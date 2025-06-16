@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Browser Compatibility Demo</title>
+
+    <script src="/uu5g05-browser-compatibility.js"></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <LoremIpsum paragraphCount={2} />
+              <Uu5Elements.Button onClick={() => (location.href = "?#test-bu")}>Force display</Uu5Elements.Button>
+              <br />
+              <Uu5Elements.Button
+                onClick={() => {
+                  document.cookie = "browserupdateorg=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
+                  location.href = "?v=" + Date.now();
+                }}
+              >
+                Clear reminder cookie & reload
+              </Uu5Elements.Button>{" "}
+              - for IE & unsupported browsers
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

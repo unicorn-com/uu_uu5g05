@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, useState, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+      const ITEM_LIST_WITH_CHILDREN = [
+        { code: "short", label: "Short", children: <LoremIpsum avgWords={4} /> },
+        { code: "long", label: "Long", children: <LoremIpsum avgWords={10} /> },
+      ];
+      const ITEM_LIST_NO_CHILDREN = ITEM_LIST_WITH_CHILDREN.map(({ children, ...it }) => it);
+
+      const ParentContainer = createVisualComponent({
+        defaultProps: {
+          alignItems: "start",
+        },
+        render(props) {
+          const { children, ...otherProps } = props;
+          const [alignItems, setAlignItems] = useState(props.alignItems);
+          const [height, setHeight] = useState(props.height);
+
+          return (
+            <>
+              <Uu5Elements.Box
+                className={Config.Css.css({ position: "sticky", top: 0, padding: "4px 8px", marginBottom: 32 })}
+                colorScheme="grey"
+                shape="background"
+              >
+                {`Alignment / sizing by parent container: `}
+                <Uu5Forms.SwitchSelect.Input
+                  value={alignItems}
+                  onChange={(e) => setAlignItems(e.data.value)}
+                  itemList={[{ value: "start", children: "as-is" }, { value: "stretch" }]}
+                />
+                <Uu5Forms.SwitchSelect.Input
+                  value={height}
+                  onChange={(e) => setHeight(e.data.value)}
+                  itemList={[{ children: "parent height auto" }, { value: 240, children: "parent height 240px" }]}
+                />
+              </Uu5Elements.Box>
+
+              <Uu5Elements.Grid
+                {...otherProps}
+                className={Utils.Css.joinClassName(
+                  height != null ? Config.Css.css({ gridAutoRows: height }) : undefined,
+                  otherProps.className
+                )}
+                alignItems={alignItems}
+                columnGap={32}
+                rowGap={32}
+              >
+                {children}
+              </Uu5Elements.Grid>
+            </>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          const [activeCode1, setActiveCode1] = useState("long");
+          const [activeCode2, setActiveCode2] = useState("short");
+
+          function renderTabContent(code, label) {
+            return code === "short" ? (
+              <Uu5Elements.ScrollableBox
+                className={Config.Css.css({ flex: "1", backgroundColor: "#e8e8e8" })}
+                maxHeight="auto"
+              >
+                <b>{label}</b>
+                <LoremIpsum avgWords={4} />
+              </Uu5Elements.ScrollableBox>
+            ) : code === "long" ? (
+              <Uu5Elements.ScrollableBox
+                className={Config.Css.css({ flex: "1", backgroundColor: "#e8e8e8" })}
+                maxHeight="auto"
+              >
+                <b>{label}</b>
+                <LoremIpsum paragraphCount={2} />
+              </Uu5Elements.ScrollableBox>
+            ) : null;
+          }
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <ParentContainer templateColumns="repeat(3, minmax(0, 1fr))">
+                <Uu5Elements.Tabs type="card-outer" itemList={ITEM_LIST_WITH_CHILDREN} contentMaxHeight="auto" />
+
+                <div
+                  className={Config.Css.css({ display: "flex", flex: "1", maxHeight: "100%", flexDirection: "column" })}
+                >
+                  <Uu5Elements.Tabs
+                    type="card-inner"
+                    itemList={ITEM_LIST_NO_CHILDREN}
+                    activeCode={activeCode1}
+                    onChange={(e) => setActiveCode1(e.data.activeCode)}
+                  />
+                  {renderTabContent(activeCode1, "card-inner")}
+                </div>
+
+                <div
+                  className={Config.Css.css({ display: "flex", flex: "1", maxHeight: "100%", flexDirection: "column" })}
+                >
+                  <Uu5Elements.Tabs
+                    type="line"
+                    itemList={ITEM_LIST_NO_CHILDREN}
+                    activeCode={activeCode2}
+                    onChange={(e) => setActiveCode2(e.data.activeCode)}
+                  />
+                  {renderTabContent(activeCode2, "line")}
+                </div>
+              </ParentContainer>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

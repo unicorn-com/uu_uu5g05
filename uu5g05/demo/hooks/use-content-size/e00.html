@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      //@@viewOn:imports
+      import { Utils, createVisualComponent, ContentSizeProvider, useContentSize } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      //@@viewOff:imports
+
+      //@@viewOn:example
+      const SizeAwareComponent = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "SizeAwareComponent",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const contentSize = useContentSize();
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <div className={Config.Css.css`font-weight: 800; font-size: 18px; padding: 8px;`}>
+              contentSize: {contentSize}
+            </div>
+          );
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      const Demo = createVisualComponent({
+        render(props) {
+          return (
+            <div>
+              <Uu5Elements.Block
+                className={Config.Css.css({ width: "75%" })}
+                collapsible={false}
+                card="content"
+                colorScheme="primary"
+                significance="highlighted" //className={Config.Css.css`width: 80%; background: lightblue; padding: 16px; margin: 16px;`}
+                header={
+                  <Uu5Elements.Text category="story" segment="heading" type="h2">
+                    75% width
+                  </Uu5Elements.Text>
+                }
+              >
+                <ContentSizeProvider>
+                  <SizeAwareComponent />
+                </ContentSizeProvider>
+              </Uu5Elements.Block>
+              <Uu5Elements.Block
+                className={Config.Css.css({ width: "50%" })}
+                collapsible={false}
+                card="content"
+                colorScheme="red"
+                significance="highlighted" //className={Config.Css.css`width: 80%; background: lightblue; padding: 16px; margin: 16px;`}
+                header={
+                  <Uu5Elements.Text category="story" segment="heading" type="h2">
+                    50% width
+                  </Uu5Elements.Text>
+                }
+              >
+                <ContentSizeProvider>
+                  <SizeAwareComponent />
+                </ContentSizeProvider>
+              </Uu5Elements.Block>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

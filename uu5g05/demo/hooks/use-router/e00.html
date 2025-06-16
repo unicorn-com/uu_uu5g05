@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        useRoute,
+        RouteProvider,
+        Fragment,
+        ErrorBoundary,
+        useState,
+        useEffect,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:imports
+      import { useRouter } from "uu5g05";
+      //@@viewOff:imports
+
+      function sortKeys(obj) {
+        if (!obj || typeof obj !== "object") return obj;
+        let result = {};
+        for (let k of Object.keys(obj).sort()) result[k] = obj[k];
+        return result;
+      }
+
+      const RouteInfo = createVisualComponent({
+        render() {
+          const [{ uu5Route, params, fragment }, setRoute] = useRoute();
+          return (
+            <div className={Config.Css.css({ marginBottom: 16 })}>
+              uu5Route: {uu5Route}
+              <br />
+              {params && (
+                <>
+                  Parameters: <pre>{JSON.stringify(params, null, 2)}</pre>
+                </>
+              )}
+              {fragment && <>Fragment: {fragment}</>}
+            </div>
+          );
+        },
+      });
+
+      const ExtraContent = createVisualComponent({
+        render() {
+          return (
+            <>
+              <LoremIpsum paragraphCount={2} />
+              <Uu5Elements.Block id="prague" header="Prague" headerType="heading" level={5}>
+                <LoremIpsum paragraphCount={2} />
+              </Uu5Elements.Block>
+
+              <Uu5Elements.Link children="Home with parameters and #london" href="home?location=London#london" />
+              <br />
+              <Uu5Elements.Link children="About with #london" href="about#london" />
+              <br />
+              <Uu5Elements.Link children="Fragment only #prague" href="#prague" />
+
+              <Uu5Elements.Block id="london" header="London" headerType="heading" level={5}>
+                <LoremIpsum paragraphCount={2} />
+              </Uu5Elements.Block>
+              <LoremIpsum paragraphCount={10} />
+            </>
+          );
+        },
+      });
+
+      const Home = createVisualComponent({
+        render(props) {
+          const [show, setShow] = useState(props.delay <= 0);
+          useEffect(() => {
+            if (!show) {
+              let timeout = setTimeout(() => setShow(true), props.delay ?? Math.random() * 3000);
+              return () => clearTimeout(timeout);
+            }
+          }, []);
+          return (
+            <Uu5Elements.Block header="Home (with loading)" headerType="title">
+              <RouteInfo />
+              {show ? <ExtraContent /> : <Uu5Elements.Pending />}
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const About = createVisualComponent({
+        render() {
+          return (
+            <Uu5Elements.Block header="About (no loading)" headerType="title">
+              <RouteInfo />
+              <ExtraContent />
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const Form = createVisualComponent({
+        render() {
+          return (
+            <Uu5Elements.Block header="Form" headerType="title">
+              <RouteInfo />
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      //@@viewOn:example
+      const ROUTE_MAP = {
+        home: (props) => <Home {...props} />,
+        about: (props) => <About {...props} />,
+        homeOld: { redirect: "home" },
+        aboutAlias: { rewrite: "about" },
+        form: { skipHistory: true, component: (props) => <Form {...props} /> },
+        "*": (props) => <h1>404 Not found</h1>,
+      };
+
+      const CustomRouter = createComponent({
+        render() {
+          const content = useRouter(ROUTE_MAP);
+
+          const [route] = useRoute();
+          const resetKey = route ? JSON.stringify([route.uu5Route, sortKeys(route.params)]) : "";
+          return (
+            <ErrorBoundary fallback="Route error" resetKey={resetKey}>
+              {content}
+            </ErrorBoundary>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const DemoNavigation = createComponent({
+        render() {
+          const [, setRoute] = useRoute();
+          return (
+            <div className={Config.Css.css({ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 24 })}>
+              <Uu5Elements.Button children="Home" onClick={() => setRoute("home")} />
+              <Uu5Elements.Button
+                children="Home with parameters and #prague"
+                onClick={() => setRoute("home", { location: "Prague" }, "prague")}
+              />
+              <Uu5Elements.Button children="About" onClick={() => setRoute("about")} />
+              <Uu5Elements.Button children="Home (redirect)" onClick={() => setRoute("homeOld")} />
+              <Uu5Elements.Button children="About alias (rewrite)" onClick={() => setRoute("aboutAlias")} />
+              <Uu5Elements.Button children="Form (skip history)" onClick={() => setRoute("form")} />
+              <Uu5Elements.Button children="Non-existing UVE" onClick={() => setRoute("nonExistingUve")} />
+            </div>
+          );
+        },
+      });
+
+      const Demo = createComponent({
+        render() {
+          return (
+            <RouteProvider initialRoute={{ uu5Route: "home" }}>
+              <DemoNavigation />
+              <CustomRouter />
+            </RouteProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

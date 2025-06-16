@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Editing from "uu5g05-editing";
+      import { LoremIpsum, Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const { open: propsOpen, onChange } = props;
+          const [open, setOpen] = useState(propsOpen);
+
+          return (
+            <Input
+              {...props}
+              open={open}
+              onChange={(e) => {
+                typeof onChange === "function" && onChange(e);
+                setOpen(e.data.open);
+              }}
+            />
+          );
+        };
+      }
+
+      const ContentSizePanel = withControlledInput(Uu5Editing.ContentSizePanel);
+
+      const CONTENT_SIZE_LIST = ["xs", "s", "m", "l", "xl"];
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h3>contentSize with "xs", "s", "m", "l", "xl" (default title)</h3>
+              <div className={Config.Css.css({ display: "flex", flexDirection: "column", gap: 8 })}>
+                {CONTENT_SIZE_LIST.map((contentSize) => (
+                  <ContentSizePanel contentSize={contentSize}>
+                    <LoremIpsum />
+                  </ContentSizePanel>
+                ))}
+              </div>
+
+              <br />
+              <br />
+              <h3>contentSize & displayScreenName</h3>
+              <div className={Config.Css.css({ display: "flex", flexDirection: "column", gap: 8 })}>
+                {CONTENT_SIZE_LIST.map((contentSize) => (
+                  <ContentSizePanel contentSize={contentSize} displayScreenName>
+                    <LoremIpsum />
+                  </ContentSizePanel>
+                ))}
+              </div>
+
+              <br />
+              <br />
+              <h3>contentSize="s" & title & subtitle</h3>
+              <ContentSizePanel contentSize="s" title="Title" subtitle="Subtitle">
+                <LoremIpsum />
+              </ContentSizePanel>
+
+              <br />
+              <br />
+              <h3>contentSize="s" & open & onChange</h3>
+              <ContentSizePanel contentSize="s" open onChange={(e) => console.log(e.data.open, "onChange")}>
+                <LoremIpsum />
+              </ContentSizePanel>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

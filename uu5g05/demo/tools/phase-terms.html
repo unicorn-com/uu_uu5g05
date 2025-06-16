@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plan phases</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5" style="height: 100%">Loading...</main>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { UuDate } from "uu_i18ng01";
+
+
+      //@@viewOn:example
+      function PlanPhases({ year }) {
+        const firstDay = new UuDate([year, 1, 1]);
+        let dateStart = new UuDate(firstDay).startOfWeek();
+        if (!/01$/.test(firstDay.toIsoWeekString(true))) dateStart.shiftDay(7);
+
+        let sprintNum = 1;
+
+        let mondayDate = dateStart;
+        const phases = [];
+        let sprints = [];
+        while (mondayDate.getYear() <= year) {
+          const sprintStart = new UuDate(mondayDate);
+          const sprintEnd = new UuDate(mondayDate).shiftDay(14 - 1);
+          mondayDate.shiftDay(14);
+
+          if (sprintEnd.getYear() > year && /0[23]$/.test(sprintEnd.toIsoWeekString(true))) {
+            if (sprints.length > 0) {
+              phases.push({
+                from: sprints[0].from,
+                to: sprints[sprints.length - 1].to,
+                sprints,
+              });
+            }
+            break;
+          }
+
+          sprints.push({ num: sprintNum, from: sprintStart.toIsoString(), to: sprintEnd.toIsoString() });
+
+          let isPhaseEnd = false;
+          if (sprintStart.getMonth() % 3 === 0) {
+            if (sprintEnd.getMonth() === sprintStart.getMonth()) {
+              isPhaseEnd = new UuDate(sprintEnd).endOfMonth().getDay() - mondayDate.getDay() < 7 || mondayDate.getDay() === 1;
+            } else {
+              isPhaseEnd = sprintEnd.getDay() < 7;
+            }
+          }
+
+          if (isPhaseEnd) {
+            phases.push({
+              from: sprints[0].from,
+              to: sprints[sprints.length - 1].to,
+              sprints,
+            });
+            sprints = [];
+          }
+
+        sprintNum++;
+        }
+
+        return (
+          <ul>
+            {phases.map(({ from, to, sprints }, i) => (
+              <li key={from}>
+                <b><i>Phase {year}-Q{i+1}:</i> {from} - {to}</b>
+                <ul>
+                  {sprints.map(({ num, from: sFrom, to: sTo }) => (
+                    <li key={sFrom}>
+                      <i>Sprint {(num + "").padStart(2, "0")}:</i> {sFrom} - {sTo}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      //@@viewOff:example
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const { value: propsValue, onChange, onValidationStart, onValidationEnd, onBlur } = props;
+
+          const [value, setValue] = useState(propsValue);
+          const [errorList, setErrorList] = useState(null);
+          const [pending, setPending] = useState();
+
+          return (
+            <div data-name="tempForDemo">
+              <Input
+                {...props}
+                value={value}
+                onChange={(e) => {
+                  typeof onChange === "function" && onChange(e);
+                  setValue(e.data.value);
+                }}
+                onValidationStart={(e) => {
+                  typeof onValidationStart === "function" && onValidationStart(e);
+                  setPending(true);
+                }}
+                onValidationEnd={(e) => {
+                  typeof onValidationEnd === "function" && onValidationEnd(e);
+                  setErrorList(e.data.errorList.length ? e.data.errorList : null);
+                  setPending(false);
+                }}
+                onBlur={(e) => {
+                  typeof onBlur === "function" && onBlur(new Utils.Event({ ...e.data, value }, e));
+                }}
+              />
+              {errorList && (
+                <div>
+                  <Uu5Elements.Text
+                    colorScheme="negative">{errorList.map(({ code }) => code).join(" ")}</Uu5Elements.Text>
+                </div>
+              )}
+              {pending && <div>Pending...</div>}
+            </div>
+          );
+        };
+      }
+
+      const Year = withControlledInput(Uu5Forms.Year.Input);
+
+      function Page() {
+        const [year, setYear] = useState(new Date().getFullYear());
+
+        return (
+          <div>
+            <Year value={year} onChange={(e) => /^\d{4}$/.test(e.data.value) ? setYear(+e.data.value) : null} />
+            <PlanPhases year={year} />
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

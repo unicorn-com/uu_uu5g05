@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5animationg01/2.x/assets/example-config.js"
+            crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5"></main>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState, AnimationLayerProvider } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import Uu5AnimationLayer from "uu5animationg01-layer";
+
+      const ANIMATION_SRC = "https://lottie.host/c5128a4e-3920-4906-91c8-e05d26d03c64/gs3DlW4G97.json";
+      const SOUND_SRC = "https://www.w3schools.com/html/horse.mp3";
+
+      function AnimationOnClick({ id = "onClick" }) {
+        const [display, setDisplay] = useState(false);
+        const { addAlert } = Uu5Elements.useAlertBus();
+
+        return (
+          <div className={Config.Css.css({ display: "inline-flex", gap: 4, alignItems: "center" })}>
+            <Uu5Elements.Button onClick={() => setDisplay(true)}>Play</Uu5Elements.Button>
+            {display && ( // div for alignment
+              <div>
+                <Uu5AnimationLayer.Animation
+                  animationSrc={ANIMATION_SRC}
+                  soundSrc={SOUND_SRC}
+                  autoPlay
+                  onEnd={(e) => {
+                    setDisplay(false);
+                    e?.data?.error && addAlert({
+                      header: id,
+                      message: <>{e.data.error.code}<br />{JSON.stringify(e.data.error.params)}</>
+                    });
+                  }}
+                  width={36}
+                  height="auto"
+                  renderOpts={{ _relative: true, _id: id }}
+                />
+              </div>
+            )}
+          </div>
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Elements.AlertBus>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <AnimationLayerProvider>
+                <AnimationOnClick id="onClick1-default" />
+                <br />
+                <AnimationOnClick id="onClick2-default" />
+              </AnimationLayerProvider>
+
+              <h4>no provider</h4>
+              <AnimationOnClick id="onClick1-noProvider" />
+
+              <h4>allowed = false</h4>
+              <AnimationLayerProvider allowed={false}>
+                <AnimationOnClick id="onClick1-notAllowed" />
+              </AnimationLayerProvider>
+
+              <h4>guaranteedDurationMs = 2000</h4>
+              <AnimationLayerProvider guaranteedDurationMs={2000}>
+                <AnimationOnClick id="onClick1-guaranteedDurationMs" />
+                <br />
+                <AnimationOnClick id="onClick2-guaranteedDurationMs" />
+              </AnimationLayerProvider>
+
+              <h4>maxDurationMs = 2000</h4>
+              <AnimationLayerProvider maxDurationMs={2000}>
+                <AnimationOnClick id="onClick1-maxDurationMs" />
+              </AnimationLayerProvider>
+
+              <h4>maxCountDuring1min = 2</h4>
+              <AnimationLayerProvider maxCountDuring1min={2}>
+                <AnimationOnClick id="onClick1-maxCountDuring1min" />
+              </AnimationLayerProvider>
+
+              <h4>maxCountDuring5min = 2</h4>
+              <AnimationLayerProvider maxCountDuring5min={2}>
+                <AnimationOnClick id="onClick1-maxCountDuring5min" />
+              </AnimationLayerProvider>
+              {/*@@viewOff:example*/}
+            </Uu5Elements.AlertBus>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

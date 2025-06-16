@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library version manager</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      Uu5Loader.config({
+        imports: {
+          "uu_gdsg01-unicorn": "https://cdn.plus4u.net/uu-gdsg01/1.0.0/uu_gdsg01-unicorn.min.js",
+        }
+      })
+    </script>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import {
+        createVisualComponent,
+        createComponent,
+        Utils,
+        useEffect,
+        useSession,
+        useDataObject,
+        useDataList,
+        useState,
+        Environment,
+        useLayoutEffect,
+        useRef,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { withControlledFormInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import Plus4U5App from "uu_plus4u5g02-app";
+
+      console.log(Environment.libraryRegistryBaseUri);
+
+      function Components() {
+
+        const { data } = useDataObject({
+          handlerMap: {
+            load: async () => {
+              const stencils = await Plus4U5.Utils.AppClient.cmdGet(Environment.libraryRegistryBaseUri + "/stencil/list");
+
+              const componentMap = {};
+              stencils.itemList.forEach(({ code, name, uuApp, componentIdList, id }) => {
+                componentIdList.forEach((componentId) => {
+                  componentMap[componentId] ||= { stencilMap: {} };
+                  componentMap[componentId].stencilMap[id] = { code, name, uuApp };
+                })
+              });
+
+              const idList = Object.keys(componentMap);
+              const count = 100;
+              for (let i = 0; i < Math.ceil(idList.length / count); i++) {
+                const components = await Plus4U5.Utils.AppClient.cmdGet(Environment.libraryRegistryBaseUri + "/component/list", { idList: idList.slice(i * count, i * count + count) });
+
+                components.itemList.forEach((comp) => {
+                  componentMap[comp.id].data = comp;
+                });
+              }
+
+              const catalogs = await Plus4U5.Utils.AppClient.cmdGet(Environment.libraryRegistryBaseUri + "/catalogue/list");
+              const catalogStencilMap = {};
+              catalogs.itemList.forEach(({ stencilIdList, name, code, uuApp, id }) => {
+                stencilIdList.forEach((stencilId) => {
+                  catalogStencilMap[stencilId] = { catalogMap: {} };
+                  catalogStencilMap[stencilId].catalogMap[id] = { name, code, uuApp };
+                })
+              });
+
+              console.log(JSON.stringify({ componentMap, catalogStencilMap }, null, 2));
+
+              return { componentMap, catalogStencilMap };
+            }
+          }
+        });
+
+
+
+        const componentIdList = data ? Object.keys(data.componentMap).filter((componentId) => {
+          const { data: component, stencilMap } = data.componentMap[componentId];
+          const { name, code, deprecated, deprecatedSince } = component;
+
+          return (Object.keys(stencilMap) > 1 || Object.values(stencilMap)[0].code !== "uu_uu5g04-legacy") && !/^Uu5[A-Za-z]*Bricks/.test(code)
+        }).sort((a, b) => {
+          return data.componentMap[a].data.code.localeCompare(data.componentMap[b].data.code);
+        }) : null;
+
+        const catalogStencilIdList = data ? Object.keys(data.catalogStencilMap) : [];
+
+        return data ? (
+          <div>
+            <div>Count: {componentIdList.length}/{Object.keys(data.componentMap).length}</div>
+            {componentIdList.map((componentId, i) => {
+              const { data: component, stencilMap } = data.componentMap[componentId];
+              const { name, code, deprecated, deprecatedSince } = component;
+              const stencilIdList = Object.keys(stencilMap);
+
+              return (
+                <Uu5Elements.Panel
+                  key={componentId}
+                  header={
+                    <>
+                      {name.cs ?? name.en ?? name} ({code}) [{componentId}]
+                      {" "}
+                      {deprecated ? <Uu5Elements.Badge>{deprecatedSince ?? "deprecated"}</Uu5Elements.Badge> : null}
+                    </>
+                  }
+                  colorScheme={catalogStencilIdList.find((id) => stencilIdList.indexOf(id) > -1) ? "negative" : undefined}
+                  initialOpen
+                >
+                  <Uu5Elements.MenuList
+                    itemList={stencilIdList.map((stencilId) => {
+                      const { code, name, uuApp } = stencilMap[stencilId];
+                      const catalogI = catalogStencilIdList.indexOf(stencilId);
+                      const catalogMap = catalogI > -1 ? data.catalogStencilMap[stencilId].catalogMap : null;
+                      return {
+                        children: `${name.cs ?? name.en ?? name} (${code} - ${uuApp}) [${stencilId}]` + (catalogMap ? ` -> ${Object.keys(catalogMap).map((catalogId) => `${catalogMap[catalogId].name}`).join(", ")}` : ""),
+                        colorScheme: catalogMap ? "positive" : undefined,
+                        significance: "distinct"
+                      };
+                    })}
+                  />
+                </Uu5Elements.Panel>
+              )
+            })}
+          </div>
+        ) : <Uu5Elements.Pending />;
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Plus4U5.SpaProvider>
+              <Components />
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

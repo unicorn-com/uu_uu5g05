@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useState, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { LoremIpsum } from "uu5g05-dev";
+
+      const Alert = createVisualComponent({
+        render({ header, onClose, ...alertProps }) {
+          const [open, setOpen] = useState(false);
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button onClick={() => setOpen(true)}>{header}</Uu5Elements.Button>&nbsp;
+              {open && (
+                <Uu5Elements.Alert {...alertProps} header={header} onClose={(e) => {
+                  if (typeof onClose === "function") onClose(e);
+                  setOpen(false);
+                }} />
+              )}
+            </Fragment>
+          );
+        },
+      });
+
+      //@@viewOn:example
+      const AddAlert = createVisualComponent({
+        render() {
+          const { addAlert } = Uu5Elements.useAlertBus();
+
+          return (
+            <Uu5Elements.Button onClick={() => addAlert({
+              header: "Alert",
+              message: "This alert is shown without a component.",
+              priority: "error"
+            })}>
+              Add alert without component
+            </Uu5Elements.Button>
+          );
+        },
+      });
+
+      const AddAndUpdateAlert = createVisualComponent({
+        render() {
+          const { addAlert, updateAlert } = Uu5Elements.useAlertBus();
+          const [id, setId] = useState();
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button
+                onClick={() => {
+                  const id = addAlert({ header: "New Alert", message: "Message...", priority: "error" });
+                  setId(id);
+                }}
+              >
+                Add alert
+              </Uu5Elements.Button>
+              &nbsp;
+              <Uu5Elements.Button
+                onClick={() => {
+                  updateAlert(id, { header: "Updated Alert", message: "Updated message...", priority: "success" });
+                }}
+              >
+                Update last alert
+              </Uu5Elements.Button>
+            </Fragment>
+          );
+        },
+      });
+
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <Uu5Elements.AlertBus>
+                <h4>priority</h4>
+                <Alert header="Error" message={<LoremIpsum avgSentences={2} />} priority="error" />
+                <Alert header="Warning" message={<LoremIpsum avgSentences={2} />} priority="warning" />
+                <Alert header="Success" message={<LoremIpsum avgSentences={2} />} priority="success" />
+                <Alert header="Info" message={<LoremIpsum avgSentences={2} />} priority="info" />
+
+                <h4>duration</h4>
+                <Alert header="Duration 2000ms" message={<LoremIpsum avgSentences={2} />} durationMs={2000} />
+
+                <h4>addAlert (without a component) in ModalBus</h4>
+                <AddAlert />
+
+                <h4>addAlert & updateAlert (without a component) in ModalBus</h4>
+                <AddAndUpdateAlert />
+              </Uu5Elements.AlertBus>
+
+              <h4>addAlert (without a component) outside of ModalBus</h4>
+              <AddAlert />
+
+              <h4>addAlert & updateAlert (without a component) outside of ModalBus</h4>
+              <AddAndUpdateAlert />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

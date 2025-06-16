@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            "uu5g05": "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js"
+          }
+        })
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createVisualComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+
+      //@@viewOn:example
+      const Summary = (props) => {
+        const { data, header } = props;
+        return (
+          <Uu5Elements.Block header={header} headerType="title">
+            <div><Uu5Elements.Text>Continent: {data?.continent}</Uu5Elements.Text></div>
+            <div><Uu5Elements.Text>Country: {data?.country}</Uu5Elements.Text></div>
+            <div><Uu5Elements.Text>Rating: {data?.rating}</Uu5Elements.Text></div>
+            <div><Uu5Elements.Text>Note: {data?.note}</Uu5Elements.Text></div>
+            <Uu5Forms.FormCheckbox
+              name="agreement"
+              label="I agree with whatever"
+              required
+            />
+          </Uu5Elements.Block>
+        );
+      };
+
+      const STEP_LIST = [
+        {
+          title: "Step 1",
+          inputMap: {
+            continent: {
+              component: Uu5Forms.FormSelect,
+              props: {
+                label: "Continent",
+                onChange: (e) => e.data.form.setItemValue("country", undefined),
+                itemList: [
+                  { value: "", children: "Select a continent" },
+                  { value: "europe", children: "Europe" },
+                  { value: "asia", children: "Asia" },
+                ],
+                required: true,
+              },
+            },
+          },
+        },
+        {
+          title: "Step 2",
+          inputMap: {
+            country: {
+              component: Uu5Forms.FormSelect,
+              props: ({ continent }) => ({
+                label: "Country",
+                itemList: {
+                  europe: [
+                    { value: "", children: "Select a country" },
+                    { value: "cz", children: "Czech Republic" },
+                    { value: "ua", children: "Ukraine" },
+                  ],
+                  asia: [
+                    { value: "", children: "Select a country" },
+                    { value: "ru", children: "Russia" },
+                    { value: "cn", children: "China" },
+                  ],
+                }[continent],
+                disabled: !continent,
+                required: true,
+              }),
+            },
+            rating: {
+              component: Uu5Forms.FormNumber,
+              props: {
+                label: "Rating (0-5)",
+                min: 0,
+                max: 5,
+                placeholder: "Press Enter for next step",
+              },
+            },
+            note: {
+              component: Uu5Forms.FormTextArea,
+              props: {
+                label: "Note",
+              },
+            },
+          },
+          gridLayout: `
+            country note note,
+            rating note note
+          `
+        },
+        {
+          title: "Step 3",
+          component: props => <Summary {...props} header={"Summary"} />,
+        },
+      ];
+      //@@viewOff:example
+
+      const Page = createVisualComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+
+              <Uu5Forms.Form.Provider onSubmit={(e) => console.log("onSubmit:", e)} preserveValueOnUnmount>
+                <Uu5Forms.Wizard.Provider itemList={STEP_LIST}>
+                  <Uu5Forms.Wizard.Stepper />
+                  <Uu5Forms.Wizard.Content />
+                  <div style={{ display: "flex", gap: 8, marginTop: 24 }}>
+                    <Uu5Forms.Wizard.PreviousButton />
+                    <Uu5Forms.Wizard.SubmitButton />
+                  </div>
+                </Uu5Forms.Wizard.Provider>
+              </Uu5Forms.Form.Provider>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

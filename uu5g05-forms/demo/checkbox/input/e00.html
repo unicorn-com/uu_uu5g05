@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, createComponent } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+
+      //@@viewOn:example
+      const ControlledCheckboxInput = createComponent({
+        render(props) {
+          const { icon, value: propValue = false, colorScheme, onClick, significance } = props;
+          const [value, setValue] = useState(propValue);
+
+          return (
+            <Uu5Forms.Checkbox.Input
+              {...props}
+              colorScheme={colorScheme || (value ? "primary" : undefined)}
+              significance={significance === "highlighted" && value ? significance : "common"}
+              icon={value ? icon : undefined}
+              onClick={(e) => {
+                typeof onClick === "function" && onClick(e);
+                setValue((v) => !v);
+              }}
+            />
+          );
+        },
+      });
+
+      //@@viewOff:example
+
+      function Page() {
+        return (
+          <div>
+            <h4>icon</h4>
+            <ControlledCheckboxInput icon="uugds-check" />
+            &nbsp;&nbsp;
+            <ControlledCheckboxInput icon="uugds-check" value={true} />
+            <br /><br />
+            <ControlledCheckboxInput icon="mdi-thumb-up" />
+            &nbsp;&nbsp;
+            <ControlledCheckboxInput icon="mdi-thumb-up" value={true} />
+
+            <h4>significance = highlighted</h4>
+            <ControlledCheckboxInput icon="uugds-check" significance="highlighted" />
+            &nbsp;&nbsp;
+            <ControlledCheckboxInput icon="uugds-check" significance="highlighted" value={true} />
+
+            <h4>colorScheme</h4>
+            <ControlledCheckboxInput icon="uugds-check" colorScheme="warning" />
+            &nbsp;&nbsp;
+            <ControlledCheckboxInput icon="uugds-check" colorScheme="warning" value={true} />
+            &nbsp;&nbsp;
+            <ControlledCheckboxInput icon="uugds-check" colorScheme="warning" significance="highlighted" />
+            &nbsp;&nbsp;
+            <ControlledCheckboxInput icon="uugds-check" colorScheme="warning" significance="highlighted" value={true} />
+            <br /><br />
+            <ControlledCheckboxInput icon="uugds-check" colorScheme="negative" />
+            &nbsp;&nbsp;
+            <ControlledCheckboxInput icon="uugds-check" colorScheme="negative" value={true} />
+            &nbsp;&nbsp;
+            <ControlledCheckboxInput icon="uugds-check" colorScheme="negative" significance="highlighted" />
+            &nbsp;&nbsp;
+            <ControlledCheckboxInput icon="uugds-check" colorScheme="negative" significance="highlighted" value={true} />
+
+            <h4>onClick (in console)</h4>
+            <ControlledCheckboxInput icon="uugds-check" onClick={(e) => console.log("onClick", e)} />
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms, {
+        useValidatorMap,
+        withExtensionInput,
+        withValidationInput,
+        withValidationMap,
+        withFormInput,
+        withFormItem,
+      } from "uu5g05-forms";
+      import { UuDate, UuDateTime } from "uu_i18ng01";
+
+      window.UuDate = UuDate;
+      window.UuDateTime = UuDateTime;
+
+      const UuGdsDateInput = createComponent({
+        uu5Tag: "UuGdsDateInput",
+
+        render(props) {
+          let { autoComplete, ...propsToPass } = props;
+
+          switch (autoComplete) {
+            case true:
+              autoComplete = "on";
+              break;
+            case false:
+              autoComplete = "off";
+              break;
+          }
+
+          return <Uu5Elements.Input {...propsToPass} autoComplete={autoComplete} type={Uu5Forms._NativeDateInput} />
+        }
+      });
+
+      const DateExtensionInput = withExtensionInput(UuGdsDateInput, { iconLeft: "uugds-calendar" });
+
+      const DateValueValidationInput = withValidationInput(DateExtensionInput);
+
+      const DateValidationInput = createComponent({
+        uu5Tag: "DateValidationInput",
+
+        render(props) {
+          const onValidate = useValidatorMap(props, {
+            max: (value) => props.max == null || value == null || value <= props.max,
+            step: (value) => {
+              if (props.step == null || value == null) return true;
+              // if min not set, 1970-01-01 must be set, because native calendar calculate step from this date
+              let millisDiff = new Date(value) - (props.min ? new Date(props.min) : new Date("1970-01-01"));
+              let diff = Math.round(millisDiff / (24 * 60 * 60 * 1000));
+              return diff % props.step === 0;
+            },
+            min: (value) => props.min == null || value == null || value >= props.min,
+            badValue: (value) => value !== null,
+          });
+
+          return <DateValueValidationInput {...props} onValidate={onValidate} />;
+        }
+      })
+
+      const DateInput = withValidationMap(DateValidationInput, {
+        badValue: {
+          message: { en: "Bad value message" },
+          feedback: "error",
+        },
+        required: {
+          message: { en: "Required message" },
+          feedback: "error",
+        },
+        min: {
+          message: { en: "Min message" },
+          feedback: "error",
+        },
+        max: {
+          message: { en: "Max message" },
+          feedback: "error",
+        },
+        step: {
+          message: { en: "Step message" },
+          feedback: "error",
+        },
+      });
+
+      const DateFormInput = withFormInput(DateInput);
+      const DateFormItem = withFormItem(DateFormInput);
+
+      const Page = createComponent({
+        render() {
+          const min = new UuDate().shiftDay(-7).toIsoString();
+          const max = new UuDate().shiftDay(7).toIsoString();
+
+          return (
+            <main>
+              <Uu5Elements.LanguageSelector />
+
+              <Uu5Forms.Form onSubmit={(e) => console.log(e.data.value)}>
+                <h3>Date input</h3>
+                <DateFormItem
+                  name="default"
+                  onChange={(e) => {
+                    console.log("onChange", e.data.value);
+                  }}
+                />
+
+                <h4>min="{min}" & max="{max}"</h4>
+                <DateFormItem
+                  name="minMax"
+                  min={min}
+                  max={max}
+                  onChange={(e) => {
+                    console.log("onChange", e.data);
+                  }}
+                />
+
+                <h4>step=7</h4>
+                <DateFormItem
+                  name="step"
+                  step={7}
+                  onChange={(e) => {
+                    console.log("onChange", e.data);
+                  }}
+                />
+
+                <h4>min="{min}" & step=7</h4>
+                <DateFormItem
+                  name="minStep"
+                  min={min}
+                  step={7}
+                  onChange={(e) => {
+                    console.log("onChange", e.data);
+                  }}
+                />
+
+                <h4>format</h4>
+                <DateFormItem
+                  name="formatA"
+                  format="MM/DD/YYYY"
+                  onChange={(e) => {
+                    console.log("onChange", e.data.value);
+                  }}
+                />
+
+                <br />
+                <br />
+
+                <DateFormItem
+                  name="formatB"
+                  format="D. M. YYYY"
+                  onChange={(e) => {
+                    console.log("onChange", e.data.value);
+                  }}
+                />
+
+                <br />
+                <br />
+
+                <DateFormItem
+                  name="formatC"
+                  format="DD.MM.YYYY"
+                  onChange={(e) => {
+                    console.log("onChange", e.data.value);
+                  }}
+                />
+
+                <Uu5Forms.SubmitButton />
+              </Uu5Forms.Form>
+            </main>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

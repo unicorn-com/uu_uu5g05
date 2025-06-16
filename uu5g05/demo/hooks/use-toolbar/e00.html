@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editing Bar</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+<body>
+<div id="uu5"></div>
+
+<script type="text/babel">
+  //@@viewOn:imports
+  import { createComponent, createVisualComponent, Utils, useState, useRef, withStickyTop, ToolbarProvider, useToolbar } from "uu5g05";
+  import Uu5Elements from "uu5g05-elements";
+  import { Config, LoremIpsum } from "uu5g05-dev";
+  //@@viewOff:imports
+
+  const Toolbar = withStickyTop(
+    createVisualComponent({
+      render(props) {
+        const { setLeftElement, setRightElement } = useToolbar();
+
+        const attrs = Utils.VisualComponent.getAttrs(props, Config.Css.css({
+          backgroundColor: "#fff",
+          display: "grid",
+          gridTemplateColumns: "auto auto"
+        }));
+
+        return (
+          <div {...attrs}>
+            {[setLeftElement, setRightElement].map((ref, i) => (
+              <menu
+                key={i}
+                ref={ref}
+                className={Config.Css.css({
+                  margin: 0,
+                  padding: 0,
+                })}
+              />
+            ))}
+          </div>
+        );
+      }
+    })
+  );
+
+  const BrickView = createVisualComponent({
+    render(props) {
+      const { data } = props;
+      const { bold, ...style } = data;
+
+      return (
+        <div style={{ ...style, fontWeight: bold ? "bold" : undefined }}>
+          <LoremIpsum />
+        </div>
+      );
+    }
+  });
+
+  const Info = createVisualComponent({
+    render(props) {
+      const [popover, setPopover] = useState();
+      const ref = useRef();
+
+      return (
+        <>
+          <Uu5Elements.Button
+            icon="mdi-information-outline"
+            elementRef={ref}
+            {...(popover ? { colorScheme: "primary", significance: "common" } : null)}
+            onClick={() => setPopover(popover ? null : { element: ref.current })}
+          />
+          {popover && (
+            <Uu5Elements.Popover
+              {...popover}
+              onClose={() => setPopover(null)}
+              className={Config.Css.css({ padding: 16, width: 320 })}
+            >
+              <LoremIpsum />
+            </Uu5Elements.Popover>
+          )}
+        </>
+      )
+    }
+  });
+
+  /*@@viewOn:example*/
+  const BrickEditable = createVisualComponent({
+    render(props) {
+      const { data, onChange } = props;
+
+      const { renderLeft, renderRight } = useToolbar();
+
+      return (
+        <>
+          {renderLeft(
+            <Uu5Elements.ActionGroup
+              alignment="left"
+              itemList={[
+                {
+                  children: data.fontSize || 15,
+                  itemList: [10, 12, 14, 15, 18, 20, 24].map((v) => ({
+                    icon: v === (data.fontSize || 15) ? "mdi-check" : "empty",
+                    colorScheme: "primary",
+                    children: v,
+                    onClick: (e) => onChange({
+                      data: {
+                        ...data,
+                        fontSize: v
+                      }
+                    }),
+                  })),
+                },
+                { divider: true },
+                {
+                  icon: "mdi-format-bold",
+                  onClick: (e) => onChange({
+                    data: {
+                      ...data,
+                      bold: !data.bold
+                    }
+                  }),
+                  ...(data.bold ? { colorScheme: "primary", significance: "common" } : null)
+                }
+              ]}
+            />
+          )}
+          {renderRight(
+            <Uu5Elements.ActionGroup
+              alignment="right"
+              itemList={[
+                {
+                  component: Info
+                }
+              ]}
+            />
+          )}
+        </>
+      );
+    }
+  });
+  /*@@viewOff:example*/
+
+  const Brick = withEditing(createVisualComponent({
+    render(props) {
+      const { edit } = props;
+      const [data, setData] = useState({});
+
+      return (
+        <>
+          <BrickView data={data} />
+          {edit && (
+            <BrickEditable
+              data={data}
+              onChange={(e) => {
+                setData(e.data);
+              }}
+            />
+          )}
+        </>
+      );
+    }
+  }));
+
+  function withEditing(Component) {
+    return createComponent({
+      render(props) {
+        const { id, activeId, onEdit } = props;
+
+        const { renderLeft } = useToolbar();
+
+        const isEditing = id === activeId;
+
+        return (
+          <>
+            {renderLeft && onEdit && (
+              <Uu5Elements.Button
+                {...(isEditing ? { colorScheme: "positive" } : null)}
+                onClick={() => onEdit(id)}
+              >
+                {isEditing ? "Finish editing" : "Edit"}
+              </Uu5Elements.Button>
+            )}
+            <Component edit={onEdit && isEditing} id={id} />
+          </>
+        )
+      }
+    });
+  }
+
+  const PageEditButton = createVisualComponent({
+    render(props) {
+      const { pageEdit, onPageEditChange } = props;
+
+      const startRef = useRef(false);
+
+      const { renderLeft } = useToolbar();
+
+      return (
+        <>
+          <Uu5Elements.Button
+            icon={pageEdit ? "mdi-check" : "mdi-application-edit-outline"}
+            {...(pageEdit ? { colorScheme: "positive" } : null)}
+            onClick={() => {
+              onPageEditChange(!pageEdit);
+              startRef.current = !pageEdit;
+            }}
+          >
+            {pageEdit ? "Finish editing" : "Edit page"}
+          </Uu5Elements.Button>
+          {startRef.current && renderLeft(
+            <Uu5Elements.InfoItem title="John Black" subtitle="Last editor" direction="vertical-reverse" />
+          )}
+        </>
+      )
+    }
+  })
+
+  const Page = createComponent({
+    render() {
+      const [pageEdit, setPageEdit] = useState(false);
+      const [activeId, setActiveId] = useState();
+
+      const handleEdit = pageEdit ? (id) => setActiveId(activeId === id ? null : id) : undefined;
+
+      return (
+        <div>
+          <ToolbarProvider>
+            <PageEditButton pageEdit={pageEdit} onPageEditChange={setPageEdit} />
+
+            <Toolbar />
+
+            <div className={Config.Css.css({ margin: "16px 0" })}>
+              <Brick id="1" activeId={activeId} onEdit={handleEdit} />
+              <Brick id="2" activeId={activeId} onEdit={handleEdit} />
+            </div>
+
+            <LoremIpsum paragraphCount={20} />
+          </ToolbarProvider>
+        </div>
+      );
+    },
+  });
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

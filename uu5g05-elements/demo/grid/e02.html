@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import { Config, times } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+
+      const Page = createComponent({
+        render() {
+          /* @@viewOn:example */
+          return (
+            <main>
+              <h4>auto-fill</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                {times(3, (i) => (
+                  <Uu5Elements.Box
+                    key={i}
+                    colorScheme="primary"
+                    significance="highlighted"
+                    className={Config.Css.css({ padding: 16 })}
+                  >
+                    {i + 1}
+                  </Uu5Elements.Box>
+                ))}
+              </Uu5Elements.Grid>
+
+              <h4>auto-fit</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fit, minmax(320px, 1fr))">
+                {times(3, (i) => (
+                  <Uu5Elements.Box
+                    key={i}
+                    colorScheme="primary"
+                    significance="highlighted"
+                    className={Config.Css.css({ padding: 16 })}
+                  >
+                    {i + 1}
+                  </Uu5Elements.Box>
+                ))}
+              </Uu5Elements.Grid>
+
+              <h4>center</h4>
+              <Uu5Elements.Grid
+                className={Config.Css.css({
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  "& > *": {
+                    width: 320,
+                  }
+                })}
+              >
+                {times(9, (i) => (
+                  <Uu5Elements.Box
+                    key={i}
+                    colorScheme="primary"
+                    significance="highlighted"
+                    className={Config.Css.css({ padding: 16 })}
+                  >
+                    {i + 1}
+                  </Uu5Elements.Box>
+                ))}
+              </Uu5Elements.Grid>
+            </main>
+          );
+          /* @@viewOff:example */
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

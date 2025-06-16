@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <h4>default</h4>
+              <Uu5Elements.Input />
+
+              <h4>autoFocus</h4>
+              <Uu5Elements.Input autoFocus />
+
+              <h4>id, name, required</h4>
+              <Uu5Elements.Input id="id" name="name" required />
+
+              <h4>placeholder</h4>
+              <Uu5Elements.Input placeholder="Placeholder" />
+              <Uu5Elements.Input placeholder={{ en: "Placeholder EN", cs: "Placeholder CS" }} />
+
+              <h4>size</h4>
+              <Uu5Elements.Input placeholder="Size xxs" size="xxs" />
+              <Uu5Elements.Input placeholder="Size xs" size="xs" />
+              <Uu5Elements.Input placeholder="Size s" size="s" />
+              <Uu5Elements.Input placeholder="Size m" size="m" />
+              <Uu5Elements.Input placeholder="Size l" size="l" />
+              <Uu5Elements.Input placeholder="Size xl" size="xl" />
+
+              <h4>borderRadius</h4>
+              <Uu5Elements.Input borderRadius="none" placeholder="none" />
+              <Uu5Elements.Input borderRadius="elementary" placeholder="elementary" />
+              <Uu5Elements.Input borderRadius="moderate" placeholder="moderate" />
+              <Uu5Elements.Input borderRadius="expressive" placeholder="expressive" />
+              <Uu5Elements.Input borderRadius="full" placeholder="full" />
+
+              <h4>width</h4>
+              <Uu5Elements.Input placeholder="Width 300" width={300} /><br />
+              <Uu5Elements.Input placeholder="Width 25%" width="25%" /><br />
+              <Uu5Elements.Input placeholder="Width 8em" width="8em" />
+
+              <h4>readOnly</h4>
+              <Uu5Elements.Input placeholder="ReadOnly placeholder" readOnly />
+              <Uu5Elements.Input value="ReadOnly value" readOnly />
+
+              <h4>type</h4>
+              {["textarea", "color", "date", "datetime-local", "email", "file", "month", "number",
+                "password", "range", "search", "tel", "text", "time", "url", "week"].map(
+                type => (
+                  <div key={type}>
+                    <h6>{type}</h6>
+                    <Uu5Elements.Input type={type} elementAttrs={{ multiple: type === "file" }} />
+                  </div>
+                )
+              )}
+            </div>
+          );
+        }
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

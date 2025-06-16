@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState, Lsi } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { LoremIpsum, Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Uu5Elements.Block
+                card="full"
+                header="Extended"
+                headerType="title"
+                headerSeparator
+              >
+                {({ style }) => {
+                  return (
+                    <div className={Config.Css.css({ ...style, borderRadius: "inherit" })}>
+                      <LoremIpsum />
+                      <Uu5Elements.Panel
+                        className={Config.Css.css({
+                          marginLeft: -style.paddingLeft,
+                          marginRight: -style.paddingRight,
+                          marginTop: style.paddingTop,
+                        })}
+                        header="Header"
+                        borderRadius="none"
+                      >
+                        <LoremIpsum />
+                      </Uu5Elements.Panel>
+                      <Uu5Elements.Panel
+                        className={Config.Css.css({
+                          marginLeft: -style.paddingLeft,
+                          marginRight: -style.paddingRight,
+                          marginTop: Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "c"]),
+                        })}
+                        header="Header"
+                        borderRadius="none"
+                      >
+                        <LoremIpsum />
+                      </Uu5Elements.Panel>
+                      <Uu5Elements.Panel
+                        className={Config.Css.css({
+                          marginLeft: -style.paddingLeft,
+                          marginRight: -style.paddingRight,
+                          marginBottom: -style.paddingBottom,
+                          marginTop: Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "c"]),
+                          borderBottomLeftRadius: "inherit",
+                          borderBottomRightRadius: "inherit",
+                        })}
+                        header="Header"
+                        borderRadius="none"
+                      >
+                        <LoremIpsum />
+                      </Uu5Elements.Panel>
+                    </div>
+                  );
+                }}
+              </Uu5Elements.Block>
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

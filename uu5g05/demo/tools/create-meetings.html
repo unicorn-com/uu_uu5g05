@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create meetings</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5calendarg01/2.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5" style="height: 100%">Loading...</main>
+
+    <script type="text/babel">
+      import {
+        createComponent,
+        createVisualComponent,
+        Utils,
+        PropTypes,
+        useState,
+        useSession,
+        useEffect,
+        useDataObject,
+        useUserPreferences,
+      } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import Uu5Calendar from "uu5calendarg01";
+
+      const Css = {
+        toolbar: () =>
+          Config.Css.css({
+            margin: "30px 0px",
+          }),
+      };
+
+      const Calls = {
+        async findPerson(search) {
+          const dtoOut = await Plus4U5.Utils.AppClient.get(
+            "https://uuapp.plus4u.net/uu-plus4upeople-maing01/56ac93ddb0034de8b8e4f4b829ff7d0f/people/findPerson",
+            { private: false, ...search }
+          );
+          return dtoOut.data;
+        },
+        async listDwRecord({ baseUri, dtoInData = {} }) {
+          let commandUri =
+            baseUri +
+            (baseUri.endsWith("/") ? "" : "/") +
+            "uuDwRecord/listDiaryRecords";
+          let today = new Date();
+          let firstDay = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000); // minus 30 days
+          let lastDay = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000); // add 90 days
+          dtoInData.dateFrom =
+            "2021-12-11" ||
+            dtoInData.dateFrom ||
+            firstDay.toISOString().split("T")[0];
+          dtoInData.dateTo =
+            lastDay.toISOString().split("T")[0] || dtoInData.dateTo;
+          dtoInData.pageInfo = dtoInData.pageInfo || { pageSize: 4000 };
+
+          let dtoOut = await Plus4U5.Utils.AppClient.get(commandUri, dtoInData);
+          return dtoOut.data;
+        },
+        async createMeeting(dtoIn, baseUri) {
+          let commandUri =
+            baseUri +
+            (baseUri.endsWith("/") ? "" : "/") +
+            "uuArtifactIfc/activity/create";
+          return await Plus4U5.Utils.AppClient.post(commandUri, dtoIn);
+        },
+      };
+
+      const COLOR_SCHEMA_LIST = [
+        "red",
+        "green",
+        "blue",
+        "light-blue",
+        "purple",
+        "cyan",
+        "dark-green",
+        "light-green",
+        "yellow",
+        "orange",
+        "pink",
+        "dark-purple",
+        "dark-blue",
+        // "brown",
+        // "steel",
+      ];
+
+      const people = [
+        {
+          name: "Ondřej Čapek",
+          uuIdentity: "7-7948-1",
+          role: "uuhumaninterfacefamily-manager",
+          colorSchema: COLOR_SCHEMA_LIST[0],
+        },
+        {
+          name: "Jakub Šírek",
+          uuIdentity: "7888-8591-1",
+          role: "uuhumaninterfacefamily-designer",
+          colorSchema: COLOR_SCHEMA_LIST[1],
+        },
+        {
+          name: "Milan Šatka",
+          uuIdentity: "127-0000-0000-1",
+          role: "uuhumaninterfacefamily-technologyarchitect",
+          colorSchema: COLOR_SCHEMA_LIST[2],
+        },
+        {
+          name: "Varditer Arzumanyan",
+          uuIdentity: "4995-4237-1",
+          role: "uuhumaninterfacefamily-coordinator",
+          colorSchema: COLOR_SCHEMA_LIST[3],
+        },
+        {
+          name: "Martina Vilímová",
+          uuIdentity: "6959-2766-1",
+          role: "uuhumaninterfacefamily-developer2",
+          colorSchema: COLOR_SCHEMA_LIST[4],
+        },
+        {
+          name: "Josef Vegner",
+          uuIdentity: "7611-1",
+          role: "uuhumaninterfacefamily-developer",
+          colorSchema: COLOR_SCHEMA_LIST[5],
+        },
+        {
+          name: "Filip Janovský",
+          uuIdentity: "3-1464-1",
+          colorSchema: COLOR_SCHEMA_LIST[6],
+        },
+        {
+          name: "Martin Mach",
+          uuIdentity: "13-1428-1",
+          colorSchema: COLOR_SCHEMA_LIST[7],
+        },
+        {
+          name: "Tomáš Necuda",
+          uuIdentity: "24-9-1",
+          colorSchema: COLOR_SCHEMA_LIST[8],
+        },
+
+        {
+          name: "Milan Kohoutek",
+          uuIdentity: "5083-8537-1",
+          colorSchema: COLOR_SCHEMA_LIST[9],
+        },
+        {
+          name: "Martin Mudra",
+          uuIdentity: "1468-5821-1",
+          colorSchema: COLOR_SCHEMA_LIST[10],
+        },
+        {
+          name: "Martin Farkaš",
+          uuIdentity: "6565-1",
+          colorSchema: COLOR_SCHEMA_LIST[11],
+        },
+        {
+          name: "Michal Husák",
+          uuIdentity: "7709-1",
+          colorSchema: COLOR_SCHEMA_LIST[12],
+        },
+      ];
+
+      const PersonFormItem = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "PersonFormItem",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const { ...propsToPass } = props;
+          const initialItemList = people.map(
+            ({ uuIdentity, name, colorSchema }) => ({
+              value: uuIdentity,
+              colorSchema,
+              text: [name, uuIdentity].join(" "),
+              children: (
+                <>
+                  <Plus4U5Elements.PersonPhoto
+                    uuIdentity={uuIdentity}
+                    size="xs"
+                  />
+                  &nbsp;{name} ({uuIdentity})
+                </>
+              ),
+            })
+          );
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <Uu5Forms.FormTextSelectAsync
+              {...propsToPass}
+              initialItemList={initialItemList}
+              onSearch={async (e) => {
+                if (e.data.value) {
+                  const data = await Calls.findPerson({ name: e.data.value });
+                  return data.itemList.map(({ uuIdentity, name }) => ({
+                    value: uuIdentity,
+                    text: [name, uuIdentity].join(" "),
+                    children: (
+                      <>
+                        <Plus4U5Elements.PersonPhoto
+                          uuIdentity={uuIdentity}
+                          size="xs"
+                        />
+                        &nbsp;{name} ({uuIdentity})
+                      </>
+                    ),
+                  }));
+                } else {
+                  return initialItemList;
+                }
+              }}
+            />
+          );
+          //@@viewOff:render
+        },
+      });
+
+      let GroupCalendar = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "GroupCalendar",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {
+          personList: PropTypes.arrayOf(
+            PropTypes.shape({
+              uuIdentity: PropTypes.string,
+              colorSchema: PropTypes.string,
+            })
+          ),
+        },
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {
+          personList: [],
+        },
+        //@@viewOff:defaultProps
+        //@@viewOn:render
+        render(props) {
+          //@@viewOn:private
+          let { personList, events = [], ...otherProps } = props;
+
+          async function loadEvents(personList) {
+            let events = await Promise.all(
+              personList.map(async (person) => {
+                const personInfo = await Calls.findPerson({
+                  uuIdentity: person.uuIdentity,
+                });
+                const personEvents = await Calls.listDwRecord({
+                  baseUri: personInfo.itemList[0].mtDwBaseUri,
+                });
+                const eventsActive = personEvents.uuDwrActiveList.map(
+                  (item) => ({
+                    id: item.id,
+                    dateTimeFrom: item.startTime,
+                    dateTimeTo: item.endTime,
+                    subject: personInfo.itemList[0].name,
+                    colorScheme: person.colorSchema,
+                  })
+                );
+                const eventsFinal = personEvents.uuDwrFinalList.map((item) => ({
+                  id: item.id,
+                  dateTimeFrom: item.startTime,
+                  dateTimeTo: item.endTime,
+                  subject: personInfo.itemList[0].name,
+                  colorScheme: person.colorSchema,
+                }));
+                return eventsActive.concat(eventsFinal);
+              })
+            );
+            return events.flat();
+          }
+
+          const { state, data, handlerMap } = useDataObject({
+            handlerMap: {
+              load: loadEvents,
+            },
+            initialDtoIn: personList,
+          });
+
+          useEffect(() => {
+            typeof handlerMap.load === "function" &&
+              personList.length > 0 &&
+              handlerMap.load(personList);
+          }, [personList]);
+
+          let child;
+          switch (state) {
+            case "pendingNoData":
+              child = <Uu5Elements.Pending />;
+              break;
+            case "errorNoData":
+              child = "Error was occured.";
+              break;
+            default: {
+              const eventList = data.concat(events);
+              child = (
+                <Uu5Calendar.BigCalendar
+                  {...otherProps}
+                  eventList={eventList}
+                />
+              );
+              break;
+            }
+          }
+
+          return <div>{child}</div>;
+          //@@viewOff:render
+        },
+      });
+
+      function addDigit(integer) {
+        return String(integer).padStart(2, "0");
+      }
+
+      function printDate(start, end) {
+        const date = `${start.getDate()}.${start.getMonth() + 1}. ${addDigit(
+          start.getHours()
+        )}:${addDigit(start.getMinutes())} - ${addDigit(
+          end.getHours()
+        )}:${addDigit(end.getMinutes())}`;
+        return date;
+      }
+
+      const SelectDate = createVisualComponent({
+        render(props) {
+          let { view, date, onClick } = props;
+          return (
+            <Uu5Calendar.DatePicker
+              view={view}
+              onDateChange={(e) => onClick(e.data.date)}
+              date={date}
+            />
+          );
+        },
+      });
+
+      const Today = createVisualComponent({
+        render(props) {
+          let { onClick } = props;
+          return (
+            <Uu5Elements.Button
+              onClick={() => onClick(new Date())}
+              significance="subdued"
+            >
+              Today
+            </Uu5Elements.Button>
+          );
+        },
+      });
+
+      const SelectView = createVisualComponent({
+        render(props) {
+          let { view, onClick } = props;
+          return (
+            <Uu5Calendar.ViewButton
+              significance="subdued"
+              view={view}
+              onViewChange={(e) => onClick(e.data.view)}
+            />
+          );
+        },
+      });
+
+      const Spa = createComponent({
+        render() {
+          let [personList, setPersonList] = useState([]);
+          let [eventList, setEventList] = useState([]);
+          let { identity } = useSession();
+          const userPreferences = useUserPreferences();
+          const [view, setView] = useState("week");
+          const [selectedDate, setSelectedDate] = useState(new Date());
+
+          async function handleCreate(e) {
+            const solverList = personList.map((person) => ({
+              solverCode: person.role ? person.role : person.uuIdentity,
+            }));
+
+            const event1 = {
+              id: e.data.value.id,
+              type: "reserveTime",
+              desc: e.data.value.description,
+              notificationTime: new Date().toISOString(),
+              submitterCode: "uuhumaninterfacefamily-coordinator",
+              showInDiary: "timeBlock",
+              activityType: "reserveTime",
+              name: e.data.value.name,
+              solverList: solverList,
+            };
+
+            try {
+              await Promise.all(
+                eventList.map(async (event) => {
+                  let meeting = {
+                    ...event1,
+                    startTime: event.dateTimeFrom,
+                    endTime: event.dateTimeTo,
+                    expirationTime: new Date(
+                      new Date(event.dateTimeTo).getTime() + 1 * 60 * 60 * 1000
+                    ).toISOString(),
+                  };
+                  await Calls.createMeeting(meeting, e.data.value.btBaseUri);
+                })
+              );
+              alert("The meeting was created successfully.");
+            } catch (e) {
+              console.error(e);
+            }
+          }
+
+          return (
+            <div>
+              <Uu5Forms.Form>
+                <PersonFormItem
+                  name="personList"
+                  label="Persons"
+                  onChange={(e) => {
+                    const personList = e.data.value.map(
+                      ({ value, colorSchema }) => ({
+                        uuIdentity: value,
+                        colorSchema,
+                      })
+                    );
+                    setPersonList(personList);
+                  }}
+                  placeholder="Write name or uuIdentity"
+                  multiple
+                />
+              </Uu5Forms.Form>
+              <Uu5Elements.ActionGroup
+                className={Css.toolbar()}
+                itemList={[
+                  {
+                    component: SelectDate,
+                    view: view,
+                    date: selectedDate,
+                    onClick: setSelectedDate,
+                    collapsed: false,
+                  },
+                  { component: Today, onClick: setSelectedDate },
+                  { component: SelectView, view: view, onClick: setView },
+                ]}
+              />
+              <Uu5Forms.Form.Provider
+                onSubmit={async (e) => {
+                  await handleCreate(e);
+                }}
+              >
+                {({ setItemValue, value }) => {
+                  let calendarProps = {
+                    events: eventList,
+                    onSlotSelect: (e) => {
+                      let newEventList = [
+                        ...eventList,
+                        {
+                          id: Utils.String.generateId(),
+                          dateTimeFrom: e.data.start.toISOString(),
+                          dateTimeTo: e.data.end.toISOString(),
+                          subject: printDate(e.data.start, e.data.end),
+                          colorScheme: "grey",
+                          allDay: e.data.allDay,
+                        },
+                      ];
+                      setEventList(newEventList);
+                      setItemValue("meetingTime", newEventList);
+                    },
+                    userPreferences: {
+                      ...userPreferences,
+                      showMyMeetings: true,
+                    },
+                    isOwner: true,
+                    timeZone: "Europe/Prague",
+                    timeFrom: "6:00",
+                    timeTo: "20:00",
+                    workTimeFrom: "8:30",
+                    workTimeTo: "17:00",
+                    view,
+                    onViewChange: (e) => setView(e.data.view),
+                    onDateChange: (e) => setSelectedDate(e.data.date),
+                    date: selectedDate,
+                  };
+
+                  return (
+                    <Uu5Forms.Form.View>
+                      <GroupCalendar
+                        personList={personList}
+                        {...calendarProps}
+                      />
+                      <Uu5Elements.Grid
+                        templateColumns="repeat(2, 1fr)"
+                        alignItems="start"
+                      >
+                        <Uu5Forms.FormText label="Name" name="name" required />
+                        <Uu5Forms.FormText
+                          label="BT base uri"
+                          name="btBaseUri"
+                          required
+                        />
+                        <Uu5Forms.FormText
+                          label="Description"
+                          name="description"
+                          initialValue="Skype"
+                          required
+                        />
+                        <Uu5Forms.FormText
+                          label="Artifact id"
+                          name="id"
+                          required
+                        />
+                        <Uu5Forms.FormSelect
+                          label="Date and time"
+                          name="meetingTime"
+                          itemList={(value.meetingTime || []).map((event) => ({
+                            value: event,
+                            children: event.subject,
+                          }))}
+                          onChange={(e) => {
+                            setEventList((eventList) =>
+                              eventList.filter((event) =>
+                                e.data.value.some(
+                                  (selectValueItem) =>
+                                    selectValueItem.id === event.id
+                                )
+                              )
+                            );
+                          }}
+                          multiple
+                          required
+                        />
+                        <Uu5Forms.SubmitButton style={{ alignSelf: "end" }}>
+                          Create
+                        </Uu5Forms.SubmitButton>
+                      </Uu5Elements.Grid>
+                    </Uu5Forms.Form.View>
+                  );
+                }}
+              </Uu5Forms.Form.Provider>
+            </div>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Plus4U5.SpaProvider>
+              <Spa />
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

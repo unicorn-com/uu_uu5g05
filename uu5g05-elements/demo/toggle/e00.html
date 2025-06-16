@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      function Toggle(props) {
+        const [value, setValue] = useState(props.value ?? false);
+
+        return (
+          <Uu5Elements.Toggle
+            value={value}
+            onChange={(e) => setValue(e.data.value)}
+            {...props}
+          />
+        );
+      }
+
+      const Page = createComponent({
+        render() {
+          const [value, setValue] = useState(true);
+
+          return (
+            <div>
+              <h4>default</h4>
+              <Uu5Elements.Toggle />
+
+              <h4>value & onChange</h4>
+              <Uu5Elements.Toggle
+                value={value}
+                onChange={(e) => setValue(e.data.value)}
+              />
+
+              <h4>label</h4>
+              <Toggle label="Some label" /><br />
+              <Toggle label={{ en: "Label EN", cs: "Label CS" }} /><br />
+              <Toggle label={({ style }) => <span className={Config.Css.css(style)}>Label as fn</span>} /><br />
+              <Toggle label={<>Label as <Uu5Elements.Badge>node</Uu5Elements.Badge></>} />
+
+              <h4>box</h4>
+              <Toggle label="As box" box />
+
+              <h4>iconOn & iconOff</h4>
+              <Toggle iconOn="empty" iconOff="empty" />&nbsp;
+              <Toggle iconOn="uugdsstencil-weather-sun" iconOff="uugdsstencil-weather-moon" />
+
+              <h4>colorScheme</h4>
+              <Toggle value size={null} colorScheme="secondary" /> secondary<br />
+              <Toggle value label="positive" colorScheme="positive" /><br />
+              <Toggle value label="warning" colorScheme="warning" box />
+
+              <h4>width = 200</h4>
+              <Toggle label="As box" box width={200} />
+
+              <h4>size</h4>
+              size null <Toggle size={null} /> is inline
+              <Uu5Elements.Grid
+                templateColumns={{ xs: "1fr", s: "repeat(3, 1fr)" }}
+                columnGap={4}
+                rowGap={4}
+                alignItems="start"
+                justifyItems="start"
+              >
+                <Toggle size="xxs" />
+                <Toggle size="xxs" label="xxs" />
+                <Toggle size="xxs" label="xxs" box />
+
+                <Toggle size="xs" />
+                <Toggle size="xs" label="xs" />
+                <Toggle size="xs" label="xs" box />
+
+                <Toggle size="s" />
+                <Toggle size="s" label="s" />
+                <Toggle size="s" label="s" box />
+
+                <Toggle size="m" />
+                <Toggle size="m" label="m" />
+                <Toggle size="m" label="m" box />
+
+                <Toggle size="l" />
+                <Toggle size="l" label="l" />
+                <Toggle size="l" label="l" box />
+
+                <Toggle size="xl" />
+                <Toggle size="xl" label="xl" />
+                <Toggle size="xl" label="xl" box />
+              </Uu5Elements.Grid>
+
+              <h4>borderRadius</h4>
+              <div className={Config.Css.css({ display: "flex", flexDirection: "column", gap: 4 })}>
+                <div>
+                  <Toggle size={null} borderRadius="none" />&nbsp;
+                  <Toggle size={null} borderRadius="elementary" />&nbsp;
+                  <Toggle size={null} borderRadius="moderate" />&nbsp;
+                  <Toggle size={null} borderRadius="expressive" />&nbsp;
+                  <Toggle size={null} borderRadius="full" />
+                </div>
+
+                <div>
+                  <Toggle label="None" box borderRadius="none" />&nbsp;
+                  <Toggle label="Elementary" box borderRadius="elementary" />&nbsp;
+                  <Toggle label="Moderate" box borderRadius="moderate" />&nbsp;
+                  <Toggle label="Expressive" box borderRadius="expressive" />&nbsp;
+                  <Toggle label="Full" box borderRadius="full" />
+                </div>
+              </div>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

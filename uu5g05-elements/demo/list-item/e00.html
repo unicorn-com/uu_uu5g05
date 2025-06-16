@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+      import { Text } from "uu5g05-forms";
+
+      const columns2 = Config.Css.css({ gridColumn: "span 2" });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Elements.Grid templateColumns="1fr 1fr" columnGap={8} rowGap={8} alignItems="start">
+              {/*@@viewOn:example*/}
+              <h4 className={columns2}>Default</h4>
+              <Uu5Elements.ListItem>Default</Uu5Elements.ListItem>
+              <Uu5Elements.ListItem><LoremIpsum /></Uu5Elements.ListItem>
+
+              <h4 className={columns2}>icon</h4>
+              <Uu5Elements.ListItem icon="uugds-react">Icon</Uu5Elements.ListItem>
+              <Uu5Elements.ListItem icon="uugds-react"><LoremIpsum /></Uu5Elements.ListItem>
+
+              <h4 className={columns2}>iconAnimation</h4>
+              <Uu5Elements.ListItem icon="uugds-react" iconAnimation="rotate" >Icon</Uu5Elements.ListItem>
+
+              <h4 className={columns2}>actionList</h4>
+              <Uu5Elements.ListItem
+                actionList={[
+                  { icon: "uugds-plus", children: "Create" },
+                  { icon: "uugds-reload", children: "Update" },
+                  { icon: "uugds-delete", children: "Delete", primary: true },
+                ]}
+              >
+                Action List
+              </Uu5Elements.ListItem>
+              <Uu5Elements.ListItem
+                actionList={[
+                  { icon: "uugds-plus", children: "Create" },
+                  { icon: "uugds-reload", children: "Update" },
+                  { icon: "uugds-delete", children: "Delete", primary: true },
+                ]}
+              >
+                <LoremIpsum />
+              </Uu5Elements.ListItem>
+              <Uu5Elements.ListItem
+                icon="uugds-dnd"
+                actionList={[
+                  { icon: "uugds-plus", children: "Create" },
+                  { icon: "uugds-reload", children: "Update" },
+                  { icon: "uugds-delete", children: "Delete", primary: true },
+                ]}
+              >
+                Action List with icon
+              </Uu5Elements.ListItem>
+              <Uu5Elements.ListItem
+                icon="uugds-react"
+                actionList={[
+                  { icon: "uugds-plus", children: "Create" },
+                  { icon: "uugds-reload", children: "Update" },
+                  { icon: "uugds-delete", children: "Delete", primary: true },
+                ]}
+              >
+                Action List with icon
+              </Uu5Elements.ListItem>
+              <Uu5Elements.ListItem
+                icon="uugds-dnd"
+                actionList={[
+                  { icon: "uugds-plus", children: "Create" },
+                  { icon: "uugds-reload", children: "Update" },
+                  { icon: "uugds-delete", children: "Delete", primary: true },
+                ]}
+              >
+                <LoremIpsum />
+              </Uu5Elements.ListItem>
+              <Uu5Elements.ListItem
+                icon="uugds-dnd"
+                actionList={[
+                  { icon: "uugds-plus", children: "Create" },
+                  { icon: "uugds-reload", children: "Update" },
+                  { icon: "uugds-delete", children: "Delete", primary: true },
+                ]}
+              >
+                <div className={Config.Css.css({ display: "grid", gap: "4px", width: "100%" })}>
+                  <Text placeholder="First name" />
+                  <Text placeholder="Last name" />
+                </div>
+              </Uu5Elements.ListItem>
+
+              <h4 className={columns2}>borderRadius</h4>
+              <Uu5Elements.ListItem borderRadius="none">none</Uu5Elements.ListItem>
+              <Uu5Elements.ListItem borderRadius="elementary">elementary</Uu5Elements.ListItem>
+              <Uu5Elements.ListItem borderRadius="moderate">moderate</Uu5Elements.ListItem>
+              <Uu5Elements.ListItem borderRadius="expressive">expressive</Uu5Elements.ListItem>
+              <Uu5Elements.ListItem borderRadius="full">full</Uu5Elements.ListItem>
+              {/*@@viewOff:example*/}
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

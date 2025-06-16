@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Context Menu</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState, useRef, useDevice } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+
+      function useContextMenuAttrs(fn, attrs = {}) {
+        const timerRef = useRef();
+        const { platform } = useDevice();
+
+        return platform === "ios" ? {
+          onTouchStart: (e) => {
+            typeof attrs.onTouchStart === "function" && attrs.onTouchStart(e);
+            timerRef.current = setTimeout(() => fn(e), 750);
+          },
+          onTouchMove: () => {
+            typeof attrs.onTouchMove === "function" && attrs.onTouchMove(e);
+            timerRef.current && clearTimeout(timerRef.current);
+          },
+          onTouchCancel: () => {
+            typeof attrs.onTouchCancel === "function" && attrs.onTouchCancel(e);
+            timerRef.current && clearTimeout(timerRef.current);
+          },
+          onTouchEnd: (e) => {
+            typeof attrs.onTouchEnd === "function" && attrs.onTouchEnd(e);
+            timerRef.current && clearTimeout(timerRef.current);
+            e.preventDefault();
+          },
+          style: {
+            ...attrs.style,
+            userSelect: "none",
+            WebkitUserSelect: "none",
+          },
+        } : {
+          onContextMenu: fn,
+        };
+      }
+
+      const Page = createComponent({
+        render() {
+          const [event, setEvent] = useState(null);
+          const { platform } = useDevice();
+          const ref = useRef();
+
+          const contextMenuAttrs = useContextMenuAttrs((e) => {
+            if (!e.ctrlKey && !e.metaKey) {
+              e.persist();
+              e.preventDefault();
+              e.persist();
+              setEvent({
+                pageX: e.pageX == null ? e.touches[0].pageX : e.pageX,
+                pageY: e.pageY == null ? e.touches[0].pageY : e.pageY,
+              });
+            }
+          });
+
+          return (
+            <div>
+              <h1>platform: {platform}</h1>
+
+              <div
+                {...contextMenuAttrs}
+                style={{
+                  backgroundColor: "lightgrey",
+                  padding: 20,
+                  width: 300,
+                  ...contextMenuAttrs.style,
+                }}
+                ref={ref}
+              >
+                Context Menu
+              </div>
+
+              {event && (
+                <Uu5Elements.Popover
+                  pageX={event.pageX}
+                  pageY={event.pageY}
+                  colorScheme={"red"}
+                  significance={"highlighted"}
+                  style={"padding: 16px"}
+                  onClose={() => setEvent(null)}
+                >
+                  Popover
+                </Uu5Elements.Popover>
+              )}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

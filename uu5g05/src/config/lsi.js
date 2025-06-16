@@ -1,0 +1,46 @@
+export default {
+  dynamicLibraryComponent: {
+    offline: {
+      cs: "Komponenta %s nemohla být načtená, protože jste offline.",
+      en: "The component %s cannot be loaded because you are offline.",
+      sk: "Komponenta %s nemohla byť načítaná, pretože ste offline.",
+      uk: "Неможливо загрузити компонент %s оскільки ви offline.",
+      ro: "Componenta %s nu poate fi încărcată deoarece sunteți offline.",
+      it: "Il componente %s non può essere caricato perché l'utente è offline.",
+      el: "Το στοιχείο %s δεν μπορεί να φορτωθεί επειδή είστε εκτός σύνδεσης.",
+      pt: "O componente %s não pode ser carregado porque o utilizador está offline.",
+    },
+    notFound: {
+      cs: "Komponenta %s neexistuje.",
+      en: "The component %s does not exist.",
+      sk: "Komponenta %s neexistuje.",
+      uk: "Компонент %s не існує.",
+      ro: "Componenta %s nu există.",
+      it: "Il componente %s non esiste.",
+      el: "Το στοιχείο %s δεν υπάρχει.",
+      pt: "O componente %s não existe.",
+    },
+    invalidTag: {
+      cs: "Komponenta %s není povolena.",
+      en: "The component %s is not allowed to be used.",
+      sk: "Komponenta %s nie je povolená.",
+      uk: "Компонент %s не може бути використаним.",
+      ro: "Componenta %s nu poate fi utilizată.",
+      it: "Il componente %s non può essere utilizzato.",
+      el: "Το στοιχείο %s δεν επιτρέπεται να χρησιμοποιηθεί.",
+      pt: "Não é permitida a utilização do componente %s.",
+    },
+  },
+  uu5String: {
+    invalidTagAttr: {
+      cs: "Komponenta %s nemá povoleno použít vlastnost %s=%s.",
+      en: "The component %s is not allowed to use property %s=%s.",
+      sk: "Komponenta %s nemá povolené použiť vlastnosť %s=%s.",
+      uk: "Компоненту %s не дозволяється використовувати властивість %s=%s.",
+      ro: "Componenta %s nu are permisiunea de a utiliza proprietatea %s=%s.",
+      it: "Il componente %s non può usare la proprietà %s=%s.",
+      el: "Το στοιχείο %s δεν επιτρέπεται να χρησιμοποιεί την ιδιότητα %s=%s.",
+      pt: "O componente %s não está autorizado a utilizar a propriedade %s=%s.",
+    },
+  },
+};

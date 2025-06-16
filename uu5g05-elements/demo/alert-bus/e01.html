@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <!--    <script-->
+    <!--      src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5demog01/1.x/assets/example-config.js"-->
+    <!--      crossorigin="anonymous"></script>-->
+
+    <script>
+      // window.uu5Environment ??= {};
+      // window.uu5Environment.uu5loaderg01_initUuAppDisabled = false;
+      // // window.uu5Environment.uu5g05_libraryRegistryBaseUri	= "..."; // pokud bude jiny uuALR
+      // Uu5Loader.initUuApp({
+      //   "uu_plus4u5demog01": "1.x",
+      //   "uu_plus4u5demog01-elements": "1.x",
+      // });
+    </script>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Content, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5App from "uu_plus4u5g02-app";
+
+      //@@viewOn:example
+      function FormButton() {
+        const [open, setOpen] = useState(false);
+        const { addAlert } = Uu5Elements.useAlertBus();
+
+        return (
+          <>
+            <Uu5Elements.Button onClick={() => setOpen(true)}>
+              Order tickets
+            </Uu5Elements.Button>
+            <Uu5Forms.Form.Provider key={open} onSubmit={(e) => {
+              if (e.data.value.count > 4) {
+                throw new Utils.Error.Message({
+                  en: "Unfortunately, you can order maximal 4 tickets for now.",
+                });
+              } else {
+                setOpen(false);
+                addAlert({
+                  header: "Successfully sent",
+                  message: `Request for ticket for ${e.data.value.email} was created.`,
+                  priority: "success",
+                  durationMs: 5000,
+                });
+              }
+            }}>
+              <Uu5Elements.Modal open={open} onClose={() => setOpen(false)} header="Order tickets">
+                <Uu5Forms.Form.View gridLayout={{ xs: "email, count, submit", s: "email count, . submit" }}>
+                  <Uu5Forms.FormEmail name="email" label="E-mail" required />
+                  <Uu5Forms.FormNumber name="count" label="Count" initialValue={5} />
+
+                  <Uu5Forms.SubmitButton name="submit" className={Config.Css.css({ justifySelf: "end" })} />
+                </Uu5Forms.Form.View>
+              </Uu5Elements.Modal>
+            </Uu5Forms.Form.Provider>
+          </>
+        )
+      }
+
+      function CopyButtons() {
+        const { addAlert } = Uu5Elements.useAlertBus();
+
+        return (
+          <Uu5Elements.Grid
+            templateColumns="repeat(auto-fill, minmax(100px, 1fr))"
+            className={Config.Css.css({ marginTop: 16 })}
+          >
+            {["A", "B", "C", "D"].map((char) => (
+              <Uu5Elements.Button key={char} onClick={() => {
+                Utils.Clipboard.write(char);
+                addAlert({ message: `"${char}" was copied!`, durationMs: 10000, priority: "success" });
+              }}>
+                Copy "{char}"
+              </Uu5Elements.Button>
+            ))}
+          </Uu5Elements.Grid>
+        );
+      }
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Plus4U5.SpaProvider initialLanguageList={["en"]}>
+              <Plus4U5App.Spa>
+                <div style={{ padding: 16 }}>
+                  <FormButton />
+                  <CopyButtons />
+                </div>
+              </Plus4U5App.Spa>
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

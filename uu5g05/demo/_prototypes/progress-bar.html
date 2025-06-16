@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Progress Bar</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5">Loading...</main>
+
+    <script type="text/babel">
+      //@@viewOn:example
+      import { Utils, createVisualComponent } from "uu5g05";
+      import Uu5Elements, {withTooltip} from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const Box = withTooltip(Uu5Elements.Box);
+
+      const ProgressBar = createVisualComponent({
+        uu5Tag: Config.TAG + "ProgressBar",
+
+        render(props) {
+          // { *value, colorScheme = "neutral", significance = "highlighted", tooltip, ...boxProps }
+          const { itemList, className, minHeight = 36, ...restProps } = props;
+
+          const sum = itemList.reduce((count, item) => count + item.value, 0);
+
+          return (
+            <Uu5Elements.Grid
+              columnGap={1}
+              templateColumns={itemList.map(({ value }) => Math.round(value * 100 / sum) + "%").join(" ")}
+            >
+              {({ style }) => (
+                <Uu5Elements.Box
+                  {...restProps}
+                  shape="background"
+                  borderRadius="moderate"
+                  className={Utils.Css.joinClassName(className, Config.Css.css({
+                    ...style,
+                    overflow: "hidden",
+                    minHeight,
+                  }))}
+                >
+                  {itemList.map(({ value, colorScheme = "neutral", significance = "highlighted", ...boxProps }, i) => (
+                    <Box
+                      key={i}
+                      shape={boxProps.onClick ? "interactiveElement" : "background"}
+                      colorScheme={colorScheme}
+                      significance={significance}
+                      className={Config.Css.css({
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      })}
+                      elementAttrs={{
+                        role: "progressbar",
+                        "aria-valuenow": Math.round(value * 100 / sum),
+                        "aria-valuemin": 0,
+                        "aria-valuemax": 100,
+                      }}
+                      {...boxProps}
+                    />
+                  ))}
+                </Uu5Elements.Box>
+              )}
+            </Uu5Elements.Grid>
+          )
+        },
+      });
+
+      function Page() {
+        return (
+          <div>
+            <ProgressBar itemList={[
+              { value: 20, colorScheme: "blue" },
+              { value: 5, colorScheme: "red" },
+              { value: 10, colorScheme: "orange" },
+              { value: 8, colorScheme: "green" },
+              { value: 57, significance: "common", children: "Rest" }
+            ]} />
+          </div>
+        );
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

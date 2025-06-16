@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const Page = createComponent({
+        render() {
+          const { a } = Uu5Elements.useSpacing();
+          return (
+            <main>
+              <h4>Tile</h4>
+              <Uu5Elements.Tile
+                footer={
+                  <div
+                    className={Config.Css.css({
+                      display: "grid",
+                      gridTemplateColumns: "auto min-content",
+                      alignItems: "center",
+                      columnGap: "8px",
+                    })}
+                  >
+                    <Uu5Elements.Skeleton height="1em" width="40%" />
+                    <Uu5Elements.Skeleton height={24} width={24} borderRadius="full" />
+                  </div>
+                }
+                width={200}
+              >
+                {({ style }) => (
+                  <div className={Config.Css.css({ display: "grid", gridTemplateRows: "2fr 1fr", maxHeight: "100%" })}>
+                    <Uu5Elements.Skeleton height="100%" width="100%" />
+                    <div
+                      className={Config.Css.css({
+                        ...style,
+                        display: "grid",
+                        gap: a,
+                      })}
+                    >
+                      <Uu5Elements.Skeleton height="1em" width="90%" />
+                      <Uu5Elements.Skeleton height="1em" width="40%" />
+                      <Uu5Elements.Skeleton height="1em" width="20%" />
+                    </div>
+                  </div>
+                )}
+              </Uu5Elements.Tile>
+
+              <h4>MenuList</h4>
+              <Uu5Elements.MenuList itemList={Array(3).fill().map(() => ({ component: Uu5Elements.Skeleton }))} />
+            </main>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

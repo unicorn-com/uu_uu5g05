@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      var uu5Environment = {
+        uu5g05_logLevel: "DEBUG",
+      };
+    </script>
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      //@@viewOn:imports
+      import { Utils, createComponent, createVisualComponent } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      //@@viewOff:imports
+
+      //@@viewOn:example
+      const MyComponent = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "MyComponent",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          const attrs = Utils.VisualComponent.getAttrs(props);
+          return (
+            <div {...attrs}>
+              Logger name: {MyComponent.logger.getName()}
+              <br />
+              Level: {MyComponent.logger.getLevel()}
+              <br />
+              <Uu5Elements.Button onClick={() => MyComponent.logger.log("log")}>log</Uu5Elements.Button>{" "}
+              <Uu5Elements.Button onClick={() => MyComponent.logger.info("info")}>info</Uu5Elements.Button>{" "}
+              <Uu5Elements.Button onClick={() => MyComponent.logger.debug("debug")}>debug</Uu5Elements.Button>{" "}
+              <Uu5Elements.Button onClick={() => MyComponent.logger.warn("warn")}>warn</Uu5Elements.Button>{" "}
+              <Uu5Elements.Button onClick={() => MyComponent.logger.error("error", new Error("Expected error."))}>
+                error
+              </Uu5Elements.Button>{" "}
+            </div>
+          );
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      const Demo = createComponent({
+        render() {
+          //@@viewOn:example
+          return <MyComponent />;
+          //@@viewOff:example
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

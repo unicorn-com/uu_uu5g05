@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { useRef, Utils, useViewportVisibility, useState, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      function Message(props) {
+        const { visible, ref } = useViewportVisibility("20px");
+        //@@viewOff:example
+
+        const [visibleArray, setVisibleArray] = useState([]);
+        const [timeArray, setTimeArray] = useState([]);
+        let bgColor = visible ? "#E8F5E9" : " #FFF3E0 ";
+
+        useEffect(() => {
+          console.log(visible);
+          setVisibleArray([...visibleArray, visible]);
+          setTimeArray([...timeArray, new Date().toLocaleString().slice(11, 20)]);
+        }, [visible]);
+        let visibleColor = Config.Css.css`color: green; padding: 4px 0px 4px 0px;`;
+        let notVisibleColor = Config.Css.css`color: red; padding: 4px 0px 4px 0px;`;
+        let message = visibleArray.map((visible, index) => {
+          if (index + 1 === visibleArray.length) {
+            return visible ? (
+              <div key={index} className={visibleColor}>
+                Since {timeArray[index]} component is on the viewport.
+              </div>
+            ) : (
+              <div key={index} className={notVisibleColor}>
+                Since {timeArray[index]} component is not on the viewport.
+              </div>
+            );
+          }
+          return visible ? (
+            <div key={index} className={visibleColor}>
+              Since {timeArray[index]} component was on the viewport.
+            </div>
+          ) : (
+            <div key={index} className={notVisibleColor}>
+              Since {timeArray[index]} component was not on the viewport.
+            </div>
+          );
+        });
+        //@@viewOn:example
+        return (
+          <div>
+            <h4>Scroll page</h4>
+            <LoremIpsum paragraphCount={20} />
+
+            <Uu5Elements.Box className={Config.Css.css`margin: 16px 0px; padding: 8px;`}>
+              <div ref={ref}>
+                <h4>
+                  This component uses useViewportVisibility hook. The return value of the hook is written to the console.
+                  The value is true if the element is on the viewport, otherwise it is false.
+                </h4>
+                {message}
+              </div>
+            </Uu5Elements.Box>
+
+            <LoremIpsum paragraphCount={20} />
+          </div>
+        );
+      }
+      //@@viewOff:example
+
+      function Demo() {
+        return <Message />;
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

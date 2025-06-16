@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, wait } from "uu5g05-dev";
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>icon & iconRight</h4>
+            <Uu5Forms.ResetButton icon="uugds-favorites" />
+            <Uu5Forms.ResetButton icon="uugds-favorites">Button</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton iconRight="uugds-menu-down">Button</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton icon="uugds-favorites" iconRight="uugds-menu-down">Button</Uu5Forms.ResetButton>
+
+            <h4>size & icon & iconRight</h4>
+            <Uu5Forms.ResetButton size="xxs">xxs</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xxs" icon="uugds-favorites" />
+            <Uu5Forms.ResetButton size="xxs" icon="uugds-favorites">xxs</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xxs" iconRight="uugds-menu-down">xxs</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xxs" icon="uugds-favorites" iconRight="uugds-menu-down">xxs</Uu5Forms.ResetButton>
+            <br />
+            <Uu5Forms.ResetButton size="xs">xs</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xs" icon="uugds-favorites" />
+            <Uu5Forms.ResetButton size="xs" icon="uugds-favorites">xs</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xs" iconRight="uugds-menu-down">xs</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xs" icon="uugds-favorites" iconRight="uugds-menu-down">xs</Uu5Forms.ResetButton>
+            <br />
+            <Uu5Forms.ResetButton size="s">s</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="s" icon="uugds-favorites" />
+            <Uu5Forms.ResetButton size="s" icon="uugds-favorites">s</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="s" iconRight="uugds-menu-down">s</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="s" icon="uugds-favorites" iconRight="uugds-menu-down">s</Uu5Forms.ResetButton>
+            <br />
+            <Uu5Forms.ResetButton size="m">m</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="m" icon="uugds-favorites" />
+            <Uu5Forms.ResetButton size="m" icon="uugds-favorites">m</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="m" iconRight="uugds-menu-down">m</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="m" icon="uugds-favorites" iconRight="uugds-menu-down">m</Uu5Forms.ResetButton>
+            <br />
+            <Uu5Forms.ResetButton size="l">l</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="l" icon="uugds-favorites" />
+            <Uu5Forms.ResetButton size="l" icon="uugds-favorites">l</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="l" iconRight="uugds-menu-down">l</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="l" icon="uugds-favorites" iconRight="uugds-menu-down">l</Uu5Forms.ResetButton>
+            <br />
+            <Uu5Forms.ResetButton size="xl">xl</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xl" icon="uugds-favorites" />
+            <Uu5Forms.ResetButton size="xl" icon="uugds-favorites">xl</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xl" iconRight="uugds-menu-down">xl</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xl" icon="uugds-favorites" iconRight="uugds-menu-down">xl</Uu5Forms.ResetButton>
+
+            <h4>size</h4>
+            <Uu5Forms.ResetButton size="xxs">xxs</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xs">xs</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="s">s</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="m">m</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="l">l</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton size="xl">xl</Uu5Forms.ResetButton>
+
+            <h4>borderRadius</h4>
+            <Uu5Forms.ResetButton borderRadius="none">none</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton borderRadius="elementary">elementary</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton borderRadius="moderate">moderate</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton borderRadius="expressive">expressive</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton borderRadius="full">full</Uu5Forms.ResetButton>
+
+            <h4>width</h4>
+            <Uu5Forms.ResetButton width="50%">50%</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton width={300}>300</Uu5Forms.ResetButton>
+
+            <h4>pressed</h4>
+            <Uu5Forms.ResetButton pressed>pressed</Uu5Forms.ResetButton>
+
+            <h4>onClick</h4>
+            <Uu5Forms.ResetButton onClick={e => {
+              console.log("onClick", e);
+              if (e.ctrlKey || e.metaKey) {
+                alert("ctrl click");
+              } else if (e.button === 1) {
+                alert(`wheel click`);
+              } else {
+                alert(`click`);
+              }
+            }}>
+              onClick
+            </Uu5Forms.ResetButton>
+
+            <h4>tooltip</h4>
+            <Uu5Forms.ResetButton tooltip="Tooltip string">tooltip string</Uu5Forms.ResetButton>
+            <Uu5Forms.ResetButton tooltip={{ cs: "titulek", en: "tooltip" }}>tooltip lsi</Uu5Forms.ResetButton>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

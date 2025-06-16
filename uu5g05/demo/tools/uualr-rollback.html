@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library version manager</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      Uu5Loader.config({
+        imports: {
+          "uu_gdsg01-unicorn": "https://cdn.plus4u.net/uu-gdsg01/1.0.0/uu_gdsg01-unicorn.min.js",
+        }
+      })
+    </script>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import {
+        createVisualComponent,
+        createComponent,
+        Utils,
+        useEffect,
+        useSession,
+        useDataObject,
+        useDataList,
+        useState,
+        Environment,
+        useLayoutEffect,
+        useRef,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { withControlledFormInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import Plus4U5App from "uu_plus4u5g02-app";
+
+      let awid, libraryRegistryBaseUri, isAlrUri;
+      if (window.parent) {
+        const url = new URL(window.frameElement ? window.frameElement.src : location.href);
+        awid = url.searchParams.get("awid");
+        libraryRegistryBaseUri = url.searchParams.get("libraryRegistryBaseUri");
+        isAlrUri = !!libraryRegistryBaseUri;
+      }
+
+      libraryRegistryBaseUri ||= Environment.libraryRegistryBaseUri
+
+      function Authenticated({ children }) {
+        const { state } = useSession();
+
+        let result;
+        switch (state) {
+          case "notAuthenticated":
+            result = <Plus4U5Elements.Unauthenticated />;
+            break;
+          case "authenticated":
+            result = children;
+            break;
+          case "pending":
+            break;
+        }
+
+        return result;
+      }
+
+      const Link = withControlledFormInput(Uu5Forms.Link);
+
+      function LibraryList({ version, generation, itemList }) {
+
+        const dataList = useDataList({
+          skipInitialLoad: true,
+          itemIdentifier: "libraryCode",
+          initialData: itemList.map((data) => ({
+            libraryCode: data.code,
+            libraryGeneration: generation,
+            version,
+            libraryName: data.name,
+          })),
+          itemHandlerMap: {
+            get: ({ id, ...dtoIn }) =>
+              Plus4U5.Utils.AppClient.cmdGet(Plus4U5.Utils.Uri.join(libraryRegistryBaseUri, "libraryVersion/get"), dtoIn),
+            rollback: ({ id, ...dtoIn }) =>
+              Plus4U5.Utils.AppClient.cmdPost(Plus4U5.Utils.Uri.join(libraryRegistryBaseUri, "libraryVersion/update"), {
+                ...dtoIn,
+                state: "cancelled",
+              }),
+            activate: ({ id, ...dtoIn }) =>
+              Plus4U5.Utils.AppClient.cmdPost(Plus4U5.Utils.Uri.join(libraryRegistryBaseUri, "libraryVersion/update"), {
+                ...dtoIn,
+                state: "active",
+              }),
+          }
+        });
+
+        useEffect(() => {
+          dataList.data.forEach(({ data, handlerMap }) => {
+            handlerMap.get({
+              libraryGeneration: data.libraryGeneration,
+              version: data.version,
+            });
+          });
+        }, []);
+
+        const [error, setError] = useState();
+
+        return (
+          <div className={Config.Css.css({ padding: "16px 24px" })}>
+            <Uu5Elements.MenuList itemList={dataList.data?.map(({ state, data, handlerMap, errorData }) => {
+              const actionList = [
+                {
+                  icon: "uugds-sync",
+                  tooltip: "Load",
+                  onClick: () => handlerMap.get({
+                    libraryGeneration: data.libraryGeneration,
+                    version: data.version,
+                  }),
+                }
+              ];
+
+              if (data.state === "active") {
+                actionList.unshift({
+                  icon: "uugdsstencil-uiaction-stop",
+                  tooltip: "Rollback",
+                  onClick: () => handlerMap.rollback({
+                    libraryGeneration: data.libraryGeneration,
+                    version: data.version,
+                  }),
+                  colorScheme: "negative",
+                  significance: "highlighted",
+                });
+              } else if (data.state === "cancelled") {
+                actionList.unshift({
+                  icon: "uugdsstencil-media-play-solid",
+                  tooltip: "Set active",
+                  onClick: () => handlerMap.activate({
+                    libraryGeneration: data.libraryGeneration,
+                    version: data.version,
+                  }),
+                  colorScheme: "positive",
+                  significance: "highlighted",
+                });
+              }
+
+              if (errorData) {
+                actionList.unshift({
+                  icon: "uugds-alert-circle-solid",
+                  tooltip: "Show error",
+                  colorScheme: "negative",
+                  onClick: () => setError(errorData),
+                });
+              }
+
+              return {
+                disabled: state === "pending",
+                actionList,
+                children: (
+                  <>
+                    {data.libraryCode}
+                    {data.state ? (
+                      <Plus4U5Elements.StateBadge
+                        icon={`uubml-state-s00-${data.state}`}
+                        className={Config.Css.css({ marginInlineStart: 8 })}
+                      >
+                        {data.state.toUpperCase()}
+                      </Plus4U5Elements.StateBadge>
+                    ) : null}
+                  </>
+                )
+              };
+            })} />
+            {dataList.data?.every(({ data }) => data.state === "active") ? (
+              <Uu5Elements.Button
+                icon="uugdsstencil-uiaction-stop"
+                onClick={() => {
+                  dataList.data?.forEach(({ handlerMap, data, state }) => {
+                    if (state === "ready" && data.state !== "cancelled") {
+                      handlerMap.rollback({
+                        libraryGeneration: data.libraryGeneration,
+                        version: data.version,
+                      });
+                    }
+                  });
+                }}
+                colorScheme="negative"
+              >
+                Rollback all
+              </Uu5Elements.Button>
+            ) : null}
+
+            {dataList.data?.every(({ data }) => data.state === "cancelled") ? (
+              <Uu5Elements.Button
+                icon="uugdsstencil-media-play-solid"
+                onClick={() => {
+                  dataList.data?.forEach(({ handlerMap, data, state }) => {
+                    if (state === "ready" && data.state === "cancelled") {
+                      handlerMap.activate({
+                        libraryGeneration: data.libraryGeneration,
+                        version: data.version,
+                      });
+                    }
+                  });
+                }}
+                colorScheme="positive"
+              >
+                Activate all
+              </Uu5Elements.Button>
+            ) : null}
+
+            <Uu5Elements.HighlightedBox
+              colorScheme="negative" icon="uugds-alert-circle-solid"
+              className={Config.Css.css({ marginBlockStart: 32 })}
+            >
+              After rollback it is also necessary to
+              <ol>
+                <li>
+                  fix <b>old</b> cdn:
+                  <ol>
+                    <li>
+                      Update <b>deploy.json</b> attachment in previous working uuAppBox - increase hotfix number of the
+                      version
+                      (e.g. wrong version is 1.2.3, previous version was 1.2.2, new rollbacked version will be
+                      1.2.<b>4</b>).
+                    </li>
+                    <li>
+                      <b>Deploy uuAppBox</b> to CDN by C3 deploy.
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  remove uuLibrary from <b>uuRepository</b>.
+                </li>
+              </ol>
+            </Uu5Elements.HighlightedBox>
+
+            {error && (
+              <Uu5Elements.Modal open onClose={() => setError(null)} header={"Error during " + error.operation}>
+                <Plus4U5Elements.Error
+                  error={error.error} title={error.error.message}
+                  subtitle={`${error.error.dtoIn.libraryCode} g${(error.error.dtoIn.libraryGeneration + "").padStart(2, "0")} ${error.error.dtoIn.version}`}
+                />
+              </Uu5Elements.Modal>
+            )}
+          </div>
+        );
+      }
+
+      function AppBoxDetail({ uri, data, onClose, displayAsModal }) {
+        const dto = useDataObject({
+          initialData: data,
+          skipInitialLoad: !!data,
+          handlerMap: {
+            load: () => {
+              const url = new URL(uri);
+              const baseUri = url.origin + url.pathname.match(/^\/?[^\/]+\/[^\/]+/)[0];
+              return Plus4U5.Utils.AppClient.cmdGet(Plus4U5.Utils.Uri.join(baseUri, "uuAppBox/load"), { id: url.searchParams.get("id") });
+            },
+          }
+        }, [uri]);
+
+        let content;
+
+        switch (dto.state) {
+          case "pendingNoData":
+            content = <Uu5Elements.Pending />;
+            break;
+          case "errorNoData":
+            console.error(dto.errorData);
+            content = "Error";
+            break;
+          default:
+            const { version, deliverySpec, ...rest } = dto.data.uuAppBox.data;
+            const { libraryList, generation } = deliverySpec;
+            content = <LibraryList generation={generation} version={version} itemList={libraryList} />;
+        }
+
+        const header = dto.data?.uuAppBox?.data ? ["name", "version"].map((k) => dto.data.uuAppBox.data[k]).join(" ") : undefined;
+
+        let result;
+        if (displayAsModal) {
+          result = <Uu5Elements.Modal open onClose={onClose} header={header}>{content}</Uu5Elements.Modal>;
+        } else {
+          let actionList;
+          if (onClose) {
+            actionList = [{ icon: "uugds-close", onClick: onClose }];
+          }
+
+          if (uri) {
+            result = (
+              <Uu5Elements.Block
+                header={header}
+                headerType="title"
+                actionList={actionList}
+                className={Config.Css.css({ marginTop: 32 })}
+              >
+                {content}
+              </Uu5Elements.Block>
+            );
+          } else {
+            result = (
+              <>
+                <Plus4U5App.PositionBar actionList={actionList}>
+                  {header}
+                </Plus4U5App.PositionBar>
+                {content}
+              </>
+            );
+          }
+        }
+
+        return result;
+      }
+
+      const ALR_LIST = [
+        { name: "Production", baseUri: Environment.libraryRegistryBaseUri },
+        {
+          name: "Production - staging",
+          baseUri: "https://uuapp.plus4u.net/uu-applibraryregistry-maing01/9a978e79dca38564b65857f8d979c624"
+        },
+        {
+          name: "Dev",
+          baseUri: "https://uuapp-dev.plus4u.net/uu-applibraryregistry-maing01/000008ad5570455e83857a394f9a21c9"
+        },
+        {
+          name: "Dev - staging",
+          baseUri: "https://uuapp-dev.plus4u.net/uu-applibraryregistry-maing01/05abd5a0b9dff0a97f19b7b9ecedae3b"
+        },
+      ]
+
+      function Demo() {
+        const [appBoxUri, setAppBoxUri] = useState();
+        const [uuAlrBaseUri, setUuAlrBaseUri] = useState(libraryRegistryBaseUri);
+
+        const name = ALR_LIST.find(({ baseUri }) => baseUri === uuAlrBaseUri)?.name ?? "Custom uuALR";
+        const uuAlrAwid = uuAlrBaseUri.match(/[a-f0-9]{32}/);
+
+        return (
+          <Uu5Elements.Block
+            headerType="title"
+            header={
+              <>
+                {name}
+                {" "}
+                <Uu5Elements.Text colorScheme="building" significance="subdued" tooltip={uuAlrBaseUri}>
+                  {`(${uuAlrAwid})`}
+                </Uu5Elements.Text>
+              </>
+            }
+            card="full"
+            significance="subdued"
+            className={Config.Css.css({ border: "none" })}
+            actionList={isAlrUri ? undefined : [
+              {
+                icon: "uugds-settings",
+                itemList: ALR_LIST.map(({ name, baseUri }) => ({
+                  icon: baseUri === uuAlrBaseUri ? "uugds-check" : "empty",
+                  children: name,
+                  onClick: () => {
+                    setUuAlrBaseUri(baseUri);
+                    libraryRegistryBaseUri = baseUri;
+                  }
+                }))
+              }
+            ]}
+          >
+            <Link
+              label="uuAppBox uri"
+              value={appBoxUri}
+              onBlur={(e) => setAppBoxUri(e.data.value)}
+              info="Uri in a format https://uuapp.plus4u.net/uu-cloud-appboxregistryg01/$awid/uuAppBoxDetail?id=$id"
+              placeholder="https://uuapp.plus4u.net/uu-cloud-appboxregistryg01/$awid/uuAppBoxDetail?id=$id"
+            />
+            {appBoxUri && <AppBoxDetail key={uuAlrBaseUri + appBoxUri} uri={appBoxUri} />}
+          </Uu5Elements.Block>
+        )
+      }
+
+      function AppBoxListBody({ detailData, onDetailOpen }) {
+        const dto = useDataList({
+          handlerMap: {
+            load: () => Plus4U5.Utils.AppClient.cmdGet(`https://uuapp.plus4u.net/uu-cloud-appboxregistryg01/${awid ?? "eae0ba1ec4f1428aaa8d9c090e8762db"}/uuAppBox/list`, { typeList: ["uu5Library"] }),
+          }
+        });
+
+        let content;
+
+        switch (dto.state) {
+          case "pendingNoData":
+            content = <Uu5Elements.Pending size="max" />;
+            break;
+          case "errorNoData":
+            console.error(dto.errorData);
+            content = <Plus4U5Elements.Error title={dto.errorData.error.message} error={errorData.error} />;
+            break;
+          default:
+            content = (
+              <Uu5Elements.Block card="full">
+                <Uu5Elements.MenuList
+                  itemList={dto.data.map((item) => ({
+                    children: ["name", "version"].map((k) => item.data.data[k]).join(" "),
+                    onClick: () => onDetailOpen({ uuAppBox: item.data }),
+                    ...(detailData && detailData.uuAppBox.id === item.data.id ? {
+                      colorScheme: "primary",
+                      significance: "distinct"
+                    } : null),
+                  }))}
+                />
+              </Uu5Elements.Block>
+            );
+        }
+
+        return content;
+      }
+
+      const AppBoxList = createVisualComponent({
+        uu5Tag: Config.TAG + "AppBoxList",
+
+        render(props) {
+          const { detailData, onDetailOpen, elementRef, ...restProps } = props;
+
+          // dynamic getting top height - only for route
+          const ref = useRef();
+          const [top, setTop] = useState(0);
+
+          useLayoutEffect(() => {
+            setTop(ref.current.getBoundingClientRect().top);
+          }, []);
+
+          return (
+            <Uu5Elements.ScrollableBox
+              {...restProps}
+              elementRef={Utils.Component.combineRefs(elementRef, ref)}
+              height={`calc(100vh - ${top}px)`}
+            >
+              <Plus4U5App.PositionBar>
+                AppBoxes
+              </Plus4U5App.PositionBar>
+              <AppBoxListBody detailData={detailData} onDetailOpen={onDetailOpen} />
+            </Uu5Elements.ScrollableBox>
+          )
+        },
+      });
+
+      const AppBoxes = createVisualComponent({
+        uu5Tag: Config.TAG + "AppBoxes",
+
+        render(props) {
+          return (
+            <Uu5Elements.SideDetailLayout
+              detail={({ data, onClose, displayAsModal, open }) => {
+                return (
+                  <AppBoxDetail
+                    key={data.uuAppBox.id}
+                    data={data}
+                    onClose={onClose}
+                    displayAsModal={displayAsModal}
+                    open={open}
+                  />
+                );
+              }}
+            >
+              <AppBoxList />
+            </Uu5Elements.SideDetailLayout>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Plus4U5.SpaProvider>
+              <Plus4U5App.Spa displayTop={false}>
+                {awid ? <AppBoxes /> : <Demo />}
+              </Plus4U5App.Spa>
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

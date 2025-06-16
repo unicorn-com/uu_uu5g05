@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  import { createComponent, Utils } from "uu5g05";
+  import Uu5Elements from "uu5g05-elements";
+
+  const UuGds = Uu5Elements.UuGds;
+
+  /*@@viewOn:example*/
+  const Page = createComponent({
+    render() {
+      const itemList = [
+        {
+          children: "UX Evangelist Family portal",
+        },
+        {
+          children: "Ux guide"
+        },
+        {
+          children: "Newcomers"
+        },
+        {
+          children: "Training set",
+        }
+      ];
+
+      const itemListLink = [
+        {
+          children: "UX Evangelist Family portal",
+        },
+        {
+          children: "Ux guide"
+        },
+        {
+          children: "Newcomers"
+        },
+        {
+          children: "Training set",
+          href: "https://www.plus4u.net/"
+        }
+      ];
+
+      const itemListCollapsed = [
+        {
+          children: "UX Evangelist Family portal",
+        },
+        {
+          children: "Ux guide",
+        },
+        {
+          children: "Newcomers",
+          collapsed: true,
+        },
+        {
+          children: "Training set",
+        }
+      ];
+
+      const itemListNotCollapsed = [
+        {
+          children: "UX Evangelist Family portal",
+        },
+        {
+          children: "Ux guide",
+        },
+        {
+          children: "Newcomers",
+          collapsed: false,
+        },
+        {
+          children: "Training set",
+        }
+      ];
+
+      return (
+        <div>
+          <h4>text</h4>
+          <Uu5Elements.Breadcrumbs itemList={itemList} />
+          <h4>link</h4>
+          <Uu5Elements.Breadcrumbs itemList={itemListLink} />
+          <h4>collapsed = true</h4>
+          <Uu5Elements.Breadcrumbs itemList={itemListCollapsed} />
+          <h4>collapsed = false</h4>
+          <Uu5Elements.Breadcrumbs itemList={itemListNotCollapsed} />
+        </div>
+      );
+    },
+  });
+  /*@@viewOff:example*/
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wizard Provider</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="uu5"></div>
+
+  <script type="text/babel">
+    import { createComponent, createVisualComponent, Utils, useRef, useState, useEffect, WizardProvider, useWizard, usePreviousValue } from "uu5g05";
+    import Uu5Elements from "uu5g05-elements";
+    import Uu5Forms from "uu5g05-forms";
+    import { Config, wait } from "uu5g05-dev";
+
+    const CONTINENTS = [
+      {
+        value: "europe",
+        children: "Europe",
+        countries: [
+          { value: "cz", children: "Czech Republic" },
+          { value: "ua", children: "Ukraine" },
+        ]
+      },
+      {
+        value: "asia",
+        children: "Asia",
+        countries: [
+          { value: "ru", children: "Russia" },
+          { value: "cn", children: "China" },
+        ]
+      },
+    ];
+
+    const getOptionsList = (options, subject) => [
+      { value: "", children: `Select a ${subject}` },
+      ...options ? options.map(({ value, children }) => ({ value, children })) : [],
+    ];
+
+    const Step1 = createVisualComponent({
+      render(props) {
+        const { data, onNext, onPrevious } = props;
+        return (
+          <Uu5Elements.Block header="Continent" headerType="title">
+            <Uu5Forms.FormSelect
+              name="continent"
+              label="Continent"
+              onChange={(e) => e.data.form.setItemValue("country", undefined)}
+              itemList={getOptionsList(CONTINENTS, "Continent")}
+              required
+            />
+          </Uu5Elements.Block>
+        );
+      },
+    });
+
+    const Step2 = createVisualComponent({
+      render(props) {
+        const { data, onNext, onPrevious } = props;
+        const countries = CONTINENTS.find(({ value }) => value === data?.continent)?.countries;
+        return (
+          <Uu5Elements.Block header="Country" headerType="title">
+            <Uu5Forms.FormSelect
+              name="country"
+              label="Country"
+              itemList={getOptionsList(countries, "Country")}
+              disabled={!countries}
+              required
+              onValidate={async () => await wait(500)}
+            />
+            <Uu5Forms.FormNumber
+              name="rating"
+              label="Rating (0-5)"
+              min={0}
+              max={5}
+              placeholder="Press Enter for next step"
+            />
+            <Uu5Forms.FormText
+              name="note"
+              label="Note"
+            />
+          </Uu5Elements.Block>
+        );
+      },
+    });
+
+    const Step3 = createVisualComponent({
+      render(props) {
+        const { data, onNext, onPrevious } = props;
+        const continent = CONTINENTS.find(({ value }) => value === data?.continent);
+        const country = continent?.countries.find(({ value }) => value === data?.country);
+        return (
+          <Uu5Elements.Block header="Summary" headerType="title">
+            <div><Uu5Elements.Text>Continent: {continent?.children}</Uu5Elements.Text></div>
+            <div><Uu5Elements.Text>Country: {country?.children}</Uu5Elements.Text></div>
+            <div><Uu5Elements.Text>Rating: {data?.rating}</Uu5Elements.Text></div>
+            <div><Uu5Elements.Text>Note: {data?.note}</Uu5Elements.Text></div>
+          </Uu5Elements.Block>
+        );
+      },
+    });
+
+    const STEP_LIST = [
+      { code: "step1", component: Step1, children: "Continent" },
+      { code: "step2", component: Step2, children: "Country" },
+      { code: "step3", component: Step3, children: "Summary" },
+    ];
+
+    const LeftMenu = createVisualComponent({
+      render ({ itemList }) {
+        const { activeCode, setActiveCode } = useWizard();
+        return (
+          <Uu5Elements.MenuList
+            itemBorderRadius="moderate"
+            itemList={itemList.map(item => ({
+              children: item.children,
+              onClick: () => setActiveCode(item.code),
+              focused: item.code === activeCode,
+            }))}
+          />
+        );
+      }
+    });
+
+    const Page = createComponent({
+      render() {
+        const [open, setOpen] = useState(false);
+
+        const prevOpen = usePreviousValue(open);
+        const keyRef = useRef(0);
+        if (open && !prevOpen) keyRef.current++;
+        const key = keyRef.current;
+
+        const handleSubmit = async (e) => {
+          let fullWizardData = e.data.value;
+          console.log("Submitting data: ", fullWizardData);
+          // ... send data to server
+          // let submitResult = await Calls.send(fullWizardData);
+          await wait(500);
+          let submitResult = { createdArtifactUri: "..." };
+          Promise.resolve().then(() => {
+            alert("Successfully submitted, can navigate elsewhere.");
+          });
+          setOpen(false);
+        }
+
+        return (
+            <Uu5Elements.Block header={"Wizard Provider"} headerType="title">
+              <Uu5Elements.Button
+                children="Open Modal"
+                significance="highlighted"
+                onClick={() => setOpen(true)}
+              />
+
+              <WizardProvider key={key} activeCode={STEP_LIST[0].code}>
+                <Uu5Forms.Form.Provider onSubmit={handleSubmit} preserveValueOnUnmount>
+                  <Uu5Elements.Modal
+                    header={"Wizard Provider Modal"}
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    left={<LeftMenu itemList={STEP_LIST} />}
+                    children={<Uu5Forms.Wizard.Content itemList={STEP_LIST} hideControls />}
+                    footer={<Uu5Forms.SubmitButton />}
+                  />
+                </Uu5Forms.Form.Provider>
+              </WizardProvider>
+            </Uu5Elements.Block>
+        );
+      },
+    });
+
+    Utils.Dom.render(<Page />, document.getElementById("uu5"));
+
+  </script>
+</body>
+
+</html>

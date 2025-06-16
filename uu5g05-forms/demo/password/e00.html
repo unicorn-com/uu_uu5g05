@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            "uu5g05": "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            "uu_i18ng01": "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js"
+          }
+        })
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { wait } from "uu5g05-dev";
+      import { withControlledFormInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const Password = withControlledFormInput(Uu5Forms.Password);
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>value & onChange (in console)</h4>
+            <Password label="Label" value="Password" onChange={(e) => {
+              console.log("onChange", e);
+              // TODO save value to state
+            }} />
+
+            <h4>revealable & revealableIcon</h4>
+            <Password label="Label" revealable />
+            <br />
+            <Password label="Label" revealable revealableIconOn="uugds-eye-off" revealableIconOff="uugds-eye" />
+
+            <h4>pattern = ^[A-Z]+$ & onValidationEnd (in console)</h4>
+            <Password label="Label" pattern="^[A-Z]+$" onValidationEnd={(e) => {
+              console.log("onValidationEnd", e);
+              // TODO save error data to state
+            }} />
+
+            <h4>minLength = 3 & maxLength = 5 & onValidationEnd (in console)</h4>
+            <Password label="Label" minLength={3} maxLength={5} onValidationEnd={(e) => {
+              console.log("onValidationEnd", e);
+              // TODO save error data to state
+            }} />
+
+            <h4>onValidate: length &lt;= 3 is invalid</h4>
+            <Password
+              label="Label"
+              onValidate={async (e) => {
+                console.log("onValidate", e);
+
+                const value = e.data.value;
+
+                // TODO some async validation e.g. on server
+                await wait();
+
+                if (value) {
+                  if (value.length <= 3) {
+                    return {
+                      code: "badAsyncValue",
+                      feedback: "error",
+                      message: {
+                        en: "Bad async value. It must be longer than %d chars."
+                      },
+                      messageParams: [3],
+                    };
+                  }
+                }
+              }}
+              onValidationStart={(e) => {
+                console.log("onValidationStart", e);
+                // TODO set pending state to input
+              }}
+              onValidationEnd={(e) => {
+                console.log("onValidationEnd", e);
+                // TODO save error data to state
+                // TODO set pending state to input to false
+              }}
+            />
+
+            <h4>validateOnChange: minLength = 3 & maxLength = 5</h4>
+            <Password label="Label" minLength={3} maxLength={5} validateOnChange />
+
+            <h4>validationMap: minLength = 3 & maxLength = 5 (in console)</h4>
+            <Password label="Label" minLength={3} maxLength={5} validationMap={{
+              minLength: {
+                feedback: "warning",
+                message: {
+                  en: "Minimum length should be higher then %d.",
+                  cs: "Minimální délka by měla být větší než %d."
+                }
+              }
+            }} />
+
+            <h4>autoComplete</h4>
+            <form id="myForm" method="POST">
+              <Password label="Password" name="pass1" placeholder="current-password" autoComplete="current-password" />
+              <Password label="Off" name="off" placeholder="false" autoComplete="new-password"/>
+              <br />
+              <Uu5Elements.Button type="submit">Submit</Uu5Elements.Button>
+            </form>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

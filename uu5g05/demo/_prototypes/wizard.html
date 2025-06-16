@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useState, useRef, Content, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config, wait } from "uu5g05-dev";
+
+      const WizardNavigation = createVisualComponent({
+        render(props) {
+          const { itemList } = props;
+          return (
+            <nav>
+              {itemList.map((it, i) => (
+                <Fragment key={i}>
+                  {i ? " > " : ""}
+                  <Uu5Elements.Link colorScheme="building" {...it}>
+                    {it.children}
+                  </Uu5Elements.Link>
+                </Fragment>
+              ))}
+            </nav>
+          );
+        },
+      });
+
+      const Step1 = createVisualComponent({
+        render(props) {
+          const { data, onNext } = props;
+          return (
+            <Uu5Elements.Block header="Continent" headerType="title">
+              <Uu5Forms.FormSelect
+                name="continent"
+                label="Continent"
+                onChange={(e) => {
+                  e.data.form.setItemValue("country", undefined);
+                }}
+                itemList={[
+                  { value: "", children: "Select a Continent" },
+                  { value: "europe", children: "Europe" },
+                  { value: "asia", children: "Asia" },
+                ]}
+                required
+              />
+
+              <div className={Config.Css.css({ margin: "16px 0" })}>
+                <Uu5Forms.SubmitButton
+                  type="step"
+                  significance="highlighted"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNext(e);
+                  }}
+                >
+                  Next
+                </Uu5Forms.SubmitButton>
+              </div>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const COUNTRIES = {
+        europe: [
+          { value: "", children: "Select a Country" },
+          { value: "cz", children: "Czech Republic" },
+          { value: "ua", children: "Ukraine" },
+        ],
+        asia: [
+          { value: "", children: "Select a Country" },
+          { value: "ru", children: "Russia" },
+          { value: "cn", children: "China" },
+        ],
+      };
+
+      const Step2 = createVisualComponent({
+        render(props) {
+          const { data, onNext, onPrevious } = props;
+
+          return (
+            <Uu5Elements.Block header="Country" headerType="title">
+              <Uu5Forms.FormSelect
+                name="country"
+                label="Country"
+                itemList={COUNTRIES[data.continent]}
+                required
+                disabled={!COUNTRIES[data.continent]}
+                onValidate={async () => await wait(500)}
+              />
+              <Uu5Forms.FormNumber
+                name="rating"
+                label="Rating (0-5)"
+                min={0}
+                max={5}
+                placeholder="Press Enter for next step"
+              />
+
+              <div className={Config.Css.css({ margin: "16px 0" })}>
+                {/* FIXME BackButton */}
+                <Uu5Forms.ResetButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onPrevious(e);
+                  }}
+                >
+                  Previous
+                </Uu5Forms.ResetButton>{" "}
+                <Uu5Forms.SubmitButton
+                  type="step"
+                  significance="highlighted"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNext(e);
+                  }}
+                >
+                  Next
+                </Uu5Forms.SubmitButton>
+              </div>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const Step3 = createVisualComponent({
+        render(props) {
+          const { data, onPrevious } = props;
+          return (
+            <Uu5Elements.Block header="Summary" headerType="title">
+              <div>
+                <div>
+                  <Uu5Elements.Text>Continent: {data.continent}</Uu5Elements.Text>
+                </div>
+                <div>
+                  <Uu5Elements.Text>Country: {data.country}</Uu5Elements.Text>
+                </div>
+                <div>
+                  <Uu5Elements.Text>Rating: {data.rating}</Uu5Elements.Text>
+                </div>
+              </div>
+
+              <div className={Config.Css.css({ margin: "16px 0" })}>
+                <Uu5Forms.ResetButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onPrevious(e);
+                  }}
+                >
+                  Previous
+                </Uu5Forms.ResetButton>{" "}
+                <Uu5Forms.SubmitButton type="submit" significance="highlighted">
+                  Submit
+                </Uu5Forms.SubmitButton>
+              </div>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const Wizard = createVisualComponent({
+        render(props) {
+          const { onSubmit, stepList } = props;
+          const [step, setStep] = useState(0);
+          const [stepValidityIndicatorList, setStepValidityIndicatorList] = useState(() =>
+            new Array(stepList.length).fill(true)
+          );
+          const maxReachedStepRef = useRef(0);
+          const maxReachedStep = (maxReachedStepRef.current = Math.max(step, maxReachedStepRef.current));
+
+          return (
+            <Uu5Forms.Form.Provider onSubmit={onSubmit} preserveValueOnUnmount>
+              {({ submit, submitMounted, validateMounted, value }) => {
+                let Component = stepList[step].component;
+                let goToStep = async (newStep) => {
+                  if (step === newStep) return;
+                  let valid;
+                  const updateIndicator = () => {
+                    setStepValidityIndicatorList((v) => {
+                      let newList = [...v];
+                      newList[step] = valid;
+                      return newList;
+                    });
+                  };
+                  if (newStep < step) {
+                    setStep(newStep);
+                    ({ valid } = await validateMounted());
+                    updateIndicator(valid);
+                  } else {
+                    ({ valid } = await submitMounted());
+                    if (valid) {
+                      setStep(newStep);
+                      updateIndicator(valid);
+                    }
+                  }
+                };
+                return (
+                  <Uu5Forms.Form.View>
+                    <WizardNavigation
+                      itemList={stepList.map(({ header }, i) => ({
+                        children: (
+                          <>
+                            {header}
+                            {i === step || stepValidityIndicatorList[i] ? null : (
+                              <Uu5Elements.Icon icon="uugds-alert-circle" colorScheme="negative" />
+                            )}
+                          </>
+                        ),
+                        className: i === step ? Config.Css.css({ fontWeight: "bold" }) : undefined,
+                        significance: i <= maxReachedStep ? "common" : "subdued",
+                        onClick:
+                          i <= maxReachedStep &&
+                          // e.g. user goes step 3 -> step 2 -> change to be invalid -> step 1 (step 2 is invalid) -> don't allow going to step 3
+                          (i <= step || stepValidityIndicatorList.slice(0, i).every((valid) => valid))
+                            ? () => goToStep(i)
+                            : undefined,
+                      }))}
+                    />
+                    <Component
+                      data={value}
+                      onNext={step < stepList.length - 1 ? () => goToStep(step + 1) : undefined}
+                      onPrevious={step > 0 ? () => goToStep(step - 1) : undefined}
+                    />
+                  </Uu5Forms.Form.View>
+                );
+              }}
+            </Uu5Forms.Form.Provider>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Wizard
+                stepList={[
+                  { component: Step1, header: "Step 1" },
+                  { component: Step2, header: "Step 2" },
+                  { component: Step3, header: "Step 3" },
+                ]}
+                onSubmit={async (e) => {
+                  let fullWizardData = e.data.value;
+                  console.log("Submitting data: ", fullWizardData);
+                  // ... send data to server
+                  // let submitResult = await Calls.send(fullWizardData);
+                  await wait(500);
+                  let submitResult = { createdArtifactUri: "..." };
+                  Promise.resolve().then(() => {
+                    alert("Successfully submitted, can navigate elsewhere.");
+                  });
+                }}
+              />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

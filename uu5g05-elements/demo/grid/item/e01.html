@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import { Config } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div
+              className={Config.Css.css`
+                > * {
+                  padding-bottom: 32px;
+                }
+              `}
+            >
+              {/* @@viewOn:example */}
+              <div>
+                <h4>Let GridItem render its own container element</h4>
+                <Uu5Elements.Grid templateColumns="repeat(12, 1fr)">
+                  <Uu5Elements.Grid.Item colSpan={6}>
+                    <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Content A</Uu5Elements.Box>
+                  </Uu5Elements.Grid.Item>
+                  <Uu5Elements.Grid.Item colSpan={6}>
+                    <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Content B</Uu5Elements.Box>
+                  </Uu5Elements.Grid.Item>
+                </Uu5Elements.Grid>
+              </div>
+
+              <div>
+                <h4>
+                  Grid item child as a function - returns a "css grid item style" object that can be applied to any
+                  element
+                </h4>
+                <Uu5Elements.Grid templateColumns="repeat(12, 1fr)">
+                  <Uu5Elements.Grid.Item colSpan={6}>
+                    {({ style }) => (
+                      <Uu5Elements.Box className={Config.Css.css({ padding: 16, ...style })}>Content A</Uu5Elements.Box>
+                    )}
+                  </Uu5Elements.Grid.Item>
+                  <Uu5Elements.Grid.Item colSpan={6}>
+                    {({ style }) => (
+                      <Uu5Elements.Box className={Config.Css.css({ padding: 16, ...style })}>Content B</Uu5Elements.Box>
+                    )}
+                  </Uu5Elements.Grid.Item>
+                </Uu5Elements.Grid>
+              </div>
+              {/* @@viewOff:example */}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

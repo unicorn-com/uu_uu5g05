@@ -1,0 +1,91 @@
+{
+  "collapse": "Einklappen",
+  "expand": "Ausklappen",
+  "moreInfo": "Hilfe",
+  "showMore": "Mehr anzeigen",
+  "showLess": "Weniger anzeigen",
+  "cancel": "Abbrechen",
+  "AlertBus": {
+    "closeAll": "Alles schließen"
+  },
+  "Alerts": {
+    "applicationNeedsReloadMessage": "Einige Funktionen der Anwendung wurden aktualisiert. Es ist notwendig, die Seite neu zu laden, damit die Anwendung korrekt funktioniert.",
+    "applicationNeedsReloadReload": "Neu laden"
+  },
+  "ModalBus": {
+    "modalList": "Modale Liste"
+  },
+  "RestoreButton": {
+    "confirmMessage": "Eines oder mehrere modale Fenster werden geschlossen. Fortfahren?",
+    "confirm": "Fenster schließen"
+  },
+  "Pagination": {
+    "search": "Seitennummer schreiben",
+    "pageOf": "Seite %d von %d"
+  },
+  "PlaceholderBox": {
+    "items": "Hier gibt es keine Elemente",
+    "document": "Dieses Dokument ist leer",
+    "documents": "Hier gibt es keine Dokumente",
+    "folder": "Dieser Ordner ist leer",
+    "users": "Es sind keine Benutzer zugewiesen",
+    "search": "Keine Suchergebnisse",
+    "permission": "Sie sind nicht berechtigt, diesen Inhalt anzuzeigen",
+    "account": "Bitte melden Sie sich zuerst an",
+    "forbidden": "Sie haben keinen Zugriff darauf",
+    "cart": "Ihr Warenkorb ist leer",
+    "basket": "Ihr Korb ist leer",
+    "product": "Hier gibt es keine Produkte",
+    "message": "Hier gibt es keine Nachrichten",
+    "ticket": "Hier gibt es keine Tickets",
+    "sprint": "Hier gibt es keine Sprints",
+    "request": "Hier gibt es keine Anfragen",
+    "activities": "Hier gibt es keine Aktivitäten",
+    "images": "Hier gibt es keine Bilder",
+    "error": "Hoppla, etwas ist schiefgelaufen",
+    "offline": "Es scheint, dass Sie offline sind",
+    "delete": "Möchten Sie dies wirklich löschen?",
+    "timer": "Inhalt wird vorbereitet",
+    "role": "Es ist keine Rolle zugewiesen",
+    "security": "Seite ist geschützt",
+    "document-check": "Seite ist verifiziert",
+    "kid": "Es ist kein Kinderkonto zugewiesen",
+    "user": "Es ist kein Konto zugewiesen",
+    "sync": "Synchronisation",
+    "favorites": "Es gibt keine Favoriten",
+    "notification": "Keine neuen Benachrichtigungen",
+    "payment-card": "Keine verfügbare Zahlungsmethode"
+  },
+  "useComponentPaste": {
+    "pasteAs": "Einfügen als",
+    "pasteHere": "Hier einfügen"
+  },
+  "verticalCalendar": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "last7Days": "Letzte 7 Tage",
+    "last30Days": "Letzte 30 Tage",
+    "thisMonth": "Dieser Monat",
+    "previousMonth": "Vorheriger Monat"
+  },
+  "IconPalette": {
+    "noIcons": "Keine Symbole gefunden"
+  },
+  "ColorPalette": {
+    "noShades": "Schattierungen sind für diese Farbe nicht verfügbar.",
+    "shade": "Schattierung",
+    "selectSchemaShade": "Farbe auswählen, um Schattierungen anzuzeigen.",
+    "selectSchemaOpacity": "Farbe auswählen, um den Deckkraftregler anzuzeigen.",
+    "opacity": "Deckkraft"
+  },
+  "Calendar": {
+    "selectWeek": "Woche auswählen",
+    "selectMonth": "Monat auswählen"
+  },
+  "SpeechButton": {
+    "label": "Sprache zu Text",
+    "error": {
+      "not-allowed": "Sprachaufzeichnung ist in diesem Browser nicht erlaubt"
+    }
+  }
+}

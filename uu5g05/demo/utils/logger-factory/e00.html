@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      var uu5Environment = {
+        uu5g05_logLevel: "DEBUG",
+      };
+    </script>
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      //@@viewOn:imports
+      import { Utils, createComponent } from "uu5g05";
+      //@@viewOff:imports
+
+      //@@viewOn:example
+      let logger = Utils.LoggerFactory.get("Uu5Demo.Example00");
+      
+      //@@viewOff:example
+
+      const Demo = createComponent({
+        render() {
+
+          return (
+            //@@viewOn:example
+            <div>
+              Logger name: {logger.getName()}
+              <br/>
+              Level: {logger.getLevel()}
+            </div>
+            //@@viewOff:example
+          );
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

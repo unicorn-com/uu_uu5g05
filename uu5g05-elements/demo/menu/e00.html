@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { LoremIpsum } from "uu5g05-dev";
+
+      const ModalContent = createComponent({
+        render() {
+          return (
+            <div>
+              <LoremIpsum />              
+            </div>
+          );
+        },
+      });
+
+      const CustomMenuItem = createComponent({
+        render({ children, ...otherProps }) {
+          return (
+            <Uu5Elements.MenuItem {...otherProps}>
+              {children}
+            </Uu5Elements.MenuItem>
+          );
+        },
+      });
+
+      const CustomTouchIcon = createComponent({
+        render({ children, ...otherProps }) {
+          return (
+            <Uu5Elements.TouchLink {...otherProps}>
+              {children}
+            </Uu5Elements.TouchLink>
+          );
+        },
+      });
+
+      const CustomInfoItem = createComponent({
+        render({ children, ...otherProps }) {
+          return (
+            <Uu5Elements.InfoItem {...otherProps}>
+              {children}
+            </Uu5Elements.InfoItem>
+          );
+        },
+      });
+
+      /*@@viewOn:example*/
+      function getItemList(itemDisplayType) {
+        let CustomComponent;
+
+        switch (itemDisplayType) {
+          case "touch-icon":
+            CustomComponent = CustomTouchIcon;
+            break;
+          case "info-item":
+            CustomComponent = CustomInfoItem;
+            break;
+          default:
+            CustomComponent = CustomMenuItem;
+        }
+
+        return [
+          { children: "Products", icon: "uugds-web", href: "https://www.plus4u.net/products", target: "_blank", colorScheme: "positive" },
+          { children: "+4U People", icon: "uugds-web", href: "https://www.plus4u.net/people", target: "_blank", colorScheme: "positive" },
+          { children: "+4U Organizations", icon: "uugds-web", href: "https://www.plus4u.net/organizations", target: "_blank", colorScheme: "positive" },
+          { children: "+4U Service Desk", icon: "uugds-web", href: "https://www.plus4u.net/servicedesk", target: "_blank", colorScheme: "positive" },
+          { divider: true },
+          { children: "Create", icon: "uugds-plus", onClick: () => console.log("Create!"), colorScheme: "primary" },
+          { children: "Update", icon: "uugds-reload", onClick: () => console.log("Update!"), colorScheme: "primary" },
+          { children: "Delete", icon: "uugds-delete", onClick: () => console.log("Delete!"), colorScheme: "negative" },
+          { children: "Settings", icon: "uugds-settings", modalContent: <ModalContent /> },
+          { divider: true },
+          { children: "Component", icon: "uugdsstencil-it-component", component: CustomComponent, modalContent: <ModalContent />, colorScheme: "warning" },
+        ];
+      }
+      /*@@viewOff:example*/
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>itemDisplayType="menu-item" (default)</h4>
+              <Uu5Elements.Menu itemList={getItemList("menu-item")} itemDisplayType="menu-item" />
+              <h4>itemDisplayType="touch-icon"</h4>
+              <Uu5Elements.Menu itemList={getItemList("touch-icon")} itemDisplayType="touch-icon" />
+              <h4>itemDisplayType="info-item"</h4>
+              <Uu5Elements.Menu itemList={getItemList("info-item")} itemDisplayType="info-item" />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

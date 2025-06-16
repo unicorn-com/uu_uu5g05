@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Communication between form items</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import { UuDate } from "uu_i18ng01";
+
+      const Page = createComponent({
+        render() {
+          const [dateFromProps, setDateFromProps] = useState({});
+          const [dateToProps, setDateToProps] = useState({});
+
+          return (
+            //@@viewOn:example
+            <Uu5Forms.Form
+              gridLayout="dateFrom dateTo, . submit"
+              onSubmit={(e) => {
+                const values = e.data.value;
+                // TODO some call to server for storing data
+                alert("Submitted with values:\n" + JSON.stringify(values, null, 2));
+              }}
+            >
+              <Uu5Forms.FormDate
+                name="dateFrom"
+                label="Date from"
+                required
+                {...dateFromProps}
+                onBlur={(event) => {
+                  const { value, form } = event.data;
+                  const dateTo = form.value.dateTo;
+
+                  if (value) {
+                    const newDateTo = new UuDate(value);
+                    newDateTo.shiftDay(7);
+
+                    if (!dateTo || value < dateTo) {
+                      if (!dateTo) form.setValue("dateTo", newDateTo.toIsoString());
+                      setDateToProps({ min: new UuDate(value).shiftDay(1).toIsoString() });
+                    }
+                  } else {
+                    setDateToProps({});
+                  }
+                }}
+              />
+
+              <Uu5Forms.FormDate
+                name="dateTo"
+                label="Date to"
+                required
+                {...dateToProps}
+                onBlur={(event) => {
+                  const { value, form } = event.data;
+                  const dateFrom = form.value.dateFrom;
+
+                  if (value) {
+                    const newDateFrom = new UuDate(value);
+                    newDateFrom.shiftDay(-7);
+
+                    if (!dateFrom || value > dateFrom) {
+                      if (!dateFrom) form.setValue("dateFrom", newDateFrom.toIsoString());
+                      setDateFromProps({ max: new UuDate(value).shiftDay(-1).toIsoString() });
+                    }
+                  } else {
+                    setDateFromProps({});
+                  }
+                }}
+              />
+
+              <Uu5Forms.SubmitButton name="submit" className={Config.Css.css({ justifySelf: "end" })} />
+            </Uu5Forms.Form>
+            //@@viewOff:example
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useState, useRef, Fragment, useEvent } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const PopoverByElement = createVisualComponent({
+        render({ styleButton, preferredPosition, children, ...popoverProps }) {
+          const [popoverSettings, setPopoverSettings] = useState(null);
+          const buttonRef = useRef();
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button
+                elementRef={buttonRef}
+                onClick={e => setPopoverSettings({ element: buttonRef.current })}
+                pressed={!!(popoverSettings || {}).element}
+                style={{...styleButton, width: '120px', height: '30px', position: 'fixed'}}
+              >
+                {children || preferredPosition || "Open Popover around of element"}
+              </Uu5Elements.Button>
+              {popoverSettings && (
+                <Uu5Elements.Popover
+                  {...popoverProps}
+                  {...popoverSettings}
+                  preferredPosition={preferredPosition}
+                  onClose={() => setPopoverSettings(null)}
+                >
+                  <ul>
+                    <li>Apple</li>
+                    <li>Orange</li>
+                    <li>Banana</li>
+                  </ul>
+                </Uu5Elements.Popover>
+              )}
+            </Fragment>
+          );
+        }
+      });
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <h4>Reposition</h4>
+                <PopoverByElement styleButton={{ top: '40px', left: '0' }} preferredPosition="top-left" />
+                <PopoverByElement styleButton={{ top: '40px', left: 'calc(50% - 60px)' }} preferredPosition="top-center" />
+                <PopoverByElement styleButton={{ top: '40px', right: '0' }} preferredPosition="top-right" />
+                <PopoverByElement styleButton={{ top: 'calc(25% - 15px)', left: '0' }} preferredPosition="left-top" />
+                <PopoverByElement styleButton={{ top: 'calc(25% - 15px)', right: '0' }} preferredPosition="right-top" />
+                <PopoverByElement styleButton={{ top: 'calc(50% - 15px)', left: '0' }} preferredPosition="left-middle" />
+                <PopoverByElement styleButton={{ top: 'calc(50% - 15px)', left: 'calc(50% - 60px)' }} style={{ width: '100vw'}}>max width</PopoverByElement>
+                <PopoverByElement styleButton={{ top: 'calc(50% - 15px)', right: '0' }} preferredPosition="right-middle" />
+                <PopoverByElement styleButton={{ top: 'calc(75% - 15px)', left: '0' }} preferredPosition="left-bottom" />
+                <PopoverByElement styleButton={{ top: 'calc(75% - 15px)', right: '0' }} preferredPosition="right-bottom" />
+                <PopoverByElement styleButton={{ bottom: '0', left: '0' }} preferredPosition="bottom-left" />
+                <PopoverByElement styleButton={{ bottom: '0', left: 'calc(50% - 60px)' }} preferredPosition="bottom-center" />
+                <PopoverByElement styleButton={{ bottom: '0', right: '0' }} preferredPosition="bottom-right" />
+            </div>
+          );
+        }
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState, useWillMount } from "uu5g05";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Editing from "uu5g05-editing";
+      import Uu5Forms from "uu5g05-forms";
+
+      //@@viewOn:example
+      const BlockEditable = createComponent({
+        render(props) {
+          const { editMode, defaultProps } = props;
+
+           // TODO develop a separated hook to take care of this and other functionalities at one place
+          useWillMount(() => {
+            if (typeof props.editMode?.onReady === "function") {
+              props.editMode.onReady(new Utils.Event());
+            }
+          });
+
+          const tabList = [
+            {
+              template: "visual",
+              propInputMap: {
+                colorScheme: {
+                  props: {
+                    valueList: ["building", "meaning", "basic"],
+                  },
+                },
+              },
+            },
+            {
+              label: { en: "Header" },
+              layout: {
+                xs: `header, headerType, level, headerSeparator`,
+                m: `header header header,
+              headerType level level,
+              headerSeparator headerSeparator headerSeparator`,
+              },
+              columns: { m: "repeat(3, 1fr)" },
+              info: <LoremIpsum avgSentences={3} />
+            },
+            {
+              label: { en: "Content" },
+              layout: {
+                xs: `info, collapsible`,
+                m: `info info info,
+              collapsible . .`,
+              },
+              columns: { m: "repeat(3, 1fr)" },
+            },
+            {
+              label: { en: "Footer" },
+              layout: { xs: `footer, footerSeparator` },
+            },
+          ];
+
+          const propInputMap = {
+            info: {
+              component: Uu5Forms.FormTextArea,
+              props: {
+                label: { en: "Info" },
+                info: {
+                  en: "Description of the component, that can be displayed via the info icon in the top right corner.",
+                },
+                autoResize: true,
+              },
+            },
+            header: {
+              component: Uu5Forms.FormText,
+              props: {
+                label: { en: "Header Content" },
+                required: true,
+              },
+            },
+            headerType: {
+              component: Uu5Forms.FormSwitchSelect,
+              props: {
+                label: { en: "Header Type" },
+                itemList: [
+                  { value: "title", children: "Title" },
+                  { value: "heading", children: "Heading" },
+                ],
+              },
+            },
+            level: {
+              component: Uu5Forms.FormSwitchSelect,
+              props: ({ componentProps }) => ({
+                label: { en: "Header Level" },
+                itemList: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
+                disabled: componentProps.nestingLevel !== "area",
+              }),
+            },
+            headerSeparator: {
+              component: Uu5Forms.FormCheckbox,
+              props: {
+                label: { en: "Show header separator" },
+                info: { en: "Separator between header and content." },
+              },
+            },
+            footer: {
+              component: Uu5Forms.FormText,
+              props: ({ componentProps }) => ({
+                label: { en: "Footer Content" },
+                disabled: !componentProps.footerSeparator,
+              }),
+            },
+            footerSeparator: {
+              component: Uu5Forms.FormCheckbox,
+              props: {
+                label: { en: "Show footer separator" },
+                info: { en: "Separator between content and footer." },
+              },
+            },
+            collapsible: {
+              component: Uu5Forms.FormCheckbox,
+              props: {
+                label: { en: "Collapsible" },
+              },
+            },
+          };
+
+          return (
+            <Uu5Editing.EditModal
+              open={editMode.edit}
+              onClose={() => editMode.onEditEnd()}
+              width={900}
+              onSave={({ props }) => editMode.onEditEnd({ props })}
+              uu5Tag="Uu5Elements.Block"
+              props={props.componentProps}
+              defaultProps={defaultProps}
+              propInputMap={propInputMap}
+              tabList={tabList}
+            />
+          );
+        },
+      });
+
+      const Block = createComponent({
+        defaultProps: {
+          level: 3,
+          card: "none",
+          actionList: [],
+          headerSeparator: false,
+          footerSeparator: false,
+          initialCollapsed: false,
+          initialDisplayInfo: false,
+          collapsible: true,
+        },
+
+        render({ componentProps }) {
+          return (
+            <Uu5Elements.Block {...componentProps}>
+              <LoremIpsum />
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          const [edit, setEdit] = useState(false);
+          const [componentProps, setComponentProps] = useState({
+            colorScheme: "primary",
+            significance: "distinct",
+            borderRadius: "elementary",
+            nestingLevel: "area",
+            card: "full",
+            headerType: "title",
+            level: 1,
+            header: "Default",
+            info: "Some info...",
+            headerAspectRatio: "1:1",
+          });
+
+          return (
+            <div>
+              <Uu5Elements.Button className={Config.Css.css({ marginBottom: 16 })} onClick={() => setEdit(true)}>
+                Start editing of Block
+              </Uu5Elements.Button>
+              <Block componentProps={componentProps} />
+              {edit && (
+                <BlockEditable
+                  editMode={{
+                    edit: edit,
+                    onEditEnd: (result) => {
+                      if (result)
+                        setComponentProps((prev) => {
+                          for (const key in result.props) {
+                            if (key in Block.defaultProps && result.props[key] === undefined) {
+                              result.props[key] = Block.defaultProps[key];
+                            }
+                          }
+                          return { ...prev, ...result.props };
+                        });
+                      setEdit(false);
+                    },
+                  }}
+                  componentProps={componentProps}
+                  defaultProps={Block.defaultProps}
+                />
+              )}
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

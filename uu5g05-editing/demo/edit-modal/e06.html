@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 06</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Editing from "uu5g05-editing";
+      import Uu5Forms from "uu5g05-forms";
+
+      //@@viewOn:example
+      const getEditableItemLabel = ({ itemProps, itemIndex }) => {
+        return itemProps.label || `Item ${itemIndex + 1}`;
+      };
+
+      const TabsEditable = createComponent({
+        render(props) {
+          const { editMode, itemDefaultProps } = props;
+
+          const itemTab = {
+            label: getEditableItemLabel,
+            layout: {
+              xs: `label, tooltip, icon, colorScheme, significance`,
+              m: `label label tooltip tooltip icon icon,
+              colorScheme colorScheme significance significance . .`,
+            },
+            propInputMap: {
+              colorScheme: {
+                props: {
+                  valueList: ["building", "meaning", "basic"],
+                },
+              },
+            },
+            columns: { m: "repeat(6, 1fr)" },
+          };
+
+          const propInputMap = {
+            label: {
+              component: Uu5Forms.FormText,
+              props: {
+                label: { en: "Label" },
+                required: true,
+              },
+            },
+            tooltip: {
+              component: Uu5Forms.FormText,
+              props: {
+                label: { en: "Tooltip" },
+              },
+            },
+            icon: {
+              component: Uu5Forms.FormText,
+              props: {
+                label: { en: "Icon" },
+              },
+            },
+          };
+
+          return (
+            <Uu5Editing.EditModal
+              open={editMode.edit}
+              onClose={() => editMode.onEditEnd()}
+              width={900}
+              onSave={({ props }) => editMode.onEditEnd({ props })}
+              uu5Tag="Uu5Elements.Tabs"
+              props={props.componentProps}
+              propInputMap={propInputMap}
+              itemUu5Tag="Uu5Elements.Box"
+              itemPropName="itemList"
+              itemTab={itemTab}
+              itemDefaultProps={itemDefaultProps}
+            />
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          const [edit, setEdit] = useState(false);
+          const [componentProps, setComponentProps] = useState({
+            itemList: [
+              {
+                id: "1",
+                customInfo: "any information needed",
+                label: "Overview",
+                icon: "uugds-info",
+                children: "Overview content...",
+                colorScheme: "building",
+                significance: "subdued",
+              },
+              {
+                id: "2",
+                customInfo: "any information needed 2",
+                label: "History",
+                icon: "mdi-history",
+                children: "History content...",
+                colorScheme: "building",
+                significance: "subdued",
+              },
+              {
+                id: "3",
+                customInfo: "any information needed 3",
+                label: "Calendar",
+                icon: "uugds-calendar",
+                children: "Calendar content...",
+                colorScheme: "building",
+                significance: "subdued",
+              },
+            ],
+          });
+
+          const ITEM_DEFAULT_PROPS = { icon: "uugds-dots-vertical", children: "Default content..." };
+
+          return (
+            <div>
+              <Uu5Elements.Button className={Config.Css.css({ marginBottom: 16 })} onClick={() => setEdit(true)}>
+                Start editing of Tabs - itemList (Uu5String)
+              </Uu5Elements.Button>
+              <Uu5Elements.Tabs {...componentProps} />
+              {edit && (
+                <TabsEditable
+                  editMode={{
+                    edit: edit,
+                    onEditEnd: (result) => {
+                      if (result?.props) {
+                        console.log("props ");
+                        console.log("props", result.props);
+                      }
+                      // cannot set props back to state until itemTagName is not removed from EditModal props 
+                      // setComponentProps((current) => ({ ...current, ...result.props }));
+                      setEdit(false);
+                    },
+                  }}
+                  componentProps={componentProps}
+                  itemDefaultProps={ITEM_DEFAULT_PROPS}
+                />
+              )}
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

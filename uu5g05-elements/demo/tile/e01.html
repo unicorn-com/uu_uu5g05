@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, Lsi, useRef, useState, useDevice } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      /*@@viewOn:example*/
+      function getActionList(nonCollapsedItemProps) {
+        return [
+          {
+            icon: "uugds-download",
+            onClick: (e) => alert("download"),
+            ...nonCollapsedItemProps,
+          },
+          {
+            icon: "uugds-reload",
+            children: "Update",
+            collapsed: true,
+            itemList: [
+              { children: "Update Name", onClick: () => alert("update name") },
+              { children: "Update Surname", onClick: () => alert("update surname") },
+            ],
+          },
+        ];
+      }
+
+      const ContentState = createVisualComponent({
+        render(props) {
+          const {
+            tooltip,
+            tooltipColorScheme,
+            tooltipSignificance,
+            elementRef,
+            elementAttrs,
+            className,
+            ...otherProps
+          } = props;
+
+          const [tooltipSettings, setTooltipSettings] = useState();
+          const badgeRef = useRef();
+
+          return (
+            <>
+              <Uu5Elements.Badge
+                borderRadius="full"
+                size="l"
+                {...otherProps}
+                className={Utils.Css.joinClassName(className, Config.Css.css({ cursor: "pointer" }))}
+                elementRef={Utils.Component.combineRefs(elementRef, badgeRef)}
+                elementAttrs={{
+                  ...elementAttrs,
+                  onMouseEnter: (e) => {
+                    elementAttrs?.onMouseEnter?.(e);
+                    setTooltipSettings({ element: badgeRef.current });
+                  },
+                  onMouseLeave: (e) => {
+                    elementAttrs?.onMouseLeave?.(e);
+                    setTooltipSettings();
+                  },
+                }}
+              />
+              {tooltipSettings && (
+                <Uu5Elements.Tooltip
+                  {...tooltipSettings}
+                  preferredPosition="bottom-center"
+                  onClose={() => setTooltipSettings()}
+                  colorScheme={tooltipColorScheme}
+                  significance={tooltipSignificance}
+                >
+                  {tooltip}
+                </Uu5Elements.Tooltip>
+              )}
+            </>
+          );
+        },
+      });
+
+      const UuCourseKitTile = createVisualComponent({
+        render() {
+          const { a } = Uu5Elements.useSpacing();
+          const { isMobileOrTabet } = useDevice();
+
+          return (
+            <Uu5Elements.Tile
+              header={
+                <div
+                  className={Config.Css.css({
+                    display: "grid",
+                    gridTemplateColumns: "min-content min-content auto",
+                    alignItems: "center",
+                    columnGap: "8px",
+                  })}
+                >
+                  <Uu5Elements.Button
+                    icon="uugds-check"
+                    significance="highlighted"
+                    colorScheme="primary"
+                    size={isMobileOrTabet ? "s" : "xs"}
+                  />
+                  <Uu5Elements.Icon icon="mdi-lock" significance="common" colorScheme="building" />
+                  Card
+                </div>
+              }
+              footer={
+                <div
+                  className={Config.Css.css({
+                    display: "grid",
+                    gridTemplateColumns: "min-content auto",
+                    alignItems: "center",
+                    columnGap: "8px",
+                  })}
+                >
+                  <img
+                    src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                    className={Config.Css.css({ objectFit: "cover", height: 24, borderRadius: "50%" })}
+                  />
+                  <div>Světla Vittingerová</div>
+                </div>
+              }
+              headerSignificance="common"
+              headerColorScheme="dark-purple"
+              footerSignificance="distinct"
+              footerColorScheme="building"
+              aspectRatio="1x1"
+              actionList={getActionList({
+                colorScheme: "building",
+                significance: "highlighted",
+                background: "dark",
+              })}
+              actionCollapsedMenuProps={{
+                colorScheme: "building",
+                significance: "highlighted",
+                background: "dark",
+              }}
+            >
+              <div className={Config.Css.css({ display: "grid", gridTemplateColumns: "1fr 1fr", gap: a })}>
+                <Uu5Elements.Text
+                  significance="subdued"
+                  colorScheme="building"
+                  category="story"
+                  segment="body"
+                  type="minor"
+                >
+                  State
+                </Uu5Elements.Text>
+                <Uu5Elements.Tag colorScheme="primary" size="xs" className={Config.Css.css({ justifySelf: "end" })}>
+                  TESTED
+                </Uu5Elements.Tag>
+                <Uu5Elements.Text
+                  significance="subdued"
+                  colorScheme="building"
+                  category="story"
+                  segment="body"
+                  type="minor"
+                >
+                  Card ID
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  category="story"
+                  segment="body"
+                  type="minor"
+                  className={Config.Css.css({ justifySelf: "end" })}
+                >
+                  KC_0177
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  significance="subdued"
+                  colorScheme="building"
+                  category="story"
+                  segment="body"
+                  type="minor"
+                >
+                  Date of creation
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  category="story"
+                  segment="body"
+                  type="minor"
+                  className={Config.Css.css({ justifySelf: "end" })}
+                >
+                  17.10.2020 10:34
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  significance="subdued"
+                  colorScheme="building"
+                  category="story"
+                  segment="body"
+                  type="minor"
+                >
+                  Last edited
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  category="story"
+                  segment="body"
+                  type="minor"
+                  className={Config.Css.css({ justifySelf: "end" })}
+                >
+                  14.01.2021 09:55
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  significance="subdued"
+                  colorScheme="building"
+                  category="story"
+                  segment="body"
+                  type="minor"
+                >
+                  Revision author
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  category="story"
+                  segment="body"
+                  type="minor"
+                  className={Config.Css.css({ justifySelf: "end" })}
+                >
+                  Světla Vittingerová
+                </Uu5Elements.Text>
+              </div>
+            </Uu5Elements.Tile>
+          );
+        },
+      });
+
+      const ImageTile = createVisualComponent({
+        render() {
+          const { isMobileOrTabet } = useDevice();
+
+          return (
+            <Uu5Elements.Tile
+              header={
+                <div
+                  className={Config.Css.css({
+                    display: "grid",
+                    gridTemplateColumns: "min-content min-content",
+                    alignItems: "center",
+                    columnGap: "8px",
+                  })}
+                >
+                  <Uu5Elements.Button
+                    icon="uugds-check"
+                    significance="highlighted"
+                    colorScheme="primary"
+                    size={isMobileOrTabet ? "s" : "xs"}
+                  />
+                  <Uu5Elements.Icon icon="mdi-lock" significance="common" colorScheme="building" />
+                </div>
+              }
+              headerOverlap
+              aspectRatio="1x1"
+              actionList={getActionList({
+                colorScheme: "building",
+                significance: "highlighted",
+                background: "dark",
+              })}
+              actionCollapsedMenuProps={{
+                colorScheme: "building",
+                significance: "highlighted",
+                background: "dark",
+              }}
+            >
+              {() => (
+                <img
+                  src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                  className={Config.Css.css({ display: "block", objectFit: "cover", width: "100%", height: "100%" })}
+                />
+              )}
+            </Uu5Elements.Tile>
+          );
+        },
+      });
+
+      const PersonTile = createVisualComponent({
+        render() {
+          const { a } = Uu5Elements.useSpacing();
+          const { isMobileOrTabet } = useDevice();
+
+          return (
+            <Uu5Elements.Tile
+              header={
+                <div
+                  className={Config.Css.css({
+                    display: "grid",
+                    gridTemplateColumns: "min-content min-content",
+                    alignItems: "center",
+                    columnGap: "8px",
+                  })}
+                >
+                  <Uu5Elements.Button
+                    icon="uugds-check"
+                    significance="highlighted"
+                    colorScheme="primary"
+                    size={isMobileOrTabet ? "s" : "xs"}
+                  />
+                  <Uu5Elements.Icon icon="mdi-lock" significance="subdued" colorScheme="building" />
+                </div>
+              }
+              footer={
+                <div
+                  className={Config.Css.css({
+                    display: "grid",
+                    gridTemplateColumns: "auto min-content min-content",
+                    alignItems: "center",
+                    columnGap: "8px",
+                  })}
+                >
+                  <Uu5Elements.Text
+                    significance="subdued"
+                    colorScheme="building"
+                    category="story"
+                    segment="body"
+                    type="minor"
+                  >
+                    Guardians
+                  </Uu5Elements.Text>
+                  <img
+                    src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                    className={Config.Css.css({
+                      display: "block",
+                      objectFit: "cover",
+                      height: 24,
+                      borderRadius: "50%",
+                      justifySelf: "end",
+                    })}
+                  />
+                  <img
+                    src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                    className={Config.Css.css({
+                      display: "block",
+                      objectFit: "cover",
+                      height: 24,
+                      borderRadius: "50%",
+                      justifySelf: "end",
+                    })}
+                  />
+                </div>
+              }
+              headerOverlap
+              footerSignificance="distinct"
+              aspectRatio="4x5"
+              width={252}
+              actionList={getActionList()}
+            >
+              {({ style }) => (
+                <div
+                  className={Config.Css.css({ display: "grid", gridTemplateRows: "4fr auto 1fr", maxHeight: "100%" })}
+                >
+                  <div className={Config.Css.css({ display: "grid", gridTemplateRows: "4fr 1fr" })}>
+                    <img
+                      src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                      className={Config.Css.css({
+                        display: "block",
+                        objectFit: "cover",
+                        width: "50%",
+                        borderRadius: "50%",
+                        placeSelf: "center",
+                      })}
+                    />
+                    <Uu5Elements.Text
+                      category="interface"
+                      segment="title"
+                      type="common"
+                      className={Config.Css.css({ textAlign: "center" })}
+                    >
+                      Jerome Bell
+                    </Uu5Elements.Text>
+                  </div>
+                  <Uu5Elements.Line significance="subdued" />
+                  <div
+                    className={Config.Css.css({
+                      ...style,
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: a,
+                    })}
+                  >
+                    <Uu5Elements.Text
+                      significance="subdued"
+                      colorScheme="building"
+                      category="story"
+                      segment="body"
+                      type="minor"
+                    >
+                      Class
+                    </Uu5Elements.Text>
+                    <Uu5Elements.Tag colorScheme="primary" size="xs" className={Config.Css.css({ justifySelf: "end" })}>
+                      4.C
+                    </Uu5Elements.Tag>
+                    <Uu5Elements.Text
+                      significance="subdued"
+                      colorScheme="building"
+                      category="story"
+                      segment="body"
+                      type="minor"
+                    >
+                      Nickname
+                    </Uu5Elements.Text>
+                    <Uu5Elements.Text
+                      category="story"
+                      segment="body"
+                      type="minor"
+                      className={Config.Css.css({ justifySelf: "end" })}
+                    >
+                      Jero
+                    </Uu5Elements.Text>
+                  </div>
+                </div>
+              )}
+            </Uu5Elements.Tile>
+          );
+        },
+      });
+
+      const FileTile = createVisualComponent({
+        render() {
+          const { a } = Uu5Elements.useSpacing();
+          const { isMobileOrTabet } = useDevice();
+
+          return (
+            <Uu5Elements.Tile
+              header={
+                <div
+                  className={Config.Css.css({
+                    display: "grid",
+                    gridTemplateColumns: "min-content min-content",
+                    alignItems: "center",
+                    columnGap: "8px",
+                  })}
+                >
+                  <Uu5Elements.Button
+                    icon="uugds-check"
+                    significance="highlighted"
+                    colorScheme="primary"
+                    size={isMobileOrTabet ? "s" : "xs"}
+                  />
+                  <ContentState
+                    icon="uugds-alert-circle"
+                    colorScheme="problem"
+                    tooltip="Invalid file format"
+                    tooltipColorScheme="negative"
+                    tooltipSignificance="highlighted"
+                  />
+                </div>
+              }
+              footer={
+                <div
+                  className={Config.Css.css({
+                    display: "grid",
+                    gridTemplateColumns: "auto min-content",
+                    alignItems: "center",
+                    columnGap: "8px",
+                  })}
+                >
+                  <Uu5Elements.Text
+                    significance="subdued"
+                    colorScheme="building"
+                    category="story"
+                    segment="body"
+                    type="minor"
+                  >
+                    26.10.2021
+                  </Uu5Elements.Text>
+                  <img
+                    src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                    className={Config.Css.css({
+                      objectFit: "cover",
+                      height: 24,
+                      borderRadius: "50%",
+                      justifySelf: "end",
+                    })}
+                  />
+                </div>
+              }
+              headerOverlap
+              aspectRatio="4x5"
+              width={252}
+            >
+              {({ style }) => (
+                <div className={Config.Css.css({ display: "grid", gridTemplateRows: "4fr 1fr", maxHeight: "100%" })}>
+                  <img
+                    src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                    className={Config.Css.css({
+                      display: "block",
+                      objectFit: "cover",
+                      width: "100%",
+                      height: "100%",
+                      minHeight: 0,
+                    })}
+                  />
+                  <div
+                    className={Config.Css.css({
+                      ...style,
+                      display: "grid",
+                      gap: a,
+                    })}
+                  >
+                    <Uu5Elements.Text category="interface" segment="title" type="minor">
+                      Image
+                    </Uu5Elements.Text>
+                    <Uu5Elements.Text
+                      significance="subdued"
+                      colorScheme="building"
+                      category="story"
+                      segment="body"
+                      type="minor"
+                    >
+                      .jpg
+                    </Uu5Elements.Text>
+                    <Uu5Elements.Text
+                      significance="subdued"
+                      colorScheme="building"
+                      category="story"
+                      segment="body"
+                      type="minor"
+                    >
+                      28 KB
+                    </Uu5Elements.Text>
+                  </div>
+                </div>
+              )}
+            </Uu5Elements.Tile>
+          );
+        },
+      });
+
+      const FileTileHorizontal = createVisualComponent({
+        render() {
+          const { a } = Uu5Elements.useSpacing();
+          const { isMobileOrTabet } = useDevice();
+
+          return (
+            <Uu5Elements.Tile
+              header={
+                <div
+                  className={Config.Css.css({
+                    display: "grid",
+                    gridTemplateColumns: "min-content min-content",
+                    alignItems: "center",
+                    columnGap: "8px",
+                  })}
+                >
+                  <Uu5Elements.Button
+                    icon="uugds-check"
+                    significance="highlighted"
+                    colorScheme="primary"
+                    size={isMobileOrTabet ? "s" : "xs"}
+                  />
+                  <ContentState
+                    icon="uugds-alert-circle"
+                    colorScheme="problem"
+                    tooltip="Invalid file format"
+                    tooltipColorScheme="negative"
+                    tooltipSignificance="highlighted"
+                  />
+                </div>
+              }
+              headerOverlap
+              aspectRatio="2x1"
+            >
+              {({ style }) => (
+                <div className={Config.Css.css({ display: "grid", gridTemplateColumns: "1fr 1fr", height: "100%" })}>
+                  <div className={Config.Css.css({ minWidth: 0, minHeight: 0, overflow: "hidden" })}>
+                    <img
+                      src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                      className={Config.Css.css({
+                        display: "block",
+                        objectFit: "cover",
+                        width: "100%",
+                        height: "100%",
+                      })}
+                    />
+                  </div>
+                  <div
+                    className={Config.Css.css({
+                      ...style,
+                      display: "grid",
+                      gridTemplateRows: "min-content min-content min-content 1fr",
+                      gap: a,
+                      minHeight: 0,
+                    })}
+                  >
+                    <Uu5Elements.Text category="interface" segment="title" type="minor">
+                      Image
+                    </Uu5Elements.Text>
+                    <Uu5Elements.Text
+                      significance="subdued"
+                      colorScheme="building"
+                      category="story"
+                      segment="body"
+                      type="minor"
+                    >
+                      .jpg
+                    </Uu5Elements.Text>
+                    <Uu5Elements.Text
+                      significance="subdued"
+                      colorScheme="building"
+                      category="story"
+                      segment="body"
+                      type="minor"
+                    >
+                      28 KB
+                    </Uu5Elements.Text>
+                    <div
+                      className={Config.Css.css({
+                        display: "grid",
+                        gridTemplateColumns: "auto min-content",
+                        alignItems: "center",
+                        alignSelf: "end",
+                        columnGap: "8px",
+                      })}
+                    >
+                      <Uu5Elements.Text
+                        significance="subdued"
+                        colorScheme="building"
+                        category="story"
+                        segment="body"
+                        type="minor"
+                      >
+                        26.10.2021
+                      </Uu5Elements.Text>
+                      <img
+                        src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                        className={Config.Css.css({
+                          objectFit: "cover",
+                          height: 24,
+                          borderRadius: "50%",
+                          justifySelf: "end",
+                        })}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </Uu5Elements.Tile>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div
+              className={Config.Css.css({
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, 280px)",
+                gap: 8,
+              })}
+            >
+              {/*@@viewOn:example*/}
+              <UuCourseKitTile />
+              <ImageTile />
+              <PersonTile />
+              <FileTile />
+              <FileTileHorizontal />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

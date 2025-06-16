@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Fragment, createComponent, createVisualComponent, useState, useRef, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      const RestrainedContent = createVisualComponent({
+        render(props) {
+          return (
+            <Uu5Elements.Grid
+              {...props}
+              templateAreas="a ., a b"
+              templateRows="32px auto"
+              templateColumns="auto min-content"
+            >
+              <Uu5Elements.Grid.Item gridArea="a">
+                Restrained header is not shown in the modal (but actions are). The modal must be aware that actions
+                might overlap the content and lay out its content accordingly.
+                <p>
+                  If the modal is nested in ModalBus, the header can still be shown in auxiliary components such as
+                  dropdown for navigating to specific modal (shown if there're at least 4 opened modals).
+                </p>
+              </Uu5Elements.Grid.Item>
+              <Uu5Elements.Grid.Item gridArea="b">
+                <Uu5Elements.PlaceholderBox code="chart" />
+              </Uu5Elements.Grid.Item>
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+
+      //@@viewOn:example
+      function DemoModal(props) {
+        const { label, ...modalProps } = props;
+        let [open, setOpen] = useState(false);
+
+        return (
+          <Fragment>
+            <Uu5Elements.Button onClick={() => setOpen(true)} children={label} />
+
+            <Uu5Elements.Modal {...modalProps} open={open} onClose={() => setOpen(false)} />
+          </Fragment>
+        );
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Elements.ModalBus>
+              <DemoModal id="modal1" label="Open modal 1 (default width)" header="Modal 1 (default width)">
+                <DemoModal label="Open modal 2 (width 480)" header="Modal 2 (width 480)" width={480} info="Information">
+                  <DemoModal label="Open modal 3 (width full)" header="Modal 3 (width full)" width="full">
+                    <DemoModal label="Open modal 4 (width null)" header="Modal 4 (width null)" width={null}>
+                      <Uu5Elements.ModalBus.RestoreButton
+                        colorScheme="negative"
+                        significance="highlighted"
+                        modalId="modal1"
+                      >
+                        Close until Modal 1
+                      </Uu5Elements.ModalBus.RestoreButton>{" "}
+                      <DemoModal
+                        label="Open modal 5 (restrained header)"
+                        header="Modal 5 (restrained header)"
+                        restrainedHeader
+                        actionList={[{ icon: "uugds-favorites", onClick: () => alert("rate") }]}
+                      >
+                        <RestrainedContent />
+                      </DemoModal>
+                      <LoremIpsum avgSentences={1} />
+                    </DemoModal>
+                    <LoremIpsum paragraphCount={1} />
+                  </DemoModal>
+                  <LoremIpsum paragraphCount={10} />
+                </DemoModal>
+                <LoremIpsum paragraphCount={1} />
+              </DemoModal>
+
+              <LoremIpsum paragraphCount={20} />
+            </Uu5Elements.ModalBus>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

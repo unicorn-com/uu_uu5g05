@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script>
+      Uu5Loader.config({
+        imports: {
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, SessionProvider, useState, ErrorBoundary, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { AuthenticationService } from "uu_appg01_oidc";
+
+      //@@viewOn:example
+      Utils.Telemetry.init("http://localhost:6450/sys/logTelemetryData", { intervalMs: 1000 });
+
+      function MyComp() {
+        useEffect(() => {
+          window.aaaa();
+        }, []);
+        return <div>hello</div>;
+      }
+
+      function Demo() {
+        const [base64, setBase64] = useState();
+
+        return (
+          <main>
+            <h5>See failed logTelemetryData in network after click to the button.</h5>
+
+            <SessionProvider authenticationService={AuthenticationService}>
+              <Uu5Elements.Button onClick={() => {
+                Utils.Telemetry.info("TEST", { myKey: "myValue" })
+              }}>
+                Telemetry.info
+              </Uu5Elements.Button>
+            </SessionProvider>
+
+            <h5>Paste base64 from the call payload to decode, what is sent to server:</h5>
+            <Uu5Forms.TextArea
+              label="Base64"
+              value={base64}
+              onChange={(e) => setBase64(e.data.value)}
+            />
+            <br />
+            <Uu5Forms.TextArea
+              label="Decoded"
+              value={base64 ? JSON.stringify(JSON.parse(atob(base64)), null, 2) : undefined}
+              readOnly
+              rows={14}
+            />
+
+            <br />
+            <ErrorBoundary fallback={"Test ErrorBoundary"}>
+              <MyComp />
+            </ErrorBoundary>
+          </main>
+        );
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

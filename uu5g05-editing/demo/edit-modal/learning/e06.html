@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ecc Editation</title>
+
+    <link href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css" rel="stylesheet" />
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      Uu5Loader.config({
+        imports: {
+          // uu_plus4u5g01 dependency
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+
+          "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+
+          // uu_contentkitg01 dependency
+          uu5g04: "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04.min.js",
+          "uu5g04-bricks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-bricks.min.js",
+          "uu5g04-forms": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-forms.min.js",
+          "uu5g04-hooks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-hooks.min.js",
+          uu5richtextg01: "https://cdn.plus4u.net/uu-uu5richtextg01/1.0.0/uu5richtextg01.min.js",
+
+          "uu5g04-block-layout": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-block-layout.min.js",
+          uu5tilesg02: "https://cdn.plus4u.net/uu-uu5tilesg02/1.0.0/uu5tilesg02.min.js",
+          uu5codekitg01: "https://cdn.plus4u.net/uu-uu5codekitg01/1.0.0/uu5codekitg01.min.js",
+          immutable: "https://cdn.plus4u.net/libs/immutable/3.8.2/immutable.min.js",
+          "uu_applibraryregistryg01-bricks":
+            "https://cdn.plus4u.net/uu-applibraryregistryg01/1.0.0/uu_applibraryregistryg01-bricks.min.js",
+
+          uu_editablecomponentcontentg03:
+            "https://cdn.plus4u.net/uu-editablecomponentcontentg03/3.0.0/uu_editablecomponentcontentg03.min.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent } from "uu5g05";
+      import { LoremIpsum } from "uu5g05-dev";
+      import Uu5Editing from "uu5g05-editing";
+      import UuEcc from "uu_editablecomponentcontentg03";
+
+      //*@@viewOn:example*
+      const editedComponent = `<uu5string />
+        <Uu5Editing.Block
+          colorScheme="primary"
+          significance="distinct"
+          borderRadius="elementary"
+          nestingLevel="area"
+          card="full"
+          headerType="title"
+          level=1
+          header="Block"
+          info="Some info..."
+          headerAspectRatio="1:1"
+          headerColorScheme="purple"
+          iconList='<uu5json />
+            [
+              {
+                "label": "Overview",
+                "icon": "uugds-info",
+                "tooltip": "Overview tooltip..."
+              },
+              {
+                "label": "Details",
+                "icon": "uugds-dots-vertical",
+                "tooltip": "Details tooltip..."
+              }
+            ]
+          '
+        >
+          <Uu5Dev.LoremIpsum />
+        </Uu5Editing.Block>`;
+
+      const sectionData = {
+        data: {
+          content: editedComponent,
+          sys: {
+            rev: 0,
+          },
+        },
+        onEditReady: () => null,
+        onUpdate: () => null,
+        onLock: () => null,
+      };
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          const componentProps = {};
+
+          return (
+            <>
+              {/*@@viewOn:example*/}
+              <UuEcc.PageEditProvider initialEditable>
+                <UuEcc.Section {...sectionData} />
+              </UuEcc.PageEditProvider>
+              {/*@@viewOff:example*/}
+            </>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

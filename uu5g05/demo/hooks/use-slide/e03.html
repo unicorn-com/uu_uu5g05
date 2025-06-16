@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, times } from "uu5g05-dev";
+
+      //@@viewOn:example
+      import { useSlide } from "uu5g05";
+
+      const Item = createVisualComponent({
+        render(props) {
+          const { onRemove, onArchive, className, elementRef, ...propsToPass } = props;
+
+          const { ref, style } = useSlide({
+            onEnd(e) {
+              switch (e.data.direction.hourType) {
+                case 3:
+                  if (e.data.lengthType) onArchive();
+                  break;
+                case 9:
+                  if (e.data.lengthType) onRemove();
+                  break;
+              }
+            }
+          })
+
+          return (
+            <Uu5Elements.MenuItem
+              {...propsToPass}
+              className={Utils.Css.joinClassName(className, Config.Css.css(style))}
+              elementRef={Utils.Component.combineRefs(elementRef, ref)}
+            />
+          )
+        }
+      });
+
+      const Demo = createVisualComponent({
+        render(props) {
+          const [itemList, setItemList] = useState(() => times(10, () => ({ value: Utils.String.generateId() })));
+
+          return (
+            <Uu5Elements.Tile
+              header="ID List"
+              actionList={[{
+                icon: "uugds-plus",
+                colorScheme: "primary",
+                significance: "common",
+                onClick: () => setItemList((itemList) => [...itemList, { value: Utils.String.generateId() }])
+              }]}
+              displayActionList
+              className={Config.Css.css({ width: "max-content" })}
+            >
+              <Uu5Elements.MenuList
+                itemBorderRadius="moderate"
+                itemList={itemList.map(({ value, archived }) => ({
+                  children: value,
+                  onClick: () => console.log("item onClick", value),
+                  colorScheme: archived ? "cyan" : undefined,
+                  significance: "distinct",
+                  component: (
+                    <Item
+                      onRemove={() => setItemList((itemList) => itemList.filter((item) => item.value !== value))}
+                      onArchive={() => setItemList((itemList) => itemList.map(
+                        (item) => item.value === value ? ({ ...item, archived: !item.archived }) : item)
+                      )}
+                    />
+                  ),
+                }))}
+              />
+            </Uu5Elements.Tile>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

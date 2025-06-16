@@ -1,0 +1,91 @@
+{
+  "collapse": "Réduire",
+  "expand": "Développer",
+  "moreInfo": "Aide",
+  "showMore": "Afficher plus",
+  "showLess": "Afficher moins",
+  "cancel": "Annuler",
+  "AlertBus": {
+    "closeAll": "Fermer tout"
+  },
+  "Alerts": {
+    "applicationNeedsReloadMessage": "Certaines fonctionnalités de l'application ont été mises à jour. Il est nécessaire de recharger la page pour que l'application fonctionne correctement.",
+    "applicationNeedsReloadReload": "Recharger"
+  },
+  "ModalBus": {
+    "modalList": "Liste modale"
+  },
+  "RestoreButton": {
+    "confirmMessage": "Un ou plusieurs fenêtres modales seront fermées. Continuer ?",
+    "confirm": "Fermer les fenêtres"
+  },
+  "Pagination": {
+    "search": "Écrire le numéro de page",
+    "pageOf": "Page %d sur %d"
+  },
+  "PlaceholderBox": {
+    "items": "Il n'y a pas d'éléments ici",
+    "document": "Ce document est vide",
+    "documents": "Il n'y a pas de documents ici",
+    "folder": "Ce dossier est vide",
+    "users": "Il n'y a pas d'utilisateurs assignés",
+    "search": "Aucun résultat de recherche",
+    "permission": "Vous n'êtes pas autorisé à voir ce contenu",
+    "account": "Veuillez vous connecter d'abord",
+    "forbidden": "Vous ne pouvez pas accéder à ceci",
+    "cart": "Votre panier est vide",
+    "basket": "Votre panier est vide",
+    "product": "Il n'y a pas de produits ici",
+    "message": "Il n'y a pas de messages ici",
+    "ticket": "Il n'y a pas de tickets ici",
+    "sprint": "Il n'y a pas de sprints ici",
+    "request": "Il n'y a pas de demandes ici",
+    "activities": "Il n'y a pas d'activités ici",
+    "images": "Il n'y a pas d'images ici",
+    "error": "Oups, quelque chose s'est mal passé",
+    "offline": "Il semble que vous soyez hors ligne",
+    "delete": "Voulez-vous vraiment supprimer cela ?",
+    "timer": "Le contenu est en préparation",
+    "role": "Aucun rôle assigné",
+    "security": "La page est protégée",
+    "document-check": "La page est vérifiée",
+    "kid": "Aucun compte enfant assigné",
+    "user": "Aucun compte assigné",
+    "sync": "Synchronisation",
+    "favorites": "Il n'y a pas de favoris",
+    "notification": "Aucune nouvelle notification",
+    "payment-card": "Aucune méthode de paiement disponible"
+  },
+  "useComponentPaste": {
+    "pasteAs": "Coller en tant que",
+    "pasteHere": "Coller ici"
+  },
+  "verticalCalendar": {
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "last7Days": "Les 7 derniers jours",
+    "last30Days": "Les 30 derniers jours",
+    "thisMonth": "Ce mois-ci",
+    "previousMonth": "Mois précédent"
+  },
+  "IconPalette": {
+    "noIcons": "Aucune icône trouvée"
+  },
+  "ColorPalette": {
+    "noShades": "Les nuances ne sont pas disponibles pour cette couleur.",
+    "shade": "Nuance",
+    "selectSchemaShade": "Choisissez une couleur pour voir les nuances.",
+    "selectSchemaOpacity": "Choisissez une couleur pour voir le curseur d'opacité.",
+    "opacity": "Opacité"
+  },
+  "Calendar": {
+    "selectWeek": "Sélectionner la semaine",
+    "selectMonth": "Sélectionner le mois"
+  },
+  "SpeechButton": {
+    "label": "Reconnaissance vocale",
+    "error": {
+      "not-allowed": "L'enregistrement vocal n'est pas autorisé dans ce navigateur."
+    }
+  }
+}

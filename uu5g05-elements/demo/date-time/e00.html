@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      function Table({ columns, children, coverItem = false }) {
+        children = Array.isArray(children) ? children : [children];
+        return (
+          <div className={Config.Css.css({
+            display: "grid",
+            gridTemplateColumns: typeof columns === "number" ? `repeat(${columns}, 1fr)` : columns,
+            gap: 8
+          })}>
+            {!coverItem ? children : children.map((child, i) => (
+              <div key={i}>
+                {child}
+              </div>
+            ))}
+          </div>
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          const formatDate = "2022-03-02T04:05:06.789"
+
+          return (
+            <Table columns="repeat(auto-fit, minmax(320px, 1fr))">
+              <div>
+                <Uu5Elements.LanguageSelector languageList={["en", "cs", "sk", "uk"]} significance="subdued" />
+
+                {/*@@viewOn:example*/}
+                <h4>default</h4>
+                <Uu5Elements.DateTime />
+
+                <h4>value</h4>
+                <Table columns="80px 1fr" coverItem>
+                  string <Uu5Elements.DateTime value="2022-02-22T22:22:22.222Z" />
+                  date <Uu5Elements.DateTime value={new Date("2022-02-22T22:22:22.222Z")} />
+                  now <Uu5Elements.DateTime value={new Date()} />
+                </Table>
+
+                <h4>dateFormat</h4>
+                <Table columns="80px 1fr" coverItem>
+                  none <Uu5Elements.DateTime dateFormat="none" />
+                  short <Uu5Elements.DateTime dateFormat="short" />
+                  medium <Uu5Elements.DateTime dateFormat="medium" />
+                  long <Uu5Elements.DateTime dateFormat="long" />
+                </Table>
+
+                <h4>timeFormat</h4>
+                <Table columns="80px 1fr" coverItem>
+                  none <Uu5Elements.DateTime timeFormat="none" />
+                  short <Uu5Elements.DateTime value={formatDate} timeFormat="short" />
+                  medium <Uu5Elements.DateTime value={formatDate} timeFormat="medium" />
+                  long <Uu5Elements.DateTime value={formatDate} timeFormat="long" />
+                </Table>
+
+                <h4>hourFormat</h4>
+                <Table columns="80px 1fr" coverItem>
+                  11 <Uu5Elements.DateTime hourFormat={11} />
+                  12 <Uu5Elements.DateTime hourFormat={12} />
+                  24 <Uu5Elements.DateTime hourFormat={24} />
+                </Table>
+
+                <h4>timeZone</h4>
+                <Table columns="200px 1fr" coverItem>
+                  Europe/Prague <Uu5Elements.DateTime timeZone="Europe/Prague" />
+                  Europe/Kiev <Uu5Elements.DateTime timeZone="Europe/Kiev" />
+                  Pacific/Honolulu <Uu5Elements.DateTime timeZone="Pacific/Honolulu" />
+                  America/Los_Angeles <Uu5Elements.DateTime timeZone="America/Los_Angeles" />
+                  Australia/Sydney <Uu5Elements.DateTime timeZone="Australia/Sydney" />
+                </Table>
+                {/*@@viewOff:example*/}
+              </div>
+
+              <div>
+                <h4>format {formatDate}</h4>
+                <Table columns="60px 100px 1fr" coverItem>
+                  {[
+                    ["D", "Displays the day in the month 1 - 31"],
+                    ["DD", "Displays the day in the month 01 - 31"],
+                    ["M", "Displays the month 1 - 12"],
+                    ["MM", "Displays the month 01 - 12"],
+                    ["MMM", "Displays the short month name based on locale, e.g. \"Jan\" (en-US) or \"led\" (cs-CZ)"],
+                    ["MMMM", "Displays the long month name based on locale, e.g. \"January\" (en-US) or \"leden\" (cs-CZ)"],
+                    ["YY", "Displays the last two digits of the year"],
+                    ["Y", "Displays the entire year"],
+                    ["dd", "Displays the 2-character weekday name based on locale, e.g. \"Tu\" (en-US) or \"út\" (cs-CZ)"],
+                    ["ddd", "Displays the short version of weekday name based on locale, e.g. \"Tue\" (en-US) or \"út\" (cs-CZ)"],
+                    ["dddd", "Displays the weekday name based on locale, e.g. \"Tuesday\" (en-US) or \"úterý\" (cs-CZ)"],
+                    ["W", "Displays the ISO week number of the year 1 - 53"],
+                    ["WW", "Displays the ISO week number of the year 01 - 53"],
+                    ["E", "Displays the day of the ISO week 1 - 7 (1 is Monday, 7 is Sunday)"],
+                    ["h", "Displays hours in 12 hour cycle 1 - 12"],
+                    ["hh", "Displays hours in 12 hour cycle 01 - 12"],
+                    ["H", "Displays hours in 24 hour cycle 0 - 23"],
+                    ["HH", "Displays hours in 24 hour cycle 00 - 23"],
+                    ["k", "Displays hours in 12 hour cycle 1 - 24"],
+                    ["kk", "Displays hours in 12 hour cycle 01 - 24"],
+                    ["K", "Displays hours in 12 hour cycle 0 - 11"],
+                    ["KK", "Displays hours in 12 hour cycle 00 - 11"],
+                    ["m", "Displays minutes 0 - 60"],
+                    ["mm", "Displays minutes 00 - 60"],
+                    ["s", "Displays seconds 0 - 60"],
+                    ["ss", "Displays seconds 00 - 60"],
+                    ["S", "Displays milliseconds with 1 significant digit"],
+                    ["SS", "Displays milliseconds with 2 significant digits"],
+                    ["SSS", "Displays milliseconds with 3 significant digits"],
+                    ["a", "Displays day period based on locale, e.g. \"am\" / \"pm\" (en-US) or \"dop.\" / \"odp.\" (cs-CZ)"],
+                    ["A", "Displays day period based on locale, e.g. \"AM\" / \"PM\" (en-US) or \"DOP.\" / \"ODP.\" (cs-CZ)"],
+                    ["aa", "Displays day period based on locale, e.g. \"in the morning\" / \"at night\" (en-US) or \"dop.\" / \"odp.\" (cs-CZ)"],
+                    ["AA", "Displays day period based on locale, e.g. \"in the morning\" / \"at night\" (en-US) or \"dop.\" / \"odp.\" (cs-CZ)"],
+                    ["aaa", "Displays day period based on locale, e.g. \"in the morning\" / \"at night\" (en-US) or \"dopoledne\" / \"odpoledne\" (cs-CZ)"],
+                    ["AAA", "Displays day period based on locale, e.g. \"in the morning\" / \"at night\" (en-US) or \"dopoledne\" / \"odpoledne\" (cs-CZ)"],
+                    ["[Year]: Y", "Displays the value in brackets as-is, e.g. [h:m:s 123] displays \"h:m:s 123\""]
+                  ].map(([format, desc]) => ([
+                    format, <Uu5Elements.DateTime key={format} value={formatDate} format={format} />, desc
+                  ])).flat()}
+                </Table>
+              </div>
+            </Table>
+          );
+        }
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

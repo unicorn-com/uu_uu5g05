@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      Uu5Loader.config({
+        imports: {
+          // mandatory for legacy components (uu5g04)
+          "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+        }
+      })
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:imports
+      import { useDynamicLibraryComponent } from "uu5g05";
+      //@@viewOff:imports
+
+      const ButtonLoader = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "ButtonLoader",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:example
+          const { Component, state, errorData } = useDynamicLibraryComponent("UU5.Bricks.Button");
+
+          let child;
+          switch (state) {
+            case "pending":
+            case "pendingNoData":
+              child = "Loading...";
+              break;
+            case "error":
+            case "errorNoData":
+              child = (
+                <div>
+                  Error
+                  <pre>
+                    {JSON.stringify(errorData, null, 2)}
+                  </pre>
+                </div>
+              );
+              break;
+            default:
+              child = <Component colorSchema="primary">Loaded Component</Component>
+          }
+          //@@viewOff:example
+
+          const attrs = Utils.VisualComponent.getAttrs(props);
+
+          return (
+            <div {...attrs}>
+              {child}
+            </div>
+          );
+          //@@viewOff:render
+        },
+      });
+
+      function Demo() {
+        return (
+          <div>
+            <ButtonLoader />
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

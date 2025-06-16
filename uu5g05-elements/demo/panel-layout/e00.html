@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <link href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css" rel="stylesheet" />
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Lsi, Fragment, createComponent, useState, useScreenSize } from "uu5g05";
+      import { LoremIpsum } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+
+      //@@viewOn:example
+      const Page = createComponent({
+        render() {
+          const [panelOpen, setPanelOpen] = useState(true);
+          const [selectedItem, setSelectedItem] = useState(0);
+          const [state, setState] = useState({});
+          const { spaceA, spaceB } = Uu5Elements.useSpacing();
+
+          const tabs = [
+            {
+              icon: "uugds-pencil",
+              onClick: () => {
+                setSelectedItem(0);
+              },
+              children: <Lsi lsi={{ en: "Lorem Ipsum" }} />,
+              focused: selectedItem === 0,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+          ];
+
+          const _renderContent = (selectedItem) => {
+            const content = [
+              <LoremIpsum paragraphCount={2} />,
+              <>
+                <Uu5Elements.HighlightedBox>Information Box</Uu5Elements.HighlightedBox>
+                <Uu5Elements.HighlightedBox colorScheme="warning">Warning Box</Uu5Elements.HighlightedBox>
+                <Uu5Elements.HighlightedBox colorScheme="positive">Positive Box</Uu5Elements.HighlightedBox>
+                <Uu5Elements.HighlightedBox colorScheme="negative">Negative Box</Uu5Elements.HighlightedBox>
+              </>,
+            ];
+
+            return content[selectedItem];
+          };
+
+          return (
+            <div>
+              <Uu5Forms.SwitchSelect
+                label="Left panel"
+                value={panelOpen}
+                itemList={[
+                  { value: true, children: "Open" },
+                  { value: false, children: "Close" },
+                ]}
+                onChange={(e) => setPanelOpen(e.data.value)}
+              />
+              <h4>Panel Layout</h4>
+              <Uu5Elements.PanelLayout
+                leftOpen={panelOpen}
+                leftContent={<Uu5Elements.MenuList itemBorderRadius="moderate" itemList={tabs} />}
+                separatorPadding={{ left: spaceB, right: spaceB }}
+              >
+                <Uu5Elements.ScrollableBox maxHeight="100%">{_renderContent(selectedItem)}</Uu5Elements.ScrollableBox>
+              </Uu5Elements.PanelLayout>
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

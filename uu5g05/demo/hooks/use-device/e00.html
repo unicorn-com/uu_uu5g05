@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      //@@viewOn:example
+      //@@viewOn:imports
+      import { Utils, createVisualComponent, useDevice, DeviceProvider } from "uu5g05";
+      //@@viewOff:imports
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const Device = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "Device",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const { browserName, orientation, hasTouch, hasPointer, isHeadless } = useDevice();
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          const attrs = Utils.VisualComponent.getAttrs(props);
+
+          return (
+            <pre {...attrs}>
+              {JSON.stringify({ browserName, orientation, hasTouch, hasPointer, isHeadless }, null, 2)}
+            </pre>
+          );
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      function Demo() {
+        return (
+          <div>
+            <Uu5Elements.Block
+              header={
+                <Uu5Elements.Text category="story" segment="heading" type="h2">
+                  Based on detected values
+                </Uu5Elements.Text>
+              }
+            >
+              <Device />
+            </Uu5Elements.Block>
+
+            <Uu5Elements.Block
+              header={
+                <Uu5Elements.Text category="story" segment="heading" type="h2">
+                  Based on custom values in DeviceProvider
+                </Uu5Elements.Text>
+              }
+            >
+              <DeviceProvider
+                browserName="netscape"
+                orientation="landscape-secondary"
+                hasTouch={false}
+                hasPointer={false}
+                isHeadless={true}
+              >
+                <Device />
+              </DeviceProvider>
+            </Uu5Elements.Block>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+      body:has(.uu-app-devkit-demo-middleware-controls) {
+        padding-top: 48px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        useDataList,
+        createComponent,
+        createVisualComponent,
+        SessionProvider,
+        useSession,
+        useState,
+        useRef,
+        useMemo,
+        useCallback,
+        useEffect,
+        useUnmountedRef,
+        useScreenSize,
+        AutoLoad,
+        Content,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import { AuthenticationService } from "uu_appg01_oidc";
+
+      const controlsClassName = Config.Css.css({
+        display: "flex",
+        justifyContent: "end",
+        gap: 8,
+        "&>*": { minWidth: 96 },
+      });
+
+      /*@@viewOn:example*/
+      // dao definition
+      const SCHEMA_VERSION = 1;
+
+      class JokeDao extends Utils.ObjectStore.Dao {
+        constructor() {
+          super("uuMyLibJoke", { schemaVersion: SCHEMA_VERSION });
+        }
+
+        createSchema() {
+          this.createIndex({ name: 1 });
+        }
+      }
+
+      const jokeDao = new JokeDao();
+
+      // dao usage example
+      const Calls = {
+        async load(dtoIn) {
+          let result = await jokeDao.find(dtoIn?.filterMap, dtoIn?.pageInfo);
+          console.log("Loaded joke list:", result);
+          return result;
+        },
+
+        async loadItem(dtoIn) {
+          return await jokeDao.findOne({ id: dtoIn.id });
+        },
+
+        async updateItem(newData) {
+          return await jokeDao.findOneAndUpdate({ id: newData.id }, newData, null);
+        },
+
+        async createItem(newData) {
+          return await jokeDao.insertOne(newData);
+        },
+
+        async deleteItem(dtoIn) {
+          return await jokeDao.deleteOne({ id: dtoIn.id });
+        },
+      };
+      /*@@viewOff:example*/
+
+      const Joke = Utils.Component.memo(
+        createVisualComponent({
+          render(props) {
+            const { onUpdate, onDelete, data, processingItem = {} } = props;
+            const attrs = Utils.VisualComponent.getAttrs(props);
+            return (
+              <Uu5Elements.Tile
+                {...attrs}
+                card="full"
+                colorScheme={processingItem.errorData ? "negative" : undefined}
+                significance="distinct"
+                actionList={[
+                  {
+                    children: "Update",
+                    icon: "uugds-pencil",
+                    disabled: !onUpdate,
+                    colorScheme: "primary",
+                    collapsed: false,
+                    onClick: () => onUpdate(processingItem),
+                  },
+                  {
+                    children: "Delete",
+                    icon: "uugds-delete",
+                    disabled: !onDelete,
+                    colorScheme: "negative",
+                    collapsed: false,
+                    onClick: () => onDelete(processingItem),
+                  },
+                ]}
+                header={
+                  <Uu5Elements.Text category="interface" segment="title" type="common">
+                    {data.name}
+                  </Uu5Elements.Text>
+                }
+              >
+                {data.text}
+              </Uu5Elements.Tile>
+            );
+          },
+        }),
+      );
+
+      const Example = createVisualComponent({
+        render() {
+          const [nameFilter, setNameFilter] = useState();
+
+          const pageSize = 8;
+          const dataListResult = useDataList(
+            {
+              pageSize,
+              handlerMap: {
+                load: (dtoIn) => Calls.load({ ...dtoIn, filterMap: nameFilter ? { name: nameFilter } : undefined }),
+                createItem: Calls.createItem,
+              },
+              itemHandlerMap: {
+                load: Calls.loadItem,
+                update: Calls.updateItem,
+                delete: Calls.deleteItem,
+              },
+            },
+            [nameFilter],
+          );
+          const { state, data, newData, errorData, pendingData, handlerMap } = dataListResult;
+
+          const unmountedRef = useUnmountedRef();
+
+          const [modalProps, setModalProps] = useState();
+          const showModal = useCallback((joke, onSave) => {
+            setModalProps({
+              header: joke ? "Edit Joke" : "Create Joke",
+              children: (
+                <Uu5Forms.Form
+                  onSubmit={async (e) => {
+                    await onSave(e);
+                    if (unmountedRef.current) return;
+                    setModalProps(null);
+                  }}
+                  gridLayout="name, text"
+                >
+                  <Uu5Forms.FormText label="Name" name="name" initialValue={joke?.name} />
+                  <Uu5Forms.FormTextArea label="Text" name="text" initialValue={joke?.text} />
+                  <div className={controlsClassName}>
+                    <Uu5Forms.CancelButton onClick={(e) => setModalProps(null)} />
+                    <Uu5Forms.SubmitButton />
+                  </div>
+                </Uu5Forms.Form>
+              ),
+            });
+          }, []);
+
+          const handleJokeCreate = useCallback(() => {
+            showModal(undefined, async (e) => {
+              let newJoke = await handlerMap.createItem(e.data.value);
+              setNameFilter((filter) =>
+                newJoke.name !== "Chuck Norris" && filter === "Chuck Norris" ? undefined : filter,
+              );
+            });
+          }, [showModal, unmountedRef, handlerMap]);
+
+          const handleJokeUpdate = useCallback(
+            (item) => {
+              showModal(item.data, async (e) => {
+                await item.handlerMap.update(e.data.value);
+              });
+            },
+            [showModal, unmountedRef],
+          );
+
+          const handleJokeDelete = useCallback((item) => {
+            item.handlerMap.delete();
+          }, []);
+
+          return (
+            <Uu5Elements.Grid>
+              <Uu5Elements.HighlightedBox>
+                Jokes should be kept separately depending on current uuIdentity.
+              </Uu5Elements.HighlightedBox>
+              <Uu5Elements.Block
+                header="Jokes"
+                headerType="title"
+                actionList={[
+                  {
+                    children: "All jokes",
+                    onClick: () => setNameFilter(undefined),
+                    pressed: !nameFilter,
+                    collapsed: false,
+                  },
+                  {
+                    children: "Chuck Norris jokes",
+                    onClick: () => setNameFilter((v) => (v === "Chuck Norris" ? undefined : "Chuck Norris")),
+                    pressed: nameFilter === "Chuck Norris",
+                    collapsed: false,
+                  },
+                  { divider: true },
+                  {
+                    disabled: !handlerMap.createItem,
+                    onClick: () => handleJokeCreate(),
+                    icon: "uugds-plus",
+                    colorScheme: "primary",
+                    significance: "highlighted",
+                    children: "Create",
+                  },
+                  {
+                    disabled: !handlerMap.load,
+                    onClick: () => handlerMap.load(),
+                    icon: "uugds-reload",
+                    children: "Reload",
+                  },
+                ]}
+              >
+                <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(360px, 1fr))">
+                  {data
+                    ?.filter((item) => item != null)
+                    .map((item) => (
+                      <Joke
+                        key={item.data.id}
+                        data={item.data}
+                        onUpdate={!item.handlerMap.update ? null : handleJokeUpdate}
+                        onDelete={!item.handlerMap.delete ? null : handleJokeDelete}
+                        processingItem={item}
+                      />
+                    ))}
+                </Uu5Elements.Grid>
+
+                <AutoLoad data={data} handleLoadNext={handlerMap.loadNext} distance={window.innerHeight} />
+
+                {pendingData && pendingData.operation === "loadNext" ? (
+                  <div className={Config.Css.css`text-align: center;`}>(loading {pageSize} more...)</div>
+                ) : errorData && errorData.operation === "loadNext" ? (
+                  <Uu5Elements.Button onClick={() => handlerMap.loadNext()} children="Load more (auto-load failed)" />
+                ) : errorData ? (
+                  <Uu5Elements.HighlightedBox colorScheme="negative">
+                    {errorData.error || "Ooops, something went wrong."}
+                  </Uu5Elements.HighlightedBox>
+                ) : null}
+              </Uu5Elements.Block>
+
+              <Uu5Elements.Modal {...modalProps} open={!!modalProps} onClose={() => setModalProps(null)} />
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+
+      const Page = createVisualComponent({
+        render() {
+          const [demoInited, setDemoInited] = useState(false);
+          const { addAlert } = Uu5Elements.useAlertBus();
+
+          useEffect(() => {
+            (async function demoInit() {
+              // await jokeDao.dropSchema();
+              if ((await jokeDao.count()) === 0) {
+                let result = await jokeDao.insertMany([
+                  { name: "Life", text: "I wondered why the baseball was getting bigger. Then it hit me." },
+                  { name: "Chuck Norris", text: "Chuck Norris does not sleep. He waits." },
+                  { name: "Chuck Norris", text: "Chuck Norris was peeling an onion. He made the onion cry." },
+                  {
+                    name: "Chuck Norris",
+                    text: "Some people say that it is impossible to go through walls... they have never met Chuck Norris.",
+                  },
+                ]);
+                addAlert({ message: "Created several jokes.", priority: "success", durationMs: 5000 });
+              }
+              setDemoInited(true);
+            })();
+          }, []);
+
+          return demoInited ? <Example /> : null;
+        },
+      });
+
+      const AuthenticatedDemo = createComponent({
+        render() {
+          let { identity, login, logout } = useSession();
+          return identity !== undefined ? (
+            <>
+              {identity ? (
+                <Uu5Elements.Button onClick={() => logout()} children="Log out" />
+              ) : (
+                <Uu5Elements.Button onClick={() => login()} children="Log in" />
+              )}
+              <Page key={identity?.uuIdentity} />
+            </>
+          ) : null;
+        },
+      });
+
+      const AuthenticatedPage = createVisualComponent({
+        render() {
+          return (
+            <SessionProvider authenticationService={AuthenticationService}>
+              <AuthenticatedDemo />
+            </SessionProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<AuthenticatedPage />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

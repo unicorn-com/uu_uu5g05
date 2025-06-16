@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, createComponent, createVisualComponent, useRef } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, wait } from "uu5g05-dev";
+      import { withControlledInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const Css = {
+        columns: () =>
+          Config.Css.css({ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }),
+      };
+
+      const SliderInput = withControlledInput(Uu5Forms.Slider.Input);
+
+      const ITEM_LIST = [
+        { value: "xs", children: "XS" },
+        { value: "s", children: "S" },
+        { value: "m", children: "M" },
+        { value: "l", children: "L" },
+        { value: "xl", children: "XL" },
+      ];
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div className={Css.columns()}>
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>value=50 & onChange (in console)</h4>
+                <SliderInput
+                  value={50}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                  }}
+                />
+
+                <h4>value=[null, 50]</h4>
+                <SliderInput value={[null, 50]} />
+
+                <h4>value=[50, null]</h4>
+                <SliderInput value={[50, null]} />
+
+                <h4>value=[20, 40]</h4>
+                <SliderInput value={[20, 40]} />
+
+                <h4>value=[10, 30, 80]</h4>
+                <SliderInput value={[10, 30, 80]} />
+
+                <h4>min=50 & max=150</h4>
+                <SliderInput value={100} min={50} max={150} />
+
+                <h4>step=25</h4>
+                <SliderInput value={50} step={25} />
+                <SliderInput value={[25, 50]} step={25} />
+
+                <h4>tickStep=25 (step=1)</h4>
+                <SliderInput value={50} tickStep={25} />
+
+                <h4>step=10 & tickStep=20</h4>
+                <SliderInput value={50} step={10} tickStep={20} />
+
+                <h4>step=5 & min=50 & max=250</h4>
+                <SliderInput value={50} step={5} min={50} max={250} />
+                <SliderInput value={[65, 120]} step={5} min={50} max={250} />
+
+                <h4>step=0.1 & min=0 & max=1</h4>
+                <SliderInput value={0.5} step={0.1} min={0} max={1} />
+                <SliderInput value={[0.5, 0.8]} step={0.1} min={0} max={1} />
+
+                <h4>itemList</h4>
+                <SliderInput value="s" itemList={ITEM_LIST} />
+                <SliderInput
+                  value="c"
+                  itemList={[
+                    { value: "none", children: "None" },
+                    { value: "a" },
+                    { value: "b", children: "Medium" },
+                    { value: "c" },
+                    { value: "d", children: "Largest" },
+                  ]}
+                />
+
+                <h4>itemList children as lsiObject</h4>
+                <SliderInput
+                  itemList={[
+                    { value: "none", children: { en: "None", cs: "Žádné" } },
+                    { value: "a" },
+                    { value: "b", children: { en: "Medium", cs: "Střední" } },
+                    { value: "c" },
+                    { value: "d", children: { en: "Largest", cs: "Největší" } },
+                  ]}
+                />
+
+                <h4>itemList & displayTick</h4>
+                <SliderInput value="m" displayTick={false} itemList={ITEM_LIST} />
+                <SliderInput value="m" displayTick itemList={ITEM_LIST} />
+                {/*@@viewOff:example*/}
+              </div>
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>value="a" & onValidationEnd (in console)</h4>
+                <SliderInput
+                  value="a"
+                  onValidationEnd={(e) => {
+                    console.log("onValidationEnd", e);
+                    // TODO save error data to state
+                  }}
+                />
+
+                <h4>value="a" & itemList & onValidationEnd (in console)</h4>
+                <SliderInput
+                  value="a"
+                  itemList={ITEM_LIST}
+                  onValidationEnd={(e) => {
+                    console.log("onValidationEnd", e);
+                    // TODO save error data to state
+                  }}
+                />
+
+                <h4>value=0 & min=50 & onValidationEnd (in console)</h4>
+                <SliderInput
+                  value={0}
+                  min={50}
+                  onValidationEnd={(e) => {
+                    console.log("onValidationEnd", e);
+                    // TODO save error data to state
+                  }}
+                />
+
+                <h4>value=100 & max=50 & onValidationEnd (in console)</h4>
+                <SliderInput
+                  value={100}
+                  max={50}
+                  onValidationEnd={(e) => {
+                    console.log("onValidationEnd", e);
+                    // TODO save error data to state
+                  }}
+                />
+
+                <h4>value=8 & step=5 & onValidationEnd (in console)</h4>
+                <SliderInput
+                  value={8}
+                  step={5}
+                  onValidationEnd={(e) => {
+                    console.log("onValidationEnd", e);
+                    // TODO save error data to state
+                  }}
+                />
+
+                <h4>onValidate: &gt;= 20 is invalid</h4>
+                <SliderInput
+                  onValidate={async (e) => {
+                    console.log("onValidate", e);
+                    const value = e.data.value;
+
+                    // TODO some async validation e.g. on server
+                    await wait();
+
+                    if (value != null) {
+                      if (value >= 20) {
+                        return {
+                          code: "badAsyncValue",
+                          feedback: "error",
+                          message: {
+                            en: "Bad async value. It must be smaller than %d.",
+                          },
+                          messageParams: [20],
+                        };
+                      }
+                    }
+                  }}
+                  onValidationStart={(e) => {
+                    console.log("onValidationStart", e);
+                    // TODO set pending state to input
+                  }}
+                  onValidationEnd={(e) => {
+                    console.log("onValidationEnd", e);
+                    // TODO save error data to state
+                    // TODO set pending state to input to false
+                  }}
+                />
+
+                <h4>value=0 & min=4 & max=10 & validateOnMount</h4>
+                <SliderInput value={0} min={4} max={10} validateOnMount />
+
+                <h4>value=0 & min=4 & max=10 & validationMap</h4>
+                <SliderInput
+                  value={0}
+                  min={4}
+                  max={10}
+                  validationMap={{
+                    min: {
+                      feedback: "warning",
+                      message: {
+                        en: "Minimum value should be higher then %d.",
+                        cs: "Minimální číslo by mělo být vyšší než %d.",
+                      },
+                    },
+                  }}
+                />
+
+                <h4>value=[10, 10] & valueUnique</h4>
+                <SliderInput valueUnique value={[10, 10]} />
+                {/*@@viewOff:example*/}
+              </div>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

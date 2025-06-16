@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, PropTypes } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      function Box({ children }) {
+        return (
+          <div className={Config.Css.css({
+            display: "inline-flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 8
+          })}>
+            {children}
+          </div>
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>code</h4>
+              <Box>
+                <Uu5Elements.Svg code="uugdssvg-svg-account" />
+                uugdssvg-svg-account
+              </Box>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <Box>
+                <Uu5Elements.Svg code="uugdssvg-activity-task" />
+                uugdssvg-activity-task
+              </Box>
+
+              <h4>uri</h4>
+              <Uu5Elements.Svg
+                uri="https://cdn.plus4u.net/uu-gds-svgg01/1.0.0/assets/illustrations/activity/task.svg"
+              />
+
+              <h4>type</h4>
+              <Box>
+                <Uu5Elements.Svg code="uugdssvg-svg-account" type="svg" />
+                svg
+              </Box>
+              <Box>
+                <Uu5Elements.Svg code="uugdssvg-svg-account" type="img" />
+                img
+              </Box>
+
+              <h4>colorScheme = red (only for svg type)</h4>
+              <Uu5Elements.Svg code="uugdssvg-svg-account" colorScheme="red" />
+
+              <h4>height 88px</h4>
+              <Box>
+                <Uu5Elements.Svg code="uugdssvg-svg-account" height={88} />
+                svg
+              </Box>
+              <Box>
+                <Uu5Elements.Svg code="uugdssvg-svg-account" height={88} type="img" />
+                img
+              </Box>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

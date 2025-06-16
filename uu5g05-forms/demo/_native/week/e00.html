@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+
+<body>
+<div id="uu5"></div>
+
+<script type="text/babel">
+  import { createComponent, Utils, useState } from "uu5g05";
+  import Uu5Elements from "uu5g05-elements";
+  import Uu5Forms from "uu5g05-forms";
+  import { UuDate, UuDateTime } from "uu_i18ng01";
+
+  window.UuDate = UuDate;
+  window.UuDateTime = UuDateTime;
+
+  function withControlledInput(Component, defaultProps) {
+    return (props) => {
+      const [value, setValue] = useState(props.value ?? defaultProps?.value);
+      return (
+        <Component
+          {...defaultProps}
+          {...props}
+          value={value}
+          onChange={(e) => {
+            props.onChange?.(e);
+            setValue(e.data ? e.data.value : e.target.value);
+          }}
+        />
+      );
+    }
+  }
+
+  const NativeInput = withControlledInput("input", { type: "week", value: "" });
+  const ControlledInput = withControlledInput(Uu5Forms._NativeWeekInput);
+
+  const Page = createComponent({
+    render() {
+      const minDate = new UuDate().shiftMonth(-6);
+      const min = minDate.getYear() + "-W" + `${minDate.getWeek()}`.padStart(2, "0");
+
+      const maxDate = new UuDate().shiftMonth(6);
+      const max = maxDate.getYear() + "-W" + `${maxDate.getWeek()}`.padStart(2, "0");
+
+      return (
+        <main>
+          <Uu5Elements.LanguageSelector />
+
+          <Uu5Elements.Grid templateColumns="repeat(auto-fit, minmax(320px, 1fr))">
+            <div>
+              <h3>HTML input</h3>
+              <NativeInput
+                onChange={(e) => {
+                  console.log("onChange native", e.target.value);
+                }}
+              />
+
+              <h4>min="{min}" & max="{max}"</h4>
+              <NativeInput
+                min={min}
+                max={max}
+                onChange={(e) => {
+                  console.log("onChange native", e.target.value);
+                }}
+              />
+
+              <h4>step=2</h4>
+              <NativeInput
+                step={2}
+                onChange={(e) => {
+                  console.log("onChange native", e.target.value);
+                }}
+              />
+
+              <h4>min="{min}" & step=2</h4>
+              <NativeInput
+                min={min}
+                step={2}
+                onChange={(e) => {
+                  console.log("onChange native", e.target.value);
+                }}
+              />
+            </div>
+
+            <div>
+              <h3>Week input</h3>
+              <ControlledInput
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                }}
+              />
+
+              <h4>min="{min}" & max="{max}"</h4>
+              <ControlledInput
+                min={min}
+                max={max}
+                onChange={(e) => {
+                  console.log("onChange", e.data);
+                }}
+              />
+
+              <h4>step=2</h4>
+              <ControlledInput
+                step={2}
+                onChange={(e) => {
+                  console.log("onChange", e.data);
+                }}
+              />
+
+              <h4>min="{min}" & step=2</h4>
+              <ControlledInput
+                min={min}
+                step={2}
+                onChange={(e) => {
+                  console.log("onChange", e.data);
+                }}
+              />
+            </div>
+          </Uu5Elements.Grid>
+        </main>
+      );
+    },
+  });
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

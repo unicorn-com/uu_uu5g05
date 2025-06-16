@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+
+      h4 {
+        margin: 32px 0 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, useState, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+      const ITEM_LIST = [
+        { code: "overview", label: "Overview", icon: "uugds-info", children: "Overview content" },
+        {
+          code: "history",
+          label: "History & Comments",
+          icon: "mdi-comment-text-multiple-outline",
+          children: "History content",
+        },
+        { code: "solvers", label: "Solvers", icon: "mdi-account-group", children: "Solvers content", disabled: true },
+      ];
+      const ITEM_LIST_NO_CHILDREN = ITEM_LIST.map(({ children, ...it }) => it);
+      const ACTION_LIST = [
+        { icon: "uugds-info", collapsedChildren: "Info", onClick: () => alert("info") },
+        { icon: "uugds-check", collapsed: true, children: "Confirm", onClick: () => alert("confirm") },
+      ];
+
+      function CustomColoredTabs({ colorScheme, itemList, type }) {
+        const [activeCode, setActiveCode] = useState(itemList[0].code);
+
+        const coloredItemList = itemList.map(({ label, icon, children, ...item }) => ({
+          ...item,
+          label: (
+            <Uu5Elements.Text
+              colorScheme={item.code === activeCode ? colorScheme : undefined}
+              className={Config.Css.css({ display: "inline-flex", alignItems: "center" })}
+            >
+              {icon ? (
+                <Uu5Elements.Icon icon={icon} className={Config.Css.css({ fontSize: "1.5em" })} margin={{ right: 4 }} />
+              ) : (
+                ""
+              )}
+              {label}
+            </Uu5Elements.Text>
+          ),
+        }));
+
+        return (
+          <>
+            <Uu5Elements.Tabs
+              itemList={coloredItemList}
+              type={type}
+              colorScheme={colorScheme}
+              activeCode={activeCode}
+              onChange={(e) => setActiveCode(e.data.activeCode)}
+            />
+            {itemList.find((tab) => tab.code === activeCode).children}
+          </>
+        );
+      }
+
+      function onTabClick(e) {
+        console.log("onClick", e);
+        if (e.ctrlKey || e.metaKey) {
+          alert("ctrl/command click");
+        } else if (e.button === 1) {
+          alert("wheel click");
+        } else {
+          alert("click");
+        }
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>itemList</h4>
+              <Uu5Elements.Tabs
+                itemList={[
+                  { label: "Overview", children: "Overview content", onClick: onTabClick },
+                  { label: "History & Comments", children: "History content", onClick: onTabClick },
+                  { label: "Solvers", children: "Solvers content", onClick: onTabClick },
+                ]}
+              />
+              <br />
+              <Uu5Elements.Tabs
+                itemList={[
+                  { label: "Overview", icon: "uugds-info", children: "Overview content" },
+                  {
+                    label: (
+                      <>
+                        History & Comments&nbsp;
+                        <Uu5Elements.Badge colorScheme="positive" size="m">
+                          NEW
+                        </Uu5Elements.Badge>
+                      </>
+                    ),
+                    icon: "mdi-comment-text-multiple-outline",
+                    children: "History content",
+                  },
+                  { label: "Solvers", icon: "mdi-account-group", children: "Solvers content" },
+                ]}
+              />
+              <br />
+              <Uu5Elements.Tabs
+                itemList={[
+                  { tooltip: "Overview", icon: "uugds-info", children: "Overview content" },
+                  {
+                    tooltip: "History & Comments",
+                    icon: "mdi-comment-text-multiple-outline",
+                    children: "History content",
+                  },
+                  { tooltip: "Solvers", icon: "mdi-account-group", children: "Solvers content" },
+                ]}
+              />
+
+              <h4>iconAnimation</h4>
+              <Uu5Elements.Tabs
+                itemList={[
+                  { label: "Overview", icon: "uugds-info", iconAnimation: "rotate", children: "Overview content" },
+                  { label: "History & Comments", children: "History content" },
+                ]}
+              />
+
+              <h4>type</h4>
+              <Uu5Elements.Tabs itemList={ITEM_LIST} />
+              <br />
+              <Uu5Elements.Tabs type="card-outer" itemList={ITEM_LIST} />
+              <br />
+              <Uu5Elements.Tabs type="line" itemList={ITEM_LIST} />
+
+              <h4>colorScheme</h4>
+              <Uu5Elements.Tabs type="line" itemList={ITEM_LIST} colorScheme="green" />
+
+              <h5>colorScheme - custom implementation</h5>
+              <CustomColoredTabs type="line" itemList={ITEM_LIST} colorScheme="green" />
+
+              <h4>activeCode</h4>
+              <Uu5Elements.Tabs activeCode="history" itemList={ITEM_LIST} />
+
+              <h4>activeCode=null (allowed only if all items in itemList have no children)</h4>
+              <Uu5Elements.Tabs itemList={ITEM_LIST_NO_CHILDREN} activeCode={null} />
+              <br />
+              <Uu5Elements.Tabs type="card-outer" itemList={ITEM_LIST_NO_CHILDREN} activeCode={null} />
+              <br />
+              <Uu5Elements.Tabs type="line" itemList={ITEM_LIST_NO_CHILDREN} activeCode={null} />
+
+              <h4>actionList</h4>
+              <Uu5Elements.Tabs
+                itemList={ITEM_LIST}
+                actionList={[
+                  { icon: "uugds-info", collapsedChildren: "Info", onClick: () => alert("info") },
+                  { icon: "uugds-check", collapsed: true, children: "Confirm", onClick: () => alert("confirm") },
+                ]}
+              />
+              <br />
+              <Uu5Elements.Tabs
+                type="card-outer"
+                itemList={ITEM_LIST}
+                actionList={[
+                  { icon: "uugds-info", collapsedChildren: "Info", onClick: () => alert("info") },
+                  { icon: "uugds-check", collapsed: true, children: "Confirm", onClick: () => alert("confirm") },
+                ]}
+              />
+              <br />
+              <Uu5Elements.Tabs
+                type="line"
+                itemList={ITEM_LIST}
+                actionList={[
+                  { icon: "uugds-info", collapsedChildren: "Info", onClick: () => alert("info") },
+                  { icon: "uugds-check", collapsed: true, children: "Confirm", onClick: () => alert("confirm") },
+                ]}
+              />
+
+              <h4>size</h4>
+              <Uu5Elements.Tabs size="s" itemList={ITEM_LIST} actionList={ACTION_LIST} />
+              <br />
+              <Uu5Elements.Tabs size="m" itemList={ITEM_LIST} actionList={ACTION_LIST} />
+
+              <h4>displayScrollButtons</h4>
+              <div className={Config.Css.css({ maxWidth: 400 })}>
+                <Uu5Elements.Tabs displayScrollButtons itemList={ITEM_LIST} actionList={ACTION_LIST} />
+                <br />
+                <Uu5Elements.Tabs displayScrollButtons itemList={ITEM_LIST} />
+                <br />
+                <Uu5Elements.Tabs itemList={ITEM_LIST} />
+              </div>
+
+              <h4>justified</h4>
+              <Uu5Elements.Tabs
+                justified
+                type="line"
+                itemList={[
+                  { label: "Overview", children: "Overview content" },
+                  { label: "History & Comments", children: "History content" },
+                  { label: "Solvers", children: "Solvers content" },
+                ]}
+              />
+
+              <h4>block</h4>
+              <Uu5Elements.Tabs
+                block
+                type="line"
+                itemList={[
+                  { label: "Overview", children: "Overview content" },
+                  { label: "History & Comments", children: "History content" },
+                  { label: "Solvers", children: "Solvers content" },
+                ]}
+              />
+
+              <h4>contentMaxHeight (only for type="card-outer")</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fit, 440px)" columnGap={32}>
+                <div>
+                  <b>200</b>
+                  <Uu5Elements.Tabs
+                    contentMaxHeight={200}
+                    type="card-outer"
+                    itemList={[
+                      { label: "Overview", children: <LoremIpsum paragraphCount={2} /> },
+                      { label: "History & Comments", children: <LoremIpsum avgWords={4} /> },
+                    ]}
+                  />
+                </div>
+                <div>
+                  <b>"auto" (height restricted by parent sizing - min(260px, 30vh))</b>
+                  <div
+                    className={Config.Css.css({ display: "flex", flexDirection: "column", height: "min(260px, 30vh)" })}
+                  >
+                    <Uu5Elements.Tabs
+                      contentMaxHeight="auto"
+                      type="card-outer"
+                      itemList={[
+                        { label: "Overview", children: <LoremIpsum paragraphCount={2} /> },
+                        { label: "History & Comments", children: <LoremIpsum avgWords={4} /> },
+                      ]}
+                    />
+                  </div>
+                </div>
+              </Uu5Elements.Grid>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

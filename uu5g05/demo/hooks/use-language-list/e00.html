@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, PropTypes, Lsi, createComponent, useLsi, useLanguageList, LanguageListProvider, LanguageProvider, useLanguage } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      const LANG_LSI = {
+        en: "English",
+        cs: "Čeština",
+        ru: "Pусский",
+        uk: "Українська",
+      };
+
+      /*@@viewOn:example*/
+      function DemoControls() {
+        let [_, setLanguageList] = useLanguageList();
+        return (
+          <div>
+            <Uu5Elements.Button onClick={() => setLanguageList(["en", "cs"])}>en, cs</Uu5Elements.Button>
+            <Uu5Elements.Button onClick={() => setLanguageList(["ru", "uk"])}>ru, uk</Uu5Elements.Button>
+          </div>
+        )
+      }
+
+      function DemoLanguageSelector() {
+        const langLsi = useLsi(LANG_LSI);
+        const [_, setLanguage] = useLanguage();
+        const [languageList] = useLanguageList();
+
+        return (
+          <Uu5Elements.Dropdown
+            label={langLsi}
+            itemList={languageList.map((lang) => ({
+              children: LANG_LSI[lang],
+              onClick: () => setLanguage(lang),
+            }))}
+          />
+        );
+      }
+      /*@@viewOff:example*/
+
+      function Demo() {
+        return (
+          <div>
+            <LanguageListProvider languageList={["en", "cs"]}>
+              <LanguageProvider>
+                <DemoControls />
+                <br />
+                <DemoLanguageSelector />
+                <br />
+                <Lsi lsi={{ en: "Hello, world!", cs: "Ahoj, světe!", ru: "Привет мир", uk: "Привіт Світ" }} />
+              </LanguageProvider>
+            </LanguageListProvider>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

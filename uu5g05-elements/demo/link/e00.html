@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const borderClassName = Config.Css.css({ border: "1px dashed lightgrey" });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <Uu5Elements.Link>Link</Uu5Elements.Link>
+
+              <h4>href</h4>
+              <Uu5Elements.Link href="#"># - Fragment Link</Uu5Elements.Link>
+              <br />
+              <Uu5Elements.Link href="https://unicorn.com">unicorn.com - absolute url</Uu5Elements.Link>
+
+              <h4>target</h4>
+              <Uu5Elements.Link href="https://unicorn.com" target="_blank">
+                unicorn.com (blank)
+              </Uu5Elements.Link>
+
+              <h4>onClick</h4>
+              <Uu5Elements.Link
+                onClick={(e) => {
+                  console.log("onClick", e);
+                  if (e.ctrlKey || e.metaKey) {
+                    alert("ctrl/command click");
+                  } else if (e.button === 1) {
+                    alert("wheel click");
+                  } else {
+                    alert("click");
+                  }
+                }}
+              >
+                Click
+              </Uu5Elements.Link>
+
+              <h4>tooltip</h4>
+              <Uu5Elements.Link tooltip="Tooltip (string)">Tooltip string</Uu5Elements.Link>
+              <br />
+              <Uu5Elements.Link tooltip={{ cs: "titulek (lsi)", en: "Tooltip (lsi)" }}>Tooltip lsi</Uu5Elements.Link>
+
+              <h4>download</h4>
+              <Uu5Elements.Link download href={Utils.Uu5Loader.config().imports["uu5g05-elements"]}>
+                uu5g05-elements.js
+              </Uu5Elements.Link>
+              <br />
+              <Uu5Elements.Link download="custom_name.js" href={Utils.Uu5Loader.config().imports["uu5g05-elements"]}>
+                custom_name.js
+              </Uu5Elements.Link>
+
+              <h4>size</h4>
+              <Uu5Elements.Grid display="inline" alignItems="start" justifyItems="start" templateColumns="auto auto">
+                <Uu5Elements.Button size="xxs">xxs</Uu5Elements.Button>
+                <Uu5Elements.Link href="#" className={borderClassName} size="xxs">xxs</Uu5Elements.Link>
+
+                <Uu5Elements.Button size="xs">xs</Uu5Elements.Button>
+                <Uu5Elements.Link href="#" className={borderClassName} size="xs">xs</Uu5Elements.Link>
+
+                <Uu5Elements.Button size="s">s</Uu5Elements.Button>
+                <Uu5Elements.Link href="#" className={borderClassName} size="s">s</Uu5Elements.Link>
+
+                <Uu5Elements.Button size="m">m</Uu5Elements.Button>
+                <Uu5Elements.Link href="#" className={borderClassName} size="m">m</Uu5Elements.Link>
+
+                <Uu5Elements.Button size="l">l</Uu5Elements.Button>
+                <Uu5Elements.Link href="#" className={borderClassName} size="l">l</Uu5Elements.Link>
+
+                <Uu5Elements.Button size="xl">xl</Uu5Elements.Button>
+                <Uu5Elements.Link href="#" className={borderClassName} size="xl">xl</Uu5Elements.Link>
+              </Uu5Elements.Grid>
+
+              <h4>type</h4>
+              email: <Uu5Elements.Link href="demo@test.com" type="email" colorScheme="building" /><br/>
+              phone: <Uu5Elements.Link href="+420123456789" type="phone" colorScheme="building" />
+
+              <h4>underline</h4>
+              <Uu5Elements.Link href="#" underline>underline = true</Uu5Elements.Link><br/>
+              <Uu5Elements.Link href="#" underline="onHover">underline = "onHover"</Uu5Elements.Link>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

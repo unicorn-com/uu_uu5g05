@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1">
+  <title>Nesting Level Demo</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+  <script>
+    Uu5Loader.config({
+      "imports": {
+        "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+        "uu5g04": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04.min.js",
+        "uu5g04-bricks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-bricks.min.js",
+        "uu5g04-hooks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-hooks.min.js",
+      }
+    });
+  </script>
+
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  //@@viewOn:imports
+  import UU5, { createVisualComponent as legacyCreateVisualComponent } from "uu5g04";
+  import "uu5g04-bricks";
+  import { createVisualComponent, Utils } from "uu5g05";
+  import { Config } from "uu5g05-dev";
+  //@@viewOff:imports
+
+  //@@viewOn:statics
+  const STATICS = {
+    uu5Tag: Config.TAG + "NestingLevel",
+    nestingLevel: ["box", "smallBox", "inline"]
+  };
+  //@@viewOff:statics
+
+  UU5.Demo = {};
+
+  UU5.Demo.NestingLevel = createVisualComponent({
+    ...STATICS,
+
+    //@@viewOn:propTypes
+    propTypes: {},
+    //@@viewOff:propTypes
+
+    //@@viewOn:defaultProps
+    defaultProps: {},
+    //@@viewOff:defaultProps
+
+    render(props) {
+      //@@viewOn:private
+      //@@viewOff:private
+
+      //@@viewOn:interface
+      //@@viewOff:interface
+
+      //@@viewOn:render
+      const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, STATICS);
+      console.log("Current nesting level:", currentNestingLevel);
+      const attrs = Utils.VisualComponent.getAttrs(
+        props,
+        Config.Css.css`
+          display: ${currentNestingLevel === "smallBox" || currentNestingLevel === "inline" ? "inline-block" : "block"};
+          padding: 8px;
+          margin: 8px;
+          background: rgba(0, 0, 0, 0.05);
+        `
+      );
+
+      return currentNestingLevel ? (
+        <span {...attrs}>
+          {STATICS.displayName}: {currentNestingLevel}<br />
+          {UU5.Utils.Content.getChildren(props.children, props, STATICS)}
+        </span>
+      ) : null;
+      //@@viewOff:render
+    }
+  });
+
+  UU5.Demo.NestingLevelWithMixin = legacyCreateVisualComponent({
+    //@@viewOn:mixins
+    mixins: [
+      UU5.Common.BaseMixin,
+      UU5.Common.ContentMixin,
+      UU5.Common.NestingLevelMixin
+    ],
+    //@@viewOff:mixins
+
+    //@@viewOn:statics
+    statics: {
+      tagName: "UU5.Demo.NestingLevelWithMixin",
+      nestingLevelList: ["box", "smallBox", "inline"]
+    },
+    //@@viewOff:statics
+
+    //@@viewOn:propTypes
+    //@@viewOff:propTypes
+
+    //@@viewOn:defaultProps
+    //@@viewOff:defaultProps
+
+    //@@viewOn:interface
+    //@@viewOff:interface
+
+    //@@viewOn:private
+    //@@viewOff:private
+
+    //@@viewOn:render
+    render() {
+      let currentNestingLevel = this.getNestingLevel();
+
+      let mainAttrs = this.getMainAttrs();
+      mainAttrs.className += " " + Config.Css.css`
+        display: ${currentNestingLevel === "smallBox" || currentNestingLevel === "inline" ? "inline-block" : "block"};
+        padding: 8px;
+        margin: 8px;
+        background: rgba(0, 0, 0, 0.05);
+      `;
+
+      return currentNestingLevel ? (
+        <UU5.Bricks.Span {...mainAttrs}>
+          {this.getTagName()}: {currentNestingLevel}<br />
+          {this.getChildren()}
+        </UU5.Bricks.Span>
+      ) : null;
+    }
+    //@@viewOff:render
+  });
+
+  const Page = createVisualComponent({
+    uu5Tag: Config.TAG + "Page",
+    nestingLevel: "page",
+    render(props) {
+      return (
+        <div>
+          <UU5.Bricks.Div nestingLevel="bigBox">
+            <h2>should be box</h2>
+            <UU5.Demo.NestingLevel>
+              <UU5.Demo.NestingLevel/>
+              <UU5.Demo.NestingLevelWithMixin/>
+            </UU5.Demo.NestingLevel>
+
+            <UU5.Demo.NestingLevelWithMixin>
+              <UU5.Demo.NestingLevel/>
+              <UU5.Demo.NestingLevelWithMixin/>
+            </UU5.Demo.NestingLevelWithMixin>
+          </UU5.Bricks.Div>
+
+          <UU5.Bricks.Div nestingLevel="box">
+            <h2>should be smallBox</h2>
+            <UU5.Demo.NestingLevel>
+              <UU5.Demo.NestingLevel/>
+              <UU5.Demo.NestingLevelWithMixin/>
+            </UU5.Demo.NestingLevel>
+
+            <UU5.Demo.NestingLevelWithMixin>
+              <UU5.Demo.NestingLevel/>
+              <UU5.Demo.NestingLevelWithMixin/>
+            </UU5.Demo.NestingLevelWithMixin>
+          </UU5.Bricks.Div>
+
+          <UU5.Bricks.Div>
+            <h2>child as a function receives nestingLevel</h2>
+            <UU5.Demo.NestingLevel>
+              {({ nestingLevel }) => (
+                <UU5.Demo.NestingLevel nestingLevel={nestingLevel}>
+                  {({ nestingLevel }) => (
+                    <UU5.Demo.NestingLevel nestingLevel={nestingLevel} />
+                  )}
+                </UU5.Demo.NestingLevel>
+              )}
+            </UU5.Demo.NestingLevel>
+          </UU5.Bricks.Div>
+
+          <UU5.Bricks.Div
+            nestingLevel="box"
+            content={`<uu5string/>
+              <h2>uu5string (inside of nestingLevel="box") - should be smallBox</h2>
+
+              <UU5.Demo.NestingLevel>
+                <UU5.Demo.NestingLevel/>
+                <UU5.Demo.NestingLevelWithMixin/>
+              </UU5.Demo.NestingLevel>
+
+              <UU5.Demo.NestingLevelWithMixin>
+                <UU5.Demo.NestingLevel/>
+                <UU5.Demo.NestingLevelWithMixin/>
+              </UU5.Demo.NestingLevelWithMixin>
+            `}
+          />
+
+        </div>
+      );
+    }
+  });
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+
+</script>
+
+</body>
+</html>

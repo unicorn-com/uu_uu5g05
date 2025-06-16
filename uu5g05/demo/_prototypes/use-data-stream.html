@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import {
+        createComponent,
+        createVisualComponent,
+        Utils,
+        useDataObject,
+        useEffect,
+        useState,
+        useRef,
+        useMemo,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5App from "uu_plus4u5g02-app";
+      import { Client } from "uu_appg01";
+
+      // prettier-ignore
+      const STREAM_URL1 = "https://cdn.plus4u.net/beta/uu-uu5codekitg01/2.0.0/uu5codekitg01.tgz"; // 7.5MB, Content-Length
+
+      // prettier-ignore
+      // const STREAM_URL2 = "https://uuapp.plus4u.net/uu-bookkit-maing01/05ecbf4e8bca405290b1a6d4cee8813a/getBinaryData?code=uu5g05Offline"; // 8MB
+
+      // prettier-ignore
+      const STREAM_URL2 = "https://uuapp.plus4u.net/uu-bookkit-maing01/ed11ec379073476db0aa295ad6c00178/getBinaryData?code=907f9c71c8f3e2807ac043fd104ff352"; // 62 MB, big-buck-bunny
+
+      function toTime(seconds) {
+        let p = [];
+        p.push(seconds % 60);
+        p.push((seconds = Math.floor(seconds / 60)) % 60);
+        while (seconds > 0) p.push((seconds = Math.floor(seconds / 60)) % 60);
+        return p
+          .reverse()
+          .map((it) => (it + "").padStart(2, "0"))
+          .join(":");
+      }
+
+      /*@@viewOn:example*/
+      const Calls = {
+        async load(url) {
+          let options = {
+            transformResponse: false,
+            enableStreamApi: true,
+          };
+          let response = await Plus4U5.Utils.AppClient.get(url, null, options);
+          let totalLength = parseInt(response.headers("content-length"), 10);
+          if (isNaN(totalLength)) totalLength = undefined;
+          let stream = response.data;
+
+          console.log({ url, stream, totalLength });
+          return { stream, totalLength };
+        },
+      };
+
+      const Example = createVisualComponent({
+        render(props) {
+          const { url } = props;
+          const { data } = useDataObject({
+            handlerMap: {
+              load: () => Calls.load(url),
+            },
+          });
+          const { stream, totalLength } = data || {};
+          const [lastChunkInfo, setLastChunkInfo] = useState();
+
+          useEffect(() => {
+            if (!stream) return;
+            /** @type ReadableStreamDefaultReader */
+            const reader = stream.getReader();
+            let cancelled = false;
+            (async () => {
+              setLastChunkInfo(null);
+              while (true) {
+                const { value, done } = await reader.read();
+                if (cancelled) return;
+                if (done) break;
+                // process chunk in any way (value is Uint8Array)
+                setLastChunkInfo((v) => ({
+                  index: v ? v.index + 1 : 0,
+                  chunk: value,
+                  processed: (v ? v.processed : 0) + value.byteLength,
+                }));
+              }
+            })();
+            return () => {
+              cancelled = true;
+              reader.cancel();
+            };
+          }, [stream]);
+
+          return (
+            <Uu5Elements.Grid templateColumns="200px 1fr" columnGap={16} rowGap={8}>
+              <div>URL</div>
+              <Uu5Elements.Link href={url}>{url}</Uu5Elements.Link>
+              <div>Processed bytes</div>
+              <div>
+                {lastChunkInfo?.processed || 0} / {totalLength ?? "?"}
+              </div>
+              {lastChunkInfo ? (
+                <>
+                  <div>Last bytes of chunk #{lastChunkInfo.index}</div>
+                  <pre className={Config.Css.css({ margin: 0 })}>
+                    {[...lastChunkInfo.chunk.slice(-10).values()].map((n) => n.toString(16).padStart(2, "0")).join(" ")}
+                  </pre>
+                </>
+              ) : null}
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+
+      const ExampleVideo = createVisualComponent({
+        render(props) {
+          const { url } = props;
+          const { data } = useDataObject(
+            {
+              handlerMap: {
+                load: () => Calls.load(url),
+              },
+            },
+            [url]
+          );
+          const { stream, totalLength } = data || {};
+          const mediaSource = useMemo(() => (stream ? new MediaSource() : undefined), [stream]);
+          const mediaSourceUrl = useMemo(
+            () => (mediaSource ? URL.createObjectURL(mediaSource) : undefined),
+            [mediaSource]
+          );
+          const [bytesLoaded, setBytesLoaded] = useState(0);
+          const [videoReadyTillTime, setVideoReadyTillTime] = useState(0);
+          const [videoCurrentTime, setVideoCurrentTime] = useState(0);
+          const videoRef = useRef();
+
+          // https://developer.mozilla.org/en-US/docs/Web/Media/Formats/codecs_parameter#avc1.ppccll
+          // ffprobe -i video.mp4 -show_streams       # codec_tag_string, profile, level
+          const CODECS = 'video/mp4; codecs="avc1.42401e, mp4a.40.2"'; // big_buck_bunny_720p_surround.mp4
+          // const CODECS = 'video/mp4; codecs="avc1.4D4028, mp4a.40.2"'; // big_buck_bunny_trailer_1080p_fragmented.mp4
+          const MAX_BYTES_AHEAD = 2 << 20; // 2MB
+          const BUFFER_SECONDS = 10;
+
+          useEffect(() => {
+            if (!mediaSource) return;
+            if (!MediaSource.isTypeSupported(CODECS)) {
+              alert("Codecs not supported: " + CODECS);
+              return;
+            }
+            setBytesLoaded(0);
+            setVideoReadyTillTime(0);
+            setVideoCurrentTime(0);
+            const video = videoRef.current;
+            let videoStream = stream;
+            // TODO Backpressure isn't working (fetch() keeps loading chunks).
+            // videoStream = videoStream.pipeThrough(
+            //   new TransformStream(
+            //     undefined, // { transform: (chunk, controller) => controller.enqueue(chunk) },
+            //     new ByteLengthQueuingStrategy({ highWaterMark: MAX_BYTES_AHEAD }),
+            //     new ByteLengthQueuingStrategy({ highWaterMark: MAX_BYTES_AHEAD })
+            //   )
+            // );
+            mediaSource.addEventListener("sourceopen", async function (e) {
+              if (this.readyState !== "open") return;
+              // https://stackoverflow.com/questions/24102075/mediasource-error-this-sourcebuffer-has-been-removed-from-the-parent-media-sour#answer-60643343
+              // https://web.archive.org/web/20161102172252id_/http://video.blendertestbuilds.de/download.php?file=download.blender.org/peach/trailer_1080p.mov
+              // ffmpeg -i trailer_1080p.mov -c:v copy -c:a copy -movflags frag_keyframe+empty_moov+default_base_moof big_buck_bunny_trailer_1080p_fragmented.mp4
+              // ffmpeg -i big_buck_bunny_720p_surround.mp4 -c:v copy -c:a copy -movflags frag_keyframe+empty_moov+default_base_moof big_buck_bunny_720p_surround_fragmented.mp4
+              const sourceBuffer = mediaSource.addSourceBuffer(CODECS);
+              const streamReader = videoStream.getReader();
+              while (true) {
+                const { value, done } = await streamReader.read();
+                if (done) break;
+                setBytesLoaded((b) => b + value.length);
+                await new Promise((resolve, reject) => {
+                  sourceBuffer.appendBuffer(value);
+                  sourceBuffer.onupdateend = () => resolve(true);
+                });
+                // wait until video play state is BUFFER_SECONDS till the end of currently-loaded portion of video
+                // (and only then continue iteration, i.e. reading chunks)
+                while (true) {
+                  let ranges = [];
+                  let waitDuration = 0;
+                  for (let i = 0; i < sourceBuffer.buffered.length; i++) {
+                    let start = sourceBuffer.buffered.start(i);
+                    let end = sourceBuffer.buffered.end(i);
+                    if (start <= video.currentTime && video.currentTime <= end) {
+                      waitDuration = Math.max(0, Math.floor(1000 * (end - video.currentTime - BUFFER_SECONDS)));
+                      setVideoReadyTillTime(Math.floor(end));
+                      break;
+                    }
+                    ranges.push(sourceBuffer.buffered.start(i) + "-" + sourceBuffer.buffered.end(i));
+                  }
+                  // console.log("Buffered ranges: " + ranges.join(", "), " will wait for: " + waitDuration + "ms");
+                  if (waitDuration > 0) await new Promise((resolve) => setTimeout(resolve, waitDuration));
+                  else break;
+                }
+              }
+              mediaSource.endOfStream();
+            });
+            const handleTimeUpdate = (e) => setVideoCurrentTime(Math.floor(e.target.currentTime));
+            video.addEventListener("timeupdate", handleTimeUpdate);
+            return () => video.removeEventListener("timeupdate", handleTimeUpdate);
+          }, [mediaSource]);
+
+          return (
+            <div>
+              <div>
+                Bytes read from stream: <b>{bytesLoaded}</b>
+              </div>
+              <div>
+                Video ready till time: <b>{toTime(videoReadyTillTime)}</b> (current is {toTime(videoCurrentTime)}; will
+                buffer at least {BUFFER_SECONDS}s ahead)
+              </div>
+              {mediaSourceUrl ? <video controls ref={videoRef} src={mediaSourceUrl} height={480} /> : null}
+            </div>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      const Page = createComponent({
+        render() {
+          const [key, setKey] = useState(0);
+          const [key2, setKey2] = useState(0);
+          const [showVideo, setShowVideo] = useState(false);
+
+          return (
+            <Plus4U5.SpaProvider>
+              <Plus4U5App.Spa>
+                <main className={Config.Css.css({ padding: 16 })}>
+                  <Uu5Elements.HighlightedBox>
+                    <ul>
+                      <li>
+                        Relevant HTTP headers:{" "}
+                        <Uu5Elements.Link href="https://httpwg.org/specs/rfc9112.html#body.content-length">
+                          Content-Length
+                        </Uu5Elements.Link>
+                        ,{" "}
+                        <Uu5Elements.Link href="https://httpwg.org/specs/rfc9110.html#content.codings">
+                          Content-Encoding
+                        </Uu5Elements.Link>
+                        ,{" "}
+                        <Uu5Elements.Link href="https://httpwg.org/specs/rfc9112.html#field.transfer-encoding">
+                          Transfer-Encoding
+                        </Uu5Elements.Link>
+                        .
+                      </li>
+                      <li>
+                        To be able to show determinate progress, backend must return <b>Content-Length</b> or{" "}
+                        <b>custom</b> HTTP header with the data length.
+                      </li>
+                      <li>
+                        Using Content-Length header denotes the length of the possibly-gzipped content (after
+                        Content-Encoding got applied), whereas JS receives unzipped chunks. Therefore{" "}
+                        <b>custom HTTP header is better</b> (with fallback to Content-Length if Content-Encoding is not
+                        used).
+                        <ul>
+                          <li>
+                            Note that <b>CORS will have to be updated</b> if custom HTTP header is used /
+                            Content-Encoding fallback detection is used (the headers must be added to the list in
+                            <Uu5Elements.Link href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers">
+                              Access-Control-Expose-Headers
+                            </Uu5Elements.Link>{" "}
+                            so that JS is allowed to read them from response).
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        If Transfer-Encoding header is used, Content-Length mustn't be sent as per{" "}
+                        <Uu5Elements.Link href="https://httpwg.org/specs/rfc9112.html#body.content-length">
+                          RFC9112
+                        </Uu5Elements.Link>
+                        . On the other hand, the same RFC states that if both are present, Transfer-Encoding takes
+                        priority (and the request can lead to vulnerabilities such as request smuggling and response
+                        splitting attacks).
+                      </li>
+                      <li>
+                        fetch() has response.body of class{" "}
+                        <Uu5Elements.Link href="https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream">
+                          ReadableStream
+                        </Uu5Elements.Link>{" "}
+                        whose API can be used for reading chunks. uuApp Client supports it too.
+                      </li>
+                      <li>
+                        Download progress can be obtained only by reading the stream and counting already-read bytes.
+                      </li>
+                    </ul>
+                  </Uu5Elements.HighlightedBox>
+                  <Uu5Elements.HighlightedBox className={Config.Css.css({ margin: "16px 0" })}>
+                    Use Network throttling "Fast 3G" for slowdown.
+                  </Uu5Elements.HighlightedBox>
+                  <div className={Config.Css.css({ margin: "16px 0" })}>
+                    <Uu5Elements.Button onClick={() => setKey((k) => k + 1)}>
+                      Get streamed data (with Content-Length, 7.5MB)
+                    </Uu5Elements.Button>
+                    {key ? <Example key={key} url={STREAM_URL1} /> : null}
+                  </div>
+                  <div className={Config.Css.css({ margin: "16px 0" })}>
+                    <Uu5Elements.Button onClick={() => setKey2((k) => k + 1)}>
+                      Get streamed data (no Content-Length, 62MB)
+                    </Uu5Elements.Button>
+                    {key2 ? <Example key={key2} url={STREAM_URL2} /> : null}
+                  </div>
+
+                  <Uu5Elements.Button onClick={() => setShowVideo((v) => !v)}>Toggle video (62 MB)</Uu5Elements.Button>
+                  {showVideo ? (
+                    // <ExampleVideo url={"http://localhost:8383/big_buck_bunny_trailer_1080p_fragmented.mp4"} />
+                    // <ExampleVideo url={"http://localhost:8383/big_buck_bunny_720p_surround_fragmented.mp4"} />
+                    <ExampleVideo url={STREAM_URL2} />
+                  ) : null}
+                </main>
+              </Plus4U5App.Spa>
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

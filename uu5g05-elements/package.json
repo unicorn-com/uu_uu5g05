@@ -1,0 +1,74 @@
+{
+  "name": "uu5g05-elements",
+  "version": "1.40.1",
+  "description": "The library contains basic components which are connected to uuGds.",
+  "license": "License Commercial",
+  "namespace": "Uu5Elements",
+  "spec": "uu5-lib; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
+  "dependencies": {
+    "uu_gdsg01-unicorn": "^1.0.0",
+    "uu_i18ng01": "^1.7.0",
+    "uu5g05": "^1.0.0"
+  },
+  "uuBuildSettings": {
+    "packs": [
+      {
+        "entryPoints": [
+          "index.js"
+        ],
+        "libraryGlobalVariable": "Uu5Elements",
+        "outputFile": "uu5g05-elements.js",
+        "banner": "./tools/build-add-banner.js"
+      }
+    ],
+    "externals": {}
+  },
+  "devDependencies": {
+    "@emotion/jest": "11.9.1",
+    "eslint-plugin-jest-dom": "5.5.0",
+    "eslint-plugin-testing-library": "7.0.0",
+    "react-focus-lock": "2.9.2",
+    "uu_appg01_devkit": "^6.6.0",
+    "uu5devkitg01-plugin": "^1.5.1",
+    "uu5g05-test": "*"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "clean": "uu_appg01_devkit clean",
+    "test": "uu_appg01_devkit test",
+    "build": "node tools/prebuild.js && uu_appg01_devkit build",
+    "postbuild": "node tools/postbuild.js",
+    "package": "uu_appg01_devkit package",
+    "start": "uu_appg01_devkit start",
+    "prettify": "uu_appg01_devkit prettify",
+    "vulnerabilityScan": "uu_appg01_devkit vulnerabilityScan",
+    "uuAppDevKitUpgrade": "uu_appg01_devkit uuAppDevKitUpgrade",
+    "uu5Generate": "uu5devkitg01-plugin generate",
+    "uu5LsiExport": "uu5devkitg01-plugin lsiExport",
+    "uu5LsiImport": "uu5devkitg01-plugin lsiImport",
+    "uu5DocUpdateExamples": "uu5devkitg01-plugin docUpdateExamples"
+  },
+  "main": "src/index.js",
+  "files": [
+    "dist",
+    "dist-node"
+  ],
+  "prettier": {
+    "printWidth": 120
+  },
+  "jest": {
+    "testEnvironmentOptions": {
+      "url": "http://localhost/test-root/"
+    },
+    "moduleNameMapper": {
+      "^(uu5g05-elements)$": "<rootDir>/src/index.js",
+      "^(uu5g05-elements-gds)$": "<rootDir>/src/gds.js"
+    },
+    "transformIgnorePatterns": [
+      "^(?!.*/node_modules/uu_appg01).*/node_modules/",
+      "uu5g05-test"
+    ]
+  }
+}

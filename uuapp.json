@@ -1,0 +1,3144 @@
+{
+  "product": "uu_uu5g05",
+  "version": "1.40.1",
+  "license": "License Commercial",
+  "description": {
+    "en": "A set of libraries with tools and basic visual and non-visual components.",
+    "cs": "Sada knihoven s nástroji a základními vizuálními a nevizuálními komponentami."
+  },
+  "docUri": "https://uuapp.plus4u.net/uu-bookkit-maing01/05ecbf4e8bca405290b1a6d4cee8813a/book",
+  "flsUri": "https://uuapp.plus4u.net/uu-flsg01-main/06ea1e6d022244a7a16ab9de54249e9c",
+  "slsUri": "https://uuapp.plus4u.net/uu-sls-maing01/e80acdfaeb5d46748a04cfc7c10fdf4e",
+  "imageUri": "https://uuapp.plus4u.net/uu-bookkit-maing01/05ecbf4e8bca405290b1a6d4cee8813a/getProductLogo",
+  "devkit": {
+    "development": {
+      "appBoxLocationUri": "ues:UU-BT:PRD.UU-UU5G05/APPBOX",
+      "appDeploymentUri": "ues:UUHUMANINTERFACEFAMILY-BT[76034904533459425]:FAMILY_UUHUMANINTERFACE_FAT_RESOURCEPOOL_AWE[6202518f1c544d65b64a96c3]:UU.UU5G05[6203a6a11c544d275a4a9a17]",
+      "resourcePoolUri": "ues:UUHUMANINTERFACEFAMILY-BT:FAMILY_UUHUMANINTERFACE_FAT_RESOURCEPOOL_AWE",
+      "uuAppBoxRegistryBaseUri": "https://uuapp.plus4u.net/uu-cloud-appboxregistryg01/eae0ba1ec4f1428aaa8d9c090e8762db",
+      "uuCloudUniverseBaseUri": "https://uuapp.plus4u.net/uu-cloud-universeg01/499b255d2620f209353489fad4ccceb4",
+      "uu5LibraryRepositoryWorkloadOid": "683dc8c2626c13b1129ad67e",
+      "uuAppLibraryRegistryBaseUri": "https://uuapp-dev.plus4u.net/uu-applibraryregistry-maing01/f46f41997daf3a4519bb9a4fc8ea13b5",
+      "uuAppBoxUri": "https://uuapp.plus4u.net/uu-cloud-appboxregistryg01/eae0ba1ec4f1428aaa8d9c090e8762db/uuAppBox/get?id=6846f0fd7bca47784ea6ec4a&extended=true",
+      "uuCloudWorkloadHubBaseUri": "----- VALUE REQUIRED -----"
+    }
+  },
+  "uu5g05": {
+    "namespace": "Uu5",
+    "sourceUri": "https://cdn.plus4u.net/uu-uu5g05/%s/uu5g05.min.js",
+    "description": "uu5 Library contains basic hooks, providers, components, utils and environment for easy development of uuApps or uuLibs.",
+    "componentList": [
+      {
+        "name": {
+          "en": "AutoLoad"
+        },
+        "code": "Uu5.AutoLoad",
+        "tagList": [
+          "uu5",
+          "AutoLoad"
+        ],
+        "docCode": "79350832",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "This component loads additional page of items when it becomes or is close to becoming visible in viewport, e.g. due to user scrolling."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "Content",
+          "cs": "Obsah"
+        },
+        "code": "Uu5.Content",
+        "tagList": [
+          "uu5",
+          "Content"
+        ],
+        "docCode": "21246930",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Renders all types of content (children, uu5string, ...) with proper nesting levels and handles possible performance issues properly."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "DynamicLibraryComponent"
+        },
+        "code": "Uu5.DynamicLibraryComponent",
+        "tagList": [
+          "uu5",
+          "DynamicLibraryComponent"
+        ],
+        "docCode": "49055461",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Renders a component based on the component name. If no such component has been loaded yet then it gets loaded by using library registry. If loading fails, an error information is shown"
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "ErrorBoundary"
+        },
+        "code": "Uu5.ErrorBoundary",
+        "tagList": [
+          "uu5",
+          "ErrorBoundary"
+        ],
+        "docCode": "16010246",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "The component could cover some other components which can crash. Fallback from ErrorBoundary is displayed when some of children crash."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "Fragment"
+        },
+        "code": "Uu5.Fragment",
+        "tagList": [
+          "uu5",
+          "Fragment"
+        ],
+        "docCode": "80708999",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Basic Fragment from React."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "Lsi"
+        },
+        "code": "Uu5.Lsi",
+        "tagList": [
+          "uu5",
+          "Lsi"
+        ],
+        "docCode": "04916786",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "The component chooses a value from a set of language variants and renders the correct one by current language. This component can lazy load lsi files."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "Router"
+        },
+        "code": "Uu5.Router",
+        "tagList": [
+          "uu5",
+          "Router"
+        ],
+        "docCode": "54860807",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Component for specifying valid uu5Routes and their mapping to route components. It supports static and dynamic uu5Routes, as well as fallback for unknown uu5Routes. See Routing concept for more information."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "Suspense"
+        },
+        "code": "Uu5.Suspense",
+        "tagList": [
+          "uu5",
+          "Suspense"
+        ],
+        "docCode": "94279879",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Same component and props as React Suspense."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "BackgroundProvider"
+        },
+        "code": "Uu5.BackgroundProvider",
+        "tagList": [
+          "uu5",
+          "BackgroundProvider"
+        ],
+        "docCode": "50478940",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Provides information about background brightness for nested visual components."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "ContentSizeProvider"
+        },
+        "code": "Uu5.ContentSizeProvider",
+        "tagList": [
+          "uu5",
+          "ContentSizeProvider"
+        ],
+        "docCode": "Uu5g05ContentSizeProvider",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Component which provides to the nested components available size based on parent element's size. Nested components can access the size by using useContentSize hook."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "DataControllerProvider"
+        },
+        "code": "Uu5.DataControllerProvider",
+        "tagList": [
+          "uu5",
+          "DataControllerProvider"
+        ],
+        "docCode": "54420558",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "DataControllerProvider manages data about the active filtering, sorting and selection. It also has information on how the data is identified. Data from this provider can be accessed using four hooks: useDataController, useDataFilter, useDataSorter and useDataSelection."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "DataStoreProvider"
+        },
+        "code": "Uu5.DataStoreProvider",
+        "tagList": [
+          "uu5",
+          "DataStoreProvider"
+        ],
+        "docCode": "00342977",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "DataStoreProvider keeps the data retrieved from the useDataList hook. Filtering, sorting, and selection are maintained by the DataControllerProvider. This allows you to customize the output data that is read using the useDataStore hook."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "DeviceProvider"
+        },
+        "code": "Uu5.DeviceProvider",
+        "tagList": [
+          "uu5",
+          "DeviceProvider"
+        ],
+        "docCode": "43174830",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Component which provides device and browser information to the nested components. Those can access the information by using useDevice hook."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "LanguageListProvider"
+        },
+        "code": "Uu5.LanguageListProvider",
+        "tagList": [
+          "uu5",
+          "LanguageListProvider"
+        ],
+        "docCode": "2984890",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "It provides and allows changing of the list of usable languages in the page (document). The hook useLanguageList responds to it. Nested LanguageProvider is automatically constrained to allow using languages from the list only. Any attempt to set a language which isn't in the list will be ignored and a language (current or first one) from the list will be used instead."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "LanguageProvider"
+        },
+        "code": "Uu5.LanguageProvider",
+        "tagList": [
+          "uu5",
+          "LanguageProvider"
+        ],
+        "docCode": "26673879",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "It allows changing the language only in a certain part of the page (document), only for the components which are wrapped. The hook useLanguage responds to it. If used inside of LanguageListProvider, this component is automatically constrained to allow using languages from the list only. Any attempt to set a language which isn't in the list will be ignored and a language (current or first one) from the list will be used instead."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "LevelProvider"
+        },
+        "code": "Uu5.LevelProvider",
+        "tagList": [
+          "uu5",
+          "LevelProvider"
+        ],
+        "docCode": "27580240",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Component which provides specified level to the nested components. Those can access the level by using useLevel hook."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "RouteProvider"
+        },
+        "code": "Uu5.RouteProvider",
+        "tagList": [
+          "uu5",
+          "RouteProvider"
+        ],
+        "docCode": "73583337",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "RouteProvider cares about actual uu5Route which is returned in context. Setter for the uu5Route is also in context. This provider does not solve route definitions, because it is priority of useRouter. For more information, look to concept about routing."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "ScreenSizeProvider"
+        },
+        "code": "Uu5.ScreenSizeProvider",
+        "tagList": [
+          "uu5",
+          "ScreenSizeProvider"
+        ],
+        "docCode": "88145796",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Component which provides to the nested components available size based on parent element's size. Nested components can access the size by using useScreenSize hook."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "SessionProvider"
+        },
+        "code": "Uu5.SessionProvider",
+        "tagList": [
+          "uu5",
+          "SessionProvider"
+        ],
+        "docCode": "12039835",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "The component SessionProvider is used to create and provide context with the session of the current user such as state, identity and expiration. It is not responsible for the creation of session itself only for the creation of the context. The children can access the session via the hook useSession."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "TimeZoneProvider"
+        },
+        "code": "Uu5.TimeZoneProvider",
+        "tagList": [
+          "uu5",
+          "TimeZoneProvider"
+        ],
+        "docCode": "69706552",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "Component which provides time zone information to the nested components. Those can access the information by using useTimeZone hook."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      },
+      {
+        "name": {
+          "en": "UserPreferencesProvider"
+        },
+        "code": "Uu5.UserPreferencesProvider",
+        "tagList": [
+          "uu5",
+          "UserPreferencesProvider"
+        ],
+        "docCode": "37984400",
+        "icon": "uugds-format-code",
+        "desc": {
+          "en": "The component provides values in props via context. It is possible to read them by hook useUserPreferences."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5"
+      }
+    ]
+  },
+  "uu5g05-bricks-support": {
+    "namespace": "Uu5BricksSupport",
+    "sourceUri": "https://cdn.plus4u.net/uu-uu5g05/%s/uu5g05-bricks-support.min.js",
+    "componentList": [
+      {
+        "name": {
+          "en": "InlineComponentLink"
+        },
+        "code": "Uu5BricksSupport.InlineComponentLink",
+        "tagList": [
+          "uu5",
+          "Uu5BricksSupport",
+          "InlineComponentLink"
+        ],
+        "docCode": "Uu5BricksSupportInlineComponentLink",
+        "icon": "",
+        "desc": {
+          "en": "The component renders a Button or a Link, which, when clicked, displays the appropriate component in a modal or Plus4UGo."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5BricksSupport"
+      }
+    ]
+  },
+  "uu5g05-browser-compatibility": {
+    "namespace": "Uu5BrowserCompatibility",
+    "sourceUri": "https://cdn.plus4u.net/uu-uu5g05/%s/uu5g05-browser-compatibility.min.js",
+    "description": "The library should be used in index.html, because the library checks if the browser is supported and if not it recommends another."
+  },
+  "uu5g05-dev": {
+    "namespace": "Uu5Dev",
+    "sourceUri": "https://cdn.plus4u.net/uu-uu5g05/%s/uu5g05-dev.min.js",
+    "description": "The library contains components for creating examples. This library is not recommended to use in production components.",
+    "componentList": [
+      {
+        "name": {
+          "en": "LoremIpsum"
+        },
+        "code": "Uu5Dev.LoremIpsum",
+        "tagList": [
+          "uu5",
+          "Uu5Dev",
+          "LoremIpsum"
+        ],
+        "docCode": "07289669",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5DevLoremIpsum",
+        "desc": {
+          "en": "This component generates placeholder text."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Dev"
+      }
+    ]
+  },
+  "uu5g05-editing": {
+    "namespace": "Uu5Editing",
+    "sourceUri": "https://cdn.plus4u.net/uu-uu5g05/%s/uu5g05-editing.min.js",
+    "description": "The library contains components that are used to create editing modes for components.",
+    "componentList": [
+      {
+        "name": {
+          "en": "ContentSizePanel"
+        },
+        "code": "Uu5Editing.ContentSizePanel",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "ContentSizePanel"
+        ],
+        "docCode": "Uu5EditingContentSizePanel",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingContentSizePanel",
+        "desc": {
+          "en": "The component displays a panel with toggle and displays the content sizes in header by default."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "EditModal"
+        },
+        "code": "Uu5Editing.EditModal",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "EditModal"
+        ],
+        "docCode": "Uu5EditingEditModal",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingEditModal",
+        "desc": {
+          "en": "The component displays a modal window with form inputs for each editable prop. The editable props and their respective inputs can be organized into logical groups that are accessed via tabs in left menu panel. Also the inputs themselves on the right content side of the modal window can be (re)arranged via custom layout templates."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormAspectRatio"
+        },
+        "code": "Uu5Editing.FormAspectRatio",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormAspectRatio"
+        ],
+        "docCode": "Uu5EditingFormAspectRatio",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormAspectRatio",
+        "desc": {
+          "en": "The custom input that wraps the form element Select and displays a list of values relevant for the prop aspectRatio."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormBaseUri"
+        },
+        "code": "Uu5Editing.FormBaseUri",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormBaseUri"
+        ],
+        "docCode": "Uu5EditingFormBaseUri",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormBaseUri",
+        "desc": {
+          "en": "The custom input that wraps the form element Text which is used to edit the baseUri prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormBid"
+        },
+        "code": "Uu5Editing.FormBid",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormBid"
+        ],
+        "docCode": "Uu5EditingFormBid",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormBid",
+        "desc": {
+          "en": "The custom input that wraps the form element Text which is used to edit the bid prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormBorderRadius"
+        },
+        "code": "Uu5Editing.FormBorderRadius",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormBorderRadius"
+        ],
+        "docCode": "Uu5EditingFormBorderRadius",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormBorderRadius",
+        "desc": {
+          "en": "The custom input that wraps the form element SwitchSelect and displays a list of values relevant for the prop borderRadius."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormCard"
+        },
+        "code": "Uu5Editing.FormCard",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormCard"
+        ],
+        "docCode": "Uu5EditingFormCard",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormCard",
+        "desc": {
+          "en": "The custom input that wraps the form element SwitchSelect and displays a list of values relevant for the prop card."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormClassName"
+        },
+        "code": "Uu5Editing.FormClassName",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormClassName"
+        ],
+        "docCode": "Uu5EditingFormClassName",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormClassName",
+        "desc": {
+          "en": "The custom input that wraps the form element Text which is used to edit the className prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormColorScheme"
+        },
+        "code": "Uu5Editing.FormColorScheme",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormColorScheme"
+        ],
+        "docCode": "Uu5EditingFormColorScheme",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormColorScheme",
+        "desc": {
+          "en": "The custom input that wraps the form element Select and displays a list of colors and their previews based on inputted list of palettes."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormDisableUserPreference"
+        },
+        "code": "Uu5Editing.FormDisableUserPreference",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormDisableUserPreference"
+        ],
+        "docCode": "Uu5EditingFormDisableUserPreference",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormDisableUserPreference",
+        "desc": {
+          "en": "The custom input that wraps the form element Checkbox which is used to block access to data from a user preference."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormDisabled"
+        },
+        "code": "Uu5Editing.FormDisabled",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormDisabled"
+        ],
+        "docCode": "Uu5EditingFormDisabled",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormDisabled",
+        "desc": {
+          "en": "The custom input that wraps the form element Checkbox which is used to change the value of the disabled prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormFullTextSearchPriority"
+        },
+        "code": "Uu5Editing.FormFullTextSearchPriority",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormFullTextSearchPriority"
+        ],
+        "docCode": "Uu5EditingFormFullTextSearchPriority",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormFullTextSearchPriority",
+        "desc": {
+          "en": "The custom input that wraps the form element SwitchSelect and displays a list of values relevant for the prop fullTextSearchPriority."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormHeight"
+        },
+        "code": "Uu5Editing.FormHeight",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormHeight"
+        ],
+        "docCode": "Uu5EditingFormHeight",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormHeight",
+        "desc": {
+          "en": "The custom input that wraps the form element Text which is used to edit the value of the height prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormHidden"
+        },
+        "code": "Uu5Editing.FormHidden",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormHidden"
+        ],
+        "docCode": "Uu5EditingFormHidden",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormHidden",
+        "desc": {
+          "en": "The custom input that wraps the form element Checkbox which is used to change the value of the hidden prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormId"
+        },
+        "code": "Uu5Editing.FormId",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormId"
+        ],
+        "docCode": "Uu5EditingFormId",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormId",
+        "desc": {
+          "en": "The custom input that wraps the form element Text which is used to edit the id prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormIdentificationType"
+        },
+        "code": "Uu5Editing.FormIdentificationType",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormIdentificationType"
+        ],
+        "docCode": "Uu5EditingFormIdentificationType",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormIdentificationType",
+        "desc": {
+          "en": "The custom input that wraps the form element SwitchSelect and displays a list of values relevant for the prop identificationType."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormNestingLevel"
+        },
+        "code": "Uu5Editing.FormNestingLevel",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormNestingLevel"
+        ],
+        "docCode": "Uu5EditingFormNestingLevel",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormNestingLevel",
+        "desc": {
+          "en": "The custom input that wraps the form element Select and and displays a list of values relevant for the prop nestingLevel."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormNoPrint"
+        },
+        "code": "Uu5Editing.FormNoPrint",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormNoPrint"
+        ],
+        "docCode": "Uu5EditingFormNoPrint",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormNoPrint",
+        "desc": {
+          "en": "The custom input that wraps the form element Checkbox which is used to change the value of the noPrint prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormOid"
+        },
+        "code": "Uu5Editing.FormOid",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormOid"
+        ],
+        "docCode": "Uu5EditingFormOid",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormOid",
+        "desc": {
+          "en": "The custom input that wraps the form element Text which is used to edit the oid prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormRts"
+        },
+        "code": "Uu5Editing.FormRts",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormRts"
+        ],
+        "docCode": "Uu5EditingFormRts",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormRts",
+        "desc": {
+          "en": "The custom input that wraps the form element DateTime that displays a calendar for date and time selection."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormSignificance"
+        },
+        "code": "Uu5Editing.FormSignificance",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormSignificance"
+        ],
+        "docCode": "Uu5EditingFormSignificance",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormSignificance",
+        "desc": {
+          "en": "The custom input that wraps the form element SwitchSelect and displays a list of values relevant for the prop significance."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormSize"
+        },
+        "code": "Uu5Editing.FormSize",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormSize"
+        ],
+        "docCode": "Uu5EditingFormSize",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormSize",
+        "desc": {
+          "en": "The custom input that wraps the form element SwitchSelect and displays a list of values relevant for the prop size."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormSpaces"
+        },
+        "code": "Uu5Editing.FormSpaces",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormSpaces"
+        ],
+        "docCode": "Uu5EditingFormSpaces",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormSpaces",
+        "desc": {
+          "en": "The custom group of inputs which serves for editing of margins and paddings."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormStyle"
+        },
+        "code": "Uu5Editing.FormStyle",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormStyle"
+        ],
+        "docCode": "Uu5EditingFormStyle",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormStyle",
+        "desc": {
+          "en": "The custom input that wraps the element Code which is used to edit the value of the style prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormUnit"
+        },
+        "code": "Uu5Editing.FormUnit",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormUnit"
+        ],
+        "docCode": "Uu5EditingFormUnit",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormUnit",
+        "desc": {
+          "en": "FormUnit is a form element with name, text or number input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "Unit"
+        },
+        "code": "Uu5Editing.Unit",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "unit",
+          "form"
+        ],
+        "docCode": "Uu5EditingUnit",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingUnit",
+        "desc": {
+          "en": "The component returns a suitable input (Number, Text) for writing the value with valid units. Allows selection of valid units."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormUu5Id"
+        },
+        "code": "Uu5Editing.FormUu5Id",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormUu5Id"
+        ],
+        "docCode": "Uu5EditingFormUu5Id",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormUu5Id",
+        "desc": {
+          "en": "The custom input that wraps the form element Text which is used to edit the uu5Id prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      },
+      {
+        "name": {
+          "en": "FormWidth"
+        },
+        "code": "Uu5Editing.FormWidth",
+        "tagList": [
+          "uu5",
+          "Uu5Editing",
+          "FormWidth"
+        ],
+        "docCode": "Uu5EditingFormWidth",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5EditingFormWidth",
+        "desc": {
+          "en": "The custom input that wraps the form element Text which is used to edit the value of the width prop of the edited component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Editing"
+      }
+    ]
+  },
+  "uu5g05-elements": {
+    "namespace": "Uu5Elements",
+    "sourceUri": "https://cdn.plus4u.net/uu-uu5g05/%s/uu5g05-elements.min.js",
+    "description": "The library contains basic components which are connected to uuGds.",
+    "componentList": [
+      {
+        "name": {
+          "en": "ActionGroup"
+        },
+        "code": "Uu5Elements.ActionGroup",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "ActionGroup",
+          "group"
+        ],
+        "docCode": "Uu5ElementsActionGroup",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsActionGroup",
+        "desc": {
+          "en": "The component displays a list of items as Button-s or Dropdown-s and if there is not enough space, some of them will be shortened. E.g. a button might be shown with icon only (instead of icon + text), or it can be entirely hidden (collapsed) into a Dropdown menu that is automatically added to the end of the list when necessary."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Alert"
+        },
+        "code": "Uu5Elements.Alert",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Alert"
+        ],
+        "docCode": "Uu5ElementsAlert",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsAlert",
+        "desc": {
+          "en": "This non-visual component is used to create an alert, which is then displayed by the AlertBus component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "AlertBus"
+        },
+        "code": "Uu5Elements.AlertBus",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "AlertBus"
+        ],
+        "docCode": "Uu5ElementsAlertBus",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsAlertBus",
+        "desc": {
+          "en": "AlertBus collects all Alerts and displays only the one Alert with the highest priority. If Alerts have the same priority, they are displayed in the order in which they were added to AlertBus."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Badge"
+        },
+        "code": "Uu5Elements.Badge",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Badge",
+          "label"
+        ],
+        "docCode": "Uu5ElementsBadge",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsBadge",
+        "desc": {
+          "en": "Component shows text in the colored rectangle. It could be used for displaying just icon, icon and text or just text on the colored ground. Text inside is smaller then text around, so it could be used even inside of button or another components."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Block"
+        },
+        "code": "Uu5Elements.Block",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Block",
+          "colorScheme",
+          "background"
+        ],
+        "docCode": "287130378",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsBlock",
+        "desc": {
+          "en": "Block is standard layout component which contains header with actions, content and it could contain footer."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Box"
+        },
+        "code": "Uu5Elements.Box",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Box",
+          "colorScheme",
+          "background"
+        ],
+        "docCode": "97978501",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsBox",
+        "desc": {
+          "en": "Component solves aspect ratio in different sizes. It also supports colorScheme of background."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Button",
+          "cs": "Tlačítko"
+        },
+        "code": "Uu5Elements.Button",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Button",
+          "click"
+        ],
+        "docCode": "Uu5ElementsButton",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsButton",
+        "desc": {
+          "en": "The component is a button that can be used to invoke any function. The component supports color schemes."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "CollapsibleBox"
+        },
+        "code": "Uu5Elements.CollapsibleBox",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "CollapsibleBox"
+        ],
+        "docCode": "Uu5ElementsCollapsibleBox",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsCollapsibleBox",
+        "desc": {
+          "en": "The CollapsibleBox is used to wrap content that it can hide or show. The state change has a smooth animation."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "DateTime"
+        },
+        "code": "Uu5Elements.DateTime",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "DateTime"
+        ],
+        "docCode": "Uu5ElementsDateTime",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsDateTime",
+        "desc": {
+          "en": "The component displays the date and time according to the user preferences or browser formatting. The format can be set also directly. Component return only string which represent formatted date and time."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Dialog"
+        },
+        "code": "Uu5Elements.Dialog",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Dialog",
+          "modal",
+          "click"
+        ],
+        "docCode": "291033310",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsDialog",
+        "desc": {
+          "en": "Dialog is a type of Modal window, but it can be closed only by click to some button with action."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Dropdown"
+        },
+        "code": "Uu5Elements.Dropdown",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Dropdown",
+          "menu"
+        ],
+        "docCode": "Uu5ElementsDropdown",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsDropdown",
+        "desc": {
+          "en": "Dropdown is Button which open its menu items on click. It is possible to add click event to each menu item."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Grid"
+        },
+        "code": "Uu5Elements.Grid",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Grid"
+        ],
+        "docCode": "Uu5ElementsGrid",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsGrid",
+        "desc": {
+          "en": "The component defines a grid layout. All of its props are used to generate a css style that is then applied to a div wrapping children or passed down to children as a parameter if it is a function."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Grid.Item"
+        },
+        "code": "Uu5Elements.Grid.Item",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "GridItem",
+          "Grid",
+          "Item"
+        ],
+        "docCode": "Uu5ElementsGridItem",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsGridItem",
+        "desc": {
+          "en": "The component defines a grid item. All of its props are used to generate a css style that is then applied to a div wrapping children or passed down to children as a parameter if it is a function."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "GridTemplate"
+        },
+        "code": "Uu5Elements.GridTemplate",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "GridTemplate"
+        ],
+        "docCode": "Uu5ElementsGridTemplate",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsGridTemplate",
+        "desc": {
+          "en": "The component defines a grid template by referencing the names of the grid areas which are specified with the gridArea property. Repeating the name of a grid area causes the content to span those cells. A period signifies an empty cell. The syntax itself provides a visualization of the structure of the grid."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "HighlightedBox"
+        },
+        "code": "Uu5Elements.HighlightedBox",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "HighlightedBox"
+        ],
+        "docCode": "51544672",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsHighlightedBox",
+        "desc": {
+          "en": "Highlighted box shows icon and some content. Box could be colored by the meaning through colorScheme. The box can also contain some actions in different variants."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Icon"
+        },
+        "code": "Uu5Elements.Icon",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Icon"
+        ],
+        "docCode": "Uu5ElementsIcon",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsIcon",
+        "desc": {
+          "en": "Icon shows some icon from MaterialDesign, FontAwesome, uu5, Plus4U or uuBml icons."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "InfoItem"
+        },
+        "code": "Uu5Elements.InfoItem",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "InfoItem"
+        ],
+        "docCode": "285438571",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsInfoItem",
+        "desc": {
+          "en": "InfoItem is a component that visually unifies and displays people and basic information."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Input"
+        },
+        "code": "Uu5Elements.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Input"
+        ],
+        "docCode": "648767634",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsInput",
+        "desc": {
+          "en": "Input is represented by standard HTML5 input element with design from uuGds."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "LanguageSelector"
+        },
+        "code": "Uu5Elements.LanguageSelector",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "LanguageSelector"
+        ],
+        "docCode": "Uu5ElementsLanguageSelector",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsLanguageSelector",
+        "desc": {
+          "en": "The LanguageSelector component is rendered as a dropdown menu, which is used to select the language of a visual use case. If the selected language is not defined in some component in lsi, the language with the largest weight is selected. If the correct language cannot be still set, then the language of the browser is used. It it is not defined too, the first language defined in the lsi is used."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Line"
+        },
+        "code": "Uu5Elements.Line",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Line",
+          "Separator"
+        ],
+        "docCode": "303769070",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsLine",
+        "desc": {
+          "en": "Line could be used as separator of menu items or some sections or blocks."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Link"
+        },
+        "code": "Uu5Elements.Link",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Link"
+        ],
+        "docCode": "981331088",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsLink",
+        "desc": {
+          "en": "Inline link opens url address to new window or routes uuApp by Router to another route."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "LinkPanel"
+        },
+        "code": "Uu5Elements.LinkPanel",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "LinkPanel",
+          "link",
+          "box"
+        ],
+        "docCode": "Uu5ElementsLinkPanel",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsLinkPanel",
+        "desc": {
+          "en": "The component is a drop-down link that contains a header and some content."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Menu"
+        },
+        "code": "Uu5Elements.Menu",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Menu"
+        ],
+        "docCode": "Uu5ElementsMenu",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsMenu",
+        "desc": {
+          "en": "The component displays specific menu type."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "MenuItem"
+        },
+        "code": "Uu5Elements.MenuItem",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "MenuItem"
+        ],
+        "docCode": "Uu5ElementsMenuItem",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsMenuItem",
+        "desc": {
+          "en": "The component is item in some menu e.g. in Dropdown or in left navigation in some page."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "MenuList"
+        },
+        "code": "Uu5Elements.MenuList",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "MenuList"
+        ],
+        "docCode": "Uu5ElementsMenuList",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsMenuList",
+        "desc": {
+          "en": "The MenuList component displayed list of menu items."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Modal"
+        },
+        "code": "Uu5Elements.Modal",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Modal"
+        ],
+        "docCode": "519126707",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsModal",
+        "desc": {
+          "en": "The component is a simple modal window, which is rendered as a panel with specified size above the viewport contents. If the modal window is opened, all user inputs are directed towards it and content beneath it is grayed out and not active. The modal window is rendered centered below the top edge of the visible area of a visual use case."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "ModalBus"
+        },
+        "code": "Uu5Elements.ModalBus",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "ModalBus"
+        ],
+        "docCode": "Uu5ElementsModalBus",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsModalBus",
+        "desc": {
+          "en": "ModalBus collects all Modals and shows just active one. User can switch between modals and read informations from them, but only last one is interactive. If modal should not be collected by ModalBus, it has to set property skipModalBus to false. Only uuApp can decide, if ModalBus will be used and in this case uuApp must render the ModalBus in its render."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "RestoreButton"
+        },
+        "code": "Uu5Elements.ModalBus.RestoreButton",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "ModalBus",
+          "RestoreButton"
+        ],
+        "docCode": "Uu5ElementsModalBusRestoreButton",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsModalBusRestoreButton",
+        "desc": {
+          "en": "Button closes all modals up to the specific modal in ModalBus."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Number"
+        },
+        "code": "Uu5Elements.Number",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Number"
+        ],
+        "docCode": "Uu5ElementsNumber",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsNumber",
+        "desc": {
+          "en": "The component displays the number according to the user preferences or browser formatting. The format can also be set directly. The component returns a string which represents the formatted number."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Pending"
+        },
+        "code": "Uu5Elements.Pending",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Pending",
+          "loading",
+          "spinner",
+          "progress"
+        ],
+        "docCode": "Uu5ElementsPending",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsPending",
+        "desc": {
+          "en": "Pending is indicator, that something is processed. It is not only for loading data, but also for updating, deleting, etc. It should be displayed every time when user must wait for some result."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "PlaceholderBox"
+        },
+        "code": "Uu5Elements.PlaceholderBox",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "PlaceholderBox"
+        ],
+        "docCode": "Uu5ElementsPlaceholderBox",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsPlaceholderBox",
+        "desc": {
+          "en": "Component displays general states using svg components and situation description. You can also add a button, link, additional text, etc. in the component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Popover"
+        },
+        "code": "Uu5Elements.Popover",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Popover"
+        ],
+        "docCode": "Uu5ElementsPopover",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsPopover",
+        "desc": {
+          "en": "Popover is a box above (in front of) the content. It could be used for Dropdown, Tooltip, pickers, ..."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "ScrollableBox"
+        },
+        "code": "Uu5Elements.ScrollableBox",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "ScrollableBox"
+        ],
+        "docCode": "87746257",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsScrollableBox",
+        "desc": {
+          "en": "The component creates scrollable box with specified min-/max-/height. The components also shows indicators at the sides of the component if the content can be scrolled in that direction."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "SpacingProvider"
+        },
+        "code": "Uu5Elements.SpacingProvider",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "SpacingProvider"
+        ],
+        "docCode": "Uu5ElementsSpacingProvider",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsSpacingProvider",
+        "desc": {
+          "en": "The component provides type of adaptive spacing via context. It is possible to read type and its final values by hook useSpacing."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Svg"
+        },
+        "code": "Uu5Elements.Svg",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Svg"
+        ],
+        "docCode": "Uu5ElementsSvg",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsSvg",
+        "desc": {
+          "en": "The Svg component render svg as svg element or as image."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "SwitchSelectVertical"
+        },
+        "code": "Uu5Elements.SwitchSelectVertical",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "SwitchSelectVertical"
+        ],
+        "docCode": "05403283",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsSwitchSelectVertical",
+        "desc": {
+          "en": "The component is a picker of item from the item list."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Tabs",
+          "cs": "Taby"
+        },
+        "code": "Uu5Elements.Tabs",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Tabs",
+          "tab"
+        ],
+        "docCode": "Uu5ElementsTabs",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsTabs",
+        "desc": {
+          "en": "Tabs are bar component which should be use with onChange and activeCode. In a case with type card-outer, children should be defined in itemList."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Tag"
+        },
+        "code": "Uu5Elements.Tag",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Tag"
+        ],
+        "docCode": "Uu5ElementsTag",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsTag",
+        "desc": {
+          "en": "Tag is a container used for categorizing or markup."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Text"
+        },
+        "code": "Uu5Elements.Text",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Text",
+          "background",
+          "colorScheme"
+        ],
+        "docCode": "Uu5ElementsText",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsText",
+        "desc": {
+          "en": "Text supports whole typography and all colors from color schemes."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Tile"
+        },
+        "code": "Uu5Elements.Tile",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Tile"
+        ],
+        "docCode": "Uu5ElementsTile",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsTile",
+        "desc": {
+          "en": "The Tile component is a box with header, actionList and footer. There are similar props as in Block and Modal, because it is next possibility, how to display content of your component."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "Tooltip"
+        },
+        "code": "Uu5Elements.Tooltip",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "Tooltip"
+        ],
+        "docCode": "Uu5ElementsTooltip",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsTooltip",
+        "desc": {
+          "en": "Component is displayed over or next to some element."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "TouchButton"
+        },
+        "code": "Uu5Elements.TouchButton",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "TouchButton"
+        ],
+        "docCode": "Uu5ElementsTouchButton",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsTouchButton",
+        "desc": {
+          "en": "Touch button is a hyperlink with icon, initials or photo."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "name": {
+          "en": "TouchLink"
+        },
+        "code": "Uu5Elements.TouchLink",
+        "tagList": [
+          "uu5",
+          "Uu5Elements",
+          "Elements",
+          "TouchLink"
+        ],
+        "docCode": "Uu5ElementsTouchLink",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsTouchLink",
+        "desc": {
+          "en": "The component can show icon, chars or numbers on some background from color schemes. It can also display image on the background. It is also possible to set custom css background and color."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Elements"
+      },
+      {
+        "code": "Uu5Elements.Drawer",
+        "name": "Drawer",
+        "tagList": [
+          "Uu5Elements",
+          "Drawer"
+        ],
+        "docCode": "Uu5ElementsDrawer",
+        "desc": "The component offers a possibility to show a closable aside panel typically with a menu, but also with other content. The drawer can behave in few different modes.",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsDrawer",
+        "uuEccReady": false
+      },
+      {
+        "code": "Uu5Elements.Header",
+        "name": "Header",
+        "tagList": [
+          "Uu5Elements",
+          "Header"
+        ],
+        "docCode": "Uu5ElementsHeader",
+        "desc": "The component displays a header with two rows.",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsHeader",
+        "uuEccReady": false
+      },
+      {
+        "code": "Uu5Elements.Panel",
+        "name": "Panel",
+        "tagList": [
+          "Uu5Elements",
+          "Panel"
+        ],
+        "docCode": "Uu5ElementsPanel",
+        "desc": "The component is a drop-down panel that contains a header and some content.",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsPanel",
+        "uuEccReady": false
+      },
+      {
+        "code": "Uu5Elements.Accordion",
+        "name": "Accordion",
+        "tagList": [
+          "Uu5Elements",
+          "Accordion",
+          "Harmonica"
+        ],
+        "docCode": "Uu5ElementsAccordion",
+        "desc": "The component is intended to display information using the nested panel component. Each panel has a header and content. Maximum number of open panels is only one - thus the component takes up less space.",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5ElementsAccordion",
+        "uuEccReady": false
+      },
+      {
+        "code": "Uu5Elements.Toggle",
+        "name": "Toggle",
+        "tagList": [
+          "Uu5Elements",
+          "Toggle"
+        ],
+        "docCode": "Uu5ElementsToggle",
+        "desc": "The component allows switching between two states.",
+        "uuEccReady": false
+      },
+      {
+        "code": "Uu5Elements.SpeechButton",
+        "name": "SpeechButton",
+        "tagList": [
+          "Uu5Elements",
+          "Speech",
+          "Button",
+          "Voice"
+        ],
+        "docCode": "Uu5ElementsSpeechButton",
+        "desc": "Button or menu item for recording a speech and converting it to a text.",
+        "icon": "uugdsstencil-media-mic",
+        "uuEccReady": false
+      }
+    ]
+  },
+  "uu5g05-forms": {
+    "namespace": "Uu5Forms",
+    "sourceUri": "https://cdn.plus4u.net/uu-uu5g05/%s/uu5g05-forms.min.js",
+    "description": "The library contains basic inputs and form which are connected to uuGds.",
+    "componentList": [
+      {
+        "name": {
+          "en": "Checkbox"
+        },
+        "code": "Uu5Forms.Checkbox",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Checkbox"
+        ],
+        "docCode": "Uu5FormsCheckbox",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsCheckbox",
+        "desc": {
+          "en": "Checkbox is the basic form element used to select value, but it displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Checkbox.Input"
+        },
+        "code": "Uu5Forms.Checkbox.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Checkbox",
+          "Input"
+        ],
+        "docCode": "Uu5FormsCheckboxInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsCheckboxInput",
+        "desc": {
+          "en": "CheckboxInput is the basic form element used to select value."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Checkboxes"
+        },
+        "code": "Uu5Forms.Checkboxes",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Checkboxes"
+        ],
+        "docCode": "Uu5FormsCheckboxes",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsCheckboxes",
+        "desc": {
+          "en": "Checkboxes is a group of multiple Checkbox components, but it displays also label, message and feedback. The component allows you to check multiple checkboxes at once."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Checkboxes.Input"
+        },
+        "code": "Uu5Forms.Checkboxes.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Checkboxes",
+          "Input"
+        ],
+        "docCode": "Uu5FormsCheckboxesInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsCheckboxesInput",
+        "desc": {
+          "en": "Checkboxes is a group of multiple Checkbox components. The component allows you to check multiple checkboxes at once."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Date",
+          "cs": "Datum"
+        },
+        "code": "Uu5Forms.Date",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Date"
+        ],
+        "docCode": "Uu5FormsDate",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsDate",
+        "desc": {
+          "en": "Date is an input for date, but it displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Date.Input"
+        },
+        "code": "Uu5Forms.Date.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Date",
+          "Input"
+        ],
+        "docCode": "Uu5FormsDateInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsDateInput",
+        "desc": {
+          "en": "Input field for getting date from a user. On mobile phone or tablet, there is displayed native calendar."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "DateTime"
+        },
+        "code": "Uu5Forms.DateTime",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "DateTime"
+        ],
+        "docCode": "Uu5FormsDateTime",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsDateTime",
+        "desc": {
+          "en": "DateTime is an input for date and time, but it also displays label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "DateTime.Input"
+        },
+        "code": "Uu5Forms.DateTime.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "DateTime",
+          "Input"
+        ],
+        "docCode": "Uu5FormsDateTimeInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsDateTimeInput",
+        "desc": {
+          "en": "Input field for obtaining date and time from user."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Email"
+        },
+        "code": "Uu5Forms.Email",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Email"
+        ],
+        "docCode": "Uu5FormsEmail",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsEmail",
+        "desc": {
+          "en": "Email is an input for an email, but it displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Email.Input"
+        },
+        "code": "Uu5Forms.Email.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Email",
+          "Input"
+        ],
+        "docCode": "Uu5FormsEmailInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsEmailInput",
+        "desc": {
+          "en": "Input field for getting an email from a user."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "File",
+          "cs": "Soubor"
+        },
+        "code": "Uu5Forms.File",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "File"
+        ],
+        "docCode": "15358364",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFile",
+        "desc": {
+          "en": "File is an input for a file from a local disk, but it displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "File.Input"
+        },
+        "code": "Uu5Forms.File.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "File",
+          "Input"
+        ],
+        "docCode": "Uu5FormsFileInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFileInput",
+        "desc": {
+          "en": "Input field for getting file from a local disk."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Form"
+        },
+        "code": "Uu5Forms.Form",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Form"
+        ],
+        "docCode": "Uu5FormsForm",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsForm",
+        "desc": {
+          "en": "Form renders html form element and has a list of all Form items which are inside (not necessary directly) of the Form."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormCheckbox"
+        },
+        "code": "Uu5Forms.FormCheckbox",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormCheckbox"
+        ],
+        "docCode": "Uu5FormsFormCheckbox",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormCheckbox",
+        "desc": {
+          "en": "FormCheckbox is a form element with name, checkbox input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormCheckboxes"
+        },
+        "code": "Uu5Forms.FormCheckboxes",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormCheckboxes"
+        ],
+        "docCode": "Uu5FormsFormCheckboxes",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormCheckboxes",
+        "desc": {
+          "en": "FormCheckboxes is a form element with name, checkboxes input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormDate"
+        },
+        "code": "Uu5Forms.FormDate",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormDate"
+        ],
+        "docCode": "212135106",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormDate",
+        "desc": {
+          "en": "FormDate is a form element with name, date input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormDateTime"
+        },
+        "code": "Uu5Forms.FormDateTime",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormDateTime"
+        ],
+        "docCode": "633393687",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormDateTime",
+        "desc": {
+          "en": "FormDateTime is a form element with name, datetime input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormEmail"
+        },
+        "code": "Uu5Forms.FormEmail",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormEmail"
+        ],
+        "docCode": "Uu5FormsFormEmail",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormEmail",
+        "desc": {
+          "en": "FormEmail is a form element with name, email input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormFile"
+        },
+        "code": "Uu5Forms.FormFile",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormFile"
+        ],
+        "docCode": "Uu5FormsFormFile",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormFile",
+        "desc": {
+          "en": "FormFile is a form element with name, file input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormLink"
+        },
+        "code": "Uu5Forms.FormLink",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormLink"
+        ],
+        "docCode": "Uu5FormsFormLink",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormLink",
+        "desc": {
+          "en": "FormLink is a form element with name, link input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormMonth"
+        },
+        "code": "Uu5Forms.FormMonth",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormMonth"
+        ],
+        "docCode": "Uu5FormsFormMonth",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormMonth",
+        "desc": {
+          "en": "FormMonth is a form element with name, month input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormNumber"
+        },
+        "code": "Uu5Forms.FormNumber",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormNumber"
+        ],
+        "docCode": "2011474",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormNumber",
+        "desc": {
+          "en": "FormNumber is a form element with name, number input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormPassword"
+        },
+        "code": "Uu5Forms.FormPassword",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormPassword"
+        ],
+        "docCode": "908615255",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormPassword",
+        "desc": {
+          "en": "FormPassword is a form element with name, password input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormRadios"
+        },
+        "code": "Uu5Forms.FormRadios",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormRadios"
+        ],
+        "docCode": "Uu5FormsFormRadios",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormRadios",
+        "desc": {
+          "en": "FormRadios is a form element with name, radios input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormSelect"
+        },
+        "code": "Uu5Forms.FormSelect",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormSelect"
+        ],
+        "docCode": "46308551",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormSelect",
+        "desc": {
+          "en": "FormSelect is a form element with name, select input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormSlider"
+        },
+        "code": "Uu5Forms.FormSlider",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormSlider"
+        ],
+        "docCode": "46308551",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormSlider",
+        "desc": {
+          "en": "FormSlider is a form element with name, slider input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormSwitchSelect"
+        },
+        "code": "Uu5Forms.FormSwitchSelect",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormSwitchSelect"
+        ],
+        "docCode": "Uu5FormsFormSwitchSelect",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormSwitchSelect",
+        "desc": {
+          "en": "FormSwitchSelect is a form element with name, SwitchSelect input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormText"
+        },
+        "code": "Uu5Forms.FormText",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormText"
+        ],
+        "docCode": "680602660",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormText",
+        "desc": {
+          "en": "FormText is a form element with name, text input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormTextArea"
+        },
+        "code": "Uu5Forms.FormTextArea",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormTextArea"
+        ],
+        "docCode": "326542547",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormTextArea",
+        "desc": {
+          "en": "FormTextArea is a form element with name, textarea input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormTextSelect"
+        },
+        "code": "Uu5Forms.FormTextSelect",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormTextSelect"
+        ],
+        "docCode": "427103206",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormTextSelect",
+        "desc": {
+          "en": "FormTextSelect is a form element with name, select input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormTextSelectAsync"
+        },
+        "code": "Uu5Forms.FormTextSelectAsync",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormTextSelectAsync"
+        ],
+        "docCode": "968149951",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormTextSelectAsync",
+        "desc": {
+          "en": "FormTextSelectAsync is a form element with name, select input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormTime"
+        },
+        "code": "Uu5Forms.FormTime",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormTime"
+        ],
+        "docCode": "723013733",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormTime",
+        "desc": {
+          "en": "FormTime is a form element with name, time input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "FormWeek"
+        },
+        "code": "Uu5Forms.FormWeek",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "FormWeek"
+        ],
+        "docCode": "Uu5FormsFormWeek",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormWeek",
+        "desc": {
+          "en": "FormWeek is a form element with name, week input, validation, and so on."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "CancelButton"
+        },
+        "code": "Uu5Forms.CancelButton",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "CancelButton"
+        ],
+        "docCode": "Uu5FormsCancelButton",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsCancelButton",
+        "desc": {
+          "en": "Button for cancelling (leaving) a form. If form was modified then clicking this button will show confirmation dialog whether to discard the data. Button properly reacts to form state changes, e.g. it is disabled during form submit."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "ResetButton"
+        },
+        "code": "Uu5Forms.ResetButton",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "ResetButton"
+        ],
+        "docCode": "Uu5FormsResetButton",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsResetButton",
+        "desc": {
+          "en": "Button for resetting a form. Button properly reacts to form state changes, e.g. it is disabled during form submit."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "SubmitButton"
+        },
+        "code": "Uu5Forms.SubmitButton",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "SubmitButton"
+        ],
+        "docCode": "Uu5FormsSubmitButton",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsSubmitButton",
+        "desc": {
+          "en": "Button for submitting a form. Button properly reacts to form state changes, e.g. it is disabled during form submit."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Form.Provider"
+        },
+        "code": "Uu5Forms.Form.Provider",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Form",
+          "Provider"
+        ],
+        "docCode": "650720772",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormProvider",
+        "desc": {
+          "en": "Provides form handling APIs and state such as form inputs values, form validation and submit state, etc. to nested components."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Form.View"
+        },
+        "code": "Uu5Forms.Form.View",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Form",
+          "View"
+        ],
+        "docCode": "Uu5FormsFormView",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsFormView",
+        "desc": {
+          "en": "Visual component for rendering HTML form element and current form state information such as submit failure or confirmation dialog if user tries to leave unsubmitted modified form."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Label",
+          "cs": "Štítek"
+        },
+        "code": "Uu5Forms.Label",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Label"
+        ],
+        "docCode": "Uu5FormsLabel",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsLabel",
+        "desc": {
+          "en": "The component displays a label. The label can be set to different size, colorScheme, etc."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Link",
+          "cs": "Odkaz"
+        },
+        "code": "Uu5Forms.Link",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Link"
+        ],
+        "docCode": "Uu5FormsLink",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsLink",
+        "desc": {
+          "en": "Link is an input for a URL, but it displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Link.Input"
+        },
+        "code": "Uu5Forms.Link.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Link",
+          "Input"
+        ],
+        "docCode": "Uu5FormsLinkInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsLinkInput",
+        "desc": {
+          "en": "Input field for getting a URL from an user."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Message",
+          "cs": "Zpráva"
+        },
+        "code": "Uu5Forms.Message",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Message"
+        ],
+        "docCode": "Uu5FormsMessage",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsMessage",
+        "desc": {
+          "en": "The component displays a message. The message can be set to different size, feedback, etc."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Month",
+          "cs": "Měsíc"
+        },
+        "code": "Uu5Forms.Month",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Month"
+        ],
+        "docCode": "Uu5FormsMonth",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsMonth",
+        "desc": {
+          "en": "Month is an input for a month, but it displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Month.Input"
+        },
+        "code": "Uu5Forms.Month.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Month",
+          "Input"
+        ],
+        "docCode": "Uu5FormsMonthInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsMonthInput",
+        "desc": {
+          "en": "Input field for getting a month and year from an user. Browser support is spotty."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Password"
+        },
+        "code": "Uu5Forms.Password",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Password"
+        ],
+        "docCode": "Uu5FormsPassword",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsPassword",
+        "desc": {
+          "en": "Password input, which also displays label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Password.Input"
+        },
+        "code": "Uu5Forms.Password.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Password",
+          "Input"
+        ],
+        "docCode": "Uu5FormsPasswordInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsPasswordInput",
+        "desc": {
+          "en": "Input for getting password from user. The value is not visible for user, there are also dots instead of characters."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Number",
+          "cs": "Číslo"
+        },
+        "code": "Uu5Forms.Number",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Number"
+        ],
+        "docCode": "Uu5FormsNumber",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsNumber",
+        "desc": {
+          "en": "Number is an input for numbers, but it displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Number.Input"
+        },
+        "code": "Uu5Forms.Number.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Number",
+          "Input"
+        ],
+        "docCode": "Uu5FormsNumberInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsNumberInput",
+        "desc": {
+          "en": "Input field for getting number from user."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Radios"
+        },
+        "code": "Uu5Forms.Radios",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Radios"
+        ],
+        "docCode": "Uu5FormsRadios",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsRadios",
+        "desc": {
+          "en": "Radios is a group of multiple Checkbox components, but it displays also label, message and feedback. The component allows you to check only one checkbox."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Radios.Input"
+        },
+        "code": "Uu5Forms.Radios.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Radios",
+          "Input"
+        ],
+        "docCode": "Uu5FormsRadiosInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsRadiosInput",
+        "desc": {
+          "en": "Radios is a group of multiple Checkbox components. The component allows you to check only one checkbox."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Select"
+        },
+        "code": "Uu5Forms.Select",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Select"
+        ],
+        "docCode": "Uu5FormsSelect",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsSelect",
+        "desc": {
+          "en": "Select is the basic form element used to select values from several options, but it displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "SelectInput"
+        },
+        "code": "Uu5Forms.Select.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Select",
+          "Input"
+        ],
+        "docCode": "Uu5FormsSelectInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsSelectInput",
+        "desc": {
+          "en": "Select is the basic form element used to select values from several options."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Slider"
+        },
+        "code": "Uu5Forms.Slider",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Slider"
+        ],
+        "docCode": "Uu5FormsSlider",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsSlider",
+        "desc": {
+          "en": "Input in the form of slider, which also displays label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "SliderInput"
+        },
+        "code": "Uu5Forms.Slider.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Slider",
+          "Input"
+        ],
+        "docCode": "Uu5FormsSliderInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsSliderInput",
+        "desc": {
+          "en": "Slider is basic form element used to select values from scale of values."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "SwitchSelect"
+        },
+        "code": "Uu5Forms.SwitchSelect",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "SwitchSelect"
+        ],
+        "docCode": "Uu5FormsSwitchSelect",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsSwitchSelect",
+        "desc": {
+          "en": "Component is represented by a series of buttons where only one of them is selected. The component also supports label, feedback and message."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "SwitchSelect.Input"
+        },
+        "code": "Uu5Forms.SwitchSelect.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "SwitchSelect",
+          "Input"
+        ],
+        "docCode": "Uu5FormsSwitchSelectInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsSwitchSelectInput",
+        "desc": {
+          "en": "Component is represented by a series of buttons where only one of them is selected."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Text"
+        },
+        "code": "Uu5Forms.Text",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Text"
+        ],
+        "docCode": "Uu5FormsText",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsText",
+        "desc": {
+          "en": "Text input, which also displays label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Text.Input"
+        },
+        "code": "Uu5Forms.Text.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Text",
+          "Input"
+        ],
+        "docCode": "Uu5FormsTextInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsTextInput",
+        "desc": {
+          "en": "Input for getting text information from user. It could be used for name, surname, etc."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "TextArea"
+        },
+        "code": "Uu5Forms.TextArea",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "TextArea"
+        ],
+        "docCode": "Uu5FormsTextArea",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsTextArea",
+        "desc": {
+          "en": "Text area input, which also displays label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "TextArea.Input"
+        },
+        "code": "Uu5Forms.TextArea.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "TextArea",
+          "Input"
+        ],
+        "docCode": "Uu5FormsTextAreaInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsTextAreaInput",
+        "desc": {
+          "en": "Input for getting text information from user. It could be used for description, comments, etc."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "TextSelect"
+        },
+        "code": "Uu5Forms.TextSelect",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "TextSelect"
+        ],
+        "docCode": "Uu5FormsTextSelect",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsTextSelect",
+        "desc": {
+          "en": "TextSelect covers TextSelect.Input and displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "TextSelect.Input"
+        },
+        "code": "Uu5Forms.TextSelect.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "TextSelect",
+          "Input"
+        ],
+        "docCode": "Uu5FormsTextSelectInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsTextSelectInput",
+        "desc": {
+          "en": "The component is similar as Select, but it is possible to filter items in popover by writing a text."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "TextSelectAsync"
+        },
+        "code": "Uu5Forms.TextSelectAsync",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "TextSelectAsync"
+        ],
+        "docCode": "Uu5FormsTextSelectAsync",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsTextSelectAsync",
+        "desc": {
+          "en": "TextSelectAsync covers TextSelectAsync.Input and displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "TextSelectAsync.Input"
+        },
+        "code": "Uu5Forms.TextSelectAsync.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "TextSelectAsync",
+          "Input"
+        ],
+        "docCode": "Uu5FormsTextSelectAsyncInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsTextSelectAsyncInput",
+        "desc": {
+          "en": "The component is similar as TextSelect, but filtering items is possible via server call."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Time"
+        },
+        "code": "Uu5Forms.Time",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Time"
+        ],
+        "docCode": "Uu5FormsTime",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsTime",
+        "desc": {
+          "en": "Time is an input for settings hours, minutes and seconds (optional), but it displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Time.Input"
+        },
+        "code": "Uu5Forms.Time.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Time",
+          "Input"
+        ],
+        "docCode": "Uu5FormsTimeInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsTimeInput",
+        "desc": {
+          "en": "Input field for obtaining time from user."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Week"
+        },
+        "code": "Uu5Forms.Week",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Week"
+        ],
+        "docCode": "Uu5FormsWeek",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsWeek",
+        "desc": {
+          "en": "Week is an input for a week, but it displays also label, message and feedback."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      },
+      {
+        "name": {
+          "en": "Week.Input"
+        },
+        "code": "Uu5Forms.Week.Input",
+        "tagList": [
+          "uu5",
+          "Uu5Forms",
+          "Week",
+          "Input"
+        ],
+        "docCode": "Uu5FormsWeekInput",
+        "imageUri": "https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d/Uu5FormsWeekInput",
+        "desc": {
+          "en": "Input field for getting a year and ISO 8601 week number from an user. Safari and Firefox don't support it on desktop."
+        },
+        "uuEccReady": false,
+        "libraryCode": "Uu5Forms"
+      }
+    ]
+  },
+  "uu5g05-test": {
+    "namespace": "Uu5Test",
+    "sourceUri": "https://cdn.plus4u.net/uu-uu5g05/%s/uu5g05-test.min.js",
+    "description": "The library contains tools for testing of a components."
+  }
+}

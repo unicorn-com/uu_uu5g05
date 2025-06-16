@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Fragment, createComponent, useState, useRef, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      function DemoModal(props) {
+        const { label, ...modalProps } = props;
+        let [open, setOpen] = useState(false);
+
+        return (
+          <Fragment>
+            <Uu5Elements.Button onClick={() => setOpen(true)} children={label} />
+
+            <Uu5Elements.Modal {...modalProps} open={open} onClose={() => setOpen(false)} />
+          </Fragment>
+        );
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Elements.ModalBus>
+              <DemoModal id="modal1" label="Open modal 1" header="Modal 1" footer="Modal Footer">
+                <DemoModal label="Open modal 2" header="Modal 2">
+                  <DemoModal label="Open modal 3" header="Modal 3">
+                    <DemoModal label="Open modal 4" header="Modal 4">
+                      <LoremIpsum paragraphCount={3} />
+                    </DemoModal>
+
+                    {/*@@viewOn:example*/}
+                    <Uu5Elements.ModalBus.RestoreButton modalId="modal1">
+                      Close until Modal 1 (from Modal 3)
+                    </Uu5Elements.ModalBus.RestoreButton>
+                    {/*@@viewOff:example*/}
+                    <LoremIpsum paragraphCount={10} />
+                  </DemoModal>
+
+                  <Uu5Elements.ModalBus.RestoreButton modalId="modal1" lsi={{ confirm: { en: "Continue" } }}>
+                    Close until Modal 1 (from Modal 2)
+                  </Uu5Elements.ModalBus.RestoreButton>
+                  <LoremIpsum paragraphCount={5} />
+                </DemoModal>
+                <LoremIpsum paragraphCount={30} />
+              </DemoModal>
+
+              <LoremIpsum paragraphCount={20} />
+            </Uu5Elements.ModalBus>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

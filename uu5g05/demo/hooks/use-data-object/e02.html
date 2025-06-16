@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script>
+      Uu5Loader.config({
+        imports: {
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        useDataObject,
+        createComponent,
+        createVisualComponent,
+        SessionProvider,
+        useSession,
+        useState,
+        useRef,
+        useMemo,
+        useCallback,
+        useEffect,
+        useUnmountedRef,
+        useScreenSize,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import { Client } from "uu_appg01";
+
+      //@@viewOn:example
+      const Calls = {
+        // ...
+
+        update(newData) {
+          let commandUri = Calls.getCommandUri("entity/update");
+          return Calls.call("post", commandUri, newData);
+        },
+
+        updateTime(newData) {
+          let commandUri = Calls.getCommandUri("entity/updateTime");
+          return Calls.call("post", commandUri, newData);
+        },
+      };
+      //@@viewOff:example
+
+      Calls.call = async (method, uri, dtoIn) => {
+        console.log("call", uri, "dtoIn:", dtoIn);
+        return dtoIn;
+      };
+      Calls.getCommandUri = (v) => v;
+
+      // prettier-ignore
+      const NAMES = ["Anabel", "Evangeline", "Dannielle", "Domenic", "Armida", "Myrl", "Emmett", "Tracey", "Valeri", "Abel"];
+      const INITIAL_DATA = {
+        name: NAMES[Math.floor(NAMES.length * Math.random())],
+        time: Date.now(),
+      };
+
+      //@@viewOn:example
+      const Example = createVisualComponent({
+        render() {
+          let dataObject = useDataObject({
+            initialData: INITIAL_DATA,
+            handlerMap: {
+              update: Calls.update,
+              updateTime: async ({ time, ...rest }) => {
+                let result = await Calls.updateTime(time);
+                return { ...rest, time: result };
+              },
+            },
+          });
+          let { state, data, errorData, pendingData, handlerMap } = dataObject;
+
+          return (
+            <div>
+              <h1>Update part of an object using different call</h1>
+              <Uu5Elements.Button
+                disabled={!handlerMap.update}
+                onClick={() =>
+                  handlerMap.update({
+                    name: NAMES[Math.floor(NAMES.length * Math.random())],
+                    time: Date.now(),
+                  })
+                }
+              >
+                Update
+              </Uu5Elements.Button>{" "}
+              <Uu5Elements.Button
+                disabled={!handlerMap.updateTime}
+                onClick={() =>
+                  handlerMap.updateTime({
+                    ...data,
+                    time: Date.now(),
+                  })
+                }
+              >
+                Update (time only)
+              </Uu5Elements.Button>{" "}
+              <div>
+                <div>
+                  <b>Name:</b> {data.name}
+                </div>
+                <div>
+                  <b>Time:</b>{" "}
+                  {new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(
+                    data.time
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const Page = createVisualComponent({
+        render() {
+          return (
+            <div>
+              <Example />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

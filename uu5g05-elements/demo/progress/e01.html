@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, useEffect, useState, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const ProgressRandom = createVisualComponent({
+        render(props) {
+          const [running, setRunning] = useState(true);
+          const [value, setValue] = useState(0);
+
+          useEffect(() => {
+            if (running) {
+              const timeout = setTimeout(() => setValue((v) => v + Utils.Number.random(10, 1)), Utils.Number.random(1500, 500));
+              return () => clearTimeout(timeout);
+            }
+          }, [running, value]);
+
+          const progress = value % 100;
+          const text = (Math.floor(value / 100)) % 2 ? 100 - progress : progress;
+
+          return (
+            <>
+              <Uu5Elements.Progress
+                value={value}
+                text={text}
+                suffix="%"
+                onCancel={(e) => setRunning(!running)}
+                animated
+              />
+              <Uu5Elements.Progress
+                type="horizontal"
+                value={value}
+                text={text}
+                suffix="%"
+                onCancel={(e) => setRunning(!running)}
+                animated
+              />
+            </>
+          )
+        }
+      });
+
+      const ProgressCounter = createVisualComponent({
+        render(props) {
+          const [running, setRunning] = useState(true);
+          const [value, setValue] = useState(0);
+
+          useEffect(() => {
+            if (running) {
+              const timeout = setTimeout(() => setValue((v) => v + 1), 100);
+              return () => clearTimeout(timeout);
+            }
+          }, [running, value]);
+
+          const progress = value % 100;
+          const text = (Math.floor(value / 100)) % 2 ? 100 - progress : progress;
+
+          return (
+            <>
+              <Uu5Elements.Progress
+                value={value}
+                text={text}
+                suffix="%"
+                onCancel={(e) => setRunning(!running)}
+              />
+              <Uu5Elements.Progress
+                type="horizontal"
+                value={value}
+                text={text}
+                suffix="%"
+                onCancel={(e) => setRunning(!running)}
+              />
+            </>
+          )
+        }
+      });
+
+      const ProgressTimer = createVisualComponent({
+        render({ seconds }) {
+          const [s, setS] = useState(0);
+          const [timeStart, setTimeStart] = useState(() => new Date().getTime());
+
+          useEffect(() => {
+            const timeout = setTimeout(() => setS(() => {
+              let sNew = Math.round((new Date().getTime() - timeStart) / 1000);
+              if (sNew > seconds) {
+                sNew = 0;
+                setTimeStart(new Date().getTime())
+              }
+              return sNew;
+            }), 1000);
+            return () => clearTimeout(timeout);
+          }, [s, timeStart, seconds]);
+
+          const value = 100 + Math.round((100 / seconds) * s);
+
+          const diff = seconds - s;
+          const text = [Math.floor(diff / 60), (diff % 60 + "").padStart(2, "0")].join(":");
+
+          return (
+            <>
+              <Uu5Elements.Progress
+                value={value}
+                text={text}
+              />
+              <Uu5Elements.Progress
+                type="horizontal"
+                value={value}
+                text={text}
+              />
+            </>
+          )
+        }
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Elements.Grid templateColumns="max-content max-content" columnGap={16}>
+              {/*@@viewOn:example*/}
+
+              <ProgressRandom />
+              <ProgressCounter />
+              <ProgressTimer seconds={60} />
+              {/*@@viewOff:example*/}
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

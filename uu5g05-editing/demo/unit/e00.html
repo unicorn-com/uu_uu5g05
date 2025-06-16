@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Editing from "uu5g05-editing";
+
+      Utils.Language.setLanguage("en");
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const {
+            value: propsValue,
+            onChange,
+            onValidationStart,
+            onValidationEnd,
+            feedback,
+            message,
+            messageParams,
+          } = props;
+
+          const [value, setValue] = useState(propsValue);
+          const [errorList, setErrorList] = useState(null);
+          const [pending, setPending] = useState();
+
+          return (
+            <div>
+              <Input
+                {...props}
+                value={value}
+                feedback={errorList?.[0].feedback || feedback}
+                message={errorList?.[0].message || message}
+                messageParams={errorList?.[0].messageParams || messageParams}
+                pending={pending}
+                onChange={(e) => {
+                  typeof onChange === "function" && onChange(e);
+                  setValue(e.data.value);
+                }}
+                onValidationStart={(e) => {
+                  typeof onValidationStart === "function" && onValidationStart(e);
+                  setPending(true);
+                }}
+                onValidationEnd={(e) => {
+                  typeof onValidationEnd === "function" && onValidationEnd(e);
+                  setErrorList(e.data.errorList.length ? e.data.errorList : null);
+                  setPending(false);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const Unit = withControlledInput(Uu5Editing.Unit);
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+                {/*@@viewOn:example*/}
+              <h4>value (string) & onChange (in console)</h4>
+              <Unit
+                label="Label"
+                value="20px"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <h4>value (number) & onChange (in console)</h4>
+              <Unit
+                label="Label"
+                value={20}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <h4>unitList=["px", "%", "rem"]</h4>
+              <Unit unitList={["px", "%", "rem"]} />
+
+              <h4>unitList=["px"] (rendering Number input)</h4>
+              <Unit unitList={["px"]} />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

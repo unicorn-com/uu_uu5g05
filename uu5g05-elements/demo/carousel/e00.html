@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createVisualComponent, Utils, useState, BackgroundProvider, PropTypes } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const COLOR_SCHEME_LIST = PropTypes.COLOR_SCHEME.basic;
+
+      const IMAGE_LIST = [
+        "https://images.pexels.com/photos/235621/pexels-photo-235621.jpeg?w=400&auto=compress",
+        "https://images.pexels.com/photos/8344069/pexels-photo-8344069.jpeg?w=400&auto=compress",
+        "https://images.pexels.com/photos/53125/elephant-tusk-ivory-animal-53125.jpeg?w=200&auto=compress",
+        "https://images.pexels.com/photos/208977/pexels-photo-208977.jpeg?w=400&auto=compress",
+        "https://images.pexels.com/photos/33787/chimpanzee-sitting-sad-mammal.jpg?w=400&auto=compress",
+        "https://images.pexels.com/photos/53957/striped-core-butterflies-butterfly-brown-53957.jpeg?w=300&auto=compress",
+        "https://images.pexels.com/photos/36347/cow-pasture-animal-almabtrieb.jpg?w=300&auto=compress",
+        "https://images.pexels.com/photos/460775/pexels-photo-460775.jpeg?w=300&auto=compress",
+        "https://images.pexels.com/photos/162140/duckling-birds-yellow-fluffy-162140.jpeg?w=400&auto=compress",
+        "https://images.pexels.com/photos/86405/penguin-funny-blue-water-86405.jpeg?w=400&auto=compress",
+      ];
+
+      function withControlledCarousel(Carousel) {
+        return (props) => {
+          const { index: propsIndex, onIndexChange } = props;
+
+          const [index, setIndex] = useState(propsIndex || 0);
+
+          return (
+            <Carousel
+              {...props}
+              index={index}
+              onIndexChange={(e) => {
+                typeof onIndexChange === "function" && onIndexChange(e);
+                setIndex(e.data.index);
+              }}
+            />
+          );
+        };
+      }
+
+      const Carousel = withControlledCarousel(Uu5Elements.Carousel);
+
+      function generateCarouselItems(count, height) {
+        return [...new Array(count)].map((it, i) => (
+          <Uu5Elements.Box
+            colorScheme={COLOR_SCHEME_LIST[i * 3]}
+            significance="distinct"
+            height={typeof height === "function" ? height(i) : height}
+            key={i}
+            className={Config.Css.css({ display: "flex", alignItems: "center", justifyContent: "center" })}
+          >
+            {i + 1}
+          </Uu5Elements.Box>
+        ));
+      }
+
+      function generateImageItems(count) {
+        return [...new Array(count)].map((it, i) => (
+          <img
+            src={IMAGE_LIST[i]}
+            key={i}
+            className={Config.Css.css({
+              display: "block",
+              height: 400,
+              width: "100%",
+              maxWidth: "100%",
+              objectFit: "cover",
+            })}
+          />
+        ));
+      }
+
+      const COLORED_ITEM_LIST = generateCarouselItems(5, 100);
+      const IMAGE_ITEM_LIST = generateImageItems(10);
+      const VARIOUS_HEIGHT_ITEM_LIST = generateCarouselItems(5, (i) => [50, 100, 80, 80, 120][i]); 
+
+      function Row({ header, children }) {
+        return (
+          <>
+            <h4>{header}</h4>
+            <div
+              className={Config.Css.css({
+                display: "grid",
+                gridTemplateColumns: `repeat(auto-fit, minmax(200px, 1fr))`,
+                gridTemplateRows: "auto",
+                gap: 16,
+              })}
+            >
+              {children}
+            </div>
+          </>
+        );
+      }
+
+      const Page = createVisualComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <Carousel>
+                <Uu5Elements.Box
+                  colorScheme="red"
+                  significance="distinct"
+                  height={100}
+                  className={Config.Css.css({ display: "flex", alignItems: "center", justifyContent: "center" })}
+                >
+                  red
+                </Uu5Elements.Box>
+                <Uu5Elements.Box
+                  colorScheme="green"
+                  significance="distinct"
+                  height={100}
+                  className={Config.Css.css({ display: "flex", alignItems: "center", justifyContent: "center" })}
+                >
+                  green
+                </Uu5Elements.Box>
+                <Uu5Elements.Box
+                  colorScheme="blue"
+                  significance="distinct"
+                  height={100}
+                  className={Config.Css.css({ display: "flex", alignItems: "center", justifyContent: "center" })}
+                >
+                  blue
+                </Uu5Elements.Box>
+              </Carousel>
+
+              <Row header="type">
+                <div>
+                  <h5>final</h5>
+                  <Carousel type="final">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>infinite</h5>
+                  <Carousel type="infinite">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>rewind</h5>
+                  <Carousel type="rewind">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+              </Row>
+
+              <Row header="colorScheme">
+                <div>
+                  <h5>positive</h5>
+                  <Carousel colorScheme="positive">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>pink</h5>
+                  <Carousel colorScheme="pink">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div style={{ backgroundColor: "#333" }}>
+                  <BackgroundProvider background="dark">
+                    <h5>
+                      <Uu5Elements.Text colorScheme="building" style={{ marginLeft: 8 }}>
+                        building on dark
+                      </Uu5Elements.Text>
+                    </h5>
+                    <Carousel colorScheme="building">{COLORED_ITEM_LIST}</Carousel>
+                  </BackgroundProvider>
+                </div>
+              </Row>
+
+              <Row header="buttons">
+                <div>
+                  <h5>outer</h5>
+                  <Carousel buttons="outer">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>inner</h5>
+                  <Carousel buttons="inner">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>none</h5>
+                  <Carousel buttons="none">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+              </Row>
+
+              <Row header="stepper">
+                <div>
+                  <h5>outer</h5>
+                  <Carousel stepper="outer">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>inner</h5>
+                  <Carousel stepper="inner">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>stepper="none"</h5>
+                  <Carousel stepper="none">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+              </Row>
+
+              <Row header="borderRadius">
+                <div>
+                  <h5>none</h5>
+                  <Carousel borderRadius="none">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>elementary</h5>
+                  <Carousel borderRadius="elementary">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>moderate</h5>
+                  <Carousel borderRadius="moderate">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>expressive</h5>
+                  <Carousel borderRadius="expressive">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>full</h5>
+                  <Carousel borderRadius="full">{COLORED_ITEM_LIST}</Carousel>
+                </div>
+              </Row>
+
+              <Row header="stopIntervalOnHover && intervalMs=1000 & type='infinite'">
+                <div>
+                  <h5>stopIntervalOnHover=true</h5>
+                  <Carousel intervalMs={1000} type="infinite" stopIntervalOnHover={true}>
+                    {COLORED_ITEM_LIST}
+                  </Carousel>
+                </div>
+                <div>
+                  <h5>stopIntervalOnHover=false</h5>
+                  <Carousel intervalMs={1000} type="infinite" stopIntervalOnHover={false}>
+                    {COLORED_ITEM_LIST}
+                  </Carousel>
+                </div>
+              </Row>
+
+              <Row header="contentHeight">
+                <div>
+                  <h5>200 (items 100% height)</h5>
+                  <Carousel contentHeight={200}>{generateCarouselItems(5, "100%")}</Carousel>
+                </div>
+                <div>
+                  <h5>200 (items various height)</h5>
+                  <Carousel contentHeight={200}>{VARIOUS_HEIGHT_ITEM_LIST}</Carousel>
+                </div>
+                <div>
+                  <h5>auto (items various height)</h5>
+                  <Carousel contentHeight="auto">{VARIOUS_HEIGHT_ITEM_LIST}</Carousel>
+                </div>
+              </Row>
+
+              <h4>virtualization & contentHeight=400</h4>
+              <Carousel virtualization contentHeight={400}>
+                {IMAGE_ITEM_LIST}
+              </Carousel>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

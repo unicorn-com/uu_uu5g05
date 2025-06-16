@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import { withControlledFormInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(500px, 1fr))",
+        gap: 16,
+      });
+
+      function Layout({ header, withBox, withoutBox }) {
+        let cssGrid = {
+          display: "grid",
+          gap: 4,
+        };
+        return (
+          <>
+            <h4>{header}</h4>
+            <div
+              className={Config.Css.css({ ...cssGrid, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" })}
+            >
+              <div className={Config.Css.css(cssGrid)}>{withBox}</div>
+              <div className={Config.Css.css(cssGrid)}>{withoutBox}</div>
+            </div>
+          </>
+        );
+      }
+
+      const Checkboxes = withControlledFormInput(Uu5Forms.Checkboxes);
+
+      function Page() {
+        const itemList = [
+          { children: "Dog", value: "dog" },
+          { children: "Cat", value: "cat" },
+          { children: "Rabbit", value: "rabbit" },
+        ];
+
+        return (
+          <div className={columnsCss}>
+            <div>
+              {/*@@viewOn:example*/}
+              <Layout
+                header="autoFocus"
+                withBox={<Checkboxes autoFocus value={["dog"]} label="Label" itemList={itemList} />}
+                withoutBox={<Checkboxes box={false} value={["dog"]} autoFocus label="Label" itemList={itemList} />}
+              />
+
+              <Layout
+                header="id & name"
+                withBox={<Checkboxes id="id" name="name" label="Label" itemList={itemList} />}
+                withoutBox={<Checkboxes box={false} id="id" name="name" label="Label" itemList={itemList} />}
+              />
+
+              <Layout
+                header="readOnly"
+                withBox={
+                  <>
+                    <Checkboxes readOnly label="Label" itemList={itemList} />
+                    <Checkboxes readOnly value={["dog"]} label="Label" itemList={itemList} />
+                  </>
+                }
+                withoutBox={
+                  <>
+                    <Checkboxes box={false} readOnly label="Label" itemList={itemList} />
+                    <Checkboxes box={false} readOnly value={["dog"]} label="Label" itemList={itemList} />
+                  </>
+                }
+              />
+
+              <Layout
+                header="disabled"
+                withBox={
+                  <>
+                    <Checkboxes disabled label="Label" itemList={itemList} />
+                    <Checkboxes disabled value={["dog"]} label="Label" itemList={itemList} />
+                  </>
+                }
+                withoutBox={
+                  <>
+                    <Checkboxes box={false} disabled label="Label" itemList={itemList} />
+                    <Checkboxes box={false} disabled value={["dog"]} label="Label" itemList={itemList} />
+                  </>
+                }
+              />
+
+              <Layout
+                header="required"
+                withBox={
+                  <>
+                    <Checkboxes required label="Label" itemList={itemList} />
+                    <Checkboxes required value={["dog"]} label="Label" itemList={itemList} />
+                  </>
+                }
+                withoutBox={
+                  <>
+                    <Checkboxes box={false} required label="Label" itemList={itemList} />
+                    <Checkboxes box={false} required value={["dog"]} label="Label" itemList={itemList} />
+                  </>
+                }
+              />
+
+              <Layout
+                header="onFocus & onBlur (in console)"
+                withBox={
+                  <Checkboxes
+                    label="Label"
+                    itemList={itemList}
+                    onFocus={(e) => console.log("onFocus", e)}
+                    onBlur={(e) => console.log("onBlur", e)}
+                  />
+                }
+                withoutBox={
+                  <Checkboxes
+                    box={false}
+                    label="Label"
+                    itemList={itemList}
+                    onFocus={(e) => console.log("onFocus", e)}
+                    onBlur={(e) => console.log("onBlur", e)}
+                  />
+                }
+              />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <Layout
+                header="size"
+                withBox={
+                  <>
+                    <Checkboxes size="xxs" label="Label" message="Message..." itemList={itemList} value={["dog"]} />
+                    <Checkboxes size="xs" label="Label" message="Message..." itemList={itemList} value={["dog"]} />
+                    <Checkboxes size="s" label="Label" message="Message..." itemList={itemList} value={["dog"]} />
+                    <Checkboxes size="m" label="Label" message="Message..." itemList={itemList} value={["dog"]} />
+                    <Checkboxes size="l" label="Label" message="Message..." itemList={itemList} value={["dog"]} />
+                    <Checkboxes size="xl" label="Label" message="Message..." itemList={itemList} value={["dog"]} />
+                  </>
+                }
+                withoutBox={
+                  <>
+                    <Checkboxes
+                      box={false}
+                      size="xxs"
+                      label="Label"
+                      message="Message..."
+                      itemList={itemList}
+                      value={["dog"]}
+                    />
+                    <Checkboxes
+                      box={false}
+                      size="xs"
+                      label="Label"
+                      message="Message..."
+                      itemList={itemList}
+                      value={["dog"]}
+                    />
+                    <Checkboxes
+                      box={false}
+                      size="s"
+                      label="Label"
+                      message="Message..."
+                      itemList={itemList}
+                      value={["dog"]}
+                    />
+                    <Checkboxes
+                      box={false}
+                      size="m"
+                      label="Label"
+                      message="Message..."
+                      itemList={itemList}
+                      value={["dog"]}
+                    />
+                    <Checkboxes
+                      box={false}
+                      size="l"
+                      label="Label"
+                      message="Message..."
+                      itemList={itemList}
+                      value={["dog"]}
+                    />
+                    <Checkboxes
+                      box={false}
+                      size="xl"
+                      label="Label"
+                      message="Message..."
+                      itemList={itemList}
+                      value={["dog"]}
+                    />
+                  </>
+                }
+              />
+
+              <Layout
+                header="borderRadius"
+                withBox={
+                  <>
+                    <Checkboxes borderRadius="none" label="Label" itemList={itemList} value={["dog"]} />
+                    <Checkboxes borderRadius="elementary" label="Label" itemList={itemList} value={["dog"]} />
+                    <Checkboxes borderRadius="moderate" label="Label" itemList={itemList} value={["dog"]} />
+                    <Checkboxes borderRadius="expressive" label="Label" itemList={itemList} value={["dog"]} />
+                    <Checkboxes borderRadius="full" label="Label" itemList={itemList} value={["dog"]} />
+                  </>
+                }
+                withoutBox={
+                  <>
+                    <Checkboxes box={false} borderRadius="none" label="Label" itemList={itemList} value={["dog"]} />
+                    <Checkboxes
+                      box={false}
+                      borderRadius="elementary"
+                      label="Label"
+                      itemList={itemList}
+                      value={["dog"]}
+                    />
+                    <Checkboxes box={false} borderRadius="moderate" label="Label" itemList={itemList} value={["dog"]} />
+                    <Checkboxes
+                      box={false}
+                      borderRadius="expressive"
+                      label="Label"
+                      itemList={itemList}
+                      value={["dog"]}
+                    />
+                    <Checkboxes box={false} borderRadius="full" label="Label" itemList={itemList} value={["dog"]} />
+                  </>
+                }
+              />
+
+              {/*@@viewOff:example*/}
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

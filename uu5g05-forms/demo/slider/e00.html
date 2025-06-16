@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState, Lsi } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { wait } from "uu5g05-dev";
+      import { withControlledFormInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const ITEM_LIST = [
+        { value: "xs", children: "XS" },
+        { value: "s", children: "S" },
+        { value: "m", children: "M" },
+        { value: "l", children: "L" },
+        { value: "xl", children: "XL" },
+      ];
+
+      const Slider = withControlledFormInput(Uu5Forms.Slider);
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>value=50 & onChange (in console)</h4>
+              <Slider
+                label="Label"
+                value={50}
+                onChange={(e) => {
+                  // console.log("onChange", e);
+                }}
+              />
+
+              <h4>value=[null, 50]</h4>
+              <Slider label="Label" value={[null, 50]} />
+
+              <h4>value=[50, null]</h4>
+              <Slider label="Label" value={[50, null]} />
+
+              <h4>value=[20, 40]</h4>
+              <Slider label="Label" value={[20, 40]} />
+
+              <h4>value=[10, 30, 80]</h4>
+              <Slider label="Label" value={[10, 30, 80]} />
+
+              <h4>min=50 & max=150</h4>
+              <Slider label="Label" value={100} min={50} max={150} />
+
+              <h4>step=10</h4>
+              <Slider label="Label" value={50} step={10} />
+
+              <h4>tickStep=10 (step=1)</h4>
+              <Slider label="Label" value={50} tickStep={10} />
+
+              <h4>step=10 & tickStep=20</h4>
+              <Slider label="Label" value={50} step={10} tickStep={20} />
+
+              <h4>maxTickWidth=30 (default)</h4>
+              <Slider label="Label" value={55000} step={100} min={50000} max={60000} />
+
+              <h4>maxTickWidth=50</h4>
+              <Slider label="Label" value={55000} step={100} min={50000} max={60000} maxTickWidth={50} />
+
+              <h4>itemList (all values and children are string)</h4>
+              <Slider label="Label" value="s" itemList={ITEM_LIST} />
+
+              <h4>itemList (some children are undefined)</h4>
+              <Slider
+                label="Label"
+                value="c"
+                itemList={[
+                  { value: "none", children: "None" },
+                  { value: "a" },
+                  { value: "b", children: "Medium" },
+                  { value: "c" },
+                  { value: "d", children: "Largest" },
+                ]}
+              />
+
+              <h4>itemList children as lsiObject</h4>
+                <Slider itemList={[
+                    { value: "none", children: {en: "None", cs: "Žádné"} },
+                    { value: "a" },
+                    { value: "b", children: {en: "Medium", cs: "Střední"} },
+                    { value: "c" },
+                    { value: "d", children: {en: "Largest", cs: "Největší"} },
+                  ]} />
+
+              <h4>itemList (all values are numbers)</h4>
+              <Slider
+                label="Label"
+                value={20}
+                itemList={[
+                  { value: 0, children: "None" },
+                  { value: 20, children: "Small" },
+                  { value: 100, children: "Largest" },
+                ]}
+              />
+
+              <h4>displayTick</h4>
+              <Slider label="Label" value="m" displayTick={false} itemList={ITEM_LIST} />
+              <Slider label="Label" value="m" displayTick itemList={ITEM_LIST} />
+
+              <h4>displayTooltip</h4>
+              <Slider label="Label" value={5} max={10} displayTooltip={false} />
+              <Slider label="Label" value={5} max={10} displayTooltip />
+
+              <h4>displayTooltip (no space available for all values = tooltip is always displayed)</h4>
+              <Slider label="Label" value={5} displayTooltip={false} />
+              <Slider label="Label" value={5} displayTooltip />
+
+              <h4>itemList with tooltip (string values)</h4>
+              <Slider
+                label="Label"
+                value="s"
+                itemList={[
+                  { value: "xs", children: "XS", tooltip: "Extra small" },
+                  { value: "s", children: "S", tooltip: <Lsi lsi={{ en: "small size", cs: "malá velikost" }} /> },
+                  { value: "m", children: "M" },
+                  { value: "l", children: "L" },
+                  { value: "xl", children: "XL", tooltip: { en: "Extra large", cs: "Extra velký" } },
+                ]}
+              />
+
+              <h4>itemList with tooltip & displayTooltip=false</h4>
+              <Slider
+                label="Label"
+                value="s"
+                itemList={[
+                  { value: "xs", children: "XS", tooltip: "Extra small" },
+                  { value: "s", children: "S", tooltip: <Lsi lsi={{ en: "small size", cs: "malá velikost" }} /> },
+                  { value: "m", children: "M" },
+                  { value: "l", children: "L" },
+                  { value: "xl", children: "XL", tooltip: "Extra large" },
+                ]}
+                displayTooltip={false}
+              />
+
+              <h4>itemList with tooltip (number values)</h4>
+              <Slider
+                label="Label"
+                value={20}
+                itemList={[
+                  { value: 0, children: "None" },
+                  { value: 20, children: "Small", tooltip: "Small" },
+                  { value: 100, children: "Largest" },
+                ]}
+              />
+
+              <h4>value="a" & onValidationEnd (in console)</h4>
+              <Slider
+                label="Label"
+                value="a"
+                onValidationEnd={(e) => {
+                  console.log("onValidationEnd", e);
+                  // TODO save error data to state
+                }}
+              />
+
+              <h4>value="a" & itemList & onValidationEnd (in console)</h4>
+              <Slider
+                label="Label"
+                value="a"
+                itemList={ITEM_LIST}
+                onValidationEnd={(e) => {
+                  console.log("onValidationEnd", e);
+                  // TODO save error data to state
+                }}
+              />
+
+              <h4>value=0 & min=50 & onValidationEnd (in console)</h4>
+              <Slider
+                label="Label"
+                value={0}
+                min={50}
+                onValidationEnd={(e) => {
+                  console.log("onValidationEnd", e);
+                  // TODO save error data to state
+                }}
+              />
+
+              <h4>value=100 & max=50 & onValidationEnd (in console)</h4>
+              <Slider
+                label="Label"
+                value={100}
+                max={50}
+                onValidationEnd={(e) => {
+                  console.log("onValidationEnd", e);
+                  // TODO save error data to state
+                }}
+              />
+
+              <h4>value=8 & step=5 & onValidationEnd (in console)</h4>
+              <Slider
+                label="Label"
+                value={8}
+                step={5}
+                onValidationEnd={(e) => {
+                  console.log("onValidationEnd", e);
+                  // TODO save error data to state
+                }}
+              />
+
+              <h4>onValidate: >= 20 is invalid</h4>
+              <Slider
+                label="Label"
+                onValidate={async (e) => {
+                  console.log("onValidate", e);
+                  const value = e.data.value;
+
+                  // TODO some async validation e.g. on server
+                  await wait();
+
+                  if (value != null) {
+                    if (value >= 20) {
+                      return {
+                        code: "badAsyncValue",
+                        feedback: "error",
+                        message: {
+                          en: "Bad async value. It must be smaller than %d.",
+                        },
+                        messageParams: [20],
+                      };
+                    }
+                  }
+                }}
+                onValidationStart={(e) => {
+                  console.log("onValidationStart", e);
+                  // TODO set pending state to input
+                }}
+                onValidationEnd={(e) => {
+                  console.log("onValidationEnd", e);
+                  // TODO save error data to state
+                  // TODO set pending state to input to false
+                }}
+              />
+
+              <h4>value=0 & min=4 & max=10 & validateOnMount</h4>
+              <Slider label="Label" value={0} min={4} max={10} validateOnMount />
+
+              <h4>value=0 & min=4 & max=10 & validationMap</h4>
+              <Slider
+                label="Label"
+                value={0}
+                min={4}
+                max={10}
+                validationMap={{
+                  min: {
+                    feedback: "warning",
+                    message: {
+                      en: "Minimum value should be higher than %d.",
+                      cs: "Minimální číslo by mělo být vyšší než %d.",
+                    },
+                  },
+                }}
+              />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config, wait } from "uu5g05-dev";
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Uu5Forms.Form
+                onValidate={(e) => {
+                  let { value } = e.data;
+                  if ((value.num1 || 0) + (value.num2 || 0) !== 6) {
+                    return { message: { en: "Sum of first 2 numbers must be 6." } };
+                  }
+                }}
+                onSubmit={async (e) => {
+                  const { endSubmitWithError } = e.data.value;
+                  if (endSubmitWithError === "generic") throw new Error("Demo error from onSubmit.");
+                  if (endSubmitWithError === "custom") {
+                    throw new Utils.Error.Message(
+                      { en: "Error with custom message and params '%s'." },
+                      { messageParams: [123] }
+                    );
+                  }
+                  alert("Submitted with values:\n" + JSON.stringify(e.data.value, null, 2));
+                }}
+              >
+                <Uu5Forms.FormRadios
+                  name="endSubmitWithError"
+                  label="End submit with error"
+                  itemList={[
+                    { label: "No error" },
+                    { label: "Generic error", value: "generic" },
+                    { label: "Custom message", value: "custom" },
+                  ]}
+                />
+                <Uu5Forms.FormNumber name="num1" label="Number, any" autoFocus />
+                <Uu5Forms.FormNumber
+                  name="num2"
+                  label="Number <-10;10>(2) step is warning"
+                  min={-10}
+                  max={10}
+                  step={2}
+                  validationMap={{
+                    step: {
+                      message: { en: "DEMO: Should be even number." },
+                      feedback: "warning",
+                    },
+                  }}
+                />
+                <Uu5Forms.FormNumber
+                  name="num3"
+                  label="Number <-10;10>(2) validateOnChange"
+                  min={-10}
+                  max={10}
+                  step={2}
+                  initialValue={8}
+                  validateOnChange
+                />
+
+                <Uu5Forms.FormNumber
+                  name="long1"
+                  label="Number async <-10;10> (500ms)"
+                  initialValue={5}
+                  required
+                  onValidate={async (e) => {
+                    if (e.data.value == null) return true;
+                    await wait(500);
+                    return e.data.value >= -10 && e.data.value <= 10;
+                  }}
+                />
+                <Uu5Forms.FormNumber
+                  name="long2"
+                  label="Number async <-10;10> (1500ms)"
+                  initialValue={0}
+                  onValidate={async (e) => {
+                    if (e.data.value == null) return true;
+                    await wait(1500);
+                    return e.data.value >= -10 && e.data.value <= 10;
+                  }}
+                />
+
+                <div
+                  className={Config.Css.css({ display: "flex", gap: 8, justifyContent: "flex-end", margin: "16px 0" })}
+                >
+                  <Uu5Forms.SubmitButton>Buy</Uu5Forms.SubmitButton>
+                </div>
+              </Uu5Forms.Form>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

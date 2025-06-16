@@ -1,0 +1,78 @@
+{
+  "collapse": "Crollo",
+  "expand": "Espandi",
+  "moreInfo": "Aiuto",
+  "cancel": "Annullamento",
+  "ModalBus": {
+    "modalList": "Elenco modale"
+  },
+  "RestoreButton": {
+    "confirmMessage": "Una o più finestre modali verranno chiuse. Continuare?",
+    "confirm": "Chiudere le finestre"
+  },
+  "Pagination": {
+    "search": "Scrivere il numero di pagina",
+    "pageOf": "Pagina %d di %d"
+  },
+  "PlaceholderBox": {
+    "items": "Non ci sono articoli qui",
+    "document": "Questo documento è vuoto",
+    "documents": "Non ci sono documenti qui",
+    "folder": "Questa cartella è vuota",
+    "users": "Non ci sono utenti assegnati",
+    "search": "Nessun risultato di ricerca",
+    "permission": "Non sei autorizzato a visualizzare questo contenuto",
+    "account": "Effettuare prima il login",
+    "forbidden": "Non è possibile accedere a questo",
+    "cart": "Il carrello è vuoto",
+    "basket": "Il carrello è vuoto",
+    "product": "Non ci sono prodotti qui",
+    "message": "Non ci sono messaggi qui",
+    "ticket": "Non ci sono biglietti qui",
+    "sprint": "Non ci sono sprint qui",
+    "request": "Non ci sono richieste qui",
+    "activities": "Non ci sono attività qui",
+    "images": "Non ci sono immagini qui",
+    "error": "Ops, qualcosa è andato storto",
+    "offline": "Sembra che tu sia offline",
+    "delete": "Vuoi davvero cancellarlo?",
+    "timer": "I contenuti sono in fase di preparazione",
+    "role": "Non è stato assegnato alcun ruolo",
+    "security": "La pagina è protetta",
+    "document-check": "La pagina è verificata",
+    "kid": "Non è stato assegnato alcun account bambino",
+    "user": "Non è stato assegnato alcun conto",
+    "sync": "Sincronizzazione",
+    "favorites": "Non ci sono favoriti",
+    "notification": "Nessuna nuova notifica",
+    "payment-card": "Nessun metodo di pagamento disponibile"
+  },
+  "ColorPalette": {
+    "noShades": "Tonalità non disponibili per questo colore.",
+    "shade": "Ombra",
+    "selectSchemaShade": "Scegliere il colore per visualizzare le tonalità.",
+    "selectSchemaOpacity": "Scegliere il colore per visualizzare il cursore di opacità.",
+    "opacity": "Opacità"
+  },
+  "useComponentPaste": {
+    "pasteAs": "Incolla come",
+    "pasteHere": "Incolla qui"
+  },
+  "IconPalette": {
+    "noIcons": "Nessuna icona trovata"
+  },
+  "verticalCalendar": {
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "last7Days": "Ultimi 7 giorni",
+    "last30Days": "Ultimi 30 giorni",
+    "thisMonth": "Questo mese",
+    "previousMonth": "Mese precedente"
+  },
+  "SpeechButton": {
+    "label": "Converti discorso in testo",
+    "error": {
+      "not-allowed": "La registrazione di un discorso non è consentita in questo browser"
+    }
+  }
+}

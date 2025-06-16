@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, PropTypes, useState, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      let [BackgroundContext, useBackground] = Utils.Context.create();
+      let CONSUMER_COUNT_PER_PROVIDER = 10;
+      let COLORS = Object.values(UuGds.getValue(["ColorSwatches", "unicorn", "brown"])).slice(0, 5);
+
+      let gridClassName = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(10, 1fr)",
+        gridColumnStart: 1,
+        gridColumnEnd: "span 10",
+        padding: 8,
+        rowGap: 8,
+      });
+
+      function random(n) {
+        return Math.floor(Math.random() * n);
+      }
+
+      const DemoConsumer = createComponent({
+        render(props) {
+          let background = useBackground();
+          return <div>{background}</div>;
+        },
+      });
+
+      const Demo = createComponent({
+        render(props) {
+          const { id, providerCountPerLevel = 0, depth = 0, maxDepth = 1 } = props;
+          let [background] = useState(() => COLORS[depth % COLORS.length]);
+          let consumers = [];
+          for (let i = 0; i < CONSUMER_COUNT_PER_PROVIDER; i++) {
+            consumers.push(<DemoConsumer key={i} />);
+          }
+          return (
+            <BackgroundContext.Provider value={background}>
+              <div style={{ backgroundColor: background, gridColumnStart: "1", gridColumnEnd: "span 10", padding: 8 }}>
+                <div>Provider #{id}</div>
+                <div className={gridClassName}>
+                  {consumers}
+                  {depth < maxDepth && providerCountPerLevel > 0
+                    ? new Array(providerCountPerLevel)
+                        .fill(0)
+                        .map((_, i) => (
+                          <Demo
+                            key={"p" + i}
+                            depth={depth + 1}
+                            providerCountPerLevel={i === 0 ? providerCountPerLevel : 0}
+                            maxDepth={maxDepth}
+                            id={id + "-" + (i + 1)}
+                          />
+                        ))
+                    : null}
+                </div>
+              </div>
+            </BackgroundContext.Provider>
+          );
+        },
+      });
+
+      const DemoContent = createComponent({
+        render(props) {
+          const { providerCountPerLevel = 0, maxDepth = 1 } = props;
+          const renderedChildren = [];
+          renderedChildren.push(<Demo key={0} id={0} {...props} depth={1} maxDepth={maxDepth} />);
+          for (let i = 1; i < providerCountPerLevel; i++) {
+            renderedChildren.push(
+              <Demo key={i} id={i} {...props} providerCountPerLevel={0} depth={1} maxDepth={maxDepth} />
+            );
+          }
+          return renderedChildren;
+        },
+      });
+
+      let testCaseDiv;
+      const TestCase = createComponent({
+        render(props) {
+          const { onStart, onEnd, children } = props;
+          const [render, setRender] = useState(false);
+
+          useEffect(() => {
+            setTimeout(() => {
+              if (!testCaseDiv) {
+                testCaseDiv = document.createElement("div");
+                document.body.appendChild(testCaseDiv);
+              } else {
+                Utils.Dom.unmount(testCaseDiv);
+                testCaseDiv.innerHTML = "";
+              }
+              let startTime = performance.now();
+              onStart?.({ startTime });
+              Utils.Dom.render(children, testCaseDiv);
+              Promise.resolve().then(() => {
+                onEnd?.({ startTime, duration: performance.now() - startTime });
+              });
+            }, 0);
+          }, []);
+
+          return null;
+        },
+      });
+
+      const tests = [
+        // { providerCountPerLevel: 1000, maxDepth: 1 },
+        { providerCountPerLevel: 20, maxDepth: 5 },
+        { providerCountPerLevel: 40, maxDepth: 5 },
+        { providerCountPerLevel: 60, maxDepth: 5 },
+        { providerCountPerLevel: 80, maxDepth: 5 },
+        { providerCountPerLevel: 100, maxDepth: 5 },
+        { providerCountPerLevel: 200, maxDepth: 5 },
+        { providerCountPerLevel: 400, maxDepth: 5 },
+      ];
+      const Page = createComponent({
+        render() {
+          const [testCases, setTestCases] = useState(tests);
+          const [results, setResults] = useState([]);
+          const testCase = testCases[0];
+
+          return (
+            <div>
+              <Uu5Elements.Button
+                onClick={() => {
+                  setTestCases(tests);
+                  setResults([]);
+                }}
+                disabled={!!testCase}
+              >
+                Run again
+              </Uu5Elements.Button>
+              <ul>
+                {results.map(({ testCase: { providerCountPerLevel, maxDepth }, duration }, i) => (
+                  <li key={i}>
+                    {providerCountPerLevel * maxDepth} providers,{" "}
+                    {providerCountPerLevel * maxDepth * CONSUMER_COUNT_PER_PROVIDER} consumers: <b>{duration}ms</b>
+                  </li>
+                ))}
+              </ul>
+
+              {testCase ? (
+                <TestCase
+                  key={testCases.length}
+                  onEnd={({ duration }) => {
+                    setResults((r) => r.concat({ testCase, duration }));
+                    setTestCases((v) => v.slice(1));
+                  }}
+                >
+                  <DemoContent {...testCase} />
+                </TestCase>
+              ) : null}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

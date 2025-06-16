@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, UserPreferencesProvider } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, wait } from "uu5g05-dev";
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const { value: propsValue, onChange, onValidationStart, onValidationEnd } = props;
+
+          const [value, setValue] = useState(propsValue);
+          const [errorList, setErrorList] = useState(null);
+          const [pending, setPending] = useState();
+
+          return (
+            <div>
+              <Input
+                {...props}
+                value={value}
+                onChange={(e) => {
+                  typeof onChange === "function" && onChange(e);
+                  setValue(e.data.value);
+                }}
+                onValidationStart={(e) => {
+                  typeof onValidationStart === "function" && onValidationStart(e);
+                  setPending(true);
+                }}
+                onValidationEnd={(e) => {
+                  typeof onValidationEnd === "function" && onValidationEnd(e);
+                  setErrorList(e.data.errorList.length ? e.data.errorList : null);
+                  setPending(false);
+                }}
+              />
+              {errorList && (
+                <div>
+                  <Uu5Elements.Text colorScheme="negative">
+                    {errorList.map(({ code }) => code).join(" ")}
+                  </Uu5Elements.Text>
+                </div>
+              )}
+              {pending && <div>Pending...</div>}
+            </div>
+          );
+        };
+      }
+
+      const NumberInput = withControlledInput(Uu5Forms.Number.Input);
+      const SwitchSelect = withControlledInput(Uu5Forms.SwitchSelect);
+
+      const SEPARATORS_ITEM_LIST = [
+        { value: { numberGroupingSeparator: ",", numberDecimalSeparator: "." }, children: "1,234.5" },
+        { value: { numberGroupingSeparator: ".", numberDecimalSeparator: "," }, children: "1.234,5" },
+        { value: { numberGroupingSeparator: " ", numberDecimalSeparator: "," }, children: "1 234,5" },
+        { value: { numberGroupingSeparator: " ", numberDecimalSeparator: "." }, children: "1 234.5" },
+      ];
+
+      function Page() {
+        const [separators, setSeparators] = useState(SEPARATORS_ITEM_LIST[0].value);
+        const [value, setValue] = useState(1234.5);
+        return (
+          <UserPreferencesProvider {...separators} onChange={() => {}}>
+            <SwitchSelect
+              label="Separators"
+              itemList={SEPARATORS_ITEM_LIST.map((it) =>
+                it === separators ? { ...separators, significance: "highlighted" } : it
+              )}
+              value={separators}
+              onChange={(e) => setSeparators(e.data.value)}
+            />
+            <div className={Config.Css.css({ display: "grid", gridTemplateColumns: "1fr 1fr" })}>
+              <div>
+                <h4>value & onChange (in console)</h4>
+                <NumberInput
+                  value={value}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    setValue(e.data.value);
+                  }}
+                />
+                Numeric value: {value}
+                <div className={Config.Css.css({ marginTop: 32 })}>
+                  <NumberInput value={1.125} />
+                </div>
+              </div>
+              <div style={{ whiteSpace: "pre-line" }}>
+                {`1 => 1
+                  1.0 => 1
+                  1,0 => 1
+                  12 => 12
+                  1.2 => 1.2
+                  1,2 => 1.2
+                  123 => 123
+                  1.23 => 1.23
+                  1,23 => 1.23
+                  1234 => 1234
+                  1.234 => thousand: "." -> 1234 | 1.234
+                  1,234 => thousand: "," -> 1234 | 1.234
+                  1.000 => thousand: "." -> 1000 | 1
+                  1,000 => thousand: "," -> 1000 | 1
+                  12.34 => 12.34
+                  12,34 => 12.34
+                  12345 => 12345
+                  1.234.5 => 1234.5
+                  1,234,5 => 1234.5
+                  1.234,5 => 1234.5
+                  1,234.5 => 1234.5
+                  1.2345 => 1.2345
+                  1,2345 => 1.2345
+                  12.345 => thousand: "." -> 12345 | 12.345
+                  12,345 => thousand: "," -> 12345 | 12.345
+                  -12 345.678 => -12345.678
+                  -12 345,678 => -12345.678
+                  `}
+              </div>
+            </div>
+          </UserPreferencesProvider>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

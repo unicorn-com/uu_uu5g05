@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useStickyTop, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const Top = createVisualComponent({
+        render(props) {
+          let { ref, style } = useStickyTop("onScrollUp");
+          let attrs = Utils.VisualComponent.getAttrs(
+            props,
+            Config.Css.css`background: #005da7; padding: 8px; color: #fff;`
+          );
+          return (
+            <div {...attrs} ref={ref} style={{ ...attrs.style, ...style }}>
+              {props.children}
+            </div>
+          );
+        },
+      });
+
+      const Bar = createVisualComponent({
+        render(props) {
+          let { ref, style } = useStickyTop();
+          let attrs = Utils.VisualComponent.getAttrs(
+            props,
+            Config.Css.css`background: #fff; padding: 8px; border-bottom: 1px solid #e0e0e0;`
+          );
+          return (
+            <div {...attrs} ref={ref} style={{ ...attrs.style, ...style }}>
+              {props.children}
+            </div>
+          );
+        },
+      });
+
+      const Header = createVisualComponent({
+        render(props) {
+          const { visibility, children } = props;
+          let { ref, style } = useStickyTop(visibility);
+          let { elementProps } = Utils.VisualComponent.splitProps(props, Config.Css.css({ padding: 8 }));
+          return (
+            <Uu5Elements.Box
+              {...elementProps}
+              elementRef={Utils.Component.combineRefs(elementProps.elementRef, ref)}
+              style={{ ...elementProps.style, ...style }}
+              colorScheme={visibility === "always" ? "blue" : "green"}
+              shape="background"
+            >
+              {children}
+            </Uu5Elements.Box>
+          );
+        },
+      });
+
+      const Example = createComponent({
+        render() {
+          return (
+            <main className={Config.Css.css({ flex: "1 1 auto" })}>
+              <Top>Top</Top>
+              <Bar>Route Bar</Bar>
+              <LoremIpsum />
+              <Header visibility="onScrollUp">Sticky header, visibility onScrollUp</Header>
+              <LoremIpsum />
+              <Header visibility="always">Sticky header, visibility always</Header>
+              <LoremIpsum />
+
+              <Uu5Elements.Grid templateColumns="1fr 1fr" className={Config.Css.css({ padding: 16 })}>
+                <Uu5Elements.Block card="full">
+                  <LoremIpsum />
+                  <Header visibility="always">Sticky header, visibility always, inside of Block</Header>
+                  <LoremIpsum />
+                  <Header visibility="onScrollUp">Sticky header, visibility onScrollUp, inside of Block</Header>
+                  <LoremIpsum paragraphCount={3} />
+                </Uu5Elements.Block>
+
+                <Uu5Elements.Block card="full">
+                  <LoremIpsum />
+                  <Header visibility="onScrollUp">Sticky header, visibility onScrollUp, inside of Block</Header>
+                  <LoremIpsum />
+                  <Header visibility="always">Sticky header, visibility always, inside of Block</Header>
+                  <LoremIpsum paragraphCount={3} />
+                </Uu5Elements.Block>
+              </Uu5Elements.Grid>
+
+              <LoremIpsum />
+              <Header visibility="onScrollUp">Sticky header, visibility onScrollUp</Header>
+              <LoremIpsum />
+              <Header visibility="always">Sticky header, visibility always</Header>
+              <LoremIpsum paragraphCount={15} />
+            </main>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const TRANSITION_DURATION = 600;
+      const leftClassName = (open) => Config.Css.css`
+        width: 200px;
+        flex: none;
+        margin-left: ${open ? "0px" : "-200px"};
+        transition: margin-left ${TRANSITION_DURATION / 1000}s;
+        position: relative;
+        ${open ? "border: 1px solid #e0e0e0;" : ""}
+      `;
+      const leftPanelButtonClassName = (open) => Config.Css.css`
+        position: sticky;
+        top: 50%;
+        transform: translate(${open ? "50%" : "100%"}, -50%);
+        margin-left: auto;
+        display: block;
+        transition: transform ${TRANSITION_DURATION / 1000}s;
+        z-index: 950;
+      `;
+
+      const Page = createComponent({
+        render() {
+          let [leftOpen, setLeftOpen] = useState(false);
+          return (
+            <div className={Config.Css.css`display: flex;`}>
+              <div className={leftClassName(leftOpen)}>
+                Left panel
+                <Uu5Elements.Button
+                  icon={leftOpen ? "uugds-chevron-left" : "uugds-chevron-right"}
+                  colorScheme="blue"
+                  className={leftPanelButtonClassName(leftOpen)}
+                  onClick={() => setLeftOpen((v) => !v)}
+                  significance="highlighted"
+                />
+              </div>
+              <Example />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

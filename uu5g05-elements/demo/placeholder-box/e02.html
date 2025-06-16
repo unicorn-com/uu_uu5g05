@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      const gridCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: 16,
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h1>Use only in special cases when UX approved it!</h1>
+              <h4>colorScheme - building</h4>
+              <Uu5Elements.PlaceholderBox code="items" colorScheme="building" />
+
+              <h4>colorScheme - basic</h4>
+              <div className={gridCss}>
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="dark-blue" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="blue" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="light-blue" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="cyan" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="dark-green" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="green" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="light-green" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="yellow" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="orange" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="red" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="pink" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="purple" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="dark-purple" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="brown" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="grey" />
+                <Uu5Elements.PlaceholderBox code="items" colorScheme="steel" />
+              </div>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const Css = {
+        gridColumns: (colCount) =>
+          Config.Css.css({
+            display: "grid",
+            gridTemplateColumns: `repeat(${colCount}, minmax(auto, 1fr))`,
+            gap: 32,
+          }),
+      };
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <Uu5Elements.ScrollableBox>
+                <LoremIpsum />
+              </Uu5Elements.ScrollableBox>
+
+              <h4>minHeight</h4>
+              <Uu5Elements.ScrollableBox minHeight="100px">100px</Uu5Elements.ScrollableBox>
+
+              <h4>maxHeight</h4>
+              <Uu5Elements.ScrollableBox maxHeight="100px">
+                100px
+                <LoremIpsum paragraphCount={3} />
+              </Uu5Elements.ScrollableBox>
+
+              <h4>height</h4>
+              <Uu5Elements.ScrollableBox height="100px">
+                100px
+                <LoremIpsum paragraphCount={3} />
+              </Uu5Elements.ScrollableBox>
+
+              <h4>disableOverscroll</h4>
+              <Uu5Elements.ScrollableBox height="100px" disableOverscroll>
+                true
+                <LoremIpsum paragraphCount={3} />
+              </Uu5Elements.ScrollableBox>
+
+              <h4>scrollIndicator</h4>
+              <div className={Css.gridColumns(3)}>
+                <Uu5Elements.ScrollableBox height="150px" scrollIndicator="gradient">
+                  gradient
+                  <LoremIpsum paragraphCount={3} />
+                </Uu5Elements.ScrollableBox>
+                <Uu5Elements.ScrollableBox height="150px" scrollIndicator="disappear">
+                  disappear
+                  <LoremIpsum paragraphCount={3} />
+                </Uu5Elements.ScrollableBox>
+                <Uu5Elements.ScrollableBox height="150px" scrollIndicator={{ top: "gradient", bottom: "disappear" }}>
+                  {`{ top: "gradient", bottom: "disappear" }`}
+                  <LoremIpsum paragraphCount={3} />
+                </Uu5Elements.ScrollableBox>
+              </div>
+
+              <h4>scrollIndicator & horizontal</h4>
+              <div className={Css.gridColumns(3)}>
+                <Uu5Elements.ScrollableBox horizontal height="150px" scrollIndicator="gradient">
+                  gradient
+                  <div className={Config.Css.css({ minWidth: 1000 })}>
+                    <LoremIpsum paragraphCount={3} />
+                  </div>
+                </Uu5Elements.ScrollableBox>
+                <Uu5Elements.ScrollableBox horizontal height="150px" scrollIndicator="disappear">
+                  disappear
+                  <div className={Config.Css.css({ minWidth: 1000 })}>
+                    <LoremIpsum paragraphCount={3} />
+                  </div>
+                </Uu5Elements.ScrollableBox>
+                <Uu5Elements.ScrollableBox
+                  horizontal
+                  height="150px"
+                  scrollIndicator={{ top: "gradient", bottom: "disappear" }}
+                >
+                  {`{ top: "gradient", bottom: "disappear" }`}
+                  <div className={Config.Css.css({ minWidth: 1000 })}>
+                    <LoremIpsum paragraphCount={3} />
+                  </div>
+                </Uu5Elements.ScrollableBox>
+              </div>
+
+              <h4>scrollIndicatorOffset</h4>
+              <Uu5Elements.ScrollableBox
+                horizontal
+                initialScrollX={100}
+                scrollIndicatorOffset={{ leftTop: 16, leftBottom: 16, rightTop: 16, rightBottom: 16 }}
+              >
+                <div className={Config.Css.css({ minWidth: "150%", "&>:last-child": { marginBottom: 0 } })}>
+                  <LoremIpsum paragraphCount={3} />
+                </div>
+              </Uu5Elements.ScrollableBox>
+
+              <h4>initialScrollX</h4>
+              <Uu5Elements.ScrollableBox initialScrollX={100} horizontal>
+                100
+                <div className={Config.Css.css({ minWidth: "150%" })}>
+                  <LoremIpsum paragraphCount={3} />
+                </div>
+              </Uu5Elements.ScrollableBox>
+
+              <h4>initialScrollY</h4>
+              <Uu5Elements.ScrollableBox height="100px" initialScrollY={100}>
+                100
+                <LoremIpsum paragraphCount={3} />
+              </Uu5Elements.ScrollableBox>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

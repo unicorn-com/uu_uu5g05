@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Side-Detail layout - prototype 2</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        useState,
+        useRef,
+        useMemo,
+        useEffect,
+        useLayoutEffect,
+        usePreviousValue,
+        useContentSize,
+        useElementSize,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum, times } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const [SideDetailContext, useSideDetailContext] = Utils.Context.create();
+
+      function SideDetailLayout({ children, ...restProps }) {
+        // for using 50% of width
+        const { ref: divRef, width } = useElementSize();
+
+        const [open, setOpen] = useState(false);
+        const ref = useRef();
+        const closeRef = useRef();
+
+        function register(id, onClose) {
+          if (closeRef.current) {
+            closeRef.current.close();
+            closeRef.current = null;
+          }
+          closeRef.current = { id, close: onClose };
+          setOpen(true);
+        }
+
+        function unregister(id) {
+          let wait;
+          if (!closeRef.current || closeRef.current.id === id) {
+            closeRef.current = null;
+            setOpen(false);
+            wait = true;
+          }
+          return wait;
+        }
+
+        const api = useMemo(() => ({
+          register,
+          unregister,
+          sideRef: ref,
+        }), []);
+
+        return (
+          <>
+            <div ref={divRef} />
+            <Uu5Elements.Drawer
+              position="right"
+              width={width / 2}
+              {...restProps}
+              open={open}
+              onClose={() => setOpen(false)}
+              content={() => <div ref={ref} />}
+            >
+              <SideDetailContext.Provider value={api}>
+                {typeof children === "function" ? children(api) : children}
+              </SideDetailContext.Provider>
+            </Uu5Elements.Drawer>
+          </>
+        );
+      }
+
+      SideDetailLayout.Detail = ({ open, onClose, children }) => {
+        const { register, unregister, sideRef } = useSideDetailContext();
+
+        const [id] = useState(() => Utils.String.generateId());
+        const [display, setDisplay] = useState();
+
+        const contentSize = useContentSize();
+        const displayAsModal = ["xs", "s"].includes(contentSize);
+
+        useEffect(() => {
+          if (open) {
+            // cannot register for modal, because Drawer should be closed
+            if (!displayAsModal) register(id, onClose);
+            // timeout because of waiting for unmounting previous side panel's content
+            const timeout = setTimeout(() => setDisplay(true), 0);
+            return () => clearTimeout(timeout);
+          } else {
+            const wait = unregister(id);
+            // for modal, it is not necessary to wait for Drawer animation
+            if (wait) {
+              const timeout = setTimeout(() => setDisplay(false), 300); // Config.COLLAPSIBLE_BOX_TRANSITION_DURATION
+              return () => clearTimeout(timeout);
+            } else {
+              setDisplay(false);
+            }
+          }
+        }, [open]);
+
+        let result = null;
+        if (display) {
+          let childrenToRender = children;
+          if (typeof children === "function") {
+            childrenToRender = children({ displayAsModal });
+          } else if (displayAsModal && Utils.Element.isValid(children)) {
+            childrenToRender = Utils.Element.clone(children, { displayAsModal });
+          }
+          if (displayAsModal) {
+            result = childrenToRender;
+          } else {
+            result = Utils.Dom.createPortal(childrenToRender, sideRef.current);
+          }
+        }
+
+        return result;
+      };
+
+      const List = createVisualComponent({
+        uu5Tag: Config.TAG + "List",
+
+        render(props) {
+          const { itemList, detailData, onDetailOpen, elementRef, ...restProps } = props;
+
+          // dynamic getting top height - only for route
+          const ref = useRef();
+          const [top, setTop] = useState(0);
+
+          useLayoutEffect(() => {
+            setTop(ref.current.getBoundingClientRect().top);
+          }, []);
+
+          return (
+            <Uu5Elements.Block
+              height={`calc(100vh - ${top}px)`} // height for the rest of the window
+              header="List"
+              headerType="title"
+              card="full"
+              significance="subdued"
+              shape="background"
+              elementRef={Utils.Component.combineRefs(elementRef, ref)}
+              {...restProps}
+            >
+              <Uu5Elements.MenuList
+                itemList={itemList.map((i) => ({
+                  children: i,
+                  onClick: () => detailData?.oid === i ? onDetailOpen(null) : onDetailOpen({ oid: i }),
+                  colorScheme: detailData?.oid === i ? "primary" : undefined,
+                  significance: "distinct",
+                }))}
+              />
+            </Uu5Elements.Block>
+          )
+        },
+      });
+
+      const Detail = createVisualComponent({
+        uu5Tag: Config.TAG + "Detail",
+
+        render(props) {
+          const { data, onClose, displayAsModal, open, ...restProps } = props;
+          const { oid } = data;
+
+          const header = `Detail route ${oid}`;
+          const body = <LoremIpsum paragraphCount={20} />;
+
+          if (displayAsModal) {
+            return (
+              <Uu5Elements.Modal {...restProps} header={header} open={open} onClose={onClose}>
+                {body}
+              </Uu5Elements.Modal>
+            );
+          } else {
+            return (
+              <Uu5Elements.Block
+                header={header}
+                headerType="title"
+                height="100%"
+                card="full"
+                significance="subdued"
+                shape="background"
+                actionList={[{ icon: "uugds-close", onClick: onClose }]}
+                {...restProps}
+              >
+                {body}
+              </Uu5Elements.Block>
+            );
+          }
+        },
+      });
+
+      function Component({ itemList }) {
+        const [data, setData] = useState();
+        const prevData = usePreviousValue(data, data);
+
+        function handleClose() {
+          setData(null)
+        }
+
+        return (
+          <>
+            <List itemList={itemList} detailData={data} onDetailOpen={setData} height="auto" />
+            <SideDetailLayout.Detail open={!!data} onClose={handleClose}>
+              {({ displayAsModal }) => (
+                <Detail
+                  data={data ?? prevData}
+                  onClose={handleClose}
+                  displayAsModal={displayAsModal}
+                  open={!!data} // only for modal
+                />
+              )}
+            </SideDetailLayout.Detail>
+          </>
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <SideDetailLayout>
+              <Uu5Elements.ScrollableBox height="100vh">
+                <Component itemList={times(5, (v) => v)} />
+                <br />
+                <br />
+                <Component itemList={times(5, (v) => v + 20)} />
+              </Uu5Elements.ScrollableBox>
+            </SideDetailLayout>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

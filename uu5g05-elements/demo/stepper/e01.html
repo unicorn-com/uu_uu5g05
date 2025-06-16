@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { Utils, useState, useEffect, createComponent } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config, wait } from "uu5g05-dev";
+
+      const STEP_LIST = [
+        { title: "Basket", subtitle: "Step 1" },
+        { title: "Delivery info", subtitle: "Step 2" },
+        { title: "Summary", subtitle: "Step 3" },
+      ];
+
+      const Step = ({ stepIndex, onPrevious, onNext, onReset }) => (
+        <Uu5Elements.Block>
+          {typeof stepIndex === "number" && `Stepper index: ${stepIndex} `}
+          <Uu5Elements.Button size="xxs" children="Previous" onClick={onPrevious} disabled={!onPrevious} />
+          <Uu5Elements.Button size="xxs" children="Next" onClick={onNext} disabled={!onNext} />
+          <Uu5Elements.Button size="xxs" children="Reset" onClick={onReset} disabled={!onReset} />
+        </Uu5Elements.Block>
+      );
+
+      const StepperExamples = createComponent({
+        render(demoStepperProps) {
+          return (
+            <>
+              {/*@@viewOn:example*/}
+              <Uu5Elements.Grid templateColumns={{ xs: "1fr", l: "1fr 1fr" }}>
+                <Uu5Elements.Grid.Item>
+
+                  <h4>default</h4>
+                  <Uu5Elements.Stepper {...demoStepperProps} />
+
+                </Uu5Elements.Grid.Item>
+                <Uu5Elements.Grid.Item>
+
+                  <h4>vertical</h4>
+                  <Uu5Elements.Stepper {...demoStepperProps} vertical />
+
+                </Uu5Elements.Grid.Item>
+              </Uu5Elements.Grid>
+
+              {demoStepperProps.type !== "linear" ?
+                <>
+                  <h4>displayLines = false</h4>
+                  <Uu5Elements.Grid templateColumns={{ xs: "1fr", l: "1fr 1fr" }}>
+                    <Uu5Elements.Stepper {...demoStepperProps} displayLines={false} />
+                    <Uu5Elements.Stepper {...demoStepperProps} vertical displayLines={false} />
+                  </Uu5Elements.Grid>
+                </> : null
+              }
+
+              <h4>Size (xxs - xl)</h4>
+              <Uu5Elements.Grid templateColumns={{ xs: "1fr", l: "1fr 1fr" }}>
+                <Uu5Elements.Grid.Item>
+
+                  <Uu5Elements.Stepper {...demoStepperProps} size="xxs" />
+                  <Uu5Elements.Stepper {...demoStepperProps} size="xs" />
+                  <Uu5Elements.Stepper {...demoStepperProps} size="s" />
+                  <Uu5Elements.Stepper {...demoStepperProps} size="m" />
+                  <Uu5Elements.Stepper {...demoStepperProps} size="l" />
+                  <Uu5Elements.Stepper {...demoStepperProps} size="xl" />
+
+                </Uu5Elements.Grid.Item>
+                <Uu5Elements.Grid.Item>
+                  <Uu5Elements.Grid templateColumns="repeat(3, 1fr)">
+
+                    <Uu5Elements.Stepper {...demoStepperProps} vertical size="xxs" />
+                    <Uu5Elements.Stepper {...demoStepperProps} vertical size="xs" />
+                    <Uu5Elements.Stepper {...demoStepperProps} vertical size="s" />
+                    <Uu5Elements.Stepper {...demoStepperProps} vertical size="m" />
+                    <Uu5Elements.Stepper {...demoStepperProps} vertical size="l" />
+                    <Uu5Elements.Stepper {...demoStepperProps} vertical size="xl" />
+
+                  </Uu5Elements.Grid>
+                </Uu5Elements.Grid.Item>
+              </Uu5Elements.Grid>
+              {/*@@viewOff:example*/}
+            </>
+          )
+        }
+      })
+
+      const Page = () => {
+        const [stepIndex, _setStepIndex] = useState(0);
+        const [progressIndex, setProgressIndex] = useState(stepIndex);
+
+        function setStepIndex(i) {
+          _setStepIndex(i);
+          if (i > progressIndex) setProgressIndex(i);
+        }
+
+        const demoStepperProps = {
+          itemList: STEP_LIST,
+          stepIndex,
+          progressIndex,
+          onChange: (event) => setStepIndex(event.data.stepIndex),
+        };
+
+        return (
+          <div>
+            <Step
+              stepIndex={stepIndex}
+              onPrevious={stepIndex > 0 ? () => setStepIndex(stepIndex - 1) : undefined}
+              onNext={stepIndex < STEP_LIST.length - 1 ? () => setStepIndex(stepIndex + 1) : undefined}
+              onReset={() => {
+                setStepIndex(0);
+                setProgressIndex(0);
+              }}
+            />
+              <h2>type="bullet" (default)</h2>
+              <StepperExamples {...demoStepperProps} />
+
+              <h2>type="linear"</h2>
+              <StepperExamples {...demoStepperProps} type="linear" />
+          </div>
+        );
+      };
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+
+    </script>
+  </body>
+</html>

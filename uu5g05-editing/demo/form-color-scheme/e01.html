@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState, useWillMount } from "uu5g05";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Editing from "uu5g05-editing";
+      import Uu5Forms from "uu5g05-forms";
+
+      Utils.Language.setLanguage("en");
+
+      const Css = {
+        button: () => Config.Css.css({ marginBottom: 16 }),
+      };
+
+      const getEditableItemLabel = ({ itemProps, itemIndex }) => {
+        return itemProps.label || `Item ${itemIndex + 1}`;
+      };
+
+      //@@viewOn:example
+      const DEFAULT_PROPS = {
+        colorScheme: "green",
+        significance: "distinct",
+        children: "Lorem ipsum....",
+        height: 60,
+      };
+
+      //@@viewOff:example
+
+      const BoxEditable = createComponent({
+        render(props) {
+          const { editMode, defaultProps, componentProps } = props;
+
+          // TODO develop a separated hook to take care of this and other functionalities at one place
+          useWillMount(() => {
+            if (typeof editMode?.onReady === "function") {
+              editMode.onReady(new Utils.Event());
+            }
+          });
+
+          //@@viewOn:example
+          const tabList = [
+            {
+              label: { en: "Header" },
+              layout: {
+                xs: `significance, colorScheme`,
+                m: `significance colorScheme`,
+              },
+              propInputMap: {
+                colorScheme: { props: { componentShape: "ground", valueList: ["building", "meaning", "basic"] } },
+              },
+              columns: { m: "repeat(2, 1fr)" },
+            },
+          ];
+          //@@viewOff:example
+
+          return (
+            <Uu5Editing.EditModal
+              open={editMode.edit}
+              onClose={() => editMode.onEditEnd()}
+              onSave={({ props }) => editMode.onEditEnd({ props })}
+              uu5Tag="Uu5Elements.Box"
+              props={componentProps}
+              defaultProps={defaultProps}
+              tabList={tabList}
+            />
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          const [edit, setEdit] = useState(false);
+          const [componentProps, setComponentProps] = useState(DEFAULT_PROPS);
+
+          function handleEditEnd(result) {
+            if (result)
+              setComponentProps((prev) => {
+                for (const key in result.props) {
+                  if (key in Uu5Elements.Box.defaultProps && result.props[key] === undefined) {
+                    result.props[key] = Uu5Elements.Box.defaultProps[key];
+                  }
+                }
+                return { ...prev, ...result.props };
+              });
+            setEdit(false);
+          }
+
+          return (
+            <div>
+              <Uu5Elements.Button className={Css.button()} onClick={() => setEdit(true)}>
+                Start editing of Box
+              </Uu5Elements.Button>
+              <br />
+              <Uu5Elements.Box {...componentProps} />
+              {edit && (
+                <BoxEditable
+                  editMode={{ edit: edit, onEditEnd: handleEditEnd }}
+                  componentProps={componentProps}
+                  defaultProps={Uu5Elements.Box.defaultProps}
+                />
+              )}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

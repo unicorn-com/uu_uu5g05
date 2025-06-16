@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+      const ASPECT_RATIO = Object.keys(UuGds.getValue(["SizingPalette"]).box);
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>height=1em & width=100%</h4>
+              <Uu5Elements.Skeleton height="1em" width="100%" />
+
+              <h4>borderRadius</h4>
+              <Uu5Elements.Skeleton aspectRatio="2x1" borderRadius="none" /><br />
+              <Uu5Elements.Skeleton aspectRatio="2x1" borderRadius="elementary" /><br />
+              <Uu5Elements.Skeleton aspectRatio="2x1" borderRadius="moderate" /><br />
+              <Uu5Elements.Skeleton aspectRatio="2x1" borderRadius="expressive" /><br />
+              <Uu5Elements.Skeleton aspectRatio="2x1" borderRadius="full" />
+
+              <h4>size</h4>
+              <div>
+                {["s", "m", "l"].map((size) => (
+                  <Fragment key={size}>
+                    <Uu5Elements.Skeleton size={size} />
+                    <br />
+                  </Fragment>
+                ))}
+              </div>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

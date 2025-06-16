@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Side-Detail layout - prototype</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        useRef,
+        createVisualComponent,
+        useState,
+        usePreviousValue,
+        useLayoutEffect,
+        useContentSize,
+        useElementSize,
+        PropTypes,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, times, LoremIpsum } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import Plus4U5App, { withRoute } from "uu_plus4u5g02-app";
+
+      //@@viewOn:example
+      const SideDetailLayout = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "SideDetailLayout",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {
+          children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+          detail: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+          initialData: PropTypes.object,
+          onlyModal: PropTypes.bool,
+        },
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          const {
+            children,
+            detail,
+            initialDetailData = null,
+            initialData = initialDetailData,
+            onlyModal,
+            ...restProps
+          } = props;
+
+          const [detailData, setDetailData] = useState(initialData);
+          const prevDetail = usePreviousValue(detailData, detailData);
+
+          const contentSize = useContentSize();
+
+          const openDetail = setDetailData;
+          const closeDetail = () => setDetailData(null);
+
+          const childrenApi = {
+            detailData,
+            onDetailOpen: openDetail,
+          };
+
+          const childrenToRender = children(childrenApi);
+
+          const detailApi = {
+            data: detailData || prevDetail,
+            onClose: closeDetail,
+          };
+
+          //@@viewOn:render
+          let result;
+          if (onlyModal || ["xs", "s"].includes(contentSize)) {
+            result = (
+              <>
+                {childrenToRender}
+                {detailApi.data ? detail({
+                  ...detailApi,
+                  displayAsModal: true,
+                  open: !!detailData,
+                }) : null}
+              </>
+            );
+          } else {
+            result = (
+              <Uu5Elements.Drawer
+                position="right"
+                width="50%"
+                {...restProps}
+                open={!!detailData}
+                onClose={closeDetail}
+                content={({ open, type }) => open ? detail({
+                  ...detailApi,
+                  displayAsModal: false,
+                  open,
+                }) : undefined}
+              >
+                {childrenToRender}
+              </Uu5Elements.Drawer>
+            );
+          }
+
+          return result;
+          //@@viewOff:render
+        },
+      });
+
+      const ListRoute = createVisualComponent({
+        uu5Tag: Config.TAG + "ListRoute",
+
+        render(props) {
+          const { detailData, onDetailOpen, elementRef, ...restProps } = props;
+
+          // dynamic getting top height - only for route
+          const ref = useRef();
+          const [top, setTop] = useState(0);
+
+          useLayoutEffect(() => {
+            setTop(ref.current.getBoundingClientRect().top);
+          }, []);
+
+          return (
+            <Uu5Elements.ScrollableBox
+              {...restProps}
+              elementRef={Utils.Component.combineRefs(elementRef, ref)}
+              height={`calc(100vh - ${top}px)`}
+            >
+              <Plus4U5App.PositionBar>
+                List route
+              </Plus4U5App.PositionBar>
+              <Uu5Elements.Grid templateColumns="1fr" rowGap={4} className={Config.Css.css({ paddingTop: 24 })}>
+                {times(48, (i) => (
+                  <Uu5Elements.MenuItem
+                    key={i}
+                    onClick={() => onDetailOpen({ oid: i })}
+                    colorScheme={detailData?.oid === i ? "primary" : undefined}
+                    significance="distinct"
+                  >
+                    {i}
+                  </Uu5Elements.MenuItem>
+                ))}
+              </Uu5Elements.Grid>
+            </Uu5Elements.ScrollableBox>
+          )
+        },
+      });
+
+      const DetailRoute = createVisualComponent({
+        uu5Tag: Config.TAG + "DetailRoute",
+
+        render(props) {
+          const { data, onClose, displayAsModal, open, ...restProps } = props;
+
+          const { oid } = data;
+
+          const header = `Detail route ${oid}`;
+          const body = (
+            <div>
+              <LoremIpsum paragraphCount={20} />
+            </div>
+          );
+
+          if (displayAsModal) {
+            return oid ? (
+              <Uu5Elements.Modal {...restProps} header={header} open={open} onClose={onClose}>
+                {body}
+              </Uu5Elements.Modal>
+            ) : null
+          } else {
+            return (
+              <div {...Utils.VisualComponent.getAttrs(restProps)}>
+                <Plus4U5App.PositionBar actionList={[{ icon: "uugds-close", onClick: onClose }]}>
+                  {header}
+                </Plus4U5App.PositionBar>
+                {body}
+              </div>
+            );
+          }
+        },
+      });
+
+      const Home = withRoute(
+        createVisualComponent({
+          uu5Tag: Config.TAG + "Home",
+
+          render(props) {
+            // for using 50% of width
+            const { ref, width } = useElementSize();
+
+            return (
+              <>
+                <div ref={ref} />
+                <SideDetailLayout
+                  // initialData={{ oid: 3 }}
+                  detail={({ data, onClose, displayAsModal, open }) => (
+                    <DetailRoute data={data} onClose={onClose} displayAsModal={displayAsModal} open={open} />
+                  )}
+                  width={width / 2}
+                >
+                  {({ detailData, onDetailOpen }) => {
+                    return <ListRoute detailData={detailData} onDetailOpen={onDetailOpen} />;
+                  }}
+                </SideDetailLayout>
+              </>
+            );
+          },
+        }),
+        { authenticated: true }
+      );
+      //@@viewOff:example
+
+      const routeMap = {
+        "": { rewrite: "home" },
+        home: () => <Home />,
+        "*": () => <h1>404 Not found</h1>,
+      };
+
+      // just for demo in iframe
+      routeMap["*"] = { rewrite: "home" };
+
+      const Page = createVisualComponent({
+        render(props) {
+          return (
+            <Plus4U5.SpaProvider>
+              <Plus4U5App.Spa>
+                <Plus4U5App.Router routeMap={routeMap} />
+              </Plus4U5App.Spa>
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

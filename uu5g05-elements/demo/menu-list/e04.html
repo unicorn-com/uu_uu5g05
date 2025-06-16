@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 04</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  import { createComponent, Utils, useState } from "uu5g05";
+  import Uu5Elements from "uu5g05-elements";
+  import { Config } from "uu5g05-dev";
+
+  const onClick = (...args) => console.log("onClick", ...args);
+
+  /*@@viewOn:example*/
+  const Page = createComponent({
+    render() {
+      const [value, setValue] = useState(["create", "document"]);
+
+      const itemList = [
+        {
+          children: "Create",
+          icon: "uugds-plus",
+          key: "create",
+          itemList: [
+            {
+              children: "Document",
+              icon: "uugds-plus",
+              onClick,
+              key: "document",
+              itemList: [
+                { children: "DOC", icon: "uugds-plus", onClick },
+                { children: "PDF", icon: "uugds-plus", onClick },
+                { children: "TXT", icon: "uugds-plus", onClick },
+              ],
+            },
+            { children: "Form", icon: "uugds-plus", onClick },
+            { children: "Table", icon: "uugds-plus", onClick },
+            { children: "Chart", icon: "uugds-plus", onClick },
+            {
+              children: "Picture",
+              icon: "uugds-plus",
+              onClick,
+              key: "picture",
+              itemList: [
+                { children: "PNG", icon: "uugds-plus", onClick },
+                { children: "JPG", icon: "uugds-plus", onClick },
+              ],
+            },
+          ],
+        },
+      ];
+
+      function handleChange(e) {
+        setValue(e.data.value)
+      }
+
+      return (
+        <div>
+          <h4>compactSubmenu & value & onChange</h4>
+          <Uu5Elements.MenuList itemList={itemList} compactSubmenu value={value} onChange={handleChange} />
+        </div>
+      );
+    },
+  });
+  /*@@viewOff:example*/
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

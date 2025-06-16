@@ -1,0 +1,65 @@
+// prettier-ignore
+if (typeof Uu5Loader !== "undefined" && Uu5Loader || typeof SystemJS !== "undefined" && SystemJS) {
+  (function() {
+    // try to auto-configure Uu5Loader loader regarding "uu5g05-elements-gds" based on UU5.Environment
+    var doConfig, resolve;
+    if (typeof Uu5Loader !== "undefined" && Uu5Loader) {
+      doConfig = function (imports) { Uu5Loader.config({ imports: imports }); };
+      resolve = Uu5Loader.resolve;
+    } else {
+      doConfig = function (imports) { SystemJS.config({ paths: imports }); };
+      resolve = function (name) {
+        var result = SystemJS.normalizeSync(name);
+        return result.slice(-name.length - 1) === "/" + name ? null : result;
+      };
+    }
+    var env = typeof uu5Environment !== "undefined" ? uu5Environment || {} : typeof UU5 !== "undefined" ? (UU5.Environment || {}) : {};
+    var uu5g05ElementsGdsUri = resolve("uu5g05-elements-gds");
+    var uuGdsg01UnicornUri = resolve("uu_gdsg01-unicorn");
+    if (env["uu5g05_gdsUri"] || !uu5g05ElementsGdsUri || !uuGdsg01UnicornUri) {
+      var gdsUri = env["uu5g05_gdsUri"] || uuGdsg01UnicornUri;
+      if (!gdsUri) {
+        gdsUri = getCdnUri("<%=GDS_CDN_PATH%>");
+      }
+      if (gdsUri.charAt(0) === "/") {
+        var myUri = resolve("uu5g05");
+        if (myUri) gdsUri = (myUri.match(/^https?:\/\/[^/]+/) || [""])[0] + gdsUri;
+      }
+      var config = {};
+      if (!uu5g05ElementsGdsUri) config["uu5g05-elements-gds"] = gdsUri;
+      if (!uuGdsg01UnicornUri) config["uu_gdsg01-unicorn"] = gdsUri;
+      doConfig(config);
+    }
+
+    var i18ng01Uri = resolve("uu_i18ng01");
+    if (!i18ng01Uri) {
+      doConfig({
+        "uu_i18ng01": getCdnUri("<%=UU_I18NG01_CDN_PATH%>", { isMissingOnCdnG02: true })
+      });
+    }
+
+    function getCdnUri(urlPathUsing1xSyntax, { isMissingOnCdnG02 = false, libs = false } = {}) {
+      let cdnBaseUri = env.cdnBaseUri;
+      if (cdnBaseUri && cdnBaseUri.charAt(cdnBaseUri.length - 1) !== "/") cdnBaseUri += "/";
+      const cdng01BaseUri = "<%=CDNG01_BASE_URI%>";
+      const cdng02BaseUri = "<%=CDNG02_BASE_URI%>";
+      let isForcedCdn = !!cdnBaseUri;
+      let cdnVersionXAllowed = env.cdnVersionXAllowed;
+      if (!cdnBaseUri) {
+        cdnBaseUri = cdng02BaseUri;
+        cdnVersionXAllowed = true;
+      } else {
+        cdnVersionXAllowed ??= false;
+      }
+
+      let usedCdnBaseUri = isForcedCdn ? cdnBaseUri : isMissingOnCdnG02 ? cdng01BaseUri : cdng02BaseUri;
+      let isLegacyCdnSyntax = isForcedCdn ? !cdnVersionXAllowed : isMissingOnCdnG02;
+      let urlPathCorrected = isLegacyCdnSyntax
+        ? urlPathUsing1xSyntax.replace(/\/(\d+)(\.\d+)?\.x\//, (m, maj, min) => "/" + maj + (min || ".0") + ".0/")
+        : urlPathUsing1xSyntax;
+      return usedCdnBaseUri + (libs && isLegacyCdnSyntax ? "libs/" : "") + urlPathCorrected;
+    }
+  })();
+} else if (typeof require !== "function" && typeof Uu5ElementsGds === "undefined") {
+  console.error("It's necessary to link uu5g05-elements-gds.js / .min.js file from uu5g05-elements/ folder before linking uu5g05-elements.");
+}

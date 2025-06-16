@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+      const startYear = 1900;
+      const endYear = 2100;
+      const itemList = new Array((endYear - startYear + 1) * (12 + 1)); // for each year 12 months + label
+      for (let i = startYear; i < endYear + 1; i++) {
+        let yearStartIndex = (i - startYear) * 13;
+        itemList[yearStartIndex] = { children: <Uu5Elements.DateTime value={`${i}-01-01`} format="YYYY" /> };
+        for (let monthIndex = 1; monthIndex <= 12; monthIndex++) {
+          let monthISOString = String(monthIndex).padStart(2, "0");
+          itemList[yearStartIndex + monthIndex] = {
+            value: `${i}-${monthISOString}`,
+            children: <Uu5Elements.DateTime value={`${i}-${monthISOString}-01`} format="MMM" />
+          };
+        }
+      }
+
+      const Page = createComponent({
+        render() {
+          const [singleValue, setSingleValue] = useState(() => {
+            let today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`;
+          });
+          const [autoScrollValue, setAutoScrollValue] = useState(singleValue);
+          const [mutliValue, setMultiValue] = useState(() => {
+            let today = new Date();
+            let currentJanuary = `${today.getFullYear()}-01`;
+            let currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`;
+            return [currentJanuary, currentMonth];
+          });
+          const [rangeValue, setRangeValue] = useState(() => {
+            let today = new Date();
+            const lastYearMonth = `${today.getFullYear() - 1}-${String(today.getMonth() + 1).padStart(2, "0")}`;
+            const currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`;
+            return [lastYearMonth, currentMonth];
+          });
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <div style={{width: "100px"}}>
+                <Uu5Elements._VirtualizedListPicker itemList={itemList} value={singleValue} onChange={(e) => setSingleValue(e.data.value)} />
+              </div>
+              <h4>selectionMode</h4>
+              <div style={{ display: "inline-block", width: "33%" }}>
+                <h5>selectionMode="multi"</h5>
+                <div style={{width: "100px"}}>
+                  <Uu5Elements._VirtualizedListPicker itemList={itemList} value={mutliValue} onChange={(e) => setMultiValue(e.data.value)} selectionMode="multi" />
+                </div>
+              </div>
+              <div style={{ display: "inline-block", width: "33%" }}>
+                <h5>selectionMode="range"</h5>
+                <div style={{width: "100px"}}>
+                  <Uu5Elements._VirtualizedListPicker itemList={itemList} value={rangeValue} onChange={(e) => setRangeValue(e.data.value)} selectionMode="range" />
+                </div>
+              </div>
+              <h4>valueAutoScroll</h4>
+              <div style={{width: "100px"}}>
+                <Uu5Elements._VirtualizedListPicker itemList={itemList} value={autoScrollValue} onChange={(e) => setAutoScrollValue(e.data.value)} valueAutoScroll/>
+              </div>
+              <h4>height</h4>
+              <div style={{width: "100px"}}>
+                <Uu5Elements._VirtualizedListPicker itemList={itemList} value={singleValue} onChange={(e) => setSingleValue(e.data.value)} height={400} />
+              </div>
+              
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

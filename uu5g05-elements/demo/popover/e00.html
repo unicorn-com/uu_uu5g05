@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useState, useRef, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum, times } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const PopoverByElement = createVisualComponent({
+        render({ preferredPosition, children, itemList, ...popoverProps }) {
+          const [popoverSettings, setPopoverSettings] = useState(null);
+          const buttonRef = useRef();
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button
+                elementRef={buttonRef}
+                onClick={e => setPopoverSettings({ element: buttonRef.current, key: Math.random() })}
+                pressed={!!(popoverSettings || {}).element}
+              >
+                {children || preferredPosition || "Open Popover around of element"}
+              </Uu5Elements.Button>
+              {popoverSettings && (
+                <Uu5Elements.Popover
+                  {...popoverProps}
+                  {...popoverSettings}
+                  elementOffset={4}
+                  preferredPosition={preferredPosition}
+                  onClose={() => setPopoverSettings(null)}
+                  className={Config.Css.css`padding: 8px;`}
+                >
+                  <Uu5Elements.MenuList itemList={itemList || [
+                    { children: "Apple" },
+                    { children: "Orange" },
+                    { children: "Pear" }
+                  ]} />
+                </Uu5Elements.Popover>
+              )}
+            </Fragment>
+          );
+        }
+      });
+
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <h4>element</h4>
+              <PopoverByElement initialState={"full"} />
+
+              <h4>preferredPosition</h4>
+              <PopoverByElement preferredPosition="bottom-right" />
+              <PopoverByElement preferredPosition="bottom-center" />
+              <PopoverByElement preferredPosition="bottom-left" />
+              <PopoverByElement preferredPosition="top-right" />
+              <PopoverByElement preferredPosition="top-center" />
+              <PopoverByElement preferredPosition="top-left" />
+              <br />
+              <PopoverByElement preferredPosition="right-bottom" />
+              <PopoverByElement preferredPosition="right-middle" />
+              <PopoverByElement preferredPosition="right-top" />
+              <PopoverByElement preferredPosition="left-bottom" />
+              <PopoverByElement preferredPosition="left-middle" />
+              <PopoverByElement preferredPosition="left-top" />
+
+              <h4>displayArrow</h4>
+              <PopoverByElement preferredPosition="bottom-right" displayArrow />
+              <PopoverByElement preferredPosition="bottom-center" displayArrow />
+              <PopoverByElement preferredPosition="bottom-left" displayArrow />
+              <PopoverByElement preferredPosition="top-right" displayArrow />
+              <PopoverByElement preferredPosition="top-center" displayArrow />
+              <PopoverByElement preferredPosition="top-left" displayArrow />
+              <br />
+              <PopoverByElement preferredPosition="right-bottom" displayArrow />
+              <PopoverByElement preferredPosition="right-middle" displayArrow />
+              <PopoverByElement preferredPosition="right-top" displayArrow />
+              <PopoverByElement preferredPosition="left-bottom" displayArrow />
+              <PopoverByElement preferredPosition="left-middle" displayArrow />
+              <PopoverByElement preferredPosition="left-top" displayArrow />
+
+              <h4>borderRadius</h4>
+              <PopoverByElement borderRadius="none">none</PopoverByElement>
+              <PopoverByElement borderRadius="elementary">elementary</PopoverByElement>
+              <PopoverByElement borderRadius="moderate">moderate</PopoverByElement>
+              <PopoverByElement borderRadius="expressive">expressive</PopoverByElement>
+
+              <h4>closeOnScroll</h4>
+              <PopoverByElement closeOnScroll={false}>!closeOnScroll</PopoverByElement>
+              <PopoverByElement closeOnScroll={true}>closeOnScroll</PopoverByElement>
+              <div style={{ maxHeight: 200, overflow: "auto", margin: "32px 0", padding: 16, background: "#f5f5f5" }}>
+                <LoremIpsum />
+                <PopoverByElement closeOnScroll={true}>closeOnScroll</PopoverByElement>
+                <LoremIpsum paragraphCount={15} />
+              </div>
+
+              <h4>initialState</h4>
+              <PopoverByElement itemList={times(25, (i) => ({ children: "Item " + (i + 1) }))}>
+                half
+              </PopoverByElement>
+              <PopoverByElement
+                initialState="full"
+                itemList={times(25, (i) => ({ children: "Item " + (i + 1) }))}
+              >
+                full
+              </PopoverByElement>
+
+              <h4>different length of items</h4>
+              {[5, 10, 15, 20].map((v) => (
+                <Uu5Elements.Dropdown key={v} label={v + " items"} itemList={times(v, (i) => ({
+                  children: "Item " + (i + 1),
+                  icon: "uugds-plus",
+                  itemList: [
+                    { children: "Item " + (i + 1) + ".1", icon: "uugds-plus" },
+                    { children: "Item " + (i + 1) + ".2", icon: "uugds-plus" },
+                  ],
+                }))} />
+              ))}
+
+              <h4>keepInViewport</h4>
+              <PopoverByElement keepInViewport={false}>!keepInViewport</PopoverByElement>
+              <PopoverByElement keepInViewport>keepInViewport</PopoverByElement>
+
+              <LoremIpsum paragraphCount={15} />
+            </div>
+          );
+        }
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

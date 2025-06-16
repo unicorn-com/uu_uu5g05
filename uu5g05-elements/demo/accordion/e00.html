@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, createVisualComponent } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { LoremIpsum, Config } from "uu5g05-dev";
+
+      const Page = createComponent({
+        render() {
+          return (
+            <main>
+              {/*@@viewOn:example*/}
+              <h4>itemList</h4>
+              <Uu5Elements.Accordion itemList={[
+                { header: "Panel 1", children: <LoremIpsum /> },
+                { header: "Panel 2", children: <LoremIpsum /> },
+                { header: "Panel 3", children: <LoremIpsum /> },
+              ]} />
+
+              <h5>itemList - initialOpen</h5>
+              <Uu5Elements.Accordion itemList={[
+                { header: "Panel 1", children: <LoremIpsum /> },
+                { header: "Panel 2", children: <LoremIpsum />, initialOpen: true },
+                { header: "Panel 3", children: <LoremIpsum /> },
+              ]} />
+
+              <h4>itemColorScheme & itemSignificance</h4>
+              <Uu5Elements.Accordion
+                itemList={[
+                  { header: "Panel 1", children: <LoremIpsum /> },
+                  { header: "Panel 2", children: <LoremIpsum /> },
+                  { header: "Other", children: <LoremIpsum />, colorScheme: "neutral", significance: "distinct" },
+                ]}
+                itemColorScheme="primary"
+                itemSignificance="highlighted"
+              />
+
+              <h4>borderRadius</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fit, minmax(240px, 1fr))">
+                {["none", "elementary", "moderate", "expressive", "full"].map((borderRadius) => (
+                  <Uu5Elements.Grid.Item key={borderRadius}>
+                    <h5>{borderRadius}</h5>
+                    <Uu5Elements.Accordion
+                      itemList={[
+                        { header: "Panel 1", children: <LoremIpsum /> },
+                        { header: "Panel 2", children: <LoremIpsum /> },
+                      ]}
+                      borderRadius={borderRadius}
+                    />
+                  </Uu5Elements.Grid.Item>
+                ))}
+              </Uu5Elements.Grid>
+              {/*@@viewOff:example*/}
+            </main>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

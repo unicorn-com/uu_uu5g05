@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script>
+      Uu5Loader.config({
+        imports: {
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, PropTypes, createVisualComponent, useSession, SessionProvider } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import { AuthenticationService } from "uu_appg01_oidc";
+
+      /*@@viewOn:example*/
+      const Identity = createVisualComponent({
+        uu5Tag: Config.TAG + "Identity",
+
+        render(props) {
+          const { state, identity, isExpiring, login, logout } = useSession();
+
+          const attrs = Utils.VisualComponent.getAttrs(props);
+
+          let name = null;
+          let buttonProps;
+          switch (state) {
+            case "authenticated":
+              name = identity.name;
+              buttonProps = {
+                onClick: () => logout(),
+                children: "Logout",
+              };
+              break;
+            case "notAuthenticated":
+              name = "Logged out";
+              buttonProps = {
+                onClick: () => login(),
+                children: "Login",
+              };
+              break;
+            default:
+              name = "Pending...";
+          }
+
+          console.log("identity", identity, isExpiring, state);
+
+          return (
+            <div {...attrs}>
+              {name} {buttonProps && <Uu5Elements.Button {...buttonProps} />}
+            </div>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      function Demo() {
+        return (
+          <div>
+            <SessionProvider authenticationService={AuthenticationService}>
+              <Identity />
+            </SessionProvider>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

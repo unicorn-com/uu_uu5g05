@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <Uu5Elements.Badge>9</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge>TEXT</Uu5Elements.Badge>
+
+              <h4>icon & children</h4>
+              <Uu5Elements.Badge icon="uugds-play-circle" />&nbsp;
+              <Uu5Elements.Badge>TEXT</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge icon="uugds-play-circle">TEXT</Uu5Elements.Badge>
+
+              <h4>size</h4>
+              <Uu5Elements.Badge size="xs" />&nbsp;
+              <Uu5Elements.Badge size="xs" icon="uugds-play-circle" />&nbsp;
+              <Uu5Elements.Badge size="xs">xs</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge size="xs" icon="uugds-play-circle">xs</Uu5Elements.Badge>
+              <br /><br />
+              <Uu5Elements.Badge size="s" />&nbsp;
+              <Uu5Elements.Badge size="s" icon="uugds-play-circle" />&nbsp;
+              <Uu5Elements.Badge size="s">s</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge size="s" icon="uugds-play-circle">s</Uu5Elements.Badge>
+              <br /><br />
+              <Uu5Elements.Badge size="m" />&nbsp;
+              <Uu5Elements.Badge size="m" icon="uugds-play-circle" />&nbsp;
+              <Uu5Elements.Badge size="m">m</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge size="m" icon="uugds-play-circle">m</Uu5Elements.Badge>
+              <br /><br />
+              <Uu5Elements.Badge size="l" />&nbsp;
+              <Uu5Elements.Badge size="l" icon="uugds-play-circle" />&nbsp;
+              <Uu5Elements.Badge size="l">l</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge size="l" icon="uugds-play-circle">l</Uu5Elements.Badge>
+              <br /><br />
+              <Uu5Elements.Badge size="xl" />&nbsp;
+              <Uu5Elements.Badge size="xl" icon="uugds-play-circle" />&nbsp;
+              <Uu5Elements.Badge size="xl">xl</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge size="xl" icon="uugds-play-circle">xl</Uu5Elements.Badge>
+
+              <h4>borderRadius</h4>
+              <Uu5Elements.Badge size="xs" borderRadius="full" />&nbsp;
+              <Uu5Elements.Badge size="xs" icon="uugds-play-circle" borderRadius="full" />&nbsp;
+              <Uu5Elements.Badge size="xs" borderRadius="expressive">xs</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge size="xs" borderRadius="expressive" icon="uugds-play-circle">xs</Uu5Elements.Badge>
+              <br /><br />
+              <Uu5Elements.Badge size="s" borderRadius="full" />&nbsp;
+              <Uu5Elements.Badge size="s" icon="uugds-play-circle" borderRadius="full" />&nbsp;
+              <Uu5Elements.Badge size="s" borderRadius="expressive">s</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge size="s" icon="uugds-play-circle" borderRadius="expressive">s</Uu5Elements.Badge>
+              <br /><br />
+              <Uu5Elements.Badge size="m" borderRadius="full" />&nbsp;
+              <Uu5Elements.Badge size="m" icon="uugds-play-circle" borderRadius="full" />&nbsp;
+              <Uu5Elements.Badge size="m" borderRadius="expressive">m</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge size="m" icon="uugds-play-circle" borderRadius="expressive">m</Uu5Elements.Badge>
+              <br /><br />
+              <Uu5Elements.Badge size="l" borderRadius="full" />&nbsp;
+              <Uu5Elements.Badge size="l" icon="uugds-play-circle" borderRadius="full" />&nbsp;
+              <Uu5Elements.Badge size="l" borderRadius="expressive">l</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge size="l" icon="uugds-play-circle" borderRadius="expressive">l</Uu5Elements.Badge>
+              <br /><br />
+              <Uu5Elements.Badge size="xl" borderRadius="full" />&nbsp;
+              <Uu5Elements.Badge size="xl" icon="uugds-play-circle" borderRadius="full" />&nbsp;
+              <Uu5Elements.Badge size="xl" borderRadius="expressive">xl</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge size="xl" icon="uugds-play-circle" borderRadius="expressive">xl</Uu5Elements.Badge>
+
+              <h4>borderContrast</h4>
+              <Uu5Elements.Button>
+                Activities&nbsp;<Uu5Elements.Badge borderContrast size="m">9</Uu5Elements.Badge>
+              </Uu5Elements.Button>
+              &nbsp;
+              <Uu5Elements.Button colorScheme="primary" significance="highlighted">
+                Activities&nbsp;<Uu5Elements.Badge borderContrast size="m">9</Uu5Elements.Badge>
+              </Uu5Elements.Button>&nbsp;
+
+              <h4>onClick</h4>
+              <Uu5Elements.Badge onClick={() => alert("click")}>9</Uu5Elements.Badge>
+
+              <h4>iconAnimation</h4>
+              <Uu5Elements.Badge icon="uugds-reload" size="xl" iconAnimation="rotate" />
+
+              <h4>tooltip</h4>
+              <Uu5Elements.Badge tooltip="Activity Count (string)">9</Uu5Elements.Badge>&nbsp;
+              <Uu5Elements.Badge tooltip={{ cs: "Počet aktivit (lsi)", en: "Activity Count (lsi)" }}>
+                9
+              </Uu5Elements.Badge>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        }
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

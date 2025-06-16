@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Fragment, createComponent, createVisualComponent, useState, Lsi } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { LoremIpsum, Config } from "uu5g05-dev";
+
+      const RestrainedContent = createVisualComponent({
+        render(props) {
+          return (
+            <Uu5Elements.Grid
+              {...props}
+              templateAreas="a ., a b"
+              templateRows="32px auto"
+              templateColumns="auto min-content"
+            >
+              <Uu5Elements.Grid.Item gridArea="a">
+                Restrained header is not shown in the modal (but actions are). The modal must be aware that actions
+                might overlap the content and lay out its content accordingly.
+                <p>
+                  If the modal is nested in ModalBus, the header can still be shown in auxiliary components such as
+                  dropdown for navigating to specific modal (shown if there're at least 4 opened modals).
+                </p>
+              </Uu5Elements.Grid.Item>
+              <Uu5Elements.Grid.Item gridArea="b">
+                <Uu5Elements.PlaceholderBox code="chart" />
+              </Uu5Elements.Grid.Item>
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+
+      const ModalOnButton = createComponent({
+        render({ header, ...props }) {
+          /*@@viewOn:example*/
+          const [open, setOpen] = useState();
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button onClick={() => setOpen(true)}>{header}</Uu5Elements.Button>
+              <Uu5Elements.Modal {...props} header={header} open={open} onClose={() => setOpen(false)}>
+                {props.children || <LoremIpsum paragraphCount={10} />}
+              </Uu5Elements.Modal>
+            </Fragment>
+          );
+
+          /*@@viewOn:example*/
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <ModalOnButton header="header" />
+              <br />
+              <ModalOnButton header="headerSeparator = false" headerSeparator={false} />
+              <br />
+              <ModalOnButton
+                header="actionList"
+                actionList={[
+                  { icon: "uugds-search", onClick: () => alert("search"), collapsedChildren: "Search" },
+                  { icon: "uugds-filter", onClick: () => alert("filter"), collapsedChildren: "Filter" },
+                  { icon: "uugds-sorting", onClick: () => alert("sort"), collapsedChildren: "Sort" },
+                  {
+                    icon: "uugds-view-list",
+                    collapsedChildren: "List",
+                    itemList: [
+                      { children: "Item 1", onClick: () => alert("item 1") },
+                      { children: "Item 2", onClick: () => alert("item 2") },
+                    ],
+                  },
+                  {
+                    icon: "uugds-bookmark",
+                    collapsedChildren: "Bookmarks",
+                    itemList: [
+                      { children: "Item 1", onClick: () => alert("item 1") },
+                      { children: "Item 2", onClick: () => alert("item 2") },
+                    ],
+                  },
+                  {
+                    icon: "uugds-plus-circle",
+                    children: <Lsi lsi={{ cs: "Vytvořit", en: "Create" }} />,
+                    onClick: () => alert("create"),
+                    primary: true,
+                    significance: "common",
+                    collapsed: false,
+                  },
+                  { icon: "uugds-info", onClick: () => alert("info"), collapsedChildren: "Info" },
+                  { icon: "uugds-refresh", children: "Refresh", collapsed: true, onClick: () => alert("refresh") },
+                ]}
+              />
+              <br />
+              <ModalOnButton
+                header="disabled"
+                disabled
+                actionList={[
+                  {
+                    icon: "uugds-favorites",
+                    children: <Lsi lsi={{ cs: "Ohodnoť", en: "Rate" }} />,
+                    onClick: () => alert("rate"),
+                    primary: true,
+                    collapsed: false,
+                  },
+                  {
+                    icon: "uugds-reload",
+                    collapsedChildren: "Update",
+                    itemList: [
+                      { children: "Update Name", onClick: () => alert("update name") },
+                      { children: "Update Surname", onClick: () => alert("update surname") },
+                    ],
+                  },
+                  { icon: "uugds-plus", children: "Create", onClick: () => alert("create") },
+                  { icon: "uugds-delete", children: "Delete", onClick: () => alert("delete") },
+                  { icon: "uugds-refresh", children: "Refresh", collapsed: true, onClick: () => alert("refresh") },
+                ]}
+              >
+                Disabled modal cannot be closed. Parent component has to enable it or close itself.
+                <br />
+                In this demo, <b>reload the page for closing the modal</b>.
+              </ModalOnButton>
+              <br />
+              <ModalOnButton
+                header="footer"
+                footer={
+                  <Uu5Elements.Grid
+                    templateColumns={{ xs: "repeat(2, 1fr)", s: "repeat(2, auto)" }}
+                    columnGap={Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "c"])}
+                    justifyContent={{ s: "end" }}
+                  >
+                    <Uu5Forms.CancelButton />
+                    <Uu5Forms.SubmitButton icon="uugds-check">Confirm</Uu5Forms.SubmitButton>
+                  </Uu5Elements.Grid>
+                }
+              />
+              <br />
+              <ModalOnButton
+                header="footerSeparator = false"
+                footerSeparator={false}
+                footer={
+                  <Uu5Elements.Grid
+                    templateColumns={{ xs: "repeat(2, 1fr)", s: "repeat(2, auto)" }}
+                    columnGap={Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "c"])}
+                    justifyContent={{ s: "end" }}
+                  >
+                    <Uu5Forms.CancelButton />
+                    <Uu5Forms.SubmitButton icon="uugds-check">Confirm</Uu5Forms.SubmitButton>
+                  </Uu5Elements.Grid>
+                }
+              />
+              <br />
+              <ModalOnButton header="info" info={<LoremIpsum />} />
+              <br />
+              <ModalOnButton
+                header="info (list)"
+                info={[
+                  {
+                    label: <Lsi lsi={{ en: "Help" }} />,
+                    children: <LoremIpsum />,
+                  },
+                  {
+                    label: <Lsi lsi={{ en: "Context" }} />,
+                    children: <LoremIpsum />,
+                  },
+                ]}
+              />
+              <br />
+              <ModalOnButton header="width = 720" width={720} />
+              <ModalOnButton header="width = 20em" width="20em" />
+              <ModalOnButton header="width = full" width="full" />
+              <br />
+              <ModalOnButton header="fullscreen = full" fullscreen />
+              <br />
+              <ModalOnButton header="borderRadius = none" borderRadius="none" />
+              <ModalOnButton header="borderRadius = elementary" borderRadius="elementary" />
+              <ModalOnButton header="borderRadius = moderate" borderRadius="moderate" />
+              <ModalOnButton header="borderRadius = expressive" borderRadius="expressive" />
+              <br />
+              <ModalOnButton header="closeOnEsc = false" closeOnEsc={false} />
+              <ModalOnButton header="closeOnOverlayClick = true" closeOnOverlayClick />
+              <ModalOnButton header="closeOnButtonClick = false" closeOnButtonClick={false} />
+              <br />
+              <ModalOnButton header="scrollable = false" scrollable={false} />
+              <br />
+              <ModalOnButton header="collapsible = false" collapsible={false} />
+              <br />
+              <ModalOnButton header="lsi" info={<LoremIpsum />} lsi={{ moreInfo: { en: "More Details" } }} />
+
+              <h4>spacing</h4>
+              <Uu5Elements.SpacingProvider type="tight">
+                <ModalOnButton header="tight" />
+              </Uu5Elements.SpacingProvider>
+              <Uu5Elements.SpacingProvider type="normal">
+                <ModalOnButton header="normal" />
+              </Uu5Elements.SpacingProvider>
+              <Uu5Elements.SpacingProvider type="loose">
+                <ModalOnButton header="loose" />
+              </Uu5Elements.SpacingProvider>
+
+              <h4>colorScheme = pink & significance</h4>
+              <ModalOnButton header="significance = distinct" colorScheme="pink" significance="distinct" />
+              <ModalOnButton header="significance = highlighted" colorScheme="pink" significance="highlighted" />
+
+              <h4>restrainedHeader</h4>
+              <ModalOnButton
+                header="Restrained header"
+                restrainedHeader
+                actionList={[{ icon: "uugds-favorites", onClick: () => alert("rate") }]}
+              >
+                <RestrainedContent />
+              </ModalOnButton>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="uu5">Loading...</div>
+
+  <script type="text/babel">
+    import { createComponent, Utils, useState } from "uu5g05";
+    import Uu5Elements from "uu5g05-elements";
+    import Uu5Forms from "uu5g05-forms";
+    import { Config, wait } from "uu5g05-dev";
+
+    const Page = createComponent({
+      render() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <Uu5Forms.Form
+              onSubmit={(e) => {
+                alert("Submitted with values:\n" + JSON.stringify(e.data.value, null, 2));
+              }}
+            >
+              <Uu5Elements.Block
+                header="Color selector"
+                headerType="heading"
+                footer={
+                  <Uu5Elements.Grid
+                    templateColumns={{ xs: "1fr", s: "auto" }}
+                    columnGap={Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "c"])}
+                    justifyContent={{ s: "end" }}
+                  >
+                    <Uu5Forms.SubmitButton>Submit</Uu5Forms.SubmitButton>
+                  </Uu5Elements.Grid>
+                }
+              >
+                <div className={Config.Css.css({
+                  display: "grid",
+                  rowGap: 8,
+                  gridTemplateRows: "auto",
+                  marginBottom: 8,
+                })}>
+                  <Uu5Forms.FormColor name="selectedColor" label="Color selector" />
+                </div>
+              </Uu5Elements.Block>
+            </Uu5Forms.Form>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      },
+    });
+
+    Utils.Dom.render(<Page />, document.getElementById("uu5"));
+  </script>
+</body>
+
+</html>

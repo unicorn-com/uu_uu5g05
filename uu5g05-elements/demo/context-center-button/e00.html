@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Lsi } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const TileWithImage = createComponent({
+        render(props) {
+          return (
+            <Uu5Elements.Tile aspectRatio="1x1" {...props}>
+              {() => {
+                return (
+                  <img
+                    src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                    className={Config.Css.css({
+                      display: "block",
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    })}
+                  />
+                );
+              }}
+            </Uu5Elements.Tile>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*viewOn:example*/}
+              <h4>ContextCenterButton in the actionList prop of the Tile component</h4>
+              <TileWithImage
+                header="Tile"
+                displayActionList
+                actionList={[
+                  { icon: "uugds-download", collapsedChildren: "Download", onClick: (e) => alert("download") },
+                  {
+                    component: (
+                      <Uu5Elements.ContextCenterButton
+                        info={[
+                          {
+                            label: <Lsi lsi={{ cs: "Nápověda", en: "Help" }} />,
+                            children: <LoremIpsum />,
+                            icon: "uugdsstencil-alert-help",
+                          },
+                          {
+                            label: <Lsi lsi={{ cs: "Kontext", en: "Context" }} />,
+                            children: <LoremIpsum />,
+                          },
+                        ]}
+                      />
+                    ),
+                    tooltip: { cs: "Více informací", en: "More Info" },
+                  },
+                ]}
+              />
+              {/*viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

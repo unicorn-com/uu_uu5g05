@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <link href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css" rel="stylesheet" />
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Lsi, Fragment, createComponent, useState, useElementSize } from "uu5g05";
+      import { LoremIpsum, Config } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+
+      const CONTENTS = [
+        <LoremIpsum paragraphCount={6} />,
+        <>
+          <Uu5Elements.HighlightedBox>Information Box</Uu5Elements.HighlightedBox>
+          <Uu5Elements.HighlightedBox colorScheme="warning">Warning Box</Uu5Elements.HighlightedBox>
+          <Uu5Elements.HighlightedBox colorScheme="positive">Positive Box</Uu5Elements.HighlightedBox>
+          <Uu5Elements.HighlightedBox colorScheme="negative">Negative Box</Uu5Elements.HighlightedBox>
+        </>,
+      ];
+
+      const Modal1 = createComponent({
+        render() {
+          const [open, setOpen] = useState(false);
+          const [selectedItem, setSelectedItem] = useState(0);
+          const [leftOpen, setLeftOpen] = useState(false);
+
+          const { ref: modalRef, width: modalWidth } = useElementSize();
+          const countSize = Utils.ScreenSize.countSize(modalWidth);
+
+          const tabs = [
+            {
+              icon: "uugds-pencil",
+              onClick: () => {
+                setSelectedItem(0);
+                if (["xs", "s"].indexOf(countSize) !== -1) setLeftOpen(false);
+              },
+              children: <Lsi lsi={{ en: "Lorem Ipsum" }} />,
+              focused: selectedItem === 0,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                if (["xs", "s"].indexOf(countSize) !== -1) setLeftOpen(false);
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+          ];
+
+          return (
+            //@@viewOn:example
+            <div>
+              <Uu5Elements.Button onClick={() => setOpen(true)}>Open default</Uu5Elements.Button>
+
+              <Uu5Elements.Modal
+                header="Default modal with panel"
+                open={open}
+                onClose={() => setOpen(false)}
+                width={900}
+                left={<Uu5Elements.MenuList itemBorderRadius="moderate" itemList={tabs} />}
+                elementRef={modalRef}
+                leftOpen={leftOpen}
+                onLeftChange={(e) => setLeftOpen(e.data.open)}
+              >
+                {CONTENTS[selectedItem]}
+              </Uu5Elements.Modal>
+            </div>
+            //@@viewOff:example
+          );
+        },
+      });
+
+      const Modal2 = createComponent({
+        render() {
+          const [open, setOpen] = useState(false);
+          const [selectedItem, setSelectedItem] = useState(0);
+          const [leftOpen, setLeftOpen] = useState(false);
+
+          const { ref: modalRef, width: modalWidth } = useElementSize();
+          const countSize = Utils.ScreenSize.countSize(modalWidth);
+
+          const tabs = [
+            {
+              icon: "uugds-pencil",
+              onClick: () => {
+                setSelectedItem(0);
+                if (["xs", "s"].indexOf(countSize) !== -1) setLeftOpen(false);
+              },
+              children: <Lsi lsi={{ en: "Lorem Ipsum" }} />,
+              focused: selectedItem === 0,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                if (["xs", "s"].indexOf(countSize) !== -1) setLeftOpen(false);
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+          ];
+
+          return (
+            //@@viewOn:example
+            <div>
+              <Uu5Elements.Button onClick={() => setOpen(true)}>Open with settings</Uu5Elements.Button>
+              <Uu5Elements.Modal
+                header="Default modal with panel"
+                open={open}
+                onClose={() => setOpen(false)}
+                width={900}
+                left={({ style }) => {
+                  return (
+                    <Uu5Elements.MenuList
+                      className={Config.Css.css(style)}
+                      itemBorderRadius="moderate"
+                      itemList={tabs}
+                      maxHeight="100%"
+                    />
+                  )
+                }}
+                leftWidth={320}
+                initialLeftOpen={false}
+                elementRef={modalRef}
+                leftOpen={leftOpen}
+                onLeftChange={(e) => setLeftOpen(e.data.open)}
+              >
+                {({ paddingLeft, paddingRight, paddingTop, paddingBottom }) => (
+                  <Uu5Elements.ScrollableBox
+                    maxHeight="100%"
+                    padding={{ left: paddingLeft, right: paddingRight, top: paddingTop, bottom: paddingBottom }}
+                  >
+                    By a function
+                    {CONTENTS[selectedItem]}
+                  </Uu5Elements.ScrollableBox>
+                )}
+              </Uu5Elements.Modal>
+            </div>
+            //@@viewOff:example
+          );
+        },
+      });
+
+      const Modal3 = createComponent({
+        render() {
+          const [open, setOpen] = useState(false);
+          const [selectedItem, setSelectedItem] = useState(0);
+          const [leftOpen, setLeftOpen] = useState(false);
+
+          const { ref: modalRef, width: modalWidth } = useElementSize();
+          const countSize = Utils.ScreenSize.countSize(modalWidth);
+
+          function handleLeftClose() {
+            if (["xs", "s"].indexOf(countSize) !== -1) setLeftOpen(false);
+          }
+
+          const tabs = [
+            {
+              icon: "uugds-pencil",
+              onClick: () => {
+                setSelectedItem(0);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Lorem Ipsum" }} />,
+              focused: selectedItem === 0,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+                handleLeftClose();
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+          ];
+
+          return (
+            //@@viewOn:example
+            <div>
+              <Uu5Elements.Button onClick={() => setOpen(true)}>Open with fixed header in panel</Uu5Elements.Button>
+              <Uu5Elements.Modal
+                header="Modal with fixed header in panel"
+                open={open}
+                onClose={() => setOpen(false)}
+                width={900}
+                left={({ style: { paddingLeft, paddingRight, paddingTop, paddingBottom } }) => (
+                  <div
+                    className={Config.Css.css({
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                    })}
+                  >
+                    <h3 className={Config.Css.css({ paddingLeft, paddingRight, paddingTop, paddingBottom, margin: 0 })}>
+                      Header
+                    </h3>
+                    <Uu5Elements.MenuList
+                      className={Config.Css.css({ flex: 1, minHeight: 0, paddingLeft, paddingRight })}
+                      itemBorderRadius="moderate"
+                      itemList={tabs}
+                      maxHeight="none"
+                    />
+                  </div>
+                )}
+                leftWidth={320}
+                initialLeftOpen={false}
+                elementRef={modalRef}
+                leftOpen={leftOpen}
+                onLeftChange={(e) => setLeftOpen(e.data.open)}
+              >
+                {({ style: { paddingLeft, paddingRight, paddingTop, paddingBottom } }) => {
+                  return (
+                    <Uu5Elements.ScrollableBox
+                      maxHeight="100%"
+                      padding={{ left: paddingLeft, right: paddingRight, top: paddingTop, bottom: paddingBottom }}
+                    >
+                      By a function
+                      {CONTENTS[selectedItem]}
+                    </Uu5Elements.ScrollableBox>
+                  )
+                }}
+              </Uu5Elements.Modal>
+            </div>
+            //@@viewOff:example
+          );
+        },
+      });
+
+      const Modal4 = createComponent({
+        render() {
+          const [open, setOpen] = useState(false);
+          const [selectedItem, setSelectedItem] = useState(0);
+
+          const tabs = [
+            {
+              icon: "uugds-pencil",
+              onClick: () => {
+                setSelectedItem(0);
+              },
+              children: <Lsi lsi={{ en: "Lorem Ipsum" }} />,
+              focused: selectedItem === 0,
+            },
+            {
+              icon: "mdi-border-style",
+              onClick: () => {
+                setSelectedItem(1);
+              },
+              children: <Lsi lsi={{ en: "Highlighted Boxes" }} />,
+              focused: selectedItem === 1,
+            },
+          ];
+
+          return (
+            //@@viewOn:example
+            <div>
+              <Uu5Elements.Button onClick={() => setOpen(true)}>Open with uncontrolled left</Uu5Elements.Button>
+
+              <Uu5Elements.Modal
+                header="Default modal with uncontrolled panel"
+                open={open}
+                onClose={() => setOpen(false)}
+                width={900}
+                left={<Uu5Elements.MenuList itemBorderRadius="moderate" itemList={tabs} />}
+                initialLeftOpen
+              >
+                On small devices Left stays open after click on any menu items
+                {CONTENTS[selectedItem]}
+              </Uu5Elements.Modal>
+            </div>
+            //@@viewOff:example
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Modal1 />
+              <br />
+              <Modal2 />
+              <br />
+              <Modal3 />
+              <br />
+              <Modal4 />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

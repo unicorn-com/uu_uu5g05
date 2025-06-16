@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script>
+      Uu5Loader.config({
+        imports: {
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { AuthenticationService } from "uu_appg01_oidc";
+      import { Client } from "uu_appg01";
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        DataControllerProvider,
+        SessionProvider,
+        useSession,
+        useDataController,
+        useDataObject,
+        useDataFilter,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      const tileClassName = ({ selected }) => Config.Css.css`
+        height: 196px;
+        border: 1px solid rgb(189, 189, 189);
+        overflow: hidden;
+        border-radius: 4px;
+        position: relative;
+        display: inline-block;
+        width: 300px;
+      `;
+
+      const headerClassName = Config.Css.css`
+        font-size: 16px;
+        color: #005da7;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        height: 48px;
+        line-height: 25px;
+      `;
+
+      const contentClassName = Config.Css.css`
+        height: 100px;
+        width: 100%;
+        color: rgba(0,0,0,.87);
+        padding: 0 16px;
+        overflow: auto;
+      `;
+
+      const ratingClassName = Config.Css.css`
+        display: flex;
+        align-items: center;
+        border-top: 1px solid rgba(0,93,167,.12);
+        padding: 0 8px;
+        margin: 0 8px;
+        height: 48px;
+        justify-content: space-between;
+      `;
+
+      const CustomTile = Utils.Component.memo(
+        createVisualComponent({
+          render(props) {
+            const { data, onToggleSelected, selected } = props;
+            const contentImage = data.image ? <i>[image - disabled]</i> : null;
+
+            return (
+              <div className={tileClassName(props)}>
+                <div className={headerClassName}>{data.name}</div>
+                <div className={contentClassName}>
+                  {data.text}
+                  {contentImage}
+                </div>
+                <div className={ratingClassName}>
+                  <Rating value={data.averageRating} />
+                </div>
+              </div>
+            );
+          },
+        })
+      );
+
+      const Calls = {
+        async load(dtoIn) {
+          let commandUri =
+            "https://uuappg01-eu-w-1.plus4u.net/uu-jokes-maing01/4ef6a7b01b5942ecbfb925b249af987f/joke/list";
+          let response = await Client.get(commandUri, { pageInfo: { pageSize: 100 }, ...dtoIn });
+          return response.data;
+        },
+      };
+
+      //@@viewOn:example
+      const FILTER_DEFINITION_LIST = [
+        {
+          key: "text",
+          filter: (item, filterValue) => item.text && item.text.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1,
+        },
+        { key: "uuIdentity", filter: (item, filterValue) => item.uuIdentity === filterValue },
+        { key: "averageRating", filter: (item, filterValue) => item.averageRating >= filterValue },
+      ];
+
+      const FilterBar = createVisualComponent({
+        render(props) {
+          let { uuIdentity } = props;
+          let { filterList, filterDefinitionList, addFilter, removeFilter } = useDataFilter();
+          let isAverageRatingOn = filterList.some((it) => it.key === "averageRating");
+          let isUuIdentityOn = filterList.some((it) => it.key === "uuIdentity");
+          let isTextOn = filterList.some((it) => it.key === "text");
+          return filterDefinitionList.length === 0 ? null : (
+            <div>
+              <Uu5Elements.Button
+                onClick={() =>
+                  isAverageRatingOn ? removeFilter("averageRating") : addFilter({ key: "averageRating", value: 3 })
+                }
+                {...(isAverageRatingOn ? { significance: "highlighted" } : {})}
+              >
+                averageRating >= 3
+              </Uu5Elements.Button>
+              {" "}
+              <Uu5Elements.Button
+                onClick={() =>
+                  isUuIdentityOn ? removeFilter("uuIdentity") : addFilter({ key: "uuIdentity", value: uuIdentity })
+                }
+                {...(isUuIdentityOn ? { significance: "highlighted" } : {})}
+              >
+                my jokes
+              </Uu5Elements.Button>
+              {" "}
+              <Uu5Elements.Button
+                onClick={() => (isTextOn ? removeFilter("text") : addFilter({ key: "text", value: "the" }))}
+                {...(isTextOn ? { significance: "highlighted" } : {})}
+              >
+                'text' contains 'the'
+              </Uu5Elements.Button>
+              {" "}
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const Rating = createVisualComponent({
+        render(props) {
+          const { value } = props;
+          const attrs = Utils.VisualComponent.getAttrs(props);
+          return <span {...attrs}>Rating {Math.round(10 * value) / 10}/5</span>;
+        },
+      });
+
+      const DemoList = createVisualComponent({
+        render() {
+          let { displayedData } = useDataController();
+
+          return displayedData ? (
+            <div>
+              {displayedData.map((data) => data ? <CustomTile data={data} key={data.id} /> : null)}
+            </div>
+          ) : null;
+        },
+      });
+
+      const DemoWrapper = createVisualComponent({
+        render(props) {
+          let { uuIdentity } = props;
+          let { data } = useDataObject({
+            handlerMap: { load: Calls.load },
+          });
+          let { itemList } = data || {};
+
+          return (
+            <Uu5Elements.Block
+              header={
+                <Uu5Elements.Text category="story" segment="heading" type="h1">
+                  useDataFilter Demo
+                </Uu5Elements.Text>
+              }
+            >
+              <DataControllerProvider data={itemList || []} selectable filterDefinitionList={FILTER_DEFINITION_LIST}>
+                <FilterBar uuIdentity={uuIdentity} />
+                <DemoList />
+              </DataControllerProvider>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const AuthenticatedDemo = createComponent({
+        render() {
+          let { identity, login } = useSession();
+          return identity ? (
+            <DemoWrapper uuIdentity={identity.uuIdentity} />
+          ) : identity === null ? (
+            <Uu5Elements.Button onClick={() => login()}>Log in</Uu5Elements.Button>
+          ) : null;
+        },
+      });
+
+      const Page = createVisualComponent({
+        render() {
+          return (
+            <SessionProvider authenticationService={AuthenticationService}>
+              <AuthenticatedDemo />
+            </SessionProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

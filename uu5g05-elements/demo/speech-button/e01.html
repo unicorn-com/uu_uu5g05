@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5"></main>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState, useRef, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+
+      function visualize(ref, stream) {
+        const canvas = ref.current;
+        const canvasCtx = canvas.getContext("2d");
+
+        const audioCtx = new AudioContext();
+
+        const source = audioCtx.createMediaStreamSource(stream);
+
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 2048;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        source.connect(analyser);
+
+        function draw() {
+          const width = canvas.width
+          const height = canvas.height;
+
+          requestAnimationFrame(draw);
+
+          analyser.getByteTimeDomainData(dataArray);
+
+          canvasCtx.fillStyle = "rgba(200, 200, 200, .2)";
+          canvasCtx.fillRect(0, 0, width, height);
+
+          canvasCtx.lineWidth = 1;
+          canvasCtx.strokeStyle = "#212121";
+
+          canvasCtx.beginPath();
+
+          let sliceWidth = width * 1.0 / bufferLength;
+          let x = 0;
+
+          for (let i = 0; i < bufferLength; i++) {
+
+            let v = dataArray[i] / 128.0;
+            let y = v * height / 2;
+
+            if (i === 0) {
+              canvasCtx.moveTo(x, y);
+            } else {
+              canvasCtx.lineTo(x, y);
+            }
+
+            x += sliceWidth;
+          }
+
+          canvasCtx.lineTo(width, height / 2);
+          canvasCtx.stroke();
+        }
+
+        draw();
+      }
+
+      const Visualizer = ({ width, height }) => {
+        const ref = useRef();
+        const clearRef = useRef();
+
+        useEffect(() => {
+          (async function () {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            visualize(ref, stream);
+
+            clearRef.current = () => {
+              stream.getTracks().forEach((track) => track.stop());
+            };
+          })();
+
+          return () => clearRef.current?.();
+        }, []);
+
+        return (
+          <canvas ref={ref} width={width} height={height} />
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          const [text, setText] = useState("");
+          const [speech, setSpeech] = useState("");
+          const [speaking, setSpeaking] = useState();
+
+          return (
+            <div>
+              <h4>Custom icon as visualizer</h4>
+              <Uu5Elements.SpeechButton
+                onSpeechStart={() => setSpeaking(true)}
+                onSpeech={(e) => setSpeech(e.data.value)}
+                onSpeechEnd={(e) => {
+                  setSpeech("");
+                  setText((text) => text + " " + e.data.value);
+                  setSpeaking(false);
+                }}
+                icon={speaking ? <Visualizer width={20} height={20} /> : undefined}
+              />
+
+              <br /><br />
+
+              <Uu5Elements.Block card="full">
+                {text} {speech}
+              </Uu5Elements.Block>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

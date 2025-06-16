@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, PropTypes, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+
+      const SvgIcon = createVisualComponent({
+        render() {
+          return (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M16.8108 4.00127L17.4069 4.59389L21.6216 8.78431L20.4295 9.96955L17.653 7.20927L17.6538 18.9995H15.9679L15.967 7.20927L13.1921 9.96955L12 8.78431L16.2148 4.59389L16.8108 4.00127Z"
+                fill="#212121"
+              />
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M8.03215 4.96174L8.03139 16.7897L10.8079 14.0305L12 15.2157L7.78525 19.4061L7.1892 19.9987L6.59315 19.4061L2.37839 15.2157L3.57049 14.0305L6.34539 16.7897L6.34625 4.96174H8.03215Z"
+                fill="#212121"
+              />
+            </svg>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          const [rotate, setRotate] = useState(true);
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>Default</h4>
+              <Uu5Elements.Icon />
+
+              <h4>Icon</h4>
+              <h5>uuGds</h5>
+              <Uu5Elements.Icon icon="uugds-log-out" /> icon="uugds-log-out"
+              <br />
+              <Uu5Elements.Icon icon="uugds-check" /> icon="uugds-check"
+              <br />
+              <Uu5Elements.Icon icon="uugdsstencil-arrow-down-circle" /> icon="uugdsstencil-arrow-down-circle"
+
+              <h5>Material design</h5>
+              <Uu5Elements.Icon icon="mdi-check" /> icon="mdi-check"
+
+              <h5>Font Awesome</h5>
+              <Uu5Elements.Icon icon="fa-check" /> icon="fa-check"
+
+              <h5>uuBml</h5>
+              <Uu5Elements.Icon icon="uubml-artifact" /> icon="uubml-artifact"
+              <br />
+              <Uu5Elements.Icon icon="uubml-artifact" colorScheme="red" /> icon="uubml-artifact"
+
+              <h5>uuBml states</h5>
+              {[
+                "",
+                "default",
+                "initial",
+                "active",
+                "alternative-active",
+                "problem",
+                "passive",
+                "final",
+                "alternative-final",
+                "cancelled",
+                "system",
+              ].map((name) => {
+                const icon = "uubml-state-s27" + (name ? "-" + name : "");
+                return (
+                  <div key={name}>
+                    <Uu5Elements.Icon icon={icon} /> icon="{icon}"
+                  </div>
+                );
+              })}
+
+              <h5>uuBml priorities</h5>
+              {["", ...PropTypes.COLOR_SCHEME.priority].map((name) => {
+                const icon = "uubml-activity" + (name ? "-" + name : "");
+                return (
+                  <div key={name}>
+                    <Uu5Elements.Icon icon={icon} /> icon="{icon}"
+                  </div>
+                );
+              })}
+
+              <h5>uuBml icons</h5>
+              <Uu5Elements.Icon icon="uubmlicon-uusprintman-ticket" /> icon="uubmlicon-uusprintman-ticket"
+              <br />
+              <Uu5Elements.Icon icon="uubmlicon-uumyterritory-uuclub" /> icon="uubmlicon-uumyterritory-uumy-club"
+
+
+              <h5>uuBml stencils</h5>
+              <Uu5Elements.Icon icon="uubmlstencil-uu5-uu5" /> icon="uubmlstencil-uu5-uu5"
+              <br />
+              <Uu5Elements.Icon icon="uubmllarge-uu5-uu5" /> icon="uubmllarge-uu5-uu5"
+
+              <h4>Icon as element</h4>
+              <Uu5Elements.Icon icon={<SvgIcon />} />
+
+              <h4>Tooltip</h4>
+              <Uu5Elements.Icon icon="fa-check" tooltip="Font Awesome" /> tooltip="Font Awesome"
+              <br />
+              <Uu5Elements.Icon icon="uugds-check" tooltip={{ en: "MDI EN", cs: "MDI CS" }} /> tooltip=
+              {`{{ en: "MDI EN", cs: "MDI CS" }}`}
+
+              <h4>Margin</h4>
+              <Uu5Elements.Icon margin={4} /> margin={`{4}`}
+              <br />
+              <Uu5Elements.Icon margin="0.3em" /> margin="0.3em"
+              <br />
+              <Uu5Elements.Icon margin={{ right: 4 }} /> margin={`{{ right: 4 }}`}
+
+              <h4>onClick</h4>
+              <Uu5Elements.Icon onClick={(e) => alert("click")} />
+
+
+              <h4>animation</h4>
+              <Uu5Elements.Icon icon="uugds-reload" animation={rotate ? "rotate" : undefined} />
+              &nbsp;
+              <Uu5Elements.Button onClick={() => setRotate(!rotate)}>Toggle rotation</Uu5Elements.Button>
+
+              <h4>colorScheme & significance</h4>
+              <Uu5Elements.Icon colorScheme="building" />
+              &nbsp;
+              <Uu5Elements.Icon colorScheme="building" significance="subdued" />
+              <br />
+              <Uu5Elements.Icon colorScheme="red" />
+              &nbsp;
+              <Uu5Elements.Icon colorScheme="red" significance="subdued" />
+              <br />
+              <Uu5Elements.Icon icon="uubmlstencil-uubusinessterritory-activity-problem" />
+              &nbsp;
+              <Uu5Elements.Icon colorScheme="green" icon="uubmlstencil-uubusinessterritory-activity-problem" />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

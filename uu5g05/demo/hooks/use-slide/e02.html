@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum, times } from "uu5g05-dev";
+
+      //@@viewOn:example
+      import { useSlide } from "uu5g05";
+
+      const Demo = createVisualComponent({
+        render(props) {
+          const [open, setOpen] = useState(false);
+
+          const { ref, style } = useSlide({
+            onEnd(e) {
+              const { direction, pointerType } = e.data;
+              if (pointerType !== "mouse" && direction.type === "horizontal") {
+                if (direction.right) setOpen(true);
+                else if (direction.left) setOpen(false);
+              }
+            }
+          });
+
+          const { userSelect, ...restStyles } = style;
+
+          return (
+            <Uu5Elements.Drawer
+              open={open}
+              onClose={() => setOpen(false)}
+              content={(
+                <Uu5Elements.MenuList
+                  itemBorderRadius="moderate"
+                  itemList={times(10, (i) => ({
+                    children: "Item " + (i + 1),
+                    onClick: () => console.log("item", i),
+                  }))}
+                />
+              )}
+            >
+              <div ref={ref} className={Config.Css.css({ ...restStyles, padding: "16px 32px" })}>
+                <Uu5Elements.Button icon="uugds-menu" pressed={open} onClick={() => setOpen(!open)} />
+                <h4>Click or swipe to open/close menu</h4>
+                <LoremIpsum paragraphCount={20} />
+              </div>
+            </Uu5Elements.Drawer>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

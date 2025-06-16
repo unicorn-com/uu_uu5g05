@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5"></main>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        useEffect,
+        useState,
+        AnimationLayerProvider,
+        useAnimationLayer
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+
+      //@@viewOn:example
+      const IMAGE_SRC = "https://images.pexels.com/photos/36347/cow-pasture-animal-almabtrieb.jpg?w=150&auto=compress";
+
+      const ImageView = createVisualComponent({
+        // TODO statics
+
+        render(props) {
+          const { onEnd, displayDurationS, nestingLevel, ...restProps } = props;
+          const [display, setDisplay] = useState(true);
+
+          useEffect(() => {
+            const timeout = setTimeout(() => {
+              setDisplay(false);
+              onEnd();
+            }, displayDurationS * 1000);
+            return () => clearTimeout(timeout);
+          }, []);
+
+          const { elementAttrs, componentProps } = Utils.VisualComponent.splitProps(restProps);
+
+          return display ? (
+            <img {...elementAttrs} {...componentProps} />
+          ) : null;
+        },
+      });
+
+      const Image = createComponent({
+        // TODO statics
+
+        render(props) {
+          const { onEnd } = props;
+
+          const { render } = useAnimationLayer(<ImageView {...props} />);
+          const [result, error] = render({ position: { top: 64, left: 32 } });
+
+          useEffect(() => {
+            if (error) {
+              onEnd?.(new Utils.Event({ error }));
+            }
+          }, [error]);
+
+          return result;
+        }
+      });
+
+      function ImageHandler({ displayDurationS = 8 }) {
+        const [display, setDisplay] = useState(true);
+        const { addAlert } = Uu5Elements.useAlertBus();
+
+        return display ? (
+          <Image
+            src={IMAGE_SRC}
+            displayDurationS={displayDurationS}
+            onEnd={(e) => {
+              setDisplay(false);
+              e?.data?.error && addAlert({
+                header: "Image onEnd",
+                message: <>{e.data.error.code}<br />{JSON.stringify(e.data.error.params)}</>
+              });
+            }}
+            width={300}
+          />
+        ) : null;
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Elements.AlertBus>
+              <h3>The image disappears after 8 seconds</h3>
+              <AnimationLayerProvider>
+                <ImageHandler />
+              </AnimationLayerProvider>
+            </Uu5Elements.AlertBus>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import { withControlledFormInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: 32,
+      });
+
+      const File = withControlledFormInput(Uu5Forms.File);
+
+      let MOUSE_GIF_ARRAY_BUFFER = new Int8Array([71, 73, 70, 56, 57, 97, 12, 0, 21, 0, 145, 0, 0, 0, 0, 0, 255, 0, 255, 255, 255, 255, 0, 0, 0, 33, 249, 4, 1, 0, 0, 1, 0, 44, 0, 0, 0, 0, 12, 0, 21, 0, 1, 2, 48, 68, 142, 25, 96, 154, 32, 154, 91, 34, 78, 90, 229, 171, 217, 65, 110, 109, 96, 120, 124, 163, 100, 158, 229, 8, 26, 105, 198, 196, 220, 167, 209, 244, 214, 220, 37, 218, 149, 138, 238, 233, 77, 128, 63, 161, 167, 81, 112, 0, 59]).buffer;
+      let MOUSE_GIF_BLOB = new Blob([MOUSE_GIF_ARRAY_BUFFER], { type: "image/gif" });
+      MOUSE_GIF_BLOB.name = "mouse.gif";
+
+      function Page() {
+        return (
+          <div className={columnsCss}>
+            <div>
+              {/*@@viewOn:example*/}
+              <h3>autoFocus</h3>
+              <File autoFocus label="Label" />
+
+              <h4>id & name & placeholder</h4>
+              <File id="id" name="name" label="Label" placeholder="Choose a file" />
+
+              <h4>readOnly</h4>
+              <File readOnly label="Label" />
+              <File readOnly label="Label" value={MOUSE_GIF_BLOB} />
+
+              <h4>disabled</h4>
+              <File disabled label="Label" />
+              <File disabled label="Label" value={MOUSE_GIF_BLOB} />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>size</h4>
+              <File size="xxs" label="Label" message="Message..." />
+              <File size="xs" label="Label" message="Message..." />
+              <File size="s" label="Label" message="Message..." />
+              <File size="m" label="Label" message="Message..." />
+              <File size="l" label="Label" message="Message..." />
+              <File size="xl" label="Label" message="Message..." />
+
+              <h4>borderRadius</h4>
+              <File borderRadius="none" label="Label" />
+              <File borderRadius="elementary" label="Label" />
+              <File borderRadius="moderate" label="Label" />
+              <File borderRadius="expressive" label="Label" />
+              <File borderRadius="full" label="Label" />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>required</h4>
+              <File required label="Label" />
+
+              <h4>onFocus & onBlur (in console)</h4>
+              <File
+                label="Label"
+                onFocus={(e) => console.log("onFocus", e)}
+                onBlur={(e) => console.log("onBlur", e)}
+              />
+              {/*@@viewOff:example*/}
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

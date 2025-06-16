@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createVisualComponent, Utils, createComponent } from "uu5g05";
+      import { Config } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+
+      const templateAreas = `
+        header header header header,
+        sidebar content content content,
+        footer footer footer footer
+      `;
+
+      const templateColumns = "repeat(4, 1fr)";
+
+      const contentMap = {
+        header: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Header</Uu5Elements.Box>,
+        sidebar: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Sidebar</Uu5Elements.Box>,
+        content: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Content</Uu5Elements.Box>,
+        footer: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Footer</Uu5Elements.Box>,
+      };
+
+      const backgroundStyle = Config.Css.css({ backgroundColor: "lightgreen" });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div
+              className={Config.Css.css`
+                > * {
+                  margin-bottom: 32px;
+                }
+              `}
+            >
+              {/* @@viewOn:example */}
+              <div>
+                <h4>display = inline</h4>
+                <Uu5Elements.GridTemplate
+                  templateAreas={templateAreas}
+                  contentMap={contentMap}
+                  templateColumns={templateColumns}
+                  display="inline"
+                />
+              </div>
+
+              <div>
+                <h4>rowGap = 24, columnGap = 64</h4>
+                <Uu5Elements.GridTemplate
+                  templateAreas={`
+                    header header header header,
+                    sidebar content content content,
+                    footerLeft footerLeft footerRight footerRight
+                  `}
+                  contentMap={{
+                    header: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Header</Uu5Elements.Box>,
+                    sidebar: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Sidebar</Uu5Elements.Box>,
+                    content: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Content</Uu5Elements.Box>,
+                    footerLeft: (
+                      <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Footer Left</Uu5Elements.Box>
+                    ),
+                    footerRight: (
+                      <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Footer Right</Uu5Elements.Box>
+                    ),
+                  }}
+                  templateColumns={templateColumns}
+                  rowGap={24}
+                  columnGap={64}
+                />
+              </div>
+
+              <div>
+                <h4>contentStyleMap (justifySelf = end)</h4>
+                <Uu5Elements.GridTemplate
+                  templateAreas={templateAreas}
+                  contentMap={{
+                    header: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Header</Uu5Elements.Box>,
+                    sidebar: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Sidebar</Uu5Elements.Box>,
+                    content: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Content</Uu5Elements.Box>,
+                    footer: <Uu5Elements.Button>Footer Button</Uu5Elements.Button>,
+                  }}
+                  contentStyleMap={{
+                    footer: {
+                      justifySelf: "end",
+                    },
+                  }}
+                  templateColumns={templateColumns}
+                />
+              </div>
+
+              <div>
+                <h4>templateRows = 100px 200px 100px</h4>
+                <Uu5Elements.GridTemplate
+                  templateAreas={templateAreas}
+                  contentMap={{
+                    header: (
+                      <Uu5Elements.Box height="100%" className={Config.Css.css({ padding: 16 })}>
+                        Header
+                      </Uu5Elements.Box>
+                    ),
+                    sidebar: (
+                      <Uu5Elements.Box height="100%" className={Config.Css.css({ padding: 16 })}>
+                        Sidebar
+                      </Uu5Elements.Box>
+                    ),
+                    content: (
+                      <Uu5Elements.Box height="100%" className={Config.Css.css({ padding: 16 })}>
+                        Content
+                      </Uu5Elements.Box>
+                    ),
+                    footer: (
+                      <Uu5Elements.Box height="100%" className={Config.Css.css({ padding: 16 })}>
+                        Footer
+                      </Uu5Elements.Box>
+                    ),
+                  }}
+                  templateRows="100px 200px 100px"
+                  templateColumns={templateColumns}
+                />
+              </div>
+
+              <div>
+                <h4>justifyItems = start</h4>
+                <Uu5Elements.GridTemplate
+                  templateAreas={templateAreas}
+                  contentMap={contentMap}
+                  templateColumns={templateColumns}
+                  justifyItems="start"
+                  className={backgroundStyle}
+                />
+              </div>
+
+              <div>
+                <h4>alignItems = start (+templateRows = 150px 150px 150px)</h4>
+                <Uu5Elements.GridTemplate
+                  templateAreas={templateAreas}
+                  contentMap={contentMap}
+                  templateRows="150px 150px 150px"
+                  templateColumns={templateColumns}
+                  alignItems="start"
+                  className={backgroundStyle}
+                />
+              </div>
+
+              <div>
+                <h4>justifyContent = center, alignContent = center</h4>
+                <Uu5Elements.GridTemplate
+                  templateAreas={templateAreas}
+                  contentMap={contentMap}
+                  templateColumns="repeat(4, 150px)"
+                  justifyContent="center"
+                  alignContent="center"
+                  className={backgroundStyle + " " + Config.Css.css({ height: 300 })}
+                />
+              </div>
+              {/* @@viewOff:example */}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

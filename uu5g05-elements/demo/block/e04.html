@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 04</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, PropTypes, useState, BackgroundProvider } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const BG_MAP = {
+        light: [{ background: "dark", colorScheme: "building", significance: "highlighted" }],
+        dark: [{ colorScheme: "building", significance: "highlighted" }, "#000"],
+        soft: [{ colorScheme: "primary" }, UuGds.getValue(["ColorPalette", "meaning", "primary", "softSolidLight"])],
+        full: [{
+          colorScheme: "primary",
+          significance: "highlighted"
+        }, UuGds.getValue(["ColorPalette", "meaning", "primary", "main"])],
+      }
+
+      const Page = createComponent({
+        render() {
+          const [background, setBackground] = useState("light");
+          const [colorScheme, setColorScheme] = useState("building");
+
+          return (
+            <div className={Config.Css.css({
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              alignItems: "flex-start",
+              gap: 16,
+              backgroundColor: BG_MAP[background][1],
+              padding: "16px 32px",
+            })}>
+              <BackgroundProvider background={background}>
+                <div className={Config.Css.css({ display: "grid", gridTemplateColumns: "auto" })}>
+                  <Uu5Elements.Button
+                    borderRadius="none"
+                    significance="subdued"
+                    disabled
+                  >
+                    Color\Background
+                  </Uu5Elements.Button>
+                  {["building", "meaning", "basic"].reduce((res, curr) => [...res, ...PropTypes.COLOR_SCHEME[curr]], []).map((color) => (
+                    <Uu5Elements.Button
+                      key={color}
+                      colorScheme={color}
+                      significance="highlighted"
+                      borderRadius="none"
+                      pressed={color === colorScheme}
+                      onClick={() => setColorScheme(color)}
+                    >
+                      {color}
+                    </Uu5Elements.Button>
+                  ))}
+                </div>
+                <div>
+                  {["light", "dark", "soft", "full"].map((bg) => (
+                    <Uu5Elements.Button
+                      key={bg}
+                      borderRadius="none"
+                      pressed={bg === background}
+                      onClick={() => setBackground(bg)}
+                      {...BG_MAP[bg][0]}
+                    >
+                      {bg}
+                    </Uu5Elements.Button>
+                  ))}
+                  <div className={Config.Css.css({
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gap: 16,
+                    marginTop: 16,
+                  })}>
+                    {["common", "highlighted", "distinct", "subdued"].map((significance) => {
+                      return ["full", "content", "none"].map((card) => (
+                        //@@viewOn:example
+                        <Uu5Elements.Block
+                          key={[significance, card].join("-")}
+                          card={card}
+                          colorScheme={colorScheme}
+                          significance={significance}
+                          headerType="title"
+                          header={significance}
+                          footer={`Some footer of card: ${card}`}
+                          actionList={[{
+                            icon: "uugds-copy",
+                            collapsedChildren: "Copy Component",
+                            tooltip: "Copy component with actual settings",
+                            onClick: () => Utils.Clipboard.write(`<Uu5Elements.Block
+    card="${card}"
+    colorScheme="${colorScheme}"
+    significance="${significance}"
+    headerType="title"
+    header="Some header"
+    footer="Some footer"
+  >
+    Lorem Ipsum...
+  </Uu5Elements.Block>`),
+                          }]}
+                        >
+                          <LoremIpsum avgSentences={1} />
+                        </Uu5Elements.Block>
+                        //@@viewOff:example
+                      ));
+                    })}
+                  </div>
+                </div>
+              </BackgroundProvider>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

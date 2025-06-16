@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="uu5">Loading...</div>
+
+  <script type="text/babel">
+    import { createComponent, createVisualComponent, Utils, useRef, useState, useEffect, usePreviousValue } from "uu5g05";
+    import Uu5Elements from "uu5g05-elements";
+    import Uu5Forms, { useWizard, useFormApi } from "uu5g05-forms";
+    import { Config, wait } from "uu5g05-dev";
+
+    const CONTINENTS = [
+      {
+        value: "europe",
+        children: "Europe",
+        countries: [
+          { value: "cz", children: "Czech Republic" },
+          { value: "ua", children: "Ukraine" },
+        ]
+      },
+      {
+        value: "asia",
+        children: "Asia",
+        countries: [
+          { value: "ru", children: "Russia" },
+          { value: "cn", children: "China" },
+        ]
+      },
+    ];
+
+    const getOptionsList = (options, subject) => [
+      { value: "", children: `Select a ${subject}` },
+      ...options ? options.map(({ value, children }) => ({ value, children })) : [],
+    ];
+
+    const Step1 = createVisualComponent({
+      render(props) {
+        const { data, onNext, onPrevious } = props;
+        return (
+          <Uu5Elements.Block header="Continent" headerType="title">
+            <Uu5Forms.FormSelect
+              name="continent"
+              label="Continent"
+              onChange={(e) => e.data.form.setItemValue("country", undefined)}
+              itemList={getOptionsList(CONTINENTS, "Continent")}
+              required
+            />
+          </Uu5Elements.Block>
+        );
+      },
+    });
+
+    const Step2 = createVisualComponent({
+      render(props) {
+        const { data, onNext, onPrevious } = props;
+        const countries = CONTINENTS.find(({ value }) => value === data?.continent)?.countries;
+        return (
+          <Uu5Elements.Block header="Country" headerType="title">
+            <Uu5Forms.FormSelect
+              name="country"
+              label="Country"
+              itemList={getOptionsList(countries, "Country")}
+              disabled={!countries}
+              required
+              onValidate={async () => await wait(500)}
+            />
+            <Uu5Forms.FormNumber
+              name="rating"
+              label="Rating (0-5)"
+              min={0}
+              max={5}
+              placeholder="Press Enter for next step"
+            />
+            <Uu5Forms.FormText
+              name="note"
+              label="Note"
+            />
+          </Uu5Elements.Block>
+        );
+      },
+    });
+
+    const Step3 = createVisualComponent({
+      render(props) {
+        const { data, onNext, onPrevious } = props;
+        const continent = CONTINENTS.find(({ value }) => value === data?.continent);
+        const country = continent?.countries.find(({ value }) => value === data?.country);
+        return (
+          <Uu5Elements.Block header="Summary" headerType="title">
+            <div><Uu5Elements.Text>Continent: {continent?.children}</Uu5Elements.Text></div>
+            <div><Uu5Elements.Text>Country: {country?.children}</Uu5Elements.Text></div>
+            <div><Uu5Elements.Text>Rating: {data?.rating}</Uu5Elements.Text></div>
+            <div><Uu5Elements.Text>Note: {data?.note}</Uu5Elements.Text></div>
+          </Uu5Elements.Block>
+        );
+      },
+    });
+
+    const STEP_LIST = [
+      { component: Step1, children: "Continent" },
+      { component: Step2, children: "Country" },
+      { component: Step3, children: "Summary" },
+    ];
+
+    const WizardMenu = createVisualComponent({
+      render() {
+        //@@viewOn:example
+        const { itemList, stepIndex, validityList, setStepIndex } = useWizard();
+
+        return (
+          <Uu5Elements.MenuList
+            itemBorderRadius="moderate"
+            itemList={itemList.map((item, index) => ({
+              children: item.children,
+              iconRight: validityList?.[index] === false ? "uugds-alert-circle" : validityList?.[index] === true ? "uugds-check" : undefined,
+              colorScheme: validityList?.[index] === false ? "negative" : undefined,
+              focused: index === stepIndex,
+              onClick: () => setStepIndex(index),
+            }))}
+          />
+        );
+        //@@viewOff:example
+      }
+    });
+
+    const Page = createComponent({
+      render() {
+        const [open, setOpen] = useState(false);
+
+        // maintain wizard refresh on second modal open
+        const prevOpen = usePreviousValue(open);
+        const keyRef = useRef(0);
+        if (open && !prevOpen) keyRef.current++;
+        const key = keyRef.current;
+
+        const handleSubmit = async (e) => {
+          console.log("Submitting data: ", e.data.value);
+          setOpen(false);
+        }
+
+        return (
+          <div>
+            <Uu5Elements.Button
+              children="Open Modal"
+              significance="highlighted"
+              onClick={() => setOpen(true)}
+            />
+
+            <Uu5Forms.Form.Provider key={key} onSubmit={handleSubmit} preserveValueOnUnmount>
+              {({ value }) => (
+                <Uu5Forms.Wizard.Provider itemList={STEP_LIST}>
+                  <Uu5Elements.Modal
+                    header={"Wizard Provider Modal"}
+                    width="full"
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    left={<WizardMenu />}
+                    children={<Uu5Forms.Wizard.Content />}
+                    footer={
+                      <Uu5Elements.Grid
+                        templateColumns={{ xs: "1fr", s: "auto" }}
+                        columnGap={Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "c"])}
+                        justifyContent={{ s: "end" }}
+                      >
+                        <Uu5Forms.SubmitButton disabled={Object.keys(value).length < 4} />
+                      </Uu5Elements.Grid>
+                    } // there are 4 input in total in the wizard form - enable submit when all of them was rendered
+                  />
+                </Uu5Forms.Wizard.Provider>
+              )}
+            </Uu5Forms.Form.Provider>
+          </div>
+        );
+      },
+    });
+
+    Utils.Dom.render(<Page />, document.getElementById("uu5"));
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <script>
+    const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+    if (ip) {
+      Uu5Loader.config({
+        imports: {
+          uu5g05: "http://" + ip + ":54321/uu5g05.js",
+          "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+          "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+          "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+          uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+        },
+      });
+    }
+  </script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  import { Utils, useState } from "uu5g05";
+  import { TextSelect } from "uu5g05-forms";
+  import { Grid, Text } from "uu5g05-elements";
+  import { Config } from "uu5g05-dev";
+
+  function withControlledInput(Input) {
+    return (props) => {
+      const { value: propsValue, onChange, onValidationStart, onValidationEnd } = props;
+
+      const [value, setValue] = useState(propsValue);
+      const [errorList, setErrorList] = useState(null);
+      const [pending, setPending] = useState();
+
+      return (
+        <div>
+          <Input
+            {...props}
+            value={value}
+            onChange={(e) => {
+              typeof onChange === "function" && onChange(e);
+              setValue(e.data.value);
+            }}
+            onValidationStart={(e) => {
+              typeof onValidationStart === "function" && onValidationStart(e);
+              setPending(true);
+            }}
+            onValidationEnd={(e) => {
+              typeof onValidationEnd === "function" && onValidationEnd(e);
+              setErrorList(e.data.errorList.length ? e.data.errorList : null);
+              setPending(false);
+            }}
+            width="100%"
+          />
+          {errorList && (
+            <div>
+              <Text colorScheme="negative">
+                {errorList.map(({ code }) => code).join(" ")}
+              </Text>
+            </div>
+          )}
+          {pending && <div>Pending...</div>}
+        </div>
+      );
+    };
+  }
+
+  const TextSelectInput = withControlledInput(TextSelect.Input);
+
+  {/*@@viewOn:example*/}
+  function Page() {
+    const itemList = [
+      { value: undefined },
+      { value: "created", children: "Created" },
+      { children: "Waiting", itemList: [
+          { value: "waiting", children: "Waiting" },
+          { value: "waitingWarning", children: "Waiting - Warning" },
+          { value: "waitingProblem", children: "Waiting - Problem" },
+        ] },
+      { children: "In progress", itemList: [
+          { value: "inProgress", children: "In progress" },
+          { value: "inProgressWarning", children: "In progress - Warning" },
+          { value: "inProgressProblem", children: "In progress - Problem" },
+        ] },
+      { children: "To Assessment", itemList: [
+          { value: "toAssessment", children: "To Assessment" },
+          { value: "toAssessmentWarning", children: "To Assessment - Warning" },
+          { value: "toAssessmentProblem", children: "To Assessment - Problem" },
+        ] },
+      { value: "suspended", children: "Suspended" },
+      { children: "Final", itemList: [
+          { value: "cancelled", children: "Cancelled" },
+          { children: "Solved", itemList: [
+              { value: "solved", children: "Solved" },
+              { value: "solvedWarning", children: "Solved - warning"},
+          ] },
+          { value: "notSolved", children: "Not Solved" },
+        ] },
+    ];
+
+    return (
+      <div>
+        <h4>Single text select</h4>
+        <TextSelectInput
+          placeholder="Search or select category"
+          itemList={itemList}
+          onChange={(e) => {
+            console.log("onChange", e);
+          }}
+        />
+        <h4>Multiple text select – Tags</h4>
+        <TextSelectInput
+          placeholder="Search or select category"
+          itemList={itemList}
+          onChange={(e) => {
+            console.log("onChange", e);
+          }}
+          multiple
+        />
+        <h4>Multiple text select – displayCheckboxes and itemList with multiple=false</h4>
+        <TextSelectInput
+          placeholder="Search or select category"
+          itemList={itemList.map((item, i) => {
+            if (i === 6) return { multiple: false, ...item };
+            return item;
+          })}
+          onChange={(e) => {
+            console.log("onChange", e);
+          }}
+          multiple
+          displayCheckboxes
+        />
+        <h4>Multiple text select – List items</h4>
+        <TextSelectInput
+          placeholder="Search or select category"
+          itemList={itemList}
+          onChange={(e) => {
+            console.log("onChange", e);
+          }}
+          multiple
+          displayTags={false}
+        >
+          <TextSelect.Field />
+          <TextSelect.SelectedOptions />
+        </TextSelectInput>
+        <h4>Multiple text select – Options outside</h4>
+        <TextSelectInput
+          placeholder="Search or select category"
+          itemList={itemList}
+          onChange={(e) => {
+            console.log("onChange", e);
+          }}
+          multiple
+          displayTags={false}
+          displayOptions={false}
+        >
+          <TextSelect.Field />
+          <TextSelect.Options />
+        </TextSelectInput>
+      </div>
+    );
+    {/*@@viewOff:example*/}
+  }
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Fragment, Utils, useState, useRef } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const TooltipForButton = createVisualComponent({
+        render({ preferredPosition, children, ...tooltipProps }) {
+          const [tooltipSettings, setTooltipSettings] = useState(null);
+          const buttonRef = useRef();
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button
+                elementRef={buttonRef}
+                elementAttrs={{
+                  onMouseEnter: () => setTooltipSettings({ element: buttonRef.current }),
+                  onMouseLeave: () => setTooltipSettings(null)
+                }}
+              >
+                {children || preferredPosition || "Hover over me!"}
+              </Uu5Elements.Button>
+              {
+                tooltipSettings && (
+                  <Uu5Elements.Tooltip
+                    {...tooltipProps}
+                    {...tooltipSettings}
+                    preferredPosition={preferredPosition}
+                    onClose={() => setTooltipSettings(null)}
+                  >
+                    Lorem ipsum<br />dolor sit amet...
+                  </Uu5Elements.Tooltip>
+                )
+              }
+            </Fragment>
+          );
+        }
+      });
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <h4>default</h4>
+              <LoremIpsum />
+              <TooltipForButton />
+
+              <br />
+              <br />
+
+              <h4>preferredPosition</h4>
+              <TooltipForButton preferredPosition="bottom-right" />&nbsp;
+              <TooltipForButton preferredPosition="bottom-left" />&nbsp;
+              <TooltipForButton preferredPosition="top-right" />&nbsp;
+              <TooltipForButton preferredPosition="top-left" />
+              <br /><br />
+              <TooltipForButton preferredPosition="right-bottom" />&nbsp;
+              <TooltipForButton preferredPosition="right-top" />&nbsp;
+              <TooltipForButton preferredPosition="left-bottom" />&nbsp;
+              <TooltipForButton preferredPosition="left-top" />
+
+              <h4>delayMs</h4>
+              <TooltipForButton delayMs={0}>0</TooltipForButton>&nbsp;
+              <TooltipForButton delayMs={2000}>2s</TooltipForButton>
+
+              <h4>borderRadius</h4>
+              <TooltipForButton borderRadius="none">none</TooltipForButton>&nbsp;
+              <TooltipForButton borderRadius="elementary">elementary</TooltipForButton>&nbsp;
+              <TooltipForButton borderRadius="moderate">moderate</TooltipForButton>&nbsp;
+              <TooltipForButton borderRadius="expressive">expressive</TooltipForButton>&nbsp;
+
+              <h4>colorScheme & significance</h4>
+              <TooltipForButton colorScheme="primary">primary</TooltipForButton>&nbsp;
+              <TooltipForButton colorScheme="positive">positive</TooltipForButton>&nbsp;
+              <TooltipForButton colorScheme="warning">warning</TooltipForButton>&nbsp;
+              <TooltipForButton colorScheme="negative">negative</TooltipForButton>
+
+              <h4>spacing</h4>
+              <Uu5Elements.SpacingProvider type="loose">
+                <TooltipForButton>loose</TooltipForButton>&nbsp;
+              </Uu5Elements.SpacingProvider>
+              <Uu5Elements.SpacingProvider type="tight">
+                <TooltipForButton>tight</TooltipForButton>
+              </Uu5Elements.SpacingProvider>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

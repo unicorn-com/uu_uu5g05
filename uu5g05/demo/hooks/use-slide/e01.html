@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      import { useSlide, useRef } from "uu5g05";
+
+      function checkBorders({ top, left }, boxRef) {
+        const { width = 0, height = 0 } = boxRef.current?.getBoundingClientRect?.() ?? {};
+
+        return {
+          left: Math.max(0, Math.min(document.body.scrollWidth - width, left)),
+          top: Math.max(0, Math.min(document.body.scrollHeight - height, top)),
+        }
+      }
+
+      const SlideBox = createVisualComponent({
+        render(props) {
+          const [pos, setPos] = useState({ left: 0 , top: 0});
+          const boxRef = useRef();
+
+          const startRef = useRef();
+
+          const { ref, style } = useSlide({
+            onStart(e) {
+              const { x, y } = boxRef.current.getBoundingClientRect();
+              startRef.current = { x: x + window.scrollX, y: y + window.scrollY };
+            },
+            onMove(e) {
+              const { dx, dy } = e.data;
+              const { x, y } = startRef.current;
+              setPos({ left: x + dx, top: y + dy });
+            }
+          });
+
+          return (
+            <Uu5Elements.Box
+              elementRef={Utils.Component.combineRefs(ref, boxRef)}
+              size="s"
+              aspectRatio="1x1"
+              borderRadius="full"
+              colorScheme="primary"
+              significance="highlighted"
+              shape="background"
+              className={Config.Css.css({ position: "absolute", ...style })}
+              style={checkBorders(pos, boxRef)}
+            />
+          );
+        },
+      });
+
+      //@@viewOff:example
+
+      function Demo() {
+        return (
+          <div>
+            <SlideBox />
+            <LoremIpsum paragraphCount={20} />
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

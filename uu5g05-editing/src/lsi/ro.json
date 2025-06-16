@@ -1,0 +1,65 @@
+{
+  "EditModal": {
+    "header": "editare ${name}",
+    "confirm": "Salvați",
+    "cancel": "Anulare",
+    "addItemButton": "Adaugare element",
+    "insertBefore": "Inserați înainte",
+    "insertAfter": "Inserați După",
+    "moveToPosition": "Mutați la Poziție",
+    "duplicate": "Componentă duplicată",
+    "delete": "Șterge",
+    "preview": "Previzualizare"
+  },
+  "ItemPositionModal": {
+    "header": "Mutați elementul în poziție",
+    "cancel": "Anulare",
+    "confirm": "Bine"
+  },
+  "ItemRemovalDialog": {
+    "header": "Îndepărtarea articolului",
+    "info": "Sunteți pe cale să faceți o acțiune potențial distructivă. Sunteți sigur că doriți să continuați?",
+    "cancel": "Anulare",
+    "confirm": "Elimina"
+  },
+  "templates": {
+    "general": "General",
+    "visual": "Vizual"
+  },
+  "FormAspectRatio": {
+    "label": "Raportul de aspect"
+  },
+  "FormBorderRadius": {
+    "label": "Raza de frontieră"
+  },
+  "FormCard": {
+    "label": "Card"
+  },
+  "FormColorScheme": {
+    "label": "Schema de culori"
+  },
+  "FormFullTextSearchPriority": {
+    "label": "Prioritate căutare text integral"
+  },
+  "FormHeight": {
+    "label": "Înălţime"
+  },
+  "FormId": {
+    "label": "ID"
+  },
+  "FormNestingLevel": {
+    "label": "Nivelul de cuibărire"
+  },
+  "FormSignificance": {
+    "label": "Semnificaţie"
+  },
+  "FormSize": {
+    "label": "mărimea"
+  },
+  "FormWidth": {
+    "label": "Lăţime"
+  },
+  "FormMargin": {
+    "label": "Marja"
+  }
+}

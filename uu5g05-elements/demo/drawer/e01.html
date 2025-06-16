@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+    </style>
+  </head>
+  <body>
+    <div id="renderHere">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Lsi, createComponent, useState, AppBackgroundProvider, createVisualComponent, useAppBackground } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const Css = {
+        header() {
+          return Config.Css.css({
+            display: "flex",
+            gap: 8,
+            padding: 8,
+            position: "sticky",
+            top: 0,
+            backgroundColor: "inherit",
+            borderBottom: "1px solid lightgrey",
+            zIndex: 100
+          });
+        },
+        content() {
+          // This is temporary fix - lates this will be solved by Drawer' "padding" prop
+          return Config.Css.css({
+            padding: 24,
+          });
+        },
+        menu(type) {
+          // This is temporary solution for correct collapsible Menu display. It will be fixed soon
+          return Config.Css.css(type === "collapsible" ? {
+            "> *": {
+              overflow: "hidden",
+              "> *": {
+                whiteSpace: "nowrap",
+              }
+            }
+          } : {});
+        },
+      };
+
+      const CONTENTS = [
+        <LoremIpsum paragraphCount={3} />,
+        <>
+          <Uu5Elements.HighlightedBox>Information Box</Uu5Elements.HighlightedBox>
+          <Uu5Elements.HighlightedBox colorScheme="warning">Warning Box</Uu5Elements.HighlightedBox>
+          <Uu5Elements.HighlightedBox colorScheme="positive">Positive Box</Uu5Elements.HighlightedBox>
+          <Uu5Elements.HighlightedBox colorScheme="negative">Negative Box</Uu5Elements.HighlightedBox>
+        </>,
+      ];
+
+      const TABS = [
+        { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+        { icon: "mdi-border-style", children: <Lsi lsi={{ en: "Highlighted Boxes" }} /> },
+        { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+        { icon: "mdi-border-style", children: <Lsi lsi={{ en: "Highlighted Boxes" }} /> },
+        { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+        { icon: "mdi-border-style", children: <Lsi lsi={{ en: "Highlighted Boxes" }} /> },
+        { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+        { icon: "mdi-border-style", children: <Lsi lsi={{ en: "Highlighted Boxes" }} /> },
+        { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      ];
+
+      const DarkModeToggle = createVisualComponent({
+        uu5Tag: "Uu5Demo.DarkModeToggle",
+
+        render(props) {
+          const [background, setBackground] = useAppBackground();
+          const darkMode = background === "dark";
+
+          return (
+            <Uu5Elements.Toggle
+              value={!darkMode}
+              onChange={() => setBackground({
+                backgroundColor: darkMode ? null : Uu5Elements.UuGds.ColorPalette.getValue(["building", "dark", "main"])
+              })}
+              iconOff="uugdsstencil-weather-moon"
+              iconOn="uugdsstencil-weather-sun"
+            />
+          )
+        }
+      });
+
+      //@@viewOn:example
+      const Page = createComponent({
+        render() {
+          const [menuOpen, setMenuOpen] = useState(false);
+          const [selectedItem, setSelectedItem] = useState(0);
+          const [drawerType, setDrawerType] = useState("elevated");
+          const [drawerPosition, setDrawerPosition] = useState("left");
+
+          return (
+            <AppBackgroundProvider>
+              <section>
+                <header className={Css.header()}>
+                  <Uu5Elements.Button
+                    icon={menuOpen ? "uugds-close" : "uugds-menu"}
+                    children={menuOpen ? "Close Drawer" : "Open Drawer"}
+                    significance="highlighted"
+                    onClick={() => setMenuOpen((prev) => !prev)}
+                  />
+                  <Uu5Forms.SwitchSelect
+                    value={drawerType}
+                    itemList={[
+                      { value: "elevated" },
+                      { value: "flat" },
+                      { value: "collapsible" }
+                    ]}
+                    onChange={(e) => setDrawerType(e.data.value)}
+                  />
+                  <Uu5Forms.SwitchSelect
+                    value={drawerPosition}
+                    itemList={[
+                      { value: "left" },
+                      { value: "right" },
+                    ]}
+                    onChange={(e) => setDrawerPosition(e.data.value)}
+                  />
+                  <DarkModeToggle />
+                </header>
+                <main>
+                  <Uu5Elements.Drawer
+                    key={drawerType}
+                    type={drawerType}
+                    open={menuOpen}
+                    position={drawerPosition}
+                    onChange={(event) => {
+                      typeof event.data.open === "boolean" && setMenuOpen(event.data.open);
+                      event.data.type && setDrawerType(event.data.type);
+                    }}
+                    content={(
+                      <div className={Css.menu(drawerType)}>
+                        <Uu5Elements.MenuList
+                          itemBorderRadius="moderate"
+                          itemList={TABS.map((tab, i) => ({
+                            ...tab,
+                            onClick: () => {
+                              setSelectedItem(i);
+                              drawerType === "elevated" && setMenuOpen(false);
+                            },
+                            focused: selectedItem === i,
+                          }))}
+                        />
+                      </div>
+                    )}
+                  >
+                    <div className={Css.content()}>
+                      {CONTENTS[selectedItem % 2]}
+                    </div>
+                  </Uu5Elements.Drawer>
+                </main>
+              </section>
+            </AppBackgroundProvider>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("renderHere"));
+    </script>
+  </body>
+</html>

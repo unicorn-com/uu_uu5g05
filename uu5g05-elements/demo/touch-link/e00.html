@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      function Section({ header, children, columns }) {
+        const styles = {};
+        if (columns) {
+          styles.display = "grid";
+          styles.justifyContent = "flex-start";
+          styles.gridTemplateColumns = `repeat(${columns}, auto)`;
+        }
+        else {
+          styles.display = "flex";
+        }
+
+        const content = (
+          <div className={Config.Css.css({ ...styles, gap: 8 })}>
+            {children}
+          </div>
+        );
+
+        return header ? (
+          <Uu5Elements.Block header={header} headerType="heading" level={5} collapsible={false}>
+            {content}
+          </Uu5Elements.Block>
+        ) : content;
+      }
+
+      const Page = createComponent({
+        render() {
+          const imageSrc = "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png";
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <Section header="default">
+                <Uu5Elements.TouchLink />
+              </Section>
+
+              <Section header="icon">
+                <Uu5Elements.TouchLink icon="uugds-favorites" />
+                <Uu5Elements.TouchLink icon="mdi-car">Car</Uu5Elements.TouchLink>
+              </Section>
+
+              <Section header="text">
+                <Uu5Elements.TouchLink text="IT" />
+                <Uu5Elements.TouchLink text="BM">Car</Uu5Elements.TouchLink>
+              </Section>
+
+              <Section header="imageSrc">
+                <Uu5Elements.TouchLink imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png">
+                  John Doe Blackintosh
+                </Uu5Elements.TouchLink>
+              </Section>
+
+              <Section header="notification">
+                <Uu5Elements.TouchLink notification={5} icon="uubml-artifact" />
+              </Section>
+
+              <Section header="state">
+                <Uu5Elements.TouchLink state="system" icon="uubml-artifact" tooltip="created" />
+                <Uu5Elements.TouchLink state="initial" icon="uubml-artifact" tooltip="initial" />
+                <Uu5Elements.TouchLink state="active" icon="uubml-artifact" tooltip="active" />
+                <Uu5Elements.TouchLink state="final" icon="uubml-artifact" tooltip="final" />
+                <Uu5Elements.TouchLink state="alternative-active" icon="uubml-artifact" tooltip="alternative" />
+                <Uu5Elements.TouchLink state="problem" icon="uubml-artifact" tooltip="problem" />
+                <Uu5Elements.TouchLink state="passive" icon="uubml-artifact" tooltip="passive" />
+                <Uu5Elements.TouchLink state="alternative-final" icon="uubml-artifact" tooltip="failed" />
+                <Uu5Elements.TouchLink state="cancelled" icon="uubml-artifact" tooltip="cancelled" />
+              </Section>
+
+              <Section header="notification & state" columns={4}>
+                <Uu5Elements.TouchLink size="s" icon="uugds-favorites" notification={5} state="active">
+                  s
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="m" icon="uugds-favorites" notification={5} state="active">
+                  m
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="l" icon="uugds-favorites" notification={5} state="active">
+                  l
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="xl" icon="uugds-favorites" notification={5} state="active">
+                  xl
+                </Uu5Elements.TouchLink>
+
+                <Uu5Elements.TouchLink size="s" imageSrc={imageSrc} borderRadius="full" notification={5} state="active">
+                  s
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="m" imageSrc={imageSrc} borderRadius="full" notification={5} state="active">
+                  m
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="l" imageSrc={imageSrc} borderRadius="full" notification={5} state="active">
+                  l
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="xl" imageSrc={imageSrc} borderRadius="full" notification={5}
+                                       state="active">
+                  xl
+                </Uu5Elements.TouchLink>
+
+                <Uu5Elements.TouchLink size="s" text="IT" notification={5} state="active">
+                  s
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="m" text="IT" notification={5} state="active">
+                  m
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="l" text="IT" notification={5} state="active">
+                  l
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="xl" text="IT" notification={5} state="active">
+                  xl
+                </Uu5Elements.TouchLink>
+              </Section>
+
+              <Section header="onClick">
+                <Uu5Elements.TouchLink
+                  icon="uugds-favorites"
+                  onClick={(e) => {
+                    console.log("onClick", e);
+                    if (e.ctrlKey || e.metaKey) {
+                      alert("ctrl/command click");
+                    } else if (e.button === 1) {
+                      alert("wheel click");
+                    } else {
+                      alert("click");
+                    }
+                  }}
+                />
+                <Uu5Elements.TouchLink
+                  icon="uugds-favorites"
+                  onClick={(e) => {
+                    console.log("onClick", e);
+                    if (e.ctrlKey || e.metaKey) {
+                      alert("ctrl/command click");
+                    } else if (e.button === 1) {
+                      alert("wheel click");
+                    } else {
+                      alert("click");
+                    }
+                  }}
+                >
+                  onClick
+                </Uu5Elements.TouchLink>
+              </Section>
+
+              <Section header="iconAnimation">
+              <Uu5Elements.TouchLink icon="uugds-favorites" iconAnimation="rotate" />
+              </Section>
+
+              <Section header="href">
+                <Uu5Elements.TouchLink
+                  icon="uugds-favorites"
+                  href="https://www.plus4u.net/"
+                />
+                <Uu5Elements.TouchLink
+                  icon="uugds-favorites"
+                  href="https://www.plus4u.net/"
+                  target="_blank"
+                >
+                  _blank
+                </Uu5Elements.TouchLink>
+              </Section>
+
+              <Section header="tooltip">
+                <Uu5Elements.TouchLink icon="uugds-favorites" tooltip="Tooltip string" />
+                <Uu5Elements.TouchLink icon="uugds-favorites" tooltip={{ cs: "titulek", en: "tooltip" }}>
+                  tooltip lsi
+                </Uu5Elements.TouchLink>
+              </Section>
+
+              <Section header="size" columns={4}>
+                <Uu5Elements.TouchLink size="s" icon="uugds-favorites" />
+                <Uu5Elements.TouchLink size="m" icon="uugds-favorites" />
+                <Uu5Elements.TouchLink size="l" icon="uugds-favorites" />
+                <Uu5Elements.TouchLink size="xl" icon="uugds-favorites" />
+
+                <Uu5Elements.TouchLink size="s" icon="uugds-favorites">
+                  s
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="m" icon="uugds-favorites">
+                  m
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="l" icon="uugds-favorites">
+                  l
+                </Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink size="xl" icon="uugds-favorites">
+                  xl
+                </Uu5Elements.TouchLink>
+              </Section>
+
+              <Section header="maxLines">
+                <Uu5Elements.Grid templateColumns="repeat(3, auto)" columnGap="40px">
+                  <div>1 line</div>
+                  <div>2 lines</div>
+                  <div>3 lines</div>
+
+                  <Uu5Elements.TouchLink maxLines={1} icon="uugds-favorites"><LoremIpsum /></Uu5Elements.TouchLink>
+                  <Uu5Elements.TouchLink icon="uugds-favorites"><LoremIpsum /></Uu5Elements.TouchLink>
+                  <Uu5Elements.TouchLink maxLines={3} icon="uugds-favorites"><LoremIpsum /></Uu5Elements.TouchLink>
+                </Uu5Elements.Grid>
+              </Section>
+
+              <Section header="borderRadius" columns={5}>
+                <Uu5Elements.TouchLink borderRadius="none" imageSrc={imageSrc}>none</Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink borderRadius="elementary" imageSrc={imageSrc}>elementary</Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink borderRadius="moderate" imageSrc={imageSrc}>moderate</Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink borderRadius="expressive" imageSrc={imageSrc}>expressive</Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink borderRadius="full" imageSrc={imageSrc}>full</Uu5Elements.TouchLink>
+
+                <Uu5Elements.TouchLink borderRadius="none" icon="uugds-favorites">none</Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink borderRadius="elementary" icon="uugds-favorites">elementary</Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink borderRadius="moderate" icon="uugds-favorites">moderate</Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink borderRadius="expressive" icon="uugds-favorites">expressive</Uu5Elements.TouchLink>
+                <Uu5Elements.TouchLink borderRadius="full" icon="uugds-favorites">full</Uu5Elements.TouchLink>
+              </Section>
+
+              <Section header="cssBackground & cssColor">
+                <Uu5Elements.TouchLink cssBackground="#2196F3" cssColor="#fff" icon="uugds-favorites" />
+                <Uu5Elements.TouchLink
+                  cssBackground="linear-gradient(45deg, #0839A6 0%, #009FE3 100%)"
+                  cssColor="#ffff00"
+                  icon="uugds-favorites"
+                />
+                <Uu5Elements.TouchLink
+                  cssBackground="linear-gradient(45deg, #0839A6 0%, #009FE3 100%)"
+                  imageSrc="https://cdn.plus4u.net/uu-gds-svgg01/1.0.0/assets/illustrations/svg/message.svg"
+                />
+              </Section>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

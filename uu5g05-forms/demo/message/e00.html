@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Lsi } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+
+      Utils.Language.setLanguage("en");
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>children as string</h4>
+            <Uu5Forms.Message>Some text...</Uu5Forms.Message>
+
+            <h4>children as object</h4>
+            <Uu5Forms.Message>{{ en: "Some text...", cs: "Nějaký text..." }}</Uu5Forms.Message>
+
+            <h4>children as node</h4>
+            <Uu5Forms.Message>
+              <Lsi lsi={{ en: "Some text...", cs: "Nějaký text..." }} />
+            </Uu5Forms.Message>
+
+            <h4>size</h4>
+            <Uu5Forms.Message size="xs">Some text in size XS</Uu5Forms.Message>
+            <br />
+            <Uu5Forms.Message size="s">Some text in size S</Uu5Forms.Message>
+            <br />
+            <Uu5Forms.Message size="m">Some text in size M</Uu5Forms.Message>
+
+            <h4>feedback</h4>
+            <Uu5Forms.Message feedback="success">Some text in feedback SUCCESS</Uu5Forms.Message>
+            <br />
+            <Uu5Forms.Message feedback="warning">Some text in feedback WARNING</Uu5Forms.Message>
+            <br />
+            <Uu5Forms.Message feedback="error">Some text in feedback ERROR</Uu5Forms.Message>
+
+            <h4>params (different writing options)</h4>
+            <Uu5Forms.Message params={["John Black", 18]}>
+              {{ en: "The user %s is %d years old.", cs: "Uživateli %s je %d let." }}
+            </Uu5Forms.Message>
+            <br />
+            <Uu5Forms.Message params={["John Black", 18]}>
+              {{ en: "The user {0} is {1} years old.", cs: "Uživateli {0} je {1} let." }}
+            </Uu5Forms.Message>
+            <br />
+            <Uu5Forms.Message params={{ name: "John Black", age: 18 }}>
+              {{ en: "The user ${name} is ${age} years old.", cs: "Uživateli ${name} je ${age} let." }}
+            </Uu5Forms.Message>
+            <br />
+            <Uu5Forms.Message
+              params={[
+                <Uu5Elements.Link href="https://unicorn.com">
+                  <Lsi lsi={{ cs: "stránka", en: "web" }} />
+                </Uu5Elements.Link>,
+              ]}
+            >
+              {{ en: "This is the %s to Unicorn.", cs: "Toto je %s na Unicorn." }}
+            </Uu5Forms.Message>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

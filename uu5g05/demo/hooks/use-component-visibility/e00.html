@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { useRef, Utils, useComponentVisibility, useState, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      function Message(props) {
+        const { visible, ref } = useComponentVisibility("20%");
+        //@@viewOff:example
+        const [visibleArray, setVisibleArray] = useState([]);
+        const [timeArray, setTimeArray] = useState([]);
+
+        let bgColor = visible ? "#E8F5E9" : " #FFF3E0 ";
+        let messageBox = Config.Css.css`position: fixed; padding: 4px 0px 4px 0px; top: 0;
+                    left: 0; background-color: white;`;
+
+        useEffect(() => {
+          console.log(visible);
+          setVisibleArray([...visibleArray, visible]);
+          setTimeArray([...timeArray, new Date().toLocaleString().slice(11, 20)]);
+        }, [visible]);
+        let visibleColor = Config.Css.css`color: green; padding: 4px 0px 4px 0px;`;
+        let notVisibleColor = Config.Css.css`color: red; padding: 4px 0px 4px 0px;`;
+        let message = visibleArray.map((visible, index) => {
+          if (index + 1 === visibleArray.length) {
+            return visible ? (
+              <div key={index} className={visibleColor}>
+                Since {timeArray[index]} element is in the viewport and window is visible.
+              </div>
+            ) : (
+              <div key={index} className={notVisibleColor}>
+                Since {timeArray[index]} element is not in the viewport or window is not visible.
+              </div>
+            );
+          }
+          return visible ? (
+            <div key={index} className={visibleColor}>
+              Since {timeArray[index]} element was in the viewport and window was visible.
+            </div>
+          ) : (
+            <div key={index} className={notVisibleColor}>
+              Since {timeArray[index]} element was not in the viewport or window was not visible.
+            </div>
+          );
+        });
+        //@@viewOn:example
+        return (
+          <div>
+            <h4>Scroll page</h4>
+            <LoremIpsum paragraphCount={20} />
+
+            <Uu5Elements.Box className={Config.Css.css`margin: 16px 0px; padding: 8px;`}>
+              <div ref={ref}>
+                <h4>
+                  This component uses useComponentVisibility hook. It displays information about visibility of the page
+                  and whether the component is on the viewport. The value from the hook is written to the console. The
+                  value is true if the element is on the viewport and if the tab is displayed in the browser (no other
+                  tab is switched to nor is the whole window minimized), otherwise it is false.
+                </h4>
+                {message}
+              </div>
+            </Uu5Elements.Box>
+
+            <LoremIpsum paragraphCount={20} />
+          </div>
+        );
+      }
+      //@@viewOff:example
+
+      function Demo() {
+        return <Message />;
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

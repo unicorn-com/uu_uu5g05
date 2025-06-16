@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { useState, useEffect, Utils } from "uu5g05";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      function Counter(props) {
+        const [count, setCount] = useState(0);
+
+        // every time when count was changed (componentDidUpdate)
+        useEffect(() => {
+          document.title = `${count}x clicked`;
+
+          // for clean up after this effect
+          // return () => console.log(count);
+        }, [count]);
+
+        // just one time on did mount (componentDidMount)
+        useEffect(() => {
+          document.title = `Counter mounted`;
+          const interval = setInterval(increase, 1000);
+
+          // only if component will be unmounted (componentWillUnmount)
+          return () => {
+            clearInterval(interval);
+          };
+        }, []);
+
+        function increase() {
+          setCount((prevCount) => (prevCount < 1000 ? prevCount + 1 : 0));
+        }
+
+        return (
+          <div>
+            <span>{count}</span>
+          </div>
+        );
+      }
+      //@@viewOff:example
+
+      function Demo() {
+        return <Counter />;
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

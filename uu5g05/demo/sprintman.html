@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SprintMan</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5tilesg02/2.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        useState,
+        useRef,
+        useDataList,
+        useSession,
+        Content,
+        Lsi,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import { Utils as Plus4U5Utils, SpaProvider } from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import Uu5Tiles, { useController } from "uu5tilesg02";
+      import Uu5TilesElements from "uu5tilesg02-elements";
+      import Uu5TilesControls from "uu5tilesg02-controls";
+
+      const SPRINT_MAN_MAP = {
+        uu5: {
+          colorScheme: "blue",
+          baseUri: "https://uuapp.plus4u.net/uu-sprintman-maing01/58b7f7df5eb4470e9c2359f4df91aae3",
+          tag: "phase10"
+        },
+        uuPlus4U5: {
+          colorScheme: "red",
+          baseUri: "https://uuapp.plus4u.net/uu-sprintman-maing01/a4f12eae671146d08e60579cb0d6c1bb",
+          tag: "phase10"
+        },
+        uuAppLibraryRegistry: {
+          colorScheme: "grey",
+          baseUri: "https://uuapp.plus4u.net/uu-sprintman-maing01/c2be3b53fb5349ef9ccbd2f036ac87f1",
+          tag: "phase08"
+        },
+        uuPlus4UGo: {
+          colorScheme: "green",
+          baseUri: "https://uuapp.plus4u.net/uu-sprintman-maing01/5c9b8e5354624a90ba9df3f35d6292d1",
+          tag: "phase08"
+        }
+      };
+
+      const SOLVERS = ["Ondra", "Jakub", "Milan", "David", "Vard"];
+
+      const ICONS = {
+        initial: "uubml-state-s00-initial",
+        inProgress: "uubml-state-s10-active",
+        inProgressWarning: "uubml-state-s10-warning",
+        inProgressProblem: "uubml-state-s10-problem",
+        toAssessment: "uubml-state-s06-active",
+      };
+
+      const PRIORITY = {
+        "5": { name: "Must have!", colorScheme: "highest" },
+        "4": { name: "Should have", colorScheme: "high" },
+        "3": { name: "Could have", colorScheme: "normal" },
+        "2": { name: "Won't have", colorScheme: "low" },
+        "1": { name: "Not set", colorScheme: "grey" },
+      };
+
+      function Authenticated({ children }) {
+        const { state } = useSession();
+        return state === "authenticated" ? children : null;
+      }
+
+      const [UuSprintManConfigContext, useUuSprintManConfig] = Utils.Context.create();
+
+      function Info({ children, ...props }) {
+        const [popoverProps, setPopoverProps] = useState(null);
+        const ref = useRef();
+
+        return (
+          <>
+            <Uu5Elements.Badge
+              icon="uugds-info-circle-solid"
+              colorScheme="blue"
+              size="l"
+              {...props}
+              borderRadius="full"
+              elementRef={ref}
+              onClick={() => setPopoverProps({ element: ref.current })}
+            />
+            {popoverProps && (
+              <Uu5Elements.Popover
+                {...popoverProps}
+                className={Config.Css.css({ padding: 8 })}
+                onClose={() => setPopoverProps(null)}
+              >
+                <div className={Config.Css.css({ maxWidth: "90vw" })}>
+                  <Content>{children}</Content>
+                </div>
+              </Uu5Elements.Popover>
+            )}
+          </>
+        )
+      }
+
+      function AddTag({ tagMap, onAdd, tagList }) {
+        const [open, setOpen] = useState(false);
+        const [value, setValue] = useState();
+
+        const pureTagList = tagList.map(({ code }) => code);
+        pureTagList.push("bug", "wish", "feature");
+
+        return open ? (
+          <Uu5Forms.TextSelect.Input
+            size="xxs"
+            value={value}
+            onChange={(e) => {
+              setValue(e.data.value);
+              onAdd(e);
+            }}
+            itemList={Object.entries(tagMap)
+              .filter(([code, { isDeprecated }]) => !isDeprecated && !pureTagList.includes(code))
+              .map(([code, { name, colorSchema }]) => ({
+                value: code,
+                children: <Lsi lsi={name} />,
+                colorScheme: COLOR_SCHEMA_MAPPING[colorSchema],
+              }))}
+          />
+        ) : (
+          <Uu5Elements.Badge size="l" icon="uugds-plus" colorScheme="steel" significance="distinct"
+                             onClick={() => setOpen(true)} />
+        );
+      }
+
+      function TypeButton({ bug, wish, onChange, ...restProps }) {
+        return (
+          <Uu5Elements.Dropdown
+            {...restProps}
+            size="xxs"
+            icon={bug ? "uugds-badge-flash" : "uugds-alert-circle"}
+            iconOpen={null}
+            iconClosed={null}
+            colorScheme={bug ? "red" : "primary"}
+            tooltip={bug || wish}
+            itemList={(bug ? ["feature", "wish"] : ["bug"]).map((v) => ({
+              children: Utils.String.capitalize(v),
+              onClick: () => onChange({ value: v }),
+            }))}
+          />
+        )
+      }
+
+      const ListItem = createVisualComponent({
+        render({ data, handlerMap }) {
+          let bug, wish;
+          data.tagList.forEach(({ code }) => {
+            switch (code) {
+              case "bug":
+                bug = code;
+                break;
+              case "wish":
+              case "feature":
+                wish = code;
+                break;
+            }
+          });
+
+          return (
+            <>
+              <div className={Config.Css.css({ display: "flex", flexDirection: "column", gap: 4, width: "100%" })}>
+                <div>
+                  {bug || wish ? (
+                    <TypeButton
+                      bug={bug}
+                      wish={wish}
+                      onChange={({ value }) => {
+                        handlerMap.update({
+                          tagList: [
+                            ...data.tagList.map(({ code }) => code).filter(v => !["bug", "feature", "wish"].includes(v)),
+                            value
+                          ]
+                        })
+                      }}
+                      className={Config.Css.css({ marginRight: 8 })}
+                    />
+                  ) : null}
+                  {ICONS[data.state] ? (
+                    <Plus4U5Elements.StateBadge
+                      icon={ICONS[data.state]}
+                      tooltip={data.state}
+                      size="l"
+                    />
+                  ) : <Uu5Elements.Badge size="l">{data.state}</Uu5Elements.Badge>}
+                  <Uu5Elements.Link href={data.href} className={Config.Css.css({ marginLeft: 4 })}>
+                    {data.name}
+                  </Uu5Elements.Link>
+                  <Info className={Config.Css.css({ marginLeft: 8 })}>{data.desc}</Info>
+                </div>
+                <div className={Config.Css.css({ display: "flex", gap: 4 })}>
+                  {data.tagList.map(({ code, name, colorSchema: colorScheme }) =>
+                    !["bug", "wish", "feature", data.phaseTag].includes(code) ? (
+                      <Uu5Elements.Tag
+                        key={code}
+                        size="xs"
+                        colorScheme={COLOR_SCHEMA_MAPPING[colorScheme] ?? colorScheme}
+                        significance="highlighted"
+                        iconRight="uugds-close"
+                        onIconRightClick={() => handlerMap.update({ tagList: data.tagList.map(({ code }) => code).filter(v => v !== code) })}
+                      >
+                        <Lsi lsi={name} />
+                      </Uu5Elements.Tag>
+                    ) : null)}
+                  <AddTag key={data.tagList.length} tagMap={data.tagMap} tagList={data.tagList} onAdd={(e) => {
+                    handlerMap.update({ tagList: [...data.tagList.map(({ code }) => code), e.data.value] })
+                  }} />
+                </div>
+              </div>
+            </>
+          );
+        }
+      });
+
+      const COLOR_SCHEMA_MAPPING = {
+        info: "important",
+        success: "positive",
+        danger: "negative"
+      };
+
+      function PrioritySelect({ priority, handlerMap }) {
+        return handlerMap ? (
+          <Uu5Elements.Dropdown
+            label={PRIORITY[priority].name}
+            colorScheme={PRIORITY[priority]?.colorScheme}
+            width={128}
+            itemList={Object.keys(PRIORITY).sort((a, b) => a > b ? -1 : a < b ? 1 : 0).map((v) => ({
+              children: PRIORITY[v].name,
+              colorScheme: PRIORITY[v].colorScheme,
+              significance: "distinct",
+              onClick: () => handlerMap.update({ priority: v }),
+            }))}
+          />
+        ) : (
+          <Uu5Elements.Button disabled colorScheme={PRIORITY[priority]?.colorScheme} width={128}>
+            {PRIORITY[priority].name}
+          </Uu5Elements.Button>
+        );
+      }
+
+      const BacklogRequestList = createComponent({
+        render(props) {
+          const { onChange } = props;
+          const { selectedData } = useController();
+
+          const sprintManConfig = useUuSprintManConfig();
+
+          return (
+            <Uu5Elements.Block
+              header="uuSprintMan"
+              actionList={[
+                { component: <Uu5TilesControls.SearchButton /> },
+                { component: <Uu5TilesControls.FilterButton type="bar" /> }
+              ]}
+            >
+              <Uu5Forms.Form
+                gridLayout="prefix prefix prefix prefix submit"
+                messagePosition="tooltip"
+                className={Config.Css.css({ marginBottom: 16 })}
+                onSubmit={async (e) => {
+                  const prefix = e.data.value.prefix;
+
+                  if (prefix) {
+                    const promises = selectedData
+                      .map(({ data: { name, baseUri, product, revision }, handlerMap }, i) => {
+                        const realName = name.replace(/^\[[^\]]+\]\s*/, "");
+                        const nameStart = Utils.String.format(prefix, ("" + ((i + 1) * 10)).padStart(3, "0"));
+                        return handlerMap.update({ name: [nameStart, realName].join(" ") });
+                      });
+
+                    await Promise.all(promises);
+                  }
+                }}
+              >
+                <Uu5Forms.FormText name="prefix" required={selectedData.length > 0} placeholder="[B-%s]" />
+                <Uu5Forms.SubmitButton disabled={selectedData.length === 0}>Rename</Uu5Forms.SubmitButton>
+              </Uu5Forms.Form>
+              <Uu5TilesControls.FilterBar initialExpanded />
+              <Uu5TilesControls.FilterManagerModal />
+              <Uu5TilesElements.Table
+                columnList={[
+                  {
+                    type: "drag",
+                    cellComponent: ({ data, ...params }) => {
+                      const { product } = data.data;
+                      const colorScheme = sprintManConfig[product].colorScheme;
+                      return (
+                        <Uu5TilesElements.Table.Cell
+                          {...params}
+                          colorScheme={colorScheme}
+                          significance="distinct"
+                          disabled={data.state === "pending"}
+                          verticalAlignment="center"
+                        />
+                      );
+                    }
+                  },
+                  {
+                    type: "select",
+                    cellComponent: ({ data, ...params }) => {
+                      const { product } = data.data;
+                      const colorScheme = sprintManConfig[product].colorScheme;
+                      return (
+                        <Uu5TilesElements.Table.Cell
+                          {...params}
+                          colorScheme={colorScheme}
+                          significance="distinct"
+                          disabled={data.state === "pending"}
+                          verticalAlignment="center"
+                        />
+                      );
+                    }
+                  },
+                  {
+                    value: "product",
+                    header: "Product",
+                    maxWidth: 100,
+                    minWidth: 100,
+                    cellComponent: ({ data, ...params }) => {
+                      const { product } = data.data;
+                      const colorScheme = sprintManConfig[product].colorScheme;
+                      return (
+                        <Uu5TilesElements.Table.Cell
+                          {...params}
+                          colorScheme={colorScheme}
+                          significance="distinct"
+                          disabled={data.state === "pending"}
+                          verticalAlignment="center"
+                        >
+                          <Uu5Elements.Text colorScheme={colorScheme}>
+                            {product}
+                          </Uu5Elements.Text>
+                        </Uu5TilesElements.Table.Cell>
+                      );
+                    }
+                  },
+                  // {
+                  //   value: "topic",
+                  //   header: "Library",
+                  //   maxWidth: 100,
+                  //   minWidth: 100,
+                  //   cellComponent: ({ data, ...params }) => {
+                  //     const { product, topic } = data.data;
+                  //     const colorScheme = sprintManConfig[product].colorScheme;
+                  //     return (
+                  //       <Uu5TilesElements.Table.Cell
+                  //         {...params}
+                  //         colorScheme={colorScheme}
+                  //         significance="distinct"
+                  //         disabled={data.state === "pending"}
+                  //       >
+                  //         {topic}
+                  //       </Uu5TilesElements.Table.Cell>
+                  //     );
+                  //   }
+                  // },
+                  {
+                    value: "priority",
+                    header: "Priority",
+                    maxWidth: 160,
+                    minWidth: 160,
+                    cellComponent: ({ data, ...params }) => {
+                      const { product, priority } = data.data;
+                      const colorScheme = sprintManConfig[product].colorScheme;
+                      return (
+                        <Uu5TilesElements.Table.Cell
+                          {...params}
+                          colorScheme={colorScheme}
+                          significance="distinct"
+                          disabled={data.state === "pending"}
+                          verticalAlignment="center"
+                        >
+                          <PrioritySelect priority={priority} handlerMap={data.handlerMap} />
+                        </Uu5TilesElements.Table.Cell>
+                      );
+                    }
+                  },
+                  {
+                    value: "data",
+                    header: "Backlog Request",
+                    cellComponent: ({ data, ...params }) => {
+                      return (
+                        <Uu5TilesElements.Table.Cell
+                          {...params}
+                          colorScheme={sprintManConfig[data.data.product].colorScheme}
+                          significance="distinct"
+                          disabled={data.state === "pending"}
+                          verticalAlignment="center"
+                        >
+                          <ListItem {...data} />
+                        </Uu5TilesElements.Table.Cell>
+                      );
+                    }
+                  },
+                ]}
+                draggable
+                onDrop={(e) => onChange(e.data.data)}
+              />
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      async function loadPhase10(product, sprintManBaseUri, phaseTag) {
+        const { data } = await Plus4U5Utils.AppClient.get(sprintManBaseUri + "/backlogRequest/list", {
+          isActiveOnly: true,
+          filterMap: { tagList: [phaseTag] },
+          sorterList: [{ key: "name", descending: false }],
+        });
+
+        const { data: { tagMap } } = await Plus4U5Utils.AppClient.get(sprintManBaseUri + "/tags/get", {
+          objectType: "uu-sprintman-maing01/backlogRequest"
+        });
+
+        data.itemList = data.itemList.map((it) => updateItemData(it, sprintManBaseUri, product, phaseTag, tagMap));
+
+        return data;
+      }
+
+      function updateItemData(data, baseUri, product, phaseTag, tagMap) {
+        return {
+          ...data,
+          href: baseUri + "/backlogRequest?id=" + data.id,
+          baseUri,
+          product,
+          phaseTag,
+          revision: data.sys?.rev,
+          tagMap,
+          tagList: data.tagList.map(code => ({ code, ...tagMap[code] })).sort((a, b) => a.order - b.order),
+        }
+      }
+
+      const FILTER_LIST = [
+        {
+          key: "type",
+          label: "Type",
+          filter: (item, value) => {
+            return item.data.tagList.find(({ code }) => code === value);
+          },
+          inputType: "switch-select",
+          inputProps: { itemList: [{ value: "bug", children: "Bug" }, { value: "wish", children: "Wish" }] },
+        },
+        {
+          key: "solver",
+          label: "Solver",
+          filter: (item, value) => {
+            return item.data.tagList.find(({ code }) => code === value.toLowerCase());
+          },
+          inputType: "select",
+          inputProps: { itemList: SOLVERS.map((solver) => ({ value: solver })) },
+        },
+      ];
+
+      const UuSprintManLoader = createComponent({
+        render() {
+          const sprintManConfig = useUuSprintManConfig();
+
+          const [filterList, setFilterList] = useState([]);
+
+          const dataList = useDataList({
+            handlerMap: {
+              load: async () => {
+                const dataList = await Promise.all(
+                  Object.entries(sprintManConfig).map(([name, { baseUri, tag }]) => loadPhase10(name, baseUri, tag))
+                );
+
+                const itemList = [];
+                dataList.forEach(({ itemList: il }) => itemList.push(...il));
+                itemList.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
+
+                return {
+                  itemList,
+                  pageInfo: {
+                    total: itemList.length,
+                    pageSize: 1000,
+                    pageIndex: 0,
+                  }
+                };
+              },
+            },
+            itemHandlerMap: {
+              update: async (dtoIn) => {
+                const item = data.find(({ data: { id } }) => id === dtoIn.id);
+                if (item) {
+                  const { baseUri, product, revision, phaseTag, tagMap } = item.data;
+                  const dtoOut = await Plus4U5Utils.AppClient.post(baseUri + "/backlogRequest/update", {
+                    revision,
+                    ...dtoIn,
+                  });
+                  return updateItemData(dtoOut.data, baseUri, product, phaseTag, tagMap);
+                } else {
+                  throw new Error("Item was not found", dtoIn);
+                }
+              },
+            }
+          });
+
+          const { data, handlerMap } = dataList;
+
+          // console.log(data);
+
+          return data ? (
+            <Uu5Tiles.ControllerProvider
+              data={data}
+              selectable="multiple"
+              filterDefinitionList={FILTER_LIST}
+              filterList={filterList}
+              onFilterChange={(e) => setFilterList(e.data.filterList)}
+            >
+              <BacklogRequestList onChange={(data) => handlerMap.setData(data)} />
+            </Uu5Tiles.ControllerProvider>
+          ) : <Uu5Elements.Pending size="max" />;
+        },
+      });
+
+      function UuSprintManManager({ config }) {
+        return (
+          <Authenticated>
+            <UuSprintManConfigContext.Provider value={config}>
+              <div className={Config.Css.css({ padding: 16 })}>
+                <UuSprintManLoader />
+              </div>
+            </UuSprintManConfigContext.Provider>
+          </Authenticated>
+        )
+      }
+
+      function Page() {
+        return (
+          <SpaProvider>
+            <UuSprintManManager config={SPRINT_MAN_MAP} />
+          </SpaProvider>
+        )
+      }
+
+      /*@@viewOff:example*/
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

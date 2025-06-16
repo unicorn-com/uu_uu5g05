@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/0.x/assets/example-config.js" crossorigin></script>
+    <script>
+      Uu5Loader.config({
+        imports: {
+          "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+
+          uu5g04: "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04.min.js",
+          "uu5g04-bricks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-bricks.min.js",
+          "uu5g04-forms": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-forms.min.js",
+
+          uu_plus4u5g01: "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/uu_plus4u5g01.min.js",
+          "uu_plus4u5g01-bricks": "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/uu_plus4u5g01-bricks.min.js",
+          "uu_plus4u5g01-app": "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/uu_plus4u5g01-app.min.js",
+        },
+      });
+    </script>
+  </head>
+  <body>
+    <div id="renderHere"></div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState, useEffect } from "uu5g05";
+      // import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import UU5 from "uu5g04";
+      import "uu5g04-bricks";
+      import Plus4U5 from "uu_plus4u5g01";
+      import "uu_plus4u5g01-app";
+
+      const Page = createComponent({
+        render() {
+          const [shown, setShown] = useState(false);
+          const [time, setTime] = useState(() => +Date.now());
+
+          // useEffect(() => {
+          //   let timeout = setTimeout(() => setTime(+Date.now()), 1000);
+          //   return () => clearTimeout(timeout);
+          // });
+
+          return (
+            <Plus4U5.App.Page>
+              <div className={Config.Css.css`padding: 32px;`}>
+                <button onClick={() => setShown((v) => !v)}>Open</button>
+                {time}
+                <UU5.Bricks.Modal header="Test" shown={shown} onClose={() => setShown(false)} location="portal">
+                  Obsah
+                </UU5.Bricks.Modal>
+              </div>
+            </Plus4U5.App.Page>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("renderHere"));
+    </script>
+  </body>
+</html>

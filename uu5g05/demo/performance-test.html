@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PropTypes</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      async function performance(fn, times = 10000) {
+        const start = Date.now();
+
+        for (let i = 0; i < times; i++) {
+          await fn();
+        }
+
+        const end = Date.now();
+
+        return end - start;
+      }
+
+      function fn1(hex = "#009688") {
+        let bigint = parseInt(hex.substring(1), 16);
+        let r = (bigint >> 16) & 255;
+        let g = (bigint >> 8) & 255;
+        let b = bigint & 255;
+        return [r, g, b];
+      }
+
+      function fn2(hex = "#009688") {
+        let result = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i.exec(hex);
+
+        let r = parseInt(result[1], 16);
+        let g = parseInt(result[2], 16);
+        let b = parseInt(result[3], 16);
+        let a = parseInt(result[4] || "ff", 16);
+
+        return [r, g, b, a / 255];
+      }
+
+      function Page() {
+        useEffect(() => {
+          (async function () {
+            const diff1 = await performance(fn1);
+            console.log(`Fn1: ${diff1} ms`);
+            const diff2 = await performance(fn2);
+            console.log(`Fn2: ${diff2} ms`);
+          })();
+        }, []);
+
+        return (
+          <div>
+
+          </div>
+        )
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

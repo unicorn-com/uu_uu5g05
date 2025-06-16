@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { wait } from "uu5g05-dev";
+      import { UuDate, UuDateTime } from "uu_i18ng01";
+      import { ComponentOverview } from "uu5g05-elements/assets/demo/helpers.jsx";
+      import { withControlledFormInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const DOC_BASE_URL =
+        "https://uuapp.plus4u.net/uu-bookkit-maing01/05ecbf4e8bca405290b1a6d4cee8813a/book/page?code=Uu5Forms";
+
+      const BLACK_LIST = [
+        "Wizard",
+        "Form",
+        "FormCheckbox",
+        "FormCheckboxes",
+        "FormDate",
+        "FormDateRange",
+        "FormDateTime",
+        "FormEmail",
+        "FormFile",
+        "FormLink",
+        "FormLsi",
+        "FormMonth",
+        "FormMonthRange",
+        "FormNumber",
+        "FormPassword",
+        "FormQuarter",
+        "FormQuarterRange",
+        "FormRadios",
+        "FormSelect",
+        "FormSlider",
+        "FormSwitchSelect",
+        "FormText",
+        "FormTextArea",
+        "FormTextSelect",
+        "FormTextSelectAsync",
+        "FormTime",
+        "FormWeek",
+        "FormWeekRange",
+        "FormYear",
+        "FormYearRange",
+        "FormIcon",
+        "FormColor",
+      ];
+
+      const now = new Date();
+      const nowDate = new UuDate(now);
+      const nowDateIso = nowDate.toIsoString();
+
+      const COMPONENTS = {
+        Checkbox: {
+          type: "spot",
+          props: {
+            label: "Lorem ipsum dolor sit amet",
+          },
+        },
+        Checkboxes: {
+          type: "area",
+          props: {
+            value: ["dog"],
+            itemList: [
+              { children: "Dog", value: "dog" },
+              { children: "Cat", value: "cat" },
+              { children: "Rabbit", value: "rabbit" },
+            ],
+          },
+        },
+        Date: {
+          type: "spot",
+          props: {
+            value: nowDateIso,
+          },
+        },
+        DateRange: {
+          type: "spot",
+          props: {
+            value: [nowDateIso, new UuDate(nowDateIso).shiftDay(6).toIsoString()],
+          },
+        },
+        DateTime: {
+          type: "spot",
+          props: {
+            value: new UuDateTime(now).toIsoString(),
+          },
+        },
+        Email: {
+          type: "spot",
+          props: {
+            value: "uu5@unicorn.com",
+          },
+        },
+        File: {
+          type: "spot",
+        },
+        Label: {
+          type: "spot",
+          props: {
+            children: "Some label...",
+          },
+        },
+        Link: {
+          type: "spot",
+          props: {
+            value: "https://unicorn.com",
+          },
+        },
+        Lsi: {
+          type: "spot",
+          props: {
+            languageList: ["en", "cs"],
+            value: { en: "Hello", cs: "Ahoj" },
+          },
+        },
+        Message: {
+          type: "spot",
+          props: {
+            children: "Some message...",
+          },
+        },
+        Month: {
+          type: "spot",
+          props: {
+            value: nowDateIso.replace(/-\d+$/, "")
+          },
+        },
+        MonthRange: {
+          type: "spot",
+          props: {
+            value: [nowDateIso.replace(/-\d+$/, ""), new UuDate(nowDateIso).shiftMonth(1).toIsoString().replace(/-\d+$/, "")],
+          },
+        },
+        Number: {
+          type: "spot",
+          props: {
+            value: 1234.567,
+          },
+        },
+        Password: {
+          type: "spot",
+          props: {
+            value: "Password",
+          },
+        },
+        Quarter: {
+          type: "spot",
+          props: {
+            value: [nowDate.getYear(), Math.ceil(nowDate.getMonth() / 3)].join("-Q")
+          },
+        },
+        QuarterRange: {
+          type: "spot",
+          props: {
+            value: [
+              [nowDate.getYear(), Math.ceil(nowDate.getMonth() / 3)].join("-Q"),
+              [new UuDate(nowDateIso).shiftMonth(3).getYear(), Math.ceil(new UuDate(nowDateIso).shiftMonth(3).getMonth() / 3)].join("-Q")
+            ],
+          },
+        },
+        Radios: {
+          type: "area",
+          props: {
+            value: "yes",
+            itemList: [
+              { children: "Yes", value: "yes" },
+              { children: "Maybe", value: "maybe" },
+              { children: "No", value: "no" },
+            ],
+          },
+        },
+        Select: {
+          type: "spot",
+          props: {
+            value: "initial",
+            itemList: [
+              { value: "created", children: "Created" },
+              { value: "initial", children: "Initial" },
+              { value: "active", children: "Active" },
+            ],
+          },
+        },
+        Slider: {
+          type: "spot",
+          props: {
+            value: "m",
+            itemList: [
+              { value: "s", children: "S" },
+              { value: "m", children: "M" },
+              { value: "l", children: "L" },
+            ],
+          },
+        },
+        SwitchSelect: {
+          type: "spot",
+          props: {
+            value: "initial",
+            itemList: [
+              { value: "created", children: "Created" },
+              { value: "initial", children: "Initial" },
+              { value: "active", children: "Active" },
+            ],
+          },
+        },
+        Text: {
+          type: "spot",
+          props: {
+            value: "Some text"
+          }
+        },
+        TextArea: {
+          type: "area",
+          props: {
+            value: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Ex sapien vitae pellentesque sem placerat in id."
+          },
+        },
+        TextSelect: {
+          type: "spot",
+          props: {
+            value: "initial",
+            itemList: [{ value: "created" }, { value: "initial" }, { value: "active" }],
+          },
+        },
+        TextSelectAsync: {
+          type: "spot",
+          props: {
+            onSearch: async (e) => {
+              await wait(1000);
+              return [
+                { value: "one", text: "Async", children: "Async" },
+                { value: "two", text: "loaded", children: "loaded" },
+                { value: "three", text: "items", children: "items" },
+              ];
+            },
+          },
+        },
+        Time: {
+          type: "spot",
+          props: {
+            value: new UuDateTime(now).format(undefined, { format: "HH:mm" }),
+          },
+        },
+        Week: {
+          type: "spot",
+          props: {
+            value: [nowDate.getYear(), ("" + nowDate.getWeek()).padStart(2, "0")].join("-W"),
+          },
+        },
+        WeekRange: {
+          type: "spot",
+          props: {
+            value: [
+              [nowDate.getYear(), nowDate.getWeek()].join("-W"),
+              [new UuDate(nowDateIso).shiftDay(7).getYear(), new UuDate(nowDateIso).shiftDay(7).getWeek()].join("-W")
+            ],
+          },
+        },
+        Year: {
+          type: "spot",
+          props: {
+            value: nowDate.getYear(),
+          },
+        },
+        YearRange: {
+          type: "spot",
+          props: {
+            value: [nowDate.getYear(), nowDate.getYear() + 1],
+          },
+        },
+        CancelButton: {
+          type: "spot",
+        },
+        ResetButton: {
+          type: "spot",
+        },
+        SubmitButton: {
+          type: "spot",
+        },
+        Icon: {
+          type: "spot",
+          props: {
+            value: "uugds-check"
+          },
+        },
+        Color: {
+          type: "spot",
+          props: {
+            value: "#2196F3"
+          },
+        },
+      };
+
+      for (let name in COMPONENTS) {
+        COMPONENTS[name].component ??= withControlledFormInput(Uu5Forms[name]);
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <ComponentOverview
+              library={Uu5Forms}
+              componentMap={COMPONENTS}
+              blackList={BLACK_LIST}
+              docBaseUrl={DOC_BASE_URL}
+            />
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

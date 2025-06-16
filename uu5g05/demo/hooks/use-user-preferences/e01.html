@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:imports
+      import { useUserPreferences, UserPreferencesProvider } from "uu5g05";
+      //@@viewOff:imports
+
+      const handlerMapLabelMap = {
+        load: "async function load()",
+        set: "async function set(dataToPersist)",
+        setData: "function setData(dataToRender), sync, no persist",
+      };
+      function stringify(dataObject) {
+        const { handlerMap } = dataObject;
+        const handlerMapString = Object.keys(handlerMap).reduce(
+          (r, k) => ((r[k] = handlerMapLabelMap[k] ?? handlerMap[k]), r),
+          {},
+        );
+        return JSON.stringify({ ...dataObject, handlerMap: handlerMapString }, null, 2);
+      }
+
+      //@@viewOn:example
+      const PreferencesCustomDataInfo = createVisualComponent({
+        uu5Tag: Config.TAG + "PreferencesCustomDataInfo",
+        render(props) {
+          const key = PreferencesCustomDataInfo.uu5Tag;
+          const dataObject = useUserPreferences(key);
+          console.log(dataObject);
+
+          return (
+            <Uu5Elements.Block
+              {...props}
+              header={`Custom user preferences for '${key}'`}
+              headerType="title"
+              card="full"
+              actionList={[
+                {
+                  icon: "uugds-reload",
+                  children: "Reload",
+                  disabled: !dataObject.handlerMap.load,
+                  onClick: () => dataObject.handlerMap.load(),
+                },
+              ]}
+            >
+              <Uu5Elements.Grid templateColumns="1fr 2fr" alignItems="start">
+                <Uu5Forms.SwitchSelect
+                  label="Toolbar view"
+                  value={dataObject.data?.toolbarView}
+                  onChange={(e) => dataObject.handlerMap.set({ ...dataObject.data, toolbarView: e.data.value })}
+                  disabled={!dataObject.handlerMap.set}
+                  itemList={[
+                    { value: undefined, children: "auto (undefined)" },
+                    { value: "full" },
+                    { value: "simple" },
+                  ]}
+                />
+
+                <pre>{stringify(dataObject)}</pre>
+              </Uu5Elements.Grid>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const Demo = createVisualComponent({
+        render(props) {
+          return (
+            <div>
+              <UserPreferencesProvider>
+                <Uu5Elements.HighlightedBox className={Config.Css.css({ marginBottom: 24 })}>
+                  <ul>
+                    <li>Settings are persisted. You can change settings in 1 tab and reload it in another tab.</li>
+                    <li>Setting settings is optimistic - data is set immediately and persisted on background.</li>
+                  </ul>
+                </Uu5Elements.HighlightedBox>
+
+                <PreferencesCustomDataInfo />
+              </UserPreferencesProvider>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

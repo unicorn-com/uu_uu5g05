@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Date input</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState, useRef, useEffect, useUpdateEffect, useLayoutEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { UuDate } from "uu_i18ng01";
+
+      window.UuDate = UuDate;
+
+      // TODO same as in uu5g05-forms
+      function useFocus({ onFocus, onBlur, disabled }) {
+        let [focus, setFocus] = useState(false);
+        if (disabled && focus) {
+          setFocus(false);
+          focus = false;
+        }
+
+        function handleFocus(e) {
+          setFocus(true);
+          typeof onFocus === "function" && onFocus(e);
+        }
+
+        function handleBlur(e) {
+          setFocus(false);
+          typeof onBlur === "function" && onBlur(e);
+        }
+
+        return [focus, handleFocus, handleBlur, setFocus];
+      }
+
+      function clampValue(value, diff, min, max) {
+        let newV = value + diff;
+        if (min > newV) newV = min === value ? max : min;
+        else if (max < newV) newV = max === value ? min : max;
+        return newV;
+      }
+
+      class DateSlot {
+        constructor(format, index, value, elementRef, min, max, step = 1, key) {
+          this.format = format;
+          this.index = index;
+          this.value = value;
+          this.elementRef = elementRef;
+          this.min = min;
+          this.max = max;
+          this.step = step;
+          this.key = key;
+        }
+
+        get element() {
+          return this.elementRef.current;
+        }
+
+        setValue(value, year, month) {
+          if (this.isValidValue(value, year, month)) this.value = value;
+        }
+
+        getValue() {
+          return this.value;
+        }
+
+        select() {
+          this.element.setSelectionRange(this.index, this.index + this.format.length);
+        }
+
+        delete() {
+          this.setValue(undefined);
+        }
+
+        isMaxChars(max = this._max()) {
+          return this.value != null && ((this.value + "").length === (max + "").length || +(this.value + "0") > max);
+        }
+
+        _updateValue(diff, max, min = 1) {
+          return this.value = this.value ? clampValue(this.value, diff, min, max) : (diff > 0 ? min : max);
+        }
+
+        isValidValue(value, year, month) {
+          let isValid = false;
+          if (value) {
+            const valueStr = value + "";
+            // TODO step i++ => i += step
+            for (let i = this._min(year, month); i <= this._max(year, month); i++) {
+              if (String(i).startsWith(valueStr)) {
+                isValid = true;
+                break;
+              }
+            }
+          } else {
+            isValid = true;
+          }
+
+          return isValid;
+        }
+      }
+
+      const DAY_MS = 24 * 60 * 60 * 1000;
+
+      class DaySlot extends DateSlot {
+
+        static KEY = "day";
+
+        constructor(...args) {
+          super(...args, DaySlot.KEY);
+        }
+
+        increase(year, month) {
+          return this._updateValue(this._step(year, month), this._max(year, month), this._min(year, month));
+        }
+
+        decrease(year, month) {
+          return this._updateValue(-this._step(year, month), this._max(year, month), this._min(year, month))
+        }
+
+        isMaxChars(year, month) {
+          return super.isMaxChars(this._max(year, month));
+        }
+
+        isReadOnly() {
+          return this.min && this.max && this.min.year === this.max.year && this.min.month === this.max.month && this.min.day === this.max.day;
+        }
+
+        getValue() {
+          return this.isReadOnly() ? this.min.day : this.value;
+        }
+
+        _max(year, month) {
+          let max;
+
+          if (this.max && this.max.year === year && this.max.month === month) max = this.max.day;
+          else {
+            if (month) {
+              const monthDays = [31, year ? year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0) ? 29 : 28 : 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+              max = monthDays[month - 1];
+            } else {
+              max = 31;
+            }
+          }
+
+          return max;
+        }
+
+        _min(year, month) {
+          return this.min && this.min.year === year && this.min.month === month ? this.min.day : 1;
+        }
+
+        _step(year, month) {
+          let step = this.step;
+          if (this.step > 1 && year && month && this.value) {
+            const currUuDate = new UuDate({ year, month, day: this.value });
+            const currDate = currUuDate.toDate();
+            const minUuDate = new UuDate(this.min ?? { year: 1970, month: 1, day: 1 });
+            const diff = (currDate - minUuDate.toDate()) % (this.step * DAY_MS);
+            if (diff) step = diff / DAY_MS;
+          }
+          return step;
+        }
+      }
+
+      class MonthSlot extends DateSlot {
+
+        static KEY = "month";
+
+        constructor(...args) {
+          super(...args, MonthSlot.KEY);
+        }
+
+        increase(year) {
+          return this._updateValue(1, this._max(year), this._min(year));
+        }
+
+        decrease(year) {
+          return this._updateValue(-1, this._max(year), this._min(year));
+        }
+
+        isMaxChars(year) {
+          return super.isMaxChars(this._max(year));
+        }
+
+        isReadOnly() {
+          return this.min && this.max && this.min.year === this.max.year && this.min.month === this.max.month;
+        }
+
+        getValue() {
+          return this.min && this.max && this.min.year === this.max.year && this.min.month === this.max.month ? this.min.month : this.value;
+        }
+
+        _max(year) {
+          return this.max && this.max.year === year ? this.max.month : 12;
+        }
+
+        _min(year) {
+          return this.min && this.min.year === year ? this.min.month : 1;
+        }
+      }
+
+      class YearSlot extends DateSlot {
+
+        static KEY = "year";
+
+        constructor(...args) {
+          super(...args, YearSlot.KEY);
+        }
+
+        increase() {
+          return this.value ? this._updateValue(1, this._max(), this._min()) : this.value = this._getInitialValue();
+        }
+
+        decrease() {
+          return this.value ? this._updateValue(-1, this._max(), this._min()) : this.value = this._getInitialValue();
+        }
+
+        isMaxChars() {
+          return super.isMaxChars();
+        }
+
+        isReadOnly() {
+          return this.min && this.max && this.min.year === this.max.year;
+        }
+
+        getValue() {
+          return this.isReadOnly() ? this.min.year : this.value;
+        }
+
+        _max() {
+          return this.max?.year ?? 9999;
+        }
+
+        _min() {
+          return this.min?.year ?? 1;
+        }
+
+        _getInitialValue() {
+          let value = new Date().getFullYear();
+          if (this.min) value = Math.max(this.min.year, value);
+          if (this.max) value = Math.min(this.max.year, value);
+          return value;
+        }
+      }
+
+      class DateValue {
+        constructor(date = {}, format, elementRef, min, max, step) {
+          this.format = format;
+          this.elementRef = elementRef;
+
+          // TODO step
+
+          this.slotMap = {};
+          this.slotFormatMap = {};
+
+          this.slotList = splitValueToList(format).map((v) => {
+            const Class = v.startsWith("D") ? DaySlot : v.startsWith("M") ? MonthSlot : YearSlot;
+            const slot = new Class(v, this.format.indexOf(v), date[Class.KEY], this.elementRef, min, max, step);
+
+            this.slotMap[Class.KEY] = slot;
+            this.slotFormatMap[v] = slot;
+
+            return slot;
+          });
+
+          this.activeSlot = null;
+          this.tempValue = "";
+        }
+
+        get element() {
+          return this.elementRef.current;
+        }
+
+        focus() {
+          let slot;
+          if (this.activeSlot || !this._isEmpty()) {
+            slot = this.slotFormatMap[this._getSlotFormatFromSelection()];
+            if (slot.isReadOnly()) slot = null;
+          }
+          slot ||= this.slotList.find((slot) => !slot.isReadOnly());
+
+          this._setActiveSlot(slot);
+          return this;
+        }
+
+        blur() {
+          this.activeSlot = null;
+          return this;
+        }
+
+        select() {
+          this.activeSlot.select();
+          return this;
+        }
+
+        selectPrevious() {
+          let actualIndex = this.slotList.indexOf(this.activeSlot);
+          let newSlotIndex;
+          for (let i = actualIndex - 1; i >= 0; i--) {
+            if (!this.slotList[i].isReadOnly()) {
+              newSlotIndex = i;
+              break;
+            }
+          }
+          if (newSlotIndex != null) this._setActiveSlot(newSlotIndex);
+          return this;
+        }
+
+        selectNext() {
+          let actualIndex = this.slotList.indexOf(this.activeSlot);
+          let newSlotIndex;
+          for (let i = actualIndex + 1; i < this.slotList.length; i++) {
+            if (!this.slotList[i].isReadOnly()) {
+              newSlotIndex = i;
+              break;
+            }
+          }
+          if (newSlotIndex != null) this._setActiveSlot(newSlotIndex);
+          return this;
+        }
+
+        increase() {
+          this.activeSlot.increase(this.slotMap.year.getValue(), this.slotMap.month.getValue());
+          return this.getDate();
+        }
+
+        decrease() {
+          this.activeSlot.decrease(this.slotMap.year.getValue(), this.slotMap.month.getValue());
+          return this.getDate();
+        }
+
+        delete() {
+          this.activeSlot.delete();
+          return this.getDate();
+        }
+
+        isEmpty() {
+          return !this.slotList.find((slot) => !slot.isReadOnly() && slot.getValue());
+        }
+
+        write(value) {
+          const slotList = splitValueToList(value);
+          const activeSlotValue = slotList[this.slotList.indexOf(this.activeSlot)];
+
+          this.tempValue += activeSlotValue;
+          this.tempValue = this.tempValue.slice(-this.activeSlot.format.length);
+
+          const prevValue = this.activeSlot.getValue();
+          this.activeSlot.setValue(+this.tempValue, this.slotMap.year.getValue(), this.slotMap.month.getValue());
+          if (prevValue !== this.activeSlot.getValue()) {
+            if (this.activeSlot.isMaxChars(this.slotMap.year.getValue(), this.slotMap.month.getValue())) this.selectNext();
+            return this.getDate();
+          }
+        }
+
+        setDate(date) {
+          this.slotList.forEach((slot) => slot.setValue(date[slot.constructor.KEY]))
+          return this;
+        }
+
+        getDate() {
+          return Object.fromEntries(this.slotList.map((slot) => [slot.key, slot.getValue()]));
+        }
+
+        // TODO set min & max to slots!
+
+        setMin(min) {
+          this.min = min;
+          return this;
+        }
+
+        setMax(max) {
+          this.max = max;
+          return this;
+        }
+
+        setStep(step) {
+          this.step = step;
+          return this;
+        }
+
+        _isEmpty() {
+          return !this.slotList.find((slot) => slot.getValue() != null);
+        }
+
+        _getSlotFormatFromSelection() {
+          let index = this.element.selectionStart;
+          if (this.format.length === index) index -= 1;
+          let char;
+          // find first valid char from format (D | M | Y)
+          for (let i = 0; i < this.format.length; i++) {
+            let newIndex = index;
+            if (i % 2 === 0) newIndex -= i;
+            else newIndex += i;
+            char = this.format[newIndex];
+            if (/^[DMY]$/.test(char)) break;
+          }
+          return this.format.match(new RegExp(char + "+"))[0];
+        }
+
+        _setActiveSlot(slot) {
+          if (typeof slot === "number") slot = this.slotList[slot];
+          this.activeSlot = slot;
+          this.tempValue = "";
+          this.activeSlot.select();
+        }
+      }
+
+      function parseDateToObject(isoDate) {
+        let day, month, year, uuDate;
+
+        if (isoDate) {
+          uuDate = new UuDate(isoDate);
+          day = uuDate.getDay();
+          month = uuDate.getMonth();
+          year = uuDate.getYear();
+        }
+
+        return { day, month, year, uuDate };
+      }
+
+      function splitValueToList(value) {
+        return [...value.match(/(\d{4}|Y{4})|(\d{1,2}|D{1,2}|M{1,2})/g)];
+      }
+
+      function splitValue(value, slotList) {
+        const list = splitValueToList(value);
+        const map = Object.fromEntries(slotList.map((v, i) => [v.startsWith("D") ? "day" : v.startsWith("M") ? "month" : "year", list[i]]));
+        return map;
+      }
+
+      function isValidStep(valueUuDate, step = 1, minUuDate = null) {
+        minUuDate ||= new UuDate("1970-01-01");
+        return (valueUuDate.toDate() - minUuDate.toDate()) % (step * DAY_MS) === 0;
+      }
+
+      const DateField = Utils.Component.forwardRef((props, ref) => {
+        const { value: isoDate, format, onChange, min, max, step, ...propsToPass } = props;
+        const { disabled, readOnly } = propsToPass;
+
+        const minDate = min ? parseDateToObject(min) : null;
+        const maxDate = max ? parseDateToObject(max) : null;
+
+        const inputRef = useRef();
+        const dateValue = useRef(new DateValue(parseDateToObject(isoDate), format, inputRef, minDate, maxDate, step)).current;
+
+        const [date, _setDate] = useState(dateValue.getDate());
+
+        function setDate(date, e) {
+          _setDate(date || {});
+
+          if (date.day && date.month && date.year) {
+            const uuDate = new UuDate(date);
+            if (uuDate) {
+              callOnChange(e, uuDate);
+            } else {
+              // TODO throw error to input message
+              console.error("Invalid date", date);
+            }
+          } else if (dateValue.isEmpty()) {
+            callOnChange(e)
+          }
+        }
+
+        const { day, month, year } = date;
+
+        useUpdateEffect(() => {
+          dateValue.setDate(parseDateToObject(isoDate));
+          _setDate(dateValue.getDate());
+        }, [isoDate]);
+
+        useUpdateEffect(() => {
+          dateValue.setMin(minDate);
+        }, [min]);
+
+        useUpdateEffect(() => {
+          dateValue.setMax(maxDate);
+        }, [max]);
+
+        useUpdateEffect(() => {
+          dateValue.setStep(step);
+        }, [step]);
+
+        const [focus, handleFocus, handleBlur] = useFocus({
+          onFocus: (e) => {
+            // necessary to select slot by click, because onFocus is called before the click event
+            setTimeout(() => dateValue.focus(), 0);
+            props.onFocus?.(e);
+          },
+          onBlur: (e) => {
+            dateValue.blur();
+            props.onBlur?.(e);
+          },
+          disabled
+        });
+
+        let formattedValue = format;
+        if (day) formattedValue = formattedValue.replace(/[D]+/, (v) => v.length > 1 ? (day + "").padStart(2, "0") : day);
+        if (month) formattedValue = formattedValue.replace(/[M]+/, (v) => v.length > 1 ? (month + "").padStart(2, "0") : month);
+        if (year) formattedValue = formattedValue.replace(/[Y]+/, (v) => v.length > 2 ? (year + "").padStart(4, "0") : (year + "").slice(2).padStart(4, "0"));
+
+        const isValueVisible = formattedValue !== format || focus;
+
+        useLayoutEffect(() => {
+          if (focus) dateValue.select();
+        }, [day, month, year]);
+
+        function callOnChange(e, newUuDate) {
+          const data = { value: undefined };
+          if (newUuDate) {
+            data.value = newUuDate.toIsoString();
+            if (minDate && UuDate.compare(newUuDate, minDate.uuDate) < 0) data.error = "min";
+            else if (maxDate && UuDate.compare(newUuDate, maxDate.uuDate) > 0) data.error = "max";
+            else if (step > 0 && !isValidStep(newUuDate, step, minDate?.uuDate)) data.error = "step";
+          }
+          onChange(new Utils.Event(data, e));
+        }
+
+        function handleChange(e) {
+          const v = e.target.value;
+
+          const newDate = dateValue.write(v);
+          // if value is invalid (e.g. 38 for day) it returns undefined -> nothing is happen, but selection must be set
+          newDate ? setDate(newDate, e) : setTimeout(() => dateValue.select(), 0);
+        }
+
+        function handleClick(e) {
+          dateValue.focus();
+          props.onClick?.(e);
+        }
+
+        function handleKeyDown(e) {
+          props.onKeyDown?.(e);
+
+          if (!e.defaultPrevented) {
+            switch (e.key) {
+              case "ArrowLeft":
+                e.preventDefault();
+                dateValue.selectPrevious();
+                break;
+              case "ArrowRight":
+                e.preventDefault();
+                dateValue.selectNext();
+                break;
+              case "ArrowUp":
+                e.preventDefault();
+                setDate(dateValue.increase(), e);
+                break;
+              case "ArrowDown":
+                e.preventDefault();
+                setDate(dateValue.decrease(), e);
+                break;
+              case "Delete":
+              case "Backspace":
+                e.preventDefault();
+                setDate(dateValue.delete(), e);
+                break;
+              case "a":
+              case "c":
+              case "v":
+                if (!e.ctrlKey && !e.metaKey) e.preventDefault();
+                break;
+              case "Control":
+                break;
+              default:
+                if (e.key.length === 1 && isNaN(+e.key)) e.preventDefault();
+            }
+          }
+        }
+
+        function handlePaste(e) {
+          props.onPaste?.(e);
+
+          if (!e.defaultPrevented) {
+            // TODO constant x-apivalue
+            const apiValue = Utils.Clipboard.read(e, "x-apivalue");
+            if (apiValue) {
+              callOnChange(e, new UuDate(apiValue));
+            } else {
+              const value = (Utils.Clipboard.read(e) || "").trim();
+              if (value) {
+                let uuDate = UuDate.parse(value, undefined, format);
+                if (!uuDate) {
+                  const jsDate = new Date(value);
+                  if (!isNaN(jsDate)) {
+                    uuDate = new UuDate(jsDate);
+                  } else {
+                    console.error(`Invalid date "${value}" to paste.`, e);
+                  }
+                }
+                if (uuDate) callOnChange(e, uuDate);
+              }
+            }
+            e.preventDefault();
+          }
+        }
+
+        function handleCopy(e) {
+          props.onCopy?.(e);
+
+          if (!e.defaultPrevented) {
+            if (isoDate) {
+              Utils.Clipboard.write({ "x-apivalue": isoDate, text: formattedValue });
+              e.preventDefault();
+            }
+          }
+        }
+
+        return (
+          <input
+            {...propsToPass}
+            ref={Utils.Component.combineRefs(ref, inputRef)}
+            value={isValueVisible ? formattedValue : ""}
+            {...(disabled || readOnly ? null : {
+              onChange: handleChange,
+              onFocus: handleFocus,
+              onBlur: handleBlur,
+              onClick: handleClick,
+              onKeyDown: handleKeyDown,
+              onPaste: handlePaste,
+              onCopy: handleCopy,
+            })}
+          />
+        );
+      });
+
+      function setShadow(el) {
+        console.log("setShadow", el);
+        if (el != null) {
+          !el.shadowRoot && el.attachShadow({ mode: "open" });
+          el.shadowRoot.innerHTML = el.innerHTML;
+          el.innerHTML = "";
+        }
+      }
+
+      const ShadowElement = Utils.Component.forwardRef(
+        ({ Element = "div", ...attrs }, ref) => {
+          useUpdateEffect(() => {
+          }, [attrs.children])
+
+          return (
+            <Element {...attrs} ref={Utils.Component.combineRefs(setShadow, ref)} />
+          )
+        }
+      );
+
+      function withControlledInput(Component, defaultProps) {
+        return (props) => {
+          const [value, setValue] = useState(props.value ?? defaultProps?.value);
+          return (
+            <Component
+              {...defaultProps}
+              {...props}
+              value={value}
+              onChange={(e) => {
+                props.onChange?.(e);
+                setValue(e.data ? e.data.value : e.target.value);
+              }}
+            />
+          );
+        }
+      }
+
+      const NativeInput = withControlledInput("input", { type: "date", value: "" });
+      const Input = withControlledInput(DateField);
+
+      const Page = createComponent({
+        render() {
+          const min = new UuDate().shiftDay(-7).toIsoString();
+          const max = new UuDate().shiftDay(7).toIsoString();
+
+          return (
+            <div>
+              <NativeInput
+                onChange={(e) => {
+                  console.log("onChange native", e.target.value);
+                }}
+                step={2}
+                min={min}
+                max={max}
+              />
+
+              <br />
+              <br />
+
+              <h4>format</h4>
+              <DateInput
+                placeholder="MM/DD/YYYY"
+                format="MM/DD/YYYY"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                }}
+              />
+
+              <DateInput
+                placeholder="D. M. YYYY"
+                format="D. M. YYYY"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                }}
+              />
+
+              <DateInput
+                placeholder="YYYY-MM-DD"
+                format="YYYY-MM-DD"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                }}
+              />
+
+              <h4>min & max</h4>
+              <DateInput
+                placeholder="MM/DD/YYYY"
+                format="MM/DD/YYYY"
+                min={min}
+                max={max}
+                onChange={(e) => {
+                  console.log("onChange", e.data);
+                }}
+              />
+
+              <h4>min & step</h4>
+              <DateInput
+                placeholder="MM/DD/YYYY"
+                format="MM/DD/YYYY"
+                min={min}
+                max={max}
+                step={2}
+                onChange={(e) => {
+                  console.log("onChange", e.data);
+                }}
+              />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

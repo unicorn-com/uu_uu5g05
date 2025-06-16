@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example editor</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5codekitg01/2.x/assets/example-config.js"
+            crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px;
+        height: 100vh;
+      }
+
+      #uu5 {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5">Loading...</main>
+
+    <script type="text/babel">
+      //@@viewOn:example
+      import {
+        Utils,
+        createVisualComponent,
+        useState,
+        useRef,
+        useEffect,
+        createComponent,
+        useMemo,
+      } from "uu5g05/src";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import Uu5CodeKit from "uu5codekitg01";
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const { value: propsValue, onChange, onBlur } = props;
+
+          const [value, setValue] = useState(propsValue);
+
+          return (
+            <Input
+              {...props}
+              value={value}
+              onChange={(e) => {
+                typeof onChange === "function" && onChange(e);
+                setValue(e.data.value);
+              }}
+              onBlur={onBlur ? (e) => {
+                onBlur(e.data?.value ? e : new Utils.Event({ ...e.data, value }, e));
+              } : undefined}
+            />
+          );
+        };
+      }
+
+      const Code = withControlledInput(Uu5CodeKit.Code.Input);
+      const Json = withControlledInput(Uu5CodeKit.Json.Input);
+
+      const Demo = createVisualComponent({
+        uu5Tag: Config.TAG + "Demo",
+
+        render(props) {
+          const { js, deps = "{}", ...restProps } = props;
+
+          const scriptEnd = "< /script>".replace(" ", "");
+          const srcDoc = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo</title>
+
+    <script src="https://cdn.plus4u.net/uu-uu5loaderg01/1.0.0/uu5loaderg01.min.js" crossorigin="anonymous">${scriptEnd}
+    <script src="https://cdn.plus4u.net/uu-plus4u5g02/1.0.0/assets/example-config.js" crossorigin="anonymous">${scriptEnd}
+
+    <script>
+      Uu5Loader.config({
+        imports: ${deps},
+      });
+    ${scriptEnd}
+
+    <style>
+      body {
+        padding: 8px;
+      }
+    </style>
+    </head>
+    <body>
+      <div id="uu5"></div>
+
+      <script type="text/babel">
+        import Uu5 from "uu5g05";
+
+        ${js}
+
+        Uu5.Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+      ${scriptEnd}
+    </body>
+</html>`;
+
+          const borderColor = Uu5Elements.UuGds.getValue(["Shape", "formElement", "light", "building", "common"]).default.colors.border;
+
+          const attrs = Utils.VisualComponent.getAttrs(restProps, Config.Css.css({
+            border: `1px solid ${borderColor}`,
+            borderRadius: Uu5Elements.UuGds.RadiusPalette.getValue(["box", "elementary"]),
+            height: "100%",
+            width: "100%",
+          }));
+
+          return (
+            <iframe
+              {...attrs}
+              srcDoc={srcDoc}
+            />
+          );
+        }
+      });
+
+      const Sandbox = createVisualComponent({
+        uu5Tag: Config.TAG + "Sandbox",
+
+        render(props) {
+          const [js, setJs] = useState(`import Uu5Elements from "uu5g05-elements";
+
+function Demo() {
+  return (
+    <Uu5Elements.Block headerType="heading" header="uu5 Sandbox">
+      Hello world!
+    </Uu5Elements.Block>
+  );
+}`);
+          const [deps, setDeps] = useState(`{
+  "uu5extrasg01": "https://cdn.plus4u.net/uu-uu5extrasg01/1.0.0/uu5extrasg01.js"
+}`);
+
+          return (
+            <Uu5Elements.Grid
+              templateAreas={{ xs: "deps, js, demo", m: "deps, js, demo" }}
+              templateRows={{ m: "auto auto 1fr" }}
+              className={Config.Css.css({ height: "100%" })}
+            >
+              <Json
+                value={deps}
+                onBlur={(e) => setDeps(e.data.value)}
+                fontSize={15}
+                format="pretty"
+                minRows={1}
+                style={{ gridArea: "deps" }}
+              />
+              <Code
+                value={js}
+                onBlur={(e) => setJs(e.data.value)}
+                codeStyle="jsx"
+                fontSize={15}
+                style={{ gridArea: "js" }}
+              />
+              <Demo js={js} deps={deps} style={{ gridArea: "demo" }} />
+            </Uu5Elements.Grid>
+          )
+        },
+      })
+
+      function Page() {
+        return (
+          <Sandbox />
+        );
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

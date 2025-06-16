@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Lsi, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h3>lsi</h3>
+            <Lsi lsi={{ cs: "Česky", en: "English", "en-gb": "English GB" }} />
+            <br />
+            <Lsi lsi={{ cs: <span>Český element</span>, en: <span>Element English</span> }} />
+
+            <h3>params</h3>
+            <Lsi
+              lsi={{ cs: "Uživateli %s je %d let.", en: "The user %s is %d years old." }}
+              params={["John Black", 18]}
+            />
+            <br />
+            <Lsi
+              lsi={{ cs: "Uživateli {0} je {1} let.", en: "The user {0} is {1} years old." }}
+              params={["John Black", 18]}
+            />
+            <br />
+            <Lsi
+              lsi={{ cs: "Uživateli ${name} je ${age} let.", en: "The user ${name} is ${age} years old." }}
+              params={{ name: "John Black", age: 18 }}
+            />
+            <br />
+            <Lsi
+              lsi={{ cs: "Toto je %s na Unicorn.", en: "This is the %s to Unicorn." }}
+              params={[
+                <Uu5Elements.Link href="https://unicorn.com">
+                  <Lsi lsi={{ cs: "stránka", en: "web" }} />
+                </Uu5Elements.Link>,
+              ]}
+            />
+            {/*@@viewOff:example*/}
+
+            <br />
+            <br />
+            <Uu5Elements.LanguageSelector />
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

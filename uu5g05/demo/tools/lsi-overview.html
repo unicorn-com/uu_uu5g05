@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lsi overview</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5tilesg02/2.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createVisualComponent,
+        SessionProvider,
+        useSession,
+        useDataObject,
+        useState,
+        useUpdateLayoutEffect,
+        useMemo
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import { AuthenticationService } from "uu_appg01_oidc";
+      import Uu5Tiles from "uu5tilesg02";
+      import Uu5TilesElements from "uu5tilesg02-elements";
+      import Uu5TilesControls from "uu5tilesg02-controls"
+
+      const awid = window.parent?.location?.href?.match(/uu-bookkit-maing01\/([a-f0-9]{32})\//)?.[1] || "05ecbf4e8bca405290b1a6d4cee8813a";
+      const baseUri = `https://uuapp.plus4u.net/uu-bookkit-maing01/${awid}`;
+
+      const BINARY_CODE = "lsiExport";
+
+      function Authenticated({ children }) {
+        const { state } = useSession();
+        return state === "authenticated" ? children : null;
+      }
+
+      function readFile(file) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            resolve(evt.target.result);
+          };
+          reader.readAsText(file);
+        })
+      }
+
+      function parseCsv(data, { sep = ";" } = {}) {
+        const regExp = `(${sep}|\\r?\\n|\\r|^)(?:"([^"]*(?:""[^"]*)*)"|([^${sep}\\r\\n]*))`;
+        const re = new RegExp(regExp, "gi");
+        const result = [[]];
+        let matches;
+        while ((matches = re.exec(data))) {
+          if (matches[1].length && matches[1] !== sep) result.push([]);
+          result[result.length - 1].push(
+            matches[2] !== undefined ? matches[2].replace(/""/g, '"') : matches[3]
+          );
+        }
+        return result;
+      }
+
+      function prepareData(data) {
+        const [header, ...rows] = data;
+
+        const [file, label, ...headerLangs] = header;
+
+        const stats = {};
+        const libraries = new Set();
+
+        const dataList = rows.map(([file, label, ...langs]) => {
+          const library = file.match(/[^\\/]+/)[0];
+          libraries.add(library);
+          return {
+            file,
+            library,
+            label,
+            ...Object.fromEntries(headerLangs.map((lang, i) => {
+              lang = lang.trim();
+              stats[lang] ||= { filled: 0, count: 0 };
+              stats[lang].count++;
+              if (langs[i]) stats[lang].filled++;
+              return [lang, langs[i]];
+            })),
+          };
+        });
+
+        return [stats, dataList, [...libraries]];
+      }
+
+      const SERIES_LIST = [
+        {
+          value: "library",
+          label: "Library",
+          visible: "always",
+          fixed: "start",
+        },
+        {
+          value: "label",
+          label: "Label",
+          visible: "always",
+          fixed: "start",
+        }
+      ];
+
+      function buildSeriesList(languageList, language) {
+        return [...SERIES_LIST, ...languageList.map((lang) => ({
+          value: lang,
+          label: lang.toUpperCase(),
+          visible: lang === language
+        }))];
+      }
+
+      function Tabs({ languageMap, languageList, data, libraryList, timestamp }) {
+        const [lang, setLang] = useState(languageList[0]);
+        const [seriesList, setSeriesList] = useState(() => buildSeriesList(languageList, lang));
+
+        useUpdateLayoutEffect(() => {
+          setSeriesList(buildSeriesList(languageList, lang));
+        }, [lang, languageList]);
+
+        const filterDefinitionList = [
+          {
+            key: "library",
+            label: "Library",
+            inputType: "select",
+            filter: (item, value) => value.some((v) => item.library === v),
+            inputProps: {
+              multiple: true,
+              itemList: libraryList.map((v) => ({ value: v, children: v })),
+            },
+          },
+          {
+            key: "empty",
+            label: "Empty only",
+            inputType: "bool",
+            filter: ({ library, label, file, ...langs }, value) => {
+              return !value || seriesList
+                .filter(({ visible, value }) => visible && langs[value] != null)
+                .some(({ value }) => !langs[value]);
+            },
+          }
+        ]
+
+        const [activeFilterList, setActiveFilterList] = useState();
+        const [activeSorterList, setActiveSorterList] = useState();
+
+        return (
+          <>
+            <Uu5Tiles.ControllerProvider
+              data={data}
+              serieList={seriesList}
+              onSerieChange={(e) => setSeriesList(e.data.serieList)}
+              filterDefinitionList={filterDefinitionList}
+              filterList={activeFilterList}
+              onFilterChange={(e) => setActiveFilterList(e.data.filterList)}
+              sorterDefinitionList={seriesList.map(({ value, label }) => ({
+                key: value,
+                label,
+                sort: (a, b) => a[value].localeCompare(b[value]),
+              }))}
+              sorterList={activeSorterList}
+              onSorterChange={(e) => setActiveSorterList(e.data.sorterList)}
+            >
+              <Uu5Elements.Tabs
+                activeCode={lang}
+                onChange={(e) => setLang(e.data.activeCode)}
+                itemList={languageList.map((lang) => {
+                  const value = Math.round(languageMap[lang].filled * 100 / languageMap[lang].count);
+                  return {
+                    code: lang,
+                    label: (
+                      <>
+                        {lang.toUpperCase()}
+                        <Uu5Elements.Progress
+                          value={value}
+                          text={value + "%"}
+                          colorScheme={value > 99 ? "positive" : value > 79 ? "warning" : "negative"}
+                          className={Config.Css.css({ marginLeft: 4 })}
+                        />
+                      </>
+                    ),
+                  };
+                })}
+                actionList={[
+                  { component: <Uu5TilesControls.SearchButton /> },
+                  { component: <Uu5TilesControls.FilterButton type="bar" /> },
+                  { component: <Uu5TilesControls.SerieButton /> }
+                ]}
+              />
+              <Uu5TilesControls.SerieManagerModal />
+              <Uu5TilesControls.FilterBar displayManagerButton={false} />
+              <Uu5TilesControls.FilterManagerModal />
+              <Uu5TilesElements.List
+                maxHeight={window.innerHeight - 60 - 54 - 16} // - top - filter bar - constant
+                columnList={seriesList.map(({ value }) => ({
+                  value,
+                  headerComponent: <Uu5TilesElements.Table.HeaderCell sorterKey={value} />,
+                  maxWidth: ["library", "label"].includes(value) ? "max-content" : undefined,
+                  footer: value === "library" ? (
+                    <>Last update: <Uu5Elements.DateTime value={timestamp} /></>
+                  ) : undefined,
+                  footerComponent: (
+                    <Uu5TilesElements.Table.FooterCell
+                      horizontalAlignment="center"
+                      verticalAlignment="center"
+                    />
+                  ),
+                }))}
+                footerTemplate={seriesList.filter(({ visible }) => visible).map(() => "library").join(" ")}
+              />
+            </Uu5Tiles.ControllerProvider>
+          </>
+        );
+      }
+
+      const LsiOverviewView = createVisualComponent({
+
+        uu5Tag: Config.TAG + "LsiOverview.View",
+
+        render(props) {
+          const { data, timestamp } = props;
+
+          const [langs, dataList, libraryList] = prepareData(data);
+          const languageList = Object.keys(langs);
+
+          return (
+            <Tabs
+              languageMap={langs}
+              languageList={languageList}
+              data={dataList}
+              libraryList={libraryList}
+              timestamp={timestamp}
+            />
+          );
+        },
+      });
+
+      const LsiOverview = createVisualComponent({
+        uu5Tag: Config.TAG + "LsiOverview",
+
+        render(props) {
+          const { state, data, errorData } = useDataObject({
+            handlerMap: {
+              load: async () => {
+                const [resFile, resData] = await Promise.all([
+                  Plus4U5.Utils.AppClient.get(baseUri + "/getBinaryData", { code: BINARY_CODE }),
+                  Plus4U5.Utils.AppClient.get(baseUri + "/getBinary", { code: BINARY_CODE })
+                ]);
+
+                const text = await readFile(resFile.data);
+
+                return {
+                  data: parseCsv(text.replace(/\n$/, "")),
+                  ts: resData.data.sys.mts,
+                };
+              }
+            },
+          });
+
+          let result = null;
+          switch (state) {
+            case "pendingNoData":
+              result = <Uu5Elements.Pending size="max" />;
+              break;
+            case "ready":
+              result = <LsiOverviewView data={data.data} timestamp={data.ts} />;
+              break;
+            default:
+              result = <Plus4U5Elements.Error error={errorData} />
+          }
+
+          return result;
+        },
+      });
+
+      function Page() {
+        return (
+          <main>
+            <SessionProvider authenticationService={AuthenticationService}>
+              <Authenticated>
+                <LsiOverview />
+              </Authenticated>
+            </SessionProvider>
+          </main>
+        )
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

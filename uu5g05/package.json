@@ -1,0 +1,68 @@
+{
+  "name": "uu5g05",
+  "version": "1.40.1",
+  "description": "uu5 Library contains basic hooks, providers, components, utils and environment for easy development of uuApps or uuLibs.",
+  "license": "License Commercial",
+  "namespace": "Uu5",
+  "spec": "uu5-lib; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
+  "dependencies": {
+    "prop-types": "15.7.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "regenerator-runtime": "0.13.7",
+    "uu5stringg01": "^1.10.0"
+  },
+  "uuBuildSettings": {
+    "externals": {
+      "react": true,
+      "react-dom": true,
+      "prop-types": true
+    }
+  },
+  "devDependencies": {
+    "@emotion/css": "11.9.0",
+    "@mdi/font": "7.0.96",
+    "memoize-one": "5.1.1",
+    "systemjs": "0.19.47",
+    "uu_appg01_devkit": "^6.6.0",
+    "uu_appg01_oidc": "^4.0.0",
+    "uu_datatypesg01": "^0.1.1",
+    "uu5devkitg01-plugin": "^1.5.1",
+    "uu5g05-test": "*",
+    "uu5loaderg01": "^1.7.0"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "clean": "uu_appg01_devkit clean",
+    "test": "uu_appg01_devkit test",
+    "build": "node tools/prebuild.js && uu_appg01_devkit build",
+    "package": "uu_appg01_devkit package",
+    "dist": "uu_appg01_devkit package",
+    "start": "uu_appg01_devkit start",
+    "prettify": "uu_appg01_devkit prettify",
+    "vulnerabilityScan": "uu_appg01_devkit vulnerabilityScan",
+    "uuAppDevKitUpgrade": "uu_appg01_devkit uuAppDevKitUpgrade",
+    "uu5Generate": "uu5devkitg01-plugin generate",
+    "uu5LsiExport": "uu5devkitg01-plugin lsiExport",
+    "uu5LsiImport": "uu5devkitg01-plugin lsiImport",
+    "uu5DocUpdateExamples": "uu5devkitg01-plugin docUpdateExamples"
+  },
+  "main": "src/index.js",
+  "files": [
+    "test/setup",
+    "dist",
+    "dist-node",
+    "jsx"
+  ],
+  "prettier": {
+    "printWidth": 120
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "^(?!.*/node_modules/uu_appg01).*/node_modules/",
+      "uu5g05-test"
+    ]
+  }
+}

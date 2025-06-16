@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Lsi } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      const Css = {
+        autoColumns: () =>
+          Config.Css.css({
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, max-content))",
+            gap: 32,
+          }),
+        differentColumns: () =>
+          Config.Css.css({
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 32,
+          }),
+      };
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <Uu5Elements.PlaceholderBox code="items" />
+
+              <h4>header</h4>
+              <div className={Css.autoColumns()}>
+                <Uu5Elements.PlaceholderBox code="items" header="Title" />
+                <Uu5Elements.PlaceholderBox code="items" header={{ cs: "Objekt lsi", en: "Object lsi" }} />
+                <Uu5Elements.PlaceholderBox code="items" header={<Lsi lsi={{ cs: "Komponenta lsi", en: "Component lsi" }} />} />
+              </div>
+
+              <h4>info</h4>
+              <div className={Css.autoColumns()}>
+                <Uu5Elements.PlaceholderBox code="items" info="Subtitle" />
+                <Uu5Elements.PlaceholderBox code="items" info={{ cs: "Podtitulek - objekt lsi", en: "Subtitle - object lsi" }} />
+                <Uu5Elements.PlaceholderBox code="items" info={<Lsi lsi={{ cs: "Podtitulek - komponenta lsi", en: "Subtitle - component lsi" }} />} />
+              </div>
+
+              <h4>actionList</h4>
+              <div className={Css.autoColumns()}>
+                <Uu5Elements.PlaceholderBox code="items" actionList={[{ children: "Create item" }]} />
+              </div>
+
+              <h4>actionList & nestingLevel</h4>
+              <div className={Css.autoColumns() + " " + Config.Css.css({ alignItems: "start" })}>
+                <Uu5Elements.PlaceholderBox
+                  code="account"
+                  actionList={[
+                    { children: "Log in", colorScheme: "primary", significance: "highlighted", onClick: () => {} },
+                    { children: "Create account", colorScheme: "primary", significance: "subdued", onClick: () => {} }
+                  ]}
+                />
+                <Uu5Elements.PlaceholderBox
+                  code="account"
+                  actionList={[
+                    { children: "Log in", colorScheme: "primary", significance: "highlighted", onClick: () => {} },
+                    { children: "Create account", colorScheme: "primary", significance: "subdued", onClick: () => {} }
+                  ]}
+                  nestingLevel="spot"
+                />
+                <Uu5Elements.PlaceholderBox
+                  code="account"
+                  actionList={[
+                    { children: "Log in", colorScheme: "primary", significance: "highlighted", onClick: () => {} },
+                    { children: "Create account", colorScheme: "primary", significance: "subdued", onClick: () => {} }
+                  ]}
+                  nestingLevel="inline"
+                />
+              </div>
+
+              <h4>actionDirection</h4>
+              <div className={Css.autoColumns()}>
+                <Uu5Elements.PlaceholderBox
+                  actionDirection="vertical"
+                  code="account"
+                  header="vertical"
+                  info="Preferred for action list with primary button."
+                  actionList={[
+                    { children: "Log in", colorScheme: "primary", significance: "highlighted" },
+                    { children: "Create account", colorScheme: "primary", significance: "subdued" }
+                  ]}
+                />
+                <Uu5Elements.PlaceholderBox
+                  actionDirection="horizontal"
+                  code="error"
+                  header="horizontal"
+                  info="Preferred for action list without primary button."
+                  actionList={[{ children: "Show details" }, { children: "Report error" }]}
+                />
+              </div>
+
+              <h4>header & info & actionList</h4>
+              <div className={Css.autoColumns()}>
+                <Uu5Elements.PlaceholderBox
+                  code="account"
+                  header="Please log in"
+                  info="Only users with active account can view this content."
+                  actionList={[
+                    { children: "Log in", colorScheme: "primary", significance: "highlighted" },
+                    { children: "Create account", colorScheme: "primary", significance: "subdued" }
+                  ]}
+                />
+              </div>
+
+              <h4>borderRadius</h4>
+              <div className={Css.autoColumns()}>
+                <Uu5Elements.PlaceholderBox code="items" borderRadius="none" />
+                <Uu5Elements.PlaceholderBox code="items" borderRadius="elementary" />
+                <Uu5Elements.PlaceholderBox code="items" borderRadius="moderate" />
+                <Uu5Elements.PlaceholderBox code="items" borderRadius="expressive" />
+                <Uu5Elements.PlaceholderBox code="items" borderRadius="full" />
+              </div>
+
+              <h4>significance</h4>
+              <div className={Css.autoColumns()}>
+                <Uu5Elements.PlaceholderBox code="items" />
+                <Uu5Elements.PlaceholderBox code="items" significance="subdued" />
+              </div>
+
+              <h4>size</h4>
+              <div className={Css.differentColumns()}>
+                <Uu5Elements.PlaceholderBox code="items" size="s" />
+                <Uu5Elements.PlaceholderBox code="items" size="m" />
+                <Uu5Elements.PlaceholderBox code="items" size="l" />
+              </div>
+
+              <h4>children</h4>
+              <div className={Css.autoColumns()}>
+                <Uu5Elements.PlaceholderBox code="items">
+                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                </Uu5Elements.PlaceholderBox>
+
+                <Uu5Elements.PlaceholderBox code="items">
+                  <Uu5Elements.Link>Link</Uu5Elements.Link>
+                </Uu5Elements.PlaceholderBox>
+
+                <Uu5Elements.PlaceholderBox code="items">
+                  <Uu5Elements.Button>Button</Uu5Elements.Button>
+                </Uu5Elements.PlaceholderBox>
+
+                <Uu5Elements.PlaceholderBox code="items">
+                  <Uu5Elements.Button>Button</Uu5Elements.Button>
+                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                </Uu5Elements.PlaceholderBox>
+              </div>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

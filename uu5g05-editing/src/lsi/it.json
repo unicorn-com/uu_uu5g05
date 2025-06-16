@@ -1,0 +1,65 @@
+{
+  "EditModal": {
+    "header": "${name} redazione",
+    "confirm": "Risparmiare",
+    "cancel": "Annullamento",
+    "addItemButton": "Aggiungi articolo",
+    "insertBefore": "Inserire prima",
+    "insertAfter": "Inserire dopo",
+    "moveToPosition": "Passare alla posizione",
+    "duplicate": "Componente duplicato",
+    "delete": "Cancellare",
+    "preview": "Anteprima"
+  },
+  "ItemPositionModal": {
+    "header": "Spostare l'elemento in posizione",
+    "cancel": "Annullamento",
+    "confirm": "OK"
+  },
+  "ItemRemovalDialog": {
+    "header": "Rimozione dell'articolo",
+    "info": "State per compiere un'azione potenzialmente distruttiva. Siete sicuri di voler procedere?",
+    "cancel": "Annullamento",
+    "confirm": "Rimuovere"
+  },
+  "templates": {
+    "general": "Generale",
+    "visual": "Visivo"
+  },
+  "FormAspectRatio": {
+    "label": "Rapporto d'aspetto"
+  },
+  "FormBorderRadius": {
+    "label": "Raggio del bordo"
+  },
+  "FormCard": {
+    "label": "Scheda"
+  },
+  "FormColorScheme": {
+    "label": "Schema di colore"
+  },
+  "FormFullTextSearchPriority": {
+    "label": "Priorità di ricerca full text"
+  },
+  "FormHeight": {
+    "label": "Altezza"
+  },
+  "FormId": {
+    "label": "ID"
+  },
+  "FormNestingLevel": {
+    "label": "Livello di nidificazione"
+  },
+  "FormSignificance": {
+    "label": "Significato"
+  },
+  "FormSize": {
+    "label": "Dimensione"
+  },
+  "FormWidth": {
+    "label": "Larghezza"
+  },
+  "FormMargin": {
+    "label": "Margine"
+  }
+}

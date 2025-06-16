@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { Badge } from "uu5g05-elements";
+      import { withControlledFormInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const Icon = withControlledFormInput(Uu5Forms.Icon);
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>Default</h4>
+            <Icon />
+
+            <h4>categoryList=["uugds"]</h4>
+            <Icon categoryList={["uugds"]} />
+
+            <h4>stencils: categoryList=["uugds-chart", "uugds-education"]</h4>
+            <Icon categoryList={["uugds-chart", "uugds-education"]} />
+
+            <h4>stencils: categoryList=["uugds-chart", "uubml-uu5"]</h4>
+            <Icon categoryList={["uugds-chart", "uubml-uu5"]} />
+
+            <h4>categoryList=[...objects]</h4>
+            <Icon categoryList={[
+              {
+                name: "badges",
+                label: "Badges",
+                itemList: [
+                  {
+                    value: "mdi-blank-empty",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "empty", colorScheme: "created" }
+                  },
+                  {
+                    value: "mdi-blank-initial",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "empty", colorScheme: "initial" }
+                  },
+                  {
+                    value: "mdi-blank-active",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "empty", colorScheme: "active" }
+                  },
+                  {
+                    value: "mdi-blank-alternativeActive",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "empty", colorScheme: "alternative" }
+                  },
+                  {
+                    value: "mdi-blank-final",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "empty", colorScheme: "final" }
+                  },
+                  {
+                    value: "mdi-blank-passive",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "empty", colorScheme: "passive" }
+                  },
+                  {
+                    value: "mdi-blank-alternativeFinal",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "empty", colorScheme: "failed" }
+                  },
+                  {
+                    value: "mdi-blank-problemActive",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "empty", colorScheme: "problem" }
+                  },
+                  {
+                    value: "system-check",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-task", colorScheme: "created" }
+                  },
+                  {
+                    value: "system-close",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-cancel", colorScheme: "created" }
+                  },
+                  {
+                    value: "pause",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-pause", colorScheme: "created" }
+                  },
+                  {
+                    value: "exclamation",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-mark-exclamation", colorScheme: "created" }
+                  },
+                  {
+                    value: "system-exclamation-2",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-mark-exclamation-2", colorScheme: "created" }
+                  },
+                  {
+                    value: "exclamation-3",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-mark-exclamation-3", colorScheme: "created" }
+                  },
+                  {
+                    value: "start",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "uubml-symbol-state-s02", colorScheme: "initial" }
+                  },
+                  {
+                    value: "clock",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-clock", colorScheme: "initial" }
+                  },
+                  {
+                    value: "play",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-arrow-right", colorScheme: "active" }
+                  },
+                  {
+                    value: "end",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-arrow-right-max", colorScheme: "active" }
+                  },
+                  {
+                    value: "active-check",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-task", colorScheme: "active" }
+                  },
+                  {
+                    value: "info",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-mark-info", colorScheme: "active" }
+                  },
+                  {
+                    value: "flash",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-flash", colorScheme: "alternative" }
+                  },
+                  {
+                    value: "exclamation-2",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-mark-exclamation-2", colorScheme: "alternative" }
+                  },
+                  {
+                    value: "final-exclamation-3",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-mark-exclamation-3", colorScheme: "final" }
+                  },
+                  {
+                    value: "passive-pause",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-pause", colorScheme: "passive" }
+                  },
+                  {
+                    value: "close",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-cancel", colorScheme: "failed" }
+                  },
+                  {
+                    value: "check",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-task", colorScheme: "problem" }
+                  },
+                  {
+                    value: "cancelled-close",
+                    component: Badge,
+                    componentProps: { size: "l", icon: "plus4u-cancel", colorScheme: "cancelled" }
+                  },
+                ],
+              },
+            ]} />
+
+            <h4>initialCategory="uugds" && categoryList=["uugds", "plus4u", "mdi", "all"]</h4>
+            <Icon initialCategory="uugds" categoryList={["uugds", "uubml", "plus4u", "mdi", "all"]} />
+
+            <h4>initialCategory="uugds-chart" && categoryList=["uugds", "plus4u", "mdi", "all"]</h4>
+            <Icon initialCategory="uugds-chart" categoryList={["uugds", "uubml", "plus4u", "mdi", "all"]} />
+
+            <h4>onChange</h4>
+            <Icon onChange={(e) => console.log("onChange", e)} />
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

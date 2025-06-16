@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 06</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const CARD_ICONS = {
+        none: "uugds-menu",
+        content: "mdi-view-split-horizontal",
+        full: "mdi-card-text-outline",
+      };
+
+      const RADIUS_ICONS = {
+        none: "mdi-border-all-variant",
+        elementary: "mdi-card-outline",
+        moderate: "mdi-square-rounded-outline",
+        expressive: "mdi-ellipse-outline",
+        full: "uugds-circle",
+      };
+
+      /*@@viewOn:example*/      
+      const Footer = ({ style }) => (
+        <Uu5Elements.Box
+          colorScheme="red"
+          significance="distinct"
+          className={Config.Css.css({ ...style, borderBottomLeftRadius: "inherit", borderBottomRightRadius: "inherit" })}
+        >
+          Footer
+        </Uu5Elements.Box>
+      );
+      const Child = ({ style }) => (
+        <Uu5Elements.Box
+          colorScheme="green"
+          significance="distinct"
+          className={Config.Css.css({ ...style, borderRadius: "inherit" })}
+        >
+          Children
+        </Uu5Elements.Box>
+      );
+
+      const Page = createComponent({
+        render() {
+          const [card, setCard] = useState("none");
+          const [borderRadius, setBorderRadius] = useState("moderate");
+
+          const actionList = [
+            {
+              icon: CARD_ICONS[card],
+              tooltip: "Card",
+              collapsedChildren: "Card",
+              itemList: ["none", "content", "full"]
+                .filter((v) => v !== card)
+                .map((v) => ({
+                  children: v,
+                  icon: CARD_ICONS[v],
+                  onClick: () => setCard(v),
+                })),
+            },
+          ];
+
+          if (card !== "none") actionList.push({
+            icon: RADIUS_ICONS[borderRadius],
+            tooltip: "Border Radius: " + borderRadius,
+            collapsedChildren: "Border Radius",
+            itemList: ["none", "elementary", "moderate", "expressive", "full"].filter(v => v !== borderRadius).map(v => ({
+              children: v,
+              icon: RADIUS_ICONS[v],
+              onClick: () => setBorderRadius(v)
+            })),
+          });
+          
+          return (
+            <div>
+              <h4>footer & borderBottomLeftRadius="inherit" & borderBottomRightRadius="inherit"</h4>
+              <Uu5Elements.Block
+                card={card}
+                actionList={actionList}
+                header="footer"
+                footer={Footer}
+                borderRadius={borderRadius}
+              >
+                <LoremIpsum />
+              </Uu5Elements.Block>
+              
+              <h4>children & borderRadius="inherit"</h4>
+              <Uu5Elements.Block
+                card={card}
+                actionList={actionList}
+                header="children"
+                borderRadius={borderRadius}
+              >
+                {Child}
+              </Uu5Elements.Block>
+              
+              <h4>children & borderRadius="inherit" & footer & borderBottomLeftRadius="inherit" & borderBottomRightRadius="inherit"</h4>
+              <Uu5Elements.Block
+                card={card}
+                actionList={actionList}
+                header="children & footer"
+                footer={Footer}
+                borderRadius={borderRadius}
+              >
+                {Child}
+              </Uu5Elements.Block>
+            </div>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

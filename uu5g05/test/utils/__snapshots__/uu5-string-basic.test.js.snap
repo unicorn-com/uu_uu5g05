@@ -1,0 +1,3554 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Uu5String - test of interface instance constructor([tagPropsObj]) 1`] = `
+Uu5String {
+  "clone": [Function],
+  "content": [
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": true,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [
+        "Toto je obsah sekce",
+      ],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": null,
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [
+          {
+            "name": "header",
+            "separator": " ",
+            "uu5DataKey": undefined,
+            "value": "Toto je hlavička sekce",
+            "valueBoundaries": """,
+            "valueDelimiter": "=",
+            "valueType": null,
+          },
+        ],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksSection",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksSection",
+    },
+  ],
+  "initFn": null,
+  "templateDataMap": undefined,
+  "toChildren": [Function],
+  "toObject": [Function],
+  "toPlainText": [Function],
+  "toString": [Function],
+}
+`;
+
+exports[`Uu5String - test of interface instance constructor([tagPropsObj], { templateDataMap, initFn }) 1`] = `
+Uu5String {
+  "clone": [Function],
+  "content": [
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": false,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": [MockFunction] {
+        "calls": [
+          [
+            [Circular],
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": true,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [
+                "Lorem ipsum ...",
+              ],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+        ],
+        "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [
+          {
+            "name": "content",
+            "separator": " ",
+            "uu5DataKey": undefined,
+            "value": "Lorem ipsum ...",
+            "valueBoundaries": """,
+            "valueDelimiter": "=",
+            "valueType": null,
+          },
+        ],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksParagraph",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksParagraph",
+    },
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": false,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": [MockFunction] {
+        "calls": [
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [
+                  {
+                    "name": "content",
+                    "separator": " ",
+                    "uu5DataKey": undefined,
+                    "value": "Lorem ipsum ...",
+                    "valueBoundaries": """,
+                    "valueDelimiter": "=",
+                    "valueType": null,
+                  },
+                ],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            [Circular],
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": true,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [
+                "Lorem ipsum ...",
+              ],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+        ],
+        "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksParagraph",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksParagraph",
+    },
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": true,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [
+        "Lorem ipsum ...",
+      ],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": [MockFunction] {
+        "calls": [
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [
+                  {
+                    "name": "content",
+                    "separator": " ",
+                    "uu5DataKey": undefined,
+                    "value": "Lorem ipsum ...",
+                    "valueBoundaries": """,
+                    "valueDelimiter": "=",
+                    "valueType": null,
+                  },
+                ],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            [Circular],
+          ],
+        ],
+        "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksParagraph",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksParagraph",
+    },
+  ],
+  "initFn": [MockFunction] {
+    "calls": [
+      [
+        Uu5StringObject {
+          "_createPropChild": [Function],
+          "_factory": {
+            "createObject": [Function],
+            "createProps": [Function],
+            "createString": [Function],
+          },
+          "_filterProps": [Function],
+          "_initContent": [Function],
+          "_isPairTag": [Function],
+          "_pairTag": false,
+          "_withPropsAfterFilterFn": [Function],
+          "children": [],
+          "clone": [Function],
+          "getIndex": [Function],
+          "initFn": [MockFunction] {
+            "calls": [Circular],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+          "parent": null,
+          "props": Uu5StringProps {
+            "_factory": {
+              "createObject": [Function],
+              "createProps": [Function],
+              "createString": [Function],
+            },
+            "clone": [Function],
+            "lastSeparator": "",
+            "props": [
+              {
+                "name": "content",
+                "separator": " ",
+                "uu5DataKey": undefined,
+                "value": "Lorem ipsum ...",
+                "valueBoundaries": """,
+                "valueDelimiter": "=",
+                "valueType": null,
+              },
+            ],
+            "toArray": [Function],
+            "toChildren": [Function],
+            "toObject": [Function],
+            "toPlainText": [Function],
+            "toString": [Function],
+          },
+          "tag": "UU5BricksParagraph",
+          "toChildren": [Function],
+          "toObject": [Function],
+          "toPlainText": [Function],
+          "toString": [Function],
+          "uu5Tag": "UU5BricksParagraph",
+        },
+      ],
+      [
+        Uu5StringObject {
+          "_createPropChild": [Function],
+          "_factory": {
+            "createObject": [Function],
+            "createProps": [Function],
+            "createString": [Function],
+          },
+          "_filterProps": [Function],
+          "_initContent": [Function],
+          "_isPairTag": [Function],
+          "_pairTag": false,
+          "_withPropsAfterFilterFn": [Function],
+          "children": [],
+          "clone": [Function],
+          "getIndex": [Function],
+          "initFn": [MockFunction] {
+            "calls": [Circular],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+          "parent": null,
+          "props": Uu5StringProps {
+            "_factory": {
+              "createObject": [Function],
+              "createProps": [Function],
+              "createString": [Function],
+            },
+            "clone": [Function],
+            "lastSeparator": "",
+            "props": [],
+            "toArray": [Function],
+            "toChildren": [Function],
+            "toObject": [Function],
+            "toPlainText": [Function],
+            "toString": [Function],
+          },
+          "tag": "UU5BricksParagraph",
+          "toChildren": [Function],
+          "toObject": [Function],
+          "toPlainText": [Function],
+          "toString": [Function],
+          "uu5Tag": "UU5BricksParagraph",
+        },
+      ],
+      [
+        Uu5StringObject {
+          "_createPropChild": [Function],
+          "_factory": {
+            "createObject": [Function],
+            "createProps": [Function],
+            "createString": [Function],
+          },
+          "_filterProps": [Function],
+          "_initContent": [Function],
+          "_isPairTag": [Function],
+          "_pairTag": true,
+          "_withPropsAfterFilterFn": [Function],
+          "children": [
+            "Lorem ipsum ...",
+          ],
+          "clone": [Function],
+          "getIndex": [Function],
+          "initFn": [MockFunction] {
+            "calls": [Circular],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+          "parent": null,
+          "props": Uu5StringProps {
+            "_factory": {
+              "createObject": [Function],
+              "createProps": [Function],
+              "createString": [Function],
+            },
+            "clone": [Function],
+            "lastSeparator": "",
+            "props": [],
+            "toArray": [Function],
+            "toChildren": [Function],
+            "toObject": [Function],
+            "toPlainText": [Function],
+            "toString": [Function],
+          },
+          "tag": "UU5BricksParagraph",
+          "toChildren": [Function],
+          "toObject": [Function],
+          "toPlainText": [Function],
+          "toString": [Function],
+          "uu5Tag": "UU5BricksParagraph",
+        },
+      ],
+    ],
+    "results": [
+      {
+        "type": "return",
+        "value": undefined,
+      },
+      {
+        "type": "return",
+        "value": undefined,
+      },
+      {
+        "type": "return",
+        "value": undefined,
+      },
+    ],
+  },
+  "templateDataMap": {
+    "idHex32": "32-moje-id",
+    "now": "21.05.2018",
+    "userEmail": "jest@facebook.com",
+    "userName": "Jest",
+  },
+  "toChildren": [Function],
+  "toObject": [Function],
+  "toPlainText": [Function],
+  "toString": [Function],
+}
+`;
+
+exports[`Uu5String - test of interface instance constructor(uu5string) 1`] = `
+Uu5String {
+  "clone": [Function],
+  "content": [
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": true,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [
+        "Toto je obsah sekce",
+      ],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": null,
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [
+          {
+            "name": "content",
+            "separator": " ",
+            "uu5DataKey": undefined,
+            "value": "Toto je hlavička sekce",
+            "valueBoundaries": """,
+            "valueDelimiter": "=",
+            "valueType": null,
+          },
+        ],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksSection",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksSection",
+    },
+  ],
+  "initFn": null,
+  "templateDataMap": undefined,
+  "toChildren": [Function],
+  "toObject": [Function],
+  "toPlainText": [Function],
+  "toString": [Function],
+}
+`;
+
+exports[`Uu5String - test of interface instance constructor(uu5string, { templateDataMap, initFn }) 1`] = `
+Uu5String {
+  "clone": [Function],
+  "content": [
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": false,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": [MockFunction] {
+        "calls": [
+          [
+            [Circular],
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": true,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [
+                "Lorem ipsum ...",
+              ],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+        ],
+        "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [
+          {
+            "name": "content",
+            "separator": " ",
+            "uu5DataKey": undefined,
+            "value": "Lorem ipsum ...",
+            "valueBoundaries": """,
+            "valueDelimiter": "=",
+            "valueType": null,
+          },
+        ],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksParagraph",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksParagraph",
+    },
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": false,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": [MockFunction] {
+        "calls": [
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [
+                  {
+                    "name": "content",
+                    "separator": " ",
+                    "uu5DataKey": undefined,
+                    "value": "Lorem ipsum ...",
+                    "valueBoundaries": """,
+                    "valueDelimiter": "=",
+                    "valueType": null,
+                  },
+                ],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            [Circular],
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": true,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [
+                "Lorem ipsum ...",
+              ],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+        ],
+        "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksParagraph",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksParagraph",
+    },
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": true,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [
+        "Lorem ipsum ...",
+      ],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": [MockFunction] {
+        "calls": [
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [
+                  {
+                    "name": "content",
+                    "separator": " ",
+                    "uu5DataKey": undefined,
+                    "value": "Lorem ipsum ...",
+                    "valueBoundaries": """,
+                    "valueDelimiter": "=",
+                    "valueType": null,
+                  },
+                ],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            [Circular],
+          ],
+        ],
+        "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksParagraph",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksParagraph",
+    },
+  ],
+  "initFn": [MockFunction] {
+    "calls": [
+      [
+        Uu5StringObject {
+          "_createPropChild": [Function],
+          "_factory": {
+            "createObject": [Function],
+            "createProps": [Function],
+            "createString": [Function],
+          },
+          "_filterProps": [Function],
+          "_initContent": [Function],
+          "_isPairTag": [Function],
+          "_pairTag": false,
+          "_withPropsAfterFilterFn": [Function],
+          "children": [],
+          "clone": [Function],
+          "getIndex": [Function],
+          "initFn": [MockFunction] {
+            "calls": [Circular],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+          "parent": null,
+          "props": Uu5StringProps {
+            "_factory": {
+              "createObject": [Function],
+              "createProps": [Function],
+              "createString": [Function],
+            },
+            "clone": [Function],
+            "lastSeparator": "",
+            "props": [
+              {
+                "name": "content",
+                "separator": " ",
+                "uu5DataKey": undefined,
+                "value": "Lorem ipsum ...",
+                "valueBoundaries": """,
+                "valueDelimiter": "=",
+                "valueType": null,
+              },
+            ],
+            "toArray": [Function],
+            "toChildren": [Function],
+            "toObject": [Function],
+            "toPlainText": [Function],
+            "toString": [Function],
+          },
+          "tag": "UU5BricksParagraph",
+          "toChildren": [Function],
+          "toObject": [Function],
+          "toPlainText": [Function],
+          "toString": [Function],
+          "uu5Tag": "UU5BricksParagraph",
+        },
+      ],
+      [
+        Uu5StringObject {
+          "_createPropChild": [Function],
+          "_factory": {
+            "createObject": [Function],
+            "createProps": [Function],
+            "createString": [Function],
+          },
+          "_filterProps": [Function],
+          "_initContent": [Function],
+          "_isPairTag": [Function],
+          "_pairTag": false,
+          "_withPropsAfterFilterFn": [Function],
+          "children": [],
+          "clone": [Function],
+          "getIndex": [Function],
+          "initFn": [MockFunction] {
+            "calls": [Circular],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+          "parent": null,
+          "props": Uu5StringProps {
+            "_factory": {
+              "createObject": [Function],
+              "createProps": [Function],
+              "createString": [Function],
+            },
+            "clone": [Function],
+            "lastSeparator": "",
+            "props": [],
+            "toArray": [Function],
+            "toChildren": [Function],
+            "toObject": [Function],
+            "toPlainText": [Function],
+            "toString": [Function],
+          },
+          "tag": "UU5BricksParagraph",
+          "toChildren": [Function],
+          "toObject": [Function],
+          "toPlainText": [Function],
+          "toString": [Function],
+          "uu5Tag": "UU5BricksParagraph",
+        },
+      ],
+      [
+        Uu5StringObject {
+          "_createPropChild": [Function],
+          "_factory": {
+            "createObject": [Function],
+            "createProps": [Function],
+            "createString": [Function],
+          },
+          "_filterProps": [Function],
+          "_initContent": [Function],
+          "_isPairTag": [Function],
+          "_pairTag": true,
+          "_withPropsAfterFilterFn": [Function],
+          "children": [
+            "Lorem ipsum ...",
+          ],
+          "clone": [Function],
+          "getIndex": [Function],
+          "initFn": [MockFunction] {
+            "calls": [Circular],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+          "parent": null,
+          "props": Uu5StringProps {
+            "_factory": {
+              "createObject": [Function],
+              "createProps": [Function],
+              "createString": [Function],
+            },
+            "clone": [Function],
+            "lastSeparator": "",
+            "props": [],
+            "toArray": [Function],
+            "toChildren": [Function],
+            "toObject": [Function],
+            "toPlainText": [Function],
+            "toString": [Function],
+          },
+          "tag": "UU5BricksParagraph",
+          "toChildren": [Function],
+          "toObject": [Function],
+          "toPlainText": [Function],
+          "toString": [Function],
+          "uu5Tag": "UU5BricksParagraph",
+        },
+      ],
+    ],
+    "results": [
+      {
+        "type": "return",
+        "value": undefined,
+      },
+      {
+        "type": "return",
+        "value": undefined,
+      },
+      {
+        "type": "return",
+        "value": undefined,
+      },
+    ],
+  },
+  "templateDataMap": {
+    "idHex32": "32-moje-id",
+    "now": "21.05.2018",
+    "userEmail": "jest@facebook.com",
+    "userName": "Jest",
+  },
+  "toChildren": [Function],
+  "toObject": [Function],
+  "toPlainText": [Function],
+  "toString": [Function],
+}
+`;
+
+exports[`Uu5String - test of interface instance instance.clone({ templateDataMap, initFn }) 1`] = `
+Uu5String {
+  "clone": [Function],
+  "content": [
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": false,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": [MockFunction] {
+        "calls": [
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [
+                  {
+                    "name": "content",
+                    "separator": " ",
+                    "uu5DataKey": undefined,
+                    "value": "Lorem ipsum ...",
+                    "valueBoundaries": """,
+                    "valueDelimiter": "=",
+                    "valueType": null,
+                  },
+                ],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": true,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [
+                "Lorem ipsum ...",
+              ],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            [Circular],
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": true,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [
+                "Lorem ipsum ...",
+              ],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+        ],
+        "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [
+          {
+            "name": "content",
+            "separator": " ",
+            "uu5DataKey": undefined,
+            "value": "Lorem ipsum ...",
+            "valueBoundaries": """,
+            "valueDelimiter": "=",
+            "valueType": null,
+          },
+        ],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksParagraph",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksParagraph",
+    },
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": false,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": [MockFunction] {
+        "calls": [
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [
+                  {
+                    "name": "content",
+                    "separator": " ",
+                    "uu5DataKey": undefined,
+                    "value": "Lorem ipsum ...",
+                    "valueBoundaries": """,
+                    "valueDelimiter": "=",
+                    "valueType": null,
+                  },
+                ],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": true,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [
+                "Lorem ipsum ...",
+              ],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [
+                  {
+                    "name": "content",
+                    "separator": " ",
+                    "uu5DataKey": undefined,
+                    "value": "Lorem ipsum ...",
+                    "valueBoundaries": """,
+                    "valueDelimiter": "=",
+                    "valueType": null,
+                  },
+                ],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            [Circular],
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": true,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [
+                "Lorem ipsum ...",
+              ],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+        ],
+        "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksParagraph",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksParagraph",
+    },
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": true,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [
+        "Lorem ipsum ...",
+      ],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": [MockFunction] {
+        "calls": [
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [
+                  {
+                    "name": "content",
+                    "separator": " ",
+                    "uu5DataKey": undefined,
+                    "value": "Lorem ipsum ...",
+                    "valueBoundaries": """,
+                    "valueDelimiter": "=",
+                    "valueType": null,
+                  },
+                ],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": true,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [
+                "Lorem ipsum ...",
+              ],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [
+                  {
+                    "name": "content",
+                    "separator": " ",
+                    "uu5DataKey": undefined,
+                    "value": "Lorem ipsum ...",
+                    "valueBoundaries": """,
+                    "valueDelimiter": "=",
+                    "valueType": null,
+                  },
+                ],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            Uu5StringObject {
+              "_createPropChild": [Function],
+              "_factory": {
+                "createObject": [Function],
+                "createProps": [Function],
+                "createString": [Function],
+              },
+              "_filterProps": [Function],
+              "_initContent": [Function],
+              "_isPairTag": [Function],
+              "_pairTag": false,
+              "_withPropsAfterFilterFn": [Function],
+              "children": [],
+              "clone": [Function],
+              "getIndex": [Function],
+              "initFn": [MockFunction] {
+                "calls": [Circular],
+                "results": [
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                  {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+              "parent": null,
+              "props": Uu5StringProps {
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "clone": [Function],
+                "lastSeparator": "",
+                "props": [],
+                "toArray": [Function],
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+              },
+              "tag": "UU5BricksParagraph",
+              "toChildren": [Function],
+              "toObject": [Function],
+              "toPlainText": [Function],
+              "toString": [Function],
+              "uu5Tag": "UU5BricksParagraph",
+            },
+          ],
+          [
+            [Circular],
+          ],
+        ],
+        "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+          {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "parent": null,
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "UU5BricksParagraph",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "UU5BricksParagraph",
+    },
+  ],
+  "initFn": null,
+  "templateDataMap": "<uu5string /><UU5BricksSlider id="root2" key="parKey2"><UU5BricksSlider.Item value=10 min="0" max="10" step="5" id="child" key="childrenID"/></UU5BricksSlider>",
+  "toChildren": [Function],
+  "toObject": [Function],
+  "toPlainText": [Function],
+  "toString": [Function],
+}
+`;
+
+exports[`Uu5String - test of interface instance instance.toChildren() 1`] = `
+[
+  <UU5BricksSlider
+    id="root"
+  >
+    <UU5BricksSlider.Item
+      id="child"
+      value={5}
+    />
+  </UU5BricksSlider>,
+]
+`;
+
+exports[`Uu5String - test of interface instance instance.toChildren({ templateDataMap }) with key path in templateDataMap 1`] = `
+[
+  <UU5CommonDiv>
+    key.path (ok)
+  </UU5CommonDiv>,
+]
+`;
+
+exports[`Uu5String - test of interface instance instance.toChildren({ templateDataMap }) with key path in templateDataMap 2`] = `
+[
+  <UU5CommonDiv>
+    ok
+  </UU5CommonDiv>,
+]
+`;
+
+exports[`Uu5String - test of interface instance instance.toChildren({ templateDataMap }) with nested uu5string in templateDataMap 1`] = `
+[
+  <UU5CommonDiv>
+    <UU5BricksParagraph>
+      lorem
+    </UU5BricksParagraph>
+  </UU5CommonDiv>,
+]
+`;
+
+exports[`Uu5String - test of interface instance instance.toChildren({ templateDataMap }) with object in templateDataMap 1`] = `
+[
+  <UU5CommonDiv>
+    {
+      "foo": 10,
+      "toString": "\${FOO:10}",
+    }
+  </UU5CommonDiv>,
+]
+`;
+
+exports[`Uu5String - test of interface instance instance.toChildren({ templateDataMap }) with object in templateDataMap 2`] = `
+[
+  <UU5CommonDiv
+    attr={
+      {
+        "foo": 10,
+        "toString": "\${FOO:10}",
+      }
+    }
+  />,
+]
+`;
+
+exports[`Uu5String - test of interface instance instance.toChildren({ templateDataMap, filterFn }) 1`] = `
+[
+  <UU5BricksParagraph
+    content="Lorem ipsum ..."
+  />,
+  <UU5BricksParagraph />,
+  <UU5BricksParagraph>
+    Lorem ipsum ...
+  </UU5BricksParagraph>,
+]
+`;
+
+exports[`Uu5String - test of interface instance instance.toString({ templateDataMap, filterFn }) 1`] = `"<UU5BricksParagraph content="Lorem ipsum ..."/><UU5BricksParagraph/><UU5BricksParagraph>Lorem ipsum ...</UU5BricksParagraph>"`;
+
+exports[`Uu5String - test of interface of class Test parsing components 1`] = `"<UU5BricksSection><UU5BricksParagraph><UU5BricksSpan/></UU5BricksParagraph></UU5BricksSection>"`;
+
+exports[`Uu5String - test of interface of class Test parsing components 2`] = `"<UU5BricksSection content='<uu5string/><UU5BricksParagraph><UU5BricksSpan/></UU5BricksParagraph>'/>"`;
+
+exports[`Uu5String - test of interface of class Test parsing components 3`] = `"<UU5BricksSection content='<uu5string/><UU5BricksParagraph content="<uu5string/><UU5BricksSpan/>"/>'/>"`;
+
+exports[`Uu5String - test of interface of class contentToChildren(uu5string, { templateDataMap, filterFn }) 1`] = `
+[
+  <UU5BricksButton />,
+  <UU5BricksParagraph>
+    <UU5BricksIcon />
+  </UU5BricksParagraph>,
+]
+`;
+
+exports[`Uu5String - test of interface of class contentToObject(uu5string, { templateDataMap, filterFn }) 1`] = `
+[
+  {
+    "props": {},
+    "uu5Tag": "UU5BricksButton",
+  },
+  {
+    "children": [
+      {
+        "props": {},
+        "uu5Tag": "UU5BricksIcon",
+      },
+    ],
+    "props": {},
+    "uu5Tag": "UU5BricksParagraph",
+  },
+]
+`;
+
+exports[`Uu5String - test of interface of class contentToString(uu5string, { templateDataMap, filterFn }) 1`] = `"<UU5BricksButton/><UU5BricksParagraph><UU5BricksIcon/></UU5BricksParagraph>"`;
+
+exports[`Uu5String - test of interface of class parse(uu5string) should return Uu5StringObject 1`] = `
+[
+  Uu5StringObject {
+    "_createPropChild": [Function],
+    "_factory": {
+      "createObject": [Function],
+      "createProps": [Function],
+      "createString": [Function],
+    },
+    "_filterProps": [Function],
+    "_initContent": [Function],
+    "_isPairTag": [Function],
+    "_pairTag": false,
+    "_withPropsAfterFilterFn": [Function],
+    "children": [],
+    "clone": [Function],
+    "getIndex": [Function],
+    "initFn": null,
+    "parent": null,
+    "props": Uu5StringProps {
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "clone": [Function],
+      "lastSeparator": "",
+      "props": [],
+      "toArray": [Function],
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+    },
+    "tag": "UU5BricksSection",
+    "toChildren": [Function],
+    "toObject": [Function],
+    "toPlainText": [Function],
+    "toString": [Function],
+    "uu5Tag": "UU5BricksSection",
+  },
+]
+`;
+
+exports[`Uu5String - test of interface of class parse(uu5string) should return Uu5StringObject 2`] = `
+[
+  "
+",
+  Uu5StringObject {
+    "_createPropChild": [Function],
+    "_factory": {
+      "createObject": [Function],
+      "createProps": [Function],
+      "createString": [Function],
+    },
+    "_filterProps": [Function],
+    "_initContent": [Function],
+    "_isPairTag": [Function],
+    "_pairTag": false,
+    "_withPropsAfterFilterFn": [Function],
+    "children": [],
+    "clone": [Function],
+    "getIndex": [Function],
+    "initFn": null,
+    "parent": null,
+    "props": Uu5StringProps {
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "clone": [Function],
+      "lastSeparator": "",
+      "props": [
+        {
+          "name": "name",
+          "separator": "
+  ",
+          "uu5DataKey": undefined,
+          "value": "newCMPname",
+          "valueBoundaries": """,
+          "valueDelimiter": "=",
+          "valueType": null,
+        },
+        {
+          "name": "count",
+          "separator": "
+  ",
+          "uu5DataKey": undefined,
+          "value": 69,
+          "valueBoundaries": "",
+          "valueDelimiter": "=",
+          "valueType": null,
+        },
+        {
+          "name": "tagName",
+          "separator": "
+  ",
+          "uu5DataKey": undefined,
+          "value": "UU5BricksButton",
+          "valueBoundaries": """,
+          "valueDelimiter": "=",
+          "valueType": null,
+        },
+        {
+          "name": "id",
+          "separator": "
+  ",
+          "uu5DataKey": undefined,
+          "value": "uu5-id-component",
+          "valueBoundaries": """,
+          "valueDelimiter": "=",
+          "valueType": null,
+        },
+        {
+          "name": "className",
+          "separator": "
+  ",
+          "uu5DataKey": undefined,
+          "value": "uu5-my-className-cmp",
+          "valueBoundaries": """,
+          "valueDelimiter": "=",
+          "valueType": null,
+        },
+        {
+          "name": "tooltip",
+          "separator": "
+  ",
+          "uu5DataKey": undefined,
+          "value": "Hy, I am tooltip.",
+          "valueBoundaries": """,
+          "valueDelimiter": "=",
+          "valueType": null,
+        },
+        {
+          "name": "selected",
+          "separator": "
+  ",
+          "uu5DataKey": undefined,
+          "value": true,
+          "valueBoundaries": "",
+          "valueDelimiter": undefined,
+          "valueType": null,
+        },
+        {
+          "name": "style",
+          "separator": "
+  ",
+          "uu5DataKey": undefined,
+          "value": "fontSize: 20px; color: red",
+          "valueBoundaries": """,
+          "valueDelimiter": "=",
+          "valueType": null,
+        },
+        {
+          "name": "disabled",
+          "separator": "
+  ",
+          "uu5DataKey": undefined,
+          "value": false,
+          "valueBoundaries": "",
+          "valueDelimiter": "=",
+          "valueType": null,
+        },
+        {
+          "name": "elementAttrs",
+          "separator": "
+  ",
+          "uu5DataKey": undefined,
+          "value": {
+            "style": {
+              "color": "red",
+              "fontSize": "20px",
+            },
+          },
+          "valueBoundaries": "'",
+          "valueDelimiter": "=",
+          "valueType": "uu5json",
+        },
+      ],
+      "toArray": [Function],
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+    },
+    "tag": "UU5BricksButton",
+    "toChildren": [Function],
+    "toObject": [Function],
+    "toPlainText": [Function],
+    "toString": [Function],
+    "uu5Tag": "UU5BricksButton",
+  },
+]
+`;
+
+exports[`Uu5String - test of interface of class parse(uu5string) should return Uu5StringObject 3`] = `
+"
+,<UU5BricksButton
+  name="newCMPname"
+  count=69
+  tagName="UU5BricksButton"
+  id="uu5-id-component"
+  className="uu5-my-className-cmp"
+  tooltip="Hy, I am tooltip."
+  selected
+  style="fontSize: 20px; color: red"
+  disabled=false
+  elementAttrs='<uu5json/>{
+  "style": {
+    "fontSize": "20px",
+    "color": "red"
+  }
+}'/>"
+`;
+
+exports[`Uu5String - test of interface of class parse(uu5string, { buildItemFn }) should return Uu5StringObject 1`] = `
+[
+  undefined,
+]
+`;
+
+exports[`Uu5String - test of interface of class parseTagPropsArray(arrayOfObjects) should return Uu5StringObject 1`] = `
+Uu5StringObject {
+  "_createPropChild": [Function],
+  "_factory": {
+    "createObject": [Function],
+    "createProps": [Function],
+    "createString": [Function],
+  },
+  "_filterProps": [Function],
+  "_initContent": [Function],
+  "_isPairTag": [Function],
+  "_pairTag": true,
+  "_withPropsAfterFilterFn": [Function],
+  "children": [
+    Uu5StringObject {
+      "_createPropChild": [Function],
+      "_factory": {
+        "createObject": [Function],
+        "createProps": [Function],
+        "createString": [Function],
+      },
+      "_filterProps": [Function],
+      "_initContent": [Function],
+      "_isPairTag": [Function],
+      "_pairTag": false,
+      "_withPropsAfterFilterFn": [Function],
+      "children": [],
+      "clone": [Function],
+      "getIndex": [Function],
+      "initFn": null,
+      "parent": [Circular],
+      "props": Uu5StringProps {
+        "_factory": {
+          "createObject": [Function],
+          "createProps": [Function],
+          "createString": [Function],
+        },
+        "clone": [Function],
+        "lastSeparator": "",
+        "props": [
+          {
+            "name": "content",
+            "separator": " ",
+            "uu5DataKey": undefined,
+            "value": [
+              Uu5StringObject {
+                "_createPropChild": [Function],
+                "_factory": {
+                  "createObject": [Function],
+                  "createProps": [Function],
+                  "createString": [Function],
+                },
+                "_filterProps": [Function],
+                "_initContent": [Function],
+                "_isPairTag": [Function],
+                "_pairTag": false,
+                "_withPropsAfterFilterFn": [Function],
+                "children": [],
+                "clone": [Function],
+                "getIndex": [Function],
+                "initFn": null,
+                "parent": [Circular],
+                "props": Uu5StringProps {
+                  "_factory": {
+                    "createObject": [Function],
+                    "createProps": [Function],
+                    "createString": [Function],
+                  },
+                  "clone": [Function],
+                  "lastSeparator": "",
+                  "props": [],
+                  "toArray": [Function],
+                  "toChildren": [Function],
+                  "toObject": [Function],
+                  "toPlainText": [Function],
+                  "toString": [Function],
+                },
+                "tag": "Nested",
+                "toChildren": [Function],
+                "toObject": [Function],
+                "toPlainText": [Function],
+                "toString": [Function],
+                "uu5Tag": "Nested",
+              },
+            ],
+            "valueBoundaries": """,
+            "valueDelimiter": "=",
+            "valueType": "uu5string",
+          },
+        ],
+        "toArray": [Function],
+        "toChildren": [Function],
+        "toObject": [Function],
+        "toPlainText": [Function],
+        "toString": [Function],
+      },
+      "tag": "Content",
+      "toChildren": [Function],
+      "toObject": [Function],
+      "toPlainText": [Function],
+      "toString": [Function],
+      "uu5Tag": "Content",
+    },
+    "text",
+  ],
+  "clone": [Function],
+  "getIndex": [Function],
+  "initFn": null,
+  "parent": null,
+  "props": Uu5StringProps {
+    "_factory": {
+      "createObject": [Function],
+      "createProps": [Function],
+      "createString": [Function],
+    },
+    "clone": [Function],
+    "lastSeparator": "",
+    "props": [
+      {
+        "name": "foo",
+        "separator": " ",
+        "uu5DataKey": undefined,
+        "value": "bar",
+        "valueBoundaries": """,
+        "valueDelimiter": "=",
+        "valueType": null,
+      },
+    ],
+    "toArray": [Function],
+    "toChildren": [Function],
+    "toObject": [Function],
+    "toPlainText": [Function],
+    "toString": [Function],
+  },
+  "tag": "UU5BricksSection",
+  "toChildren": [Function],
+  "toObject": [Function],
+  "toPlainText": [Function],
+  "toString": [Function],
+  "uu5Tag": "UU5BricksSection",
+}
+`;
+
+exports[`Uu5String - test of interface of class toChildren(uu5string) 1`] = `
+[
+  "
+",
+  <UU5BricksButton
+    className="uu5-my-className-cmp"
+    count={69}
+    disabled={false}
+    elementAttrs={
+      {
+        "style": {
+          "color": "red",
+          "fontSize": "20px",
+        },
+      }
+    }
+    id="uu5-id-component"
+    name="newCMPname"
+    selected={true}
+    style="fontSize: 20px; color: red"
+    tagName="UU5BricksButton"
+    tooltip="Hy, I am tooltip."
+  />,
+]
+`;
+
+exports[`Uu5String - test of interface of class toChildren(uu5string, { templateDataMap, filterFn }) 1`] = `
+[
+  <UU5BricksSection />,
+]
+`;
+
+exports[`Uu5String - test of interface of class toObject(uu5string, { templateDataMap, filterFn }) 1`] = `
+[
+  {
+    "props": {},
+    "uu5Tag": "UU5BricksSection",
+  },
+]
+`;
+
+exports[`Uu5String - test of interface of class toString(uu5string) 1`] = `
+"
+<UU5BricksButton
+  name="newCMPname"
+  count=69
+  tagName="UU5BricksButton"
+  id="uu5-id-component"
+  className="uu5-my-className-cmp"
+  tooltip="Hy, I am tooltip."
+  selected
+  style="fontSize: 20px; color: red"
+  disabled=false
+  elementAttrs='<uu5json/>{
+  "style": {
+    "fontSize": "20px",
+    "color": "red"
+  }
+}'/>"
+`;
+
+exports[`Uu5String - test of interface of class toString(uu5string, { templateDataMap, filterFn }) 1`] = `"<UU5BricksSection/>"`;

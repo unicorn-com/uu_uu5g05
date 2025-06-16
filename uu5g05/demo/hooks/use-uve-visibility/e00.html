@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { useRef, Utils, useUveVisibility, useEffect, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      function Message(props) {
+        const [visibleArray, setVisibleArray] = useState([]);
+        const [timeArray, setTimeArray] = useState([]);
+        /*@@viewOn:example*/
+        const visible = useUveVisibility();
+        /*@@viewOff:example*/
+
+        useEffect(() => {
+          console.log(visible);
+          setVisibleArray([...visibleArray, visible]);
+          setTimeArray([...timeArray, new Date().toLocaleString().slice(11, 20)]);
+        }, [visible]);
+        let visibleColor = Config.Css.css`color: green; padding: 4px 0px 4px 0px;`;
+        let notVisibleColor = Config.Css.css`color: red; padding: 4px 0px 4px 0px;`;
+        let message = visibleArray.map((visible, index) => {
+          if (index + 1 === visibleArray.length) {
+            return visible ? (
+              <div key={index} className={visibleColor}>
+                Since {timeArray[index]} window is visible.
+              </div>
+            ) : (
+              <div key={index} className={notVisibleColor}>
+                Since {timeArray[index]} window is not not visible.
+              </div>
+            );
+          }
+          return visible ? (
+            <div key={index} className={visibleColor}>
+              Since {timeArray[index]} window has been visible.
+            </div>
+          ) : (
+            <div key={index} className={notVisibleColor}>
+              Since {timeArray[index]} window has been not visible.
+            </div>
+          );
+        });
+
+        return (
+          <div>
+            <h3>Change tab</h3>
+            <div>
+              On the page is written information about visibility of the page. Page visibility is detected based on
+              returned value of useUveVisibility hook. If the tab is displayed in the browser (no other tab is switched
+              or the whole window is not minimized) the returned value is true, otherwise it is false (value is also
+              written to the console).
+            </div>
+            {message}
+          </div>
+        );
+      }
+      //@@viewOff:example
+
+      function Demo() {
+        return <Message />;
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

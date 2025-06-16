@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+
+      //@@viewOn:example
+      const STEP_LIST = [
+        { code: "step1", title: "Step 1" },
+        { code: "step2", title: "Step 2" },
+        { code: "step3", title: "Step 3" },
+      ];
+
+      const Page = () => {
+        const [stepIndex, setStepIndex] = useState(0);
+        const [progressIndex, setProgressIndex] = useState(stepIndex);
+
+        return (
+          <div>
+            <Uu5Elements.Stepper
+              itemList={STEP_LIST}
+              stepIndex={stepIndex}
+              progressIndex={progressIndex}
+              onChange={(event) => {
+                setStepIndex(event.data.stepIndex);
+              }}
+            />
+
+            <div>
+              {`Stepper index: ${stepIndex} `}
+              <Uu5Elements.Button
+                size="xxs"
+                children="Previous"
+                onClick={() => setStepIndex(stepIndex - 1)} disabled={stepIndex === 0}
+              />
+              <Uu5Elements.Button
+                size="xxs"
+                children="Next"
+                onClick={() => {
+                  setStepIndex(stepIndex + 1);
+                  if (progressIndex < stepIndex + 1) setProgressIndex(stepIndex + 1);
+                }}
+                disabled={stepIndex === STEP_LIST.length - 1}
+              />
+              <Uu5Elements.Button
+                size="xxs"
+                children="Reset"
+                onClick={() => {
+                  setStepIndex(0);
+                  setProgressIndex(0);
+                }}
+              />
+            </div>
+          </div>
+        );
+      };
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

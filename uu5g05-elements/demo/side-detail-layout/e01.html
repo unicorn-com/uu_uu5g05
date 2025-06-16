@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        useState,
+        useRef,
+        useLayoutEffect,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum, times } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const List = createVisualComponent({
+        uu5Tag: Config.TAG + "List",
+
+        render(props) {
+          const {
+            itemList = times(10, (v) => v + 1),
+            detailData,
+            onDetailOpen,
+            ...restProps
+          } = props;
+
+          return (
+            <Uu5Elements.Block
+              headerType="title"
+              card="full"
+              significance="subdued"
+              shape="background"
+              height="100%"
+              {...restProps}
+            >
+              <Uu5Elements.MenuList
+                itemList={itemList.map((i) => ({
+                  children: i,
+                  onClick: () => detailData?.oid === i ? onDetailOpen(null) : onDetailOpen({ oid: i }),
+                  colorScheme: detailData?.oid === i ? "primary" : undefined,
+                  significance: "distinct",
+                }))}
+              />
+            </Uu5Elements.Block>
+          )
+        },
+      });
+
+      const Detail = createVisualComponent({
+        uu5Tag: Config.TAG + "Detail",
+
+        render(props) {
+          const { data, onClose, displayAsModal, open, ...restProps } = props;
+          const { oid } = data;
+
+          const header = `Detail route ${oid}`;
+          const body = <LoremIpsum paragraphCount={20} />;
+
+          if (displayAsModal) {
+            return (
+              <Uu5Elements.Modal {...restProps} header={header} open={open} onClose={onClose}>
+                {body}
+              </Uu5Elements.Modal>
+            );
+          } else {
+            return (
+              <Uu5Elements.Block
+                header={header}
+                headerType="title"
+                height="100%"
+                card="full"
+                significance="subdued"
+                shape="background"
+                actionList={[{ icon: "uugds-close", onClick: onClose }]}
+                {...restProps}
+              >
+                {body}
+              </Uu5Elements.Block>
+            );
+          }
+        },
+      });
+
+      function Block({ header, children }) {
+        return (
+          <Uu5Elements.Block
+            header={header}
+            headerType="title"
+            card="full"
+            significance="subdued"
+            shape="background"
+            height={300}
+          >
+            {/* children as fn because of removing default padding in Block */}
+            {() => children}
+          </Uu5Elements.Block>
+        );
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Block header="children & detail">
+                <Uu5Elements.SideDetailLayout detail={<Detail />}>
+                  <List />
+                </Uu5Elements.SideDetailLayout>
+              </Block>
+
+              <Block header="initialData">
+                <Uu5Elements.SideDetailLayout detail={<Detail />} initialData={{ oid: 2 }}>
+                  <List />
+                </Uu5Elements.SideDetailLayout>
+              </Block>
+
+              <Block header="onlyModal">
+                <Uu5Elements.SideDetailLayout detail={<Detail />} onlyModal>
+                  <List />
+                </Uu5Elements.SideDetailLayout>
+              </Block>
+
+              <Block header="width = 300">
+                <Uu5Elements.SideDetailLayout detail={<Detail />} width={300}>
+                  <List />
+                </Uu5Elements.SideDetailLayout>
+              </Block>
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+
+</html>

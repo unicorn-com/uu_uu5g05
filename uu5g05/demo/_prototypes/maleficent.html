@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maleficent</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5extrasg01/1.x/assets/example-config.js"
+            crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5animationg01/2.x/assets/example-config.js"
+            crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5">Loading...</main>
+
+    <script type="text/babel">
+      //@@viewOn:example
+      import {
+        Utils,
+        createVisualComponent,
+        createVisualComponentWithRef,
+        useState,
+        useImperativeHandle,
+        useRef,
+        useEffect
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import Uu5Animation from "uu5animationg01";
+      import Uu5Extras from "uu5extrasg01";
+
+      const Maleficent = createVisualComponentWithRef({
+        uu5Tag: Config.TAG + "Maleficent",
+
+        render(props, ref) {
+          const { animationSrc, soundSrc, onAnimationEnd, autoPlay, ...restProps } = props;
+
+          const animationRef = useRef();
+          const soundRef = useRef();
+
+          useImperativeHandle(ref, () => ({
+            play() {
+              animationRef?.current?.play?.();
+              soundRef?.current?.play?.();
+            },
+            pause() {
+              animationRef?.current?.pause?.();
+              soundRef?.current?.pause?.();
+            },
+            stop() {
+              animationRef?.current?.stop?.();
+              soundRef?.current?.stop?.();
+            }
+          }));
+
+          useEffect(() => {
+            if (autoPlay) {
+              soundRef.current?.play();
+            }
+          }, [autoPlay]);
+
+          return (
+            <>
+              <Uu5Animation.SvgAnimation
+                src={animationSrc}
+                autoPlay={autoPlay}
+                onEnded={onAnimationEnd}
+                ref={animationRef}
+                {...restProps}
+              />
+              {soundSrc && <Uu5Extras.Audio src={soundSrc} elementRef={soundRef} hidden />}
+            </>
+          )
+        }
+      });
+
+      const Image = createVisualComponent({
+        uu5Tag: Config.TAG + "Image",
+
+        render(props) {
+          const { src, displayDurationS, displayFrequencyS = 0, repeatingDisplay = 1, onEnd, ...restProps } = props;
+          const [displayCount, setDisplayCount] = useState(1);
+          const [display, setDisplay] = useState(true);
+
+          const attrs = Utils.VisualComponent.getAttrs(restProps);
+
+          useEffect(() => {
+            if (display) {
+              if (displayDurationS) {
+                const timeout = setTimeout(() => {
+                  if (repeatingDisplay > 1) {
+                    if (repeatingDisplay === displayCount) {
+                      onEnd();
+                    } else {
+                      setDisplay(false);
+                    }
+                  } else {
+                    onEnd();
+                  }
+                }, displayDurationS * 1000);
+                return () => clearTimeout(timeout);
+              }
+            } else {
+              const timeout = setTimeout(() => {
+                setDisplay(true);
+                setDisplayCount(displayCount + 1);
+              }, displayFrequencyS * 1000);
+              return () => clearTimeout(timeout);
+            }
+          }, [displayDurationS, repeatingDisplay, display, displayFrequencyS, displayCount]);
+
+          return display ? (
+            <img {...attrs} src={src} />
+          ) : null;
+        }
+      });
+
+      const ANIMATION_SRC = "https://lottie.host/c5128a4e-3920-4906-91c8-e05d26d03c64/gs3DlW4G97.json";
+      const SOUND_SRC = "./sound.mp3"
+
+      function MaleficentOnClick() {
+        const [display, setDisplay] = useState(false);
+        console.log("display", display);
+
+        return (
+          <div className={Config.Css.css({ display: "inline-flex", gap: 4, alignItems: "center" })}>
+            <Uu5Elements.Button onClick={(e) => setDisplay(true)}>Display by render</Uu5Elements.Button>
+            {display && (
+              <div>
+                <Maleficent
+                  animationSrc={ANIMATION_SRC}
+                  soundSrc={SOUND_SRC}
+                  autoPlay
+                  onAnimationEnd={() => setDisplay(false)}
+                  width={36}
+                  height="auto"
+                  className={Config.Css.css({ display: "inline-block" })}
+                />
+              </div>
+            )}
+          </div>
+        )
+      }
+
+      function MaleficentOnClickAPI() {
+        const maleficentRef = useRef();
+
+        return (
+          <div className={Config.Css.css({ display: "inline-flex", gap: 4, alignItems: "center" })}>
+            <Uu5Elements.Button onClick={(e) => maleficentRef.current.play()}>Play by ifc</Uu5Elements.Button>
+            <div>
+              <Maleficent
+                animationSrc={ANIMATION_SRC}
+                soundSrc={SOUND_SRC}
+                ref={maleficentRef}
+                width={36}
+                height="auto"
+                className={Config.Css.css({ display: "inline-block" })}
+              />
+            </div>
+          </div>
+        )
+      }
+
+      function MaleficentRandom({ minS, maxS }) {
+        const [display, setDisplay] = useState(false);
+
+        function randomStart() {
+          const timeout = setTimeout(() => setDisplay(true), Utils.Number.random(maxS, minS) * 1000);
+          return () => clearTimeout(timeout);
+        }
+
+        useEffect(() => {
+          if (!display) {
+            return randomStart();
+          }
+        }, [display]);
+
+        return (
+          <div>
+            {display ? (
+              <Maleficent
+                animationSrc={ANIMATION_SRC}
+                //soundSrc={SOUND_SRC} // not event trigger
+                autoPlay
+                onAnimationEnd={() => setDisplay(false)}
+                width={36}
+                height="auto"
+                className={Config.Css.css({ display: "inline-block" })}
+              />
+            ) : null}
+          </div>
+        );
+      }
+
+      const useInactive = (inactiveTime) => {
+        const [isInactive, setIsInactive] = useState(false);
+
+        useEffect(() => {
+          let timeout;
+
+          const resetTimeout = () => {
+            if (timeout) {
+              clearTimeout(timeout);
+            }
+
+            timeout = setTimeout(() => {
+              setIsInactive(true);
+            }, inactiveTime);
+          };
+
+          const handleUserActivity = () => {
+            setIsInactive(false);
+            resetTimeout();
+          };
+
+          // Initial setup
+          resetTimeout();
+
+          // Event listeners
+          window.addEventListener('touchstart', handleUserActivity);
+          window.addEventListener('mousedown', handleUserActivity);
+          window.addEventListener('mousemove', handleUserActivity);
+          window.addEventListener('keydown', handleUserActivity);
+          window.addEventListener('scroll', handleUserActivity);
+
+          // Cleanup
+          return () => {
+            window.removeEventListener('touchstart', handleUserActivity);
+            window.removeEventListener('mousedown', handleUserActivity);
+            window.removeEventListener('mousemove', handleUserActivity);
+            window.removeEventListener('keydown', handleUserActivity);
+            window.removeEventListener('scroll', handleUserActivity);
+
+            if (timeout) {
+              clearTimeout(timeout);
+            }
+          };
+        }, [inactiveTime]);
+
+        return isInactive;
+      };
+
+      function MaleficentInactive({ durationMs }) {
+        const [display, setDisplay] = useState(false);
+
+        const inactive = useInactive(durationMs);
+        if (!display && inactive) setDisplay(true);
+
+        return (
+          <div>
+            {display ? (
+              <Maleficent
+                animationSrc={ANIMATION_SRC}
+                //soundSrc={SOUND_SRC} // not event trigger
+                autoPlay
+                onAnimationEnd={() => setDisplay(false)}
+                width={36}
+                height="auto"
+                className={Config.Css.css({ display: "inline-block" })}
+              />
+            ) : null}
+          </div>
+        );
+      }
+
+      const useMuchActive = (durationMs = 5 * 60 * 1000, efficiency = 0.9) => {
+        const [isActive, setIsActive] = useState(false);
+        const [activeTime, setActiveTime] = useState(0);
+        const [startTime, setStartTime] = useState(0);
+
+        const handleUserActivity = () => {
+          if (!isActive) {
+            setStartTime(Date.now());
+            setIsActive(true);
+          }
+        };
+
+        const calculateActiveTime = () => {
+          if (isActive) {
+            const currentTime = Date.now();
+            const elapsedTime = currentTime - startTime;
+            setActiveTime((prevActiveTime) => prevActiveTime + elapsedTime);
+            setIsActive(false);
+          }
+        };
+
+        useEffect(() => {
+          // Attach event listeners
+          window.addEventListener('mousemove', handleUserActivity);
+          window.addEventListener('mousedown', handleUserActivity);
+          window.addEventListener('keydown', handleUserActivity);
+          window.addEventListener('scroll', handleUserActivity);
+
+          // Set up a timer to calculate active time periodically
+          const intervalId = setInterval(calculateActiveTime, 1000);
+
+          // Cleanup
+          return () => {
+            // Remove event listeners and clear the interval when the component is unmounted
+            window.removeEventListener('mousemove', handleUserActivity);
+            window.removeEventListener('mousedown', handleUserActivity);
+            window.removeEventListener('keydown', handleUserActivity);
+            window.removeEventListener('scroll', handleUserActivity);
+            clearInterval(intervalId);
+          };
+        }, [isActive, startTime]);
+
+        // Check if the active time is more than x% (90%) of the given duration
+        const isUserActiveEnough = activeTime >= efficiency * durationMs;
+
+        return isUserActiveEnough;
+      };
+
+      function MaleficentMuchActive({ durationMs, efficiency }) {
+        const [display, setDisplay] = useState(false);
+
+        const muchActive = useMuchActive(durationMs, efficiency);
+        if (!display && muchActive) setDisplay(true);
+
+        return (
+          <div>
+            {display ? (
+              <Maleficent
+                animationSrc={ANIMATION_SRC}
+                //soundSrc={SOUND_SRC} // not event trigger
+                autoPlay
+                onAnimationEnd={() => setDisplay(false)}
+                width={36}
+                height="auto"
+                className={Config.Css.css({ display: "inline-block" })}
+              />
+            ) : null}
+          </div>
+        );
+      }
+
+      function ImageDuration({ displayDurationS }) {
+        const [display, setDisplay] = useState(true);
+        return (
+          <div className={Config.Css.css({ height: "100%" })}>
+            {display ? (
+              <Image
+                src="https://images.pexels.com/photos/36347/cow-pasture-animal-almabtrieb.jpg?w=150&auto=compress"
+                displayDurationS={displayDurationS}
+                onEnd={() => setDisplay(false)}
+                className={Config.Css.css({ height: "100%" })}
+              />
+            ) : null}
+          </div>
+        );
+      }
+
+      function ImageAll({ displayDurationS, repeatingDisplay, displayFrequencyS }) {
+        const [display, setDisplay] = useState(true);
+        return (
+          <div className={Config.Css.css({ height: "100%" })}>
+            {display ? (
+              <Image
+                src="https://images.pexels.com/photos/36347/cow-pasture-animal-almabtrieb.jpg?w=150&auto=compress"
+                displayDurationS={displayDurationS}
+                repeatingDisplay={repeatingDisplay}
+                displayFrequencyS={displayFrequencyS}
+                onEnd={() => setDisplay(false)}
+                className={Config.Css.css({ height: "100%" })}
+              />
+            ) : null}
+          </div>
+        );
+      }
+
+      function Page() {
+        return (
+          <Uu5Elements.Grid templateColumns="auto 1fr" alignItems="center" autoRows="40px 40px 40px 40px 40px 80px 80px">
+            <span>on click</span>
+            <MaleficentOnClick />
+
+            <span>on click (by API)</span>
+            <MaleficentOnClickAPI />
+
+            <span>random 1-5s</span>
+            <MaleficentRandom minS={1} maxS={5} />
+
+            <span>inactive 2s</span>
+            <MaleficentInactive durationMs={2000} />
+
+            <span>much active 80% in 2s<br/>not working so much</span>
+            <MaleficentMuchActive durationMs={2000} efficiency={0.8} />
+
+            <span>image & displayDurationS=5</span>
+            <ImageDuration displayDurationS={5} />
+
+            <span>image & displayDurationS=5 & repeatingDisplay=3 & displayFrequencyS=3</span>
+            <ImageAll displayDurationS={5} repeatingDisplay={3} displayFrequencyS={3} />
+          </Uu5Elements.Grid>
+        );
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState, useCallback } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      //@@viewOn:imports
+      import { useUnmountedRef } from "uu5g05";
+      //@@viewOff:imports
+
+      const Tracker = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "Tracker",
+        //@@viewOff:statics
+
+        render(props) {
+          //@@viewOn:private
+          const [progress, setProgress] = useState(0);
+          const unmountedRef = useUnmountedRef();
+
+          async function trackProgress() {
+            let totalProgress = 0;
+            do {
+              let progressedBy = await performPieceOfWork();
+              if (unmountedRef.current) return;
+
+              totalProgress = Math.min(totalProgress + progressedBy, 1);
+              setProgress(totalProgress);
+            } while (totalProgress < 1);
+          }
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <div>
+              <Uu5Elements.Button onClick={trackProgress} disabled={progress > 0} children="Track progress" />
+              <div>Current progress: {Math.round(progress * 100)}%</div>
+            </div>
+          );
+          //@@viewOff:render
+        },
+      });
+
+      async function performPieceOfWork() {
+        let v = Math.random() * 0.1;
+        await new Promise((resolve) => setTimeout(resolve, Math.floor(v * 5000)));
+        return v;
+      }
+      //@@viewOff:example
+
+      function Demo() {
+        let [key, setKey] = useState(0);
+        let remount = useCallback(() => setKey((key) => key + 1), []);
+
+        return (
+          <div>
+            <Tracker key={key} />
+
+            <Uu5Elements.Button
+              onClick={remount}
+              children="Re-mount example during tracking"
+              className={Config.Css.css`margin-top: 16px;`}
+            />
+            <div>
+              (should not cause any warnings in console regarding setting state after component has been unmounted)
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const { value: propsValue, onChange, onValidationStart, onValidationEnd } = props;
+
+          const [value, setValue] = useState(propsValue);
+          const [errorList, setErrorList] = useState(null);
+          const [pending, setPending] = useState();
+
+          return (
+            <div>
+              <Input
+                {...props}
+                value={value}
+                onChange={(e) => {
+                  typeof onChange === "function" && onChange(e);
+                  setValue(e.data.value);
+                }}
+                onValidationStart={(e) => {
+                  typeof onValidationStart === "function" && onValidationStart(e);
+                  setPending(true);
+                }}
+                onValidationEnd={(e) => {
+                  typeof onValidationEnd === "function" && onValidationEnd(e);
+                  setErrorList(e.data.errorList.length ? e.data.errorList : null);
+                  setPending(false);
+                }}
+              />
+              {errorList && (
+                <div>
+                  <Uu5Elements.Text colorScheme="negative">
+                    {errorList.map(({ code }) => code).join(" ")}
+                  </Uu5Elements.Text>
+                </div>
+              )}
+              {pending && <div>Pending...</div>}
+            </div>
+          );
+        };
+      }
+
+      const SelectInput = withControlledInput(Uu5Forms.Select.Input);
+
+      function Page() {
+        const itemList = [
+          { value: undefined },
+          { value: "created", children: "Created" },
+          { value: "initial", children: "Initial" },
+          { value: "active", children: "Active" },
+          { value: "final", children: "Final" },
+          { value: "alternative", children: "Alternative" },
+          { value: "problem", children: "Problem" },
+          { value: "passive", children: "Passive" },
+          { value: "failed", children: "Failed" },
+          { value: "cancelled", children: "Cancelled" },
+        ];
+
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>value & onChange (in console)</h4>
+            <SelectInput
+              itemList={itemList}
+              value="initial"
+              onChange={(e) => {
+                console.log("onChange", e);
+                // TODO save value to state
+              }}
+            />
+
+            <h4>itemList</h4>
+            <SelectInput
+              placeholder="Just value"
+              itemList={[
+                { value: "created" },
+                { value: "initial" },
+                { value: "active" },
+                { value: "final" },
+                { value: "alternative" },
+                { value: "problem" },
+                { value: "passive" },
+                { value: "failed" },
+                { value: "cancelled" },
+              ]}
+            />
+            <br />
+            <SelectInput
+              placeholder="Value & children"
+              itemList={[
+                { value: "created", children: "Created sad sad ad sad ad as" },
+                { value: "initial", children: "Initial" },
+                { value: "active", children: "Active" },
+                { value: "final", children: "Final" },
+                { value: "alternative", children: "Alternative" },
+                { value: "problem", children: "Problem" },
+                { value: "passive", children: "Passive" },
+                { value: "failed", children: "Failed" },
+                { value: "cancelled", children: "Cancelled" },
+              ]}
+            />
+            <br />
+            <SelectInput
+              placeholder="Component in children"
+              itemList={[
+                {
+                  value: "created",
+                  children: (
+                    <>
+                      <Uu5Elements.Badge colorScheme="created" size="l" />&nbsp;Created
+                    </>
+                  ),
+                },
+                {
+                  value: "initial",
+                  children: (
+                    <>
+                      <Uu5Elements.Badge colorScheme="initial" size="l" />&nbsp;Initial
+                    </>
+                  ),
+                },
+                {
+                  value: "active",
+                  children: (
+                    <>
+                      <Uu5Elements.Badge colorScheme="active" size="l" />&nbsp;Active
+                    </>
+                  ),
+                },
+                {
+                  value: "final",
+                  children: (
+                    <>
+                      <Uu5Elements.Badge colorScheme="final" size="l" />&nbsp;Final
+                    </>
+                  ),
+                },
+                {
+                  value: "alternative",
+                  children: (
+                    <>
+                      <Uu5Elements.Badge colorScheme="alternative" size="l" />&nbsp;Alternative
+                    </>
+                  ),
+                },
+                {
+                  value: "problem",
+                  children: (
+                    <>
+                      <Uu5Elements.Badge colorScheme="problem" size="l" />&nbsp;Problem
+                    </>
+                  ),
+                },
+                {
+                  value: "passive",
+                  children: (
+                    <>
+                      <Uu5Elements.Badge colorScheme="passive" size="l" />&nbsp;Passive
+                    </>
+                  ),
+                },
+                {
+                  value: "failed",
+                  children: (
+                    <>
+                      <Uu5Elements.Badge colorScheme="failed" size="l" />&nbsp;Failed
+                    </>
+                  ),
+                },
+                {
+                  value: "cancelled",
+                  children: (
+                    <>
+                      <Uu5Elements.Badge colorScheme="cancelled" size="l" />&nbsp;Cancelled
+                    </>
+                  ),
+                },
+              ]}
+            />
+
+            <h4>itemList children as lsiObject</h4>
+            <SelectInput placeholder="children as lsiObject" itemList={[
+                { value: "created", children: {en: "Created", cs: "Vytvořeno"} },
+                { value: "initial", children: {en: "Initial", cs: "Úvodní"} },
+                { value: "active", children: {en: "Active", cs: "Aktivní"} },
+                { value: "final", children: {en: "Final", cs: "Finální"} },
+                { value: "alternative", children: {en: "Alternative", cs: "Alternativní"} },
+                { value: "problem", children: {en: "Problem", cs: "Problém"} },
+                { value: "passive", children: {en: "Passive", cs: "Pasivní"} },
+                { value: "failed", children: {en: "Failed", cs: "Neúspěšný"} },
+                { value: "cancelled", children: {en: "Cancelled", cs: "Zrušený"} },
+              ]} />
+
+            <h4>multiple</h4>
+            <SelectInput placeholder="Select multiple items" multiple itemList={itemList} />
+
+            <h4>iconOpen & iconClosed</h4>
+            <SelectInput
+              placeholder="Different icons"
+              iconOpen="uugds-check"
+              iconClosed="uugds-close"
+              itemList={itemList}
+            />
+            <SelectInput
+              placeholder="Different icons"
+              iconOpen="uugds-plus"
+              iconClosed="uugds-favorites"
+              itemList={itemList}
+            />
+
+            <h4>disableOptionReorder</h4>
+            <SelectInput
+              placeholder="Value & children"
+              itemList={itemList}
+              disableOptionReorder
+              multiple
+            />
+
+            <h4>displayCheckboxes</h4>
+            <SelectInput
+              placeholder="Multiple value"
+              itemList={itemList}
+              multiple
+              displayCheckboxes
+            />
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

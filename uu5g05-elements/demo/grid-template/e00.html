@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent } from "uu5g05";
+      import { Config } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+
+      const Page = createComponent({
+        render() {
+          //@@viewOn:example
+          return (
+            <div>
+              <Uu5Elements.GridTemplate
+                contentMap={{
+                  header: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Header</Uu5Elements.Box>,
+                  sidebar: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Sidebar</Uu5Elements.Box>,
+                  content: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Content</Uu5Elements.Box>,
+                  footer: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Footer</Uu5Elements.Box>,
+                }}
+                templateAreas={`
+                  header header header header,
+                  sidebar content content content,
+                  footer footer footer footer
+                `}
+                templateColumns="repeat(4, 1fr)"
+                rowGap={8}
+                columnGap={8}
+              />
+
+              <Uu5Elements.GridTemplate
+                contentMap={{
+                  name: (props) => <Uu5Forms.FormText {...props} name="name" label="Name" />,
+                  surname: (props) => <Uu5Forms.FormText {...props} name="surname" label="Surname" />,
+                  birthDate: (props) => <Uu5Forms.FormDate {...props} name="birthDate" label="Date of birth" />,
+                  desc: (props) => <Uu5Forms.FormTextArea {...props} name="desc" label="Description" />,
+                  controls: (props) => <div {...props}><Uu5Forms.CancelButton /><Uu5Forms.SubmitButton /></div>,
+                }}
+                contentStyleMap={{
+                  controls: { justifySelf: "flex-end", display: "flex", gap: 8 },
+                }}
+                templateAreas={{
+                  xs: `name, surname, birthDate, desc, controls`,
+                  s: `
+                    name surname,
+                    birthDate desc,
+                    . controls
+                  `,
+                }}
+              />
+            </div>
+          );
+          //@@viewOff:example
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

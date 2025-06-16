@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, createVisualComponent, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms, { useFormApi } from "uu5g05-forms";
+      import { Config, wait } from "uu5g05-dev";
+
+      /*@@viewOn:example*/
+      const FormContent = createVisualComponent({
+        render(props) {
+          const formApiHookValue = useFormApi();
+          const { submit, validate, value, setItemValue } = formApiHookValue;
+
+          useEffect(() => {
+            console.log("formApi:", formApiHookValue);
+          });
+
+          return (
+            <>
+              <div className={Config.Css.css({ margin: 16 })}>
+                <Uu5Elements.Button onClick={() => setItemValue("counter", 50)}>Set counter to 50</Uu5Elements.Button>{" "}
+                <Uu5Elements.Button onClick={() => validate()}>Validate</Uu5Elements.Button>{" "}
+                <Uu5Elements.Button onClick={() => submit()}>Submit</Uu5Elements.Button>{" "}
+              </div>
+              <Uu5Forms.FormNumber
+                label="Counter"
+                name="counter"
+                initialValue={10}
+                onValidate={async (e) => {
+                  await wait(200);
+                  return Math.random() < 0.5 ? true : { message: "This value cannot be used right now, try later." };
+                }}
+              />
+              <Uu5Elements.Line />
+              <h4>Current form value:</h4>
+              <pre>{JSON.stringify(value, null, 2)}</pre>
+            </>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Uu5Forms.Form.Provider
+                onValidate={async (e) => {
+                  console.log("onValidate", e);
+                }}
+                onSubmit={(e) => {
+                  console.log("onSubmit", e);
+                  alert(JSON.stringify(e.data.value, null, 2));
+                }}
+              >
+                <FormContent />
+              </Uu5Forms.Form.Provider>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

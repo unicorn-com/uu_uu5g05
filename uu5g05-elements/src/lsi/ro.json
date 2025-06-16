@@ -1,0 +1,78 @@
+{
+  "collapse": "Colaps",
+  "expand": "Extinde",
+  "moreInfo": "Ajutor",
+  "cancel": "Anulare",
+  "ModalBus": {
+    "modalList": "Lista modală"
+  },
+  "RestoreButton": {
+    "confirmMessage": "Una sau mai multe ferestre modale vor fi închise. Continua?",
+    "confirm": "Închideți Windows"
+  },
+  "Pagination": {
+    "search": "Scrieți numărul paginii",
+    "pageOf": "Pagina %d din %d"
+  },
+  "PlaceholderBox": {
+    "items": "Nu există articole aici",
+    "document": "Acest document este gol",
+    "documents": "Nu există documente aici",
+    "folder": "Acest dosar este gol",
+    "users": "Nu există utilizatori alocați",
+    "search": "Nu există Rezultate",
+    "permission": "Nu sunteți autorizat să vizualizați acest conținut",
+    "account": "Vă rugăm să vă conectați mai întâi",
+    "forbidden": "Nu puteți accesa acest lucru",
+    "cart": "Coșul tău este gol",
+    "basket": "Coșul tău este gol",
+    "product": "Nu există produse aici",
+    "message": "Nu există mesaje aici",
+    "ticket": "Nu există bilete aici",
+    "sprint": "Nu există sprinturi aici",
+    "request": "Nu există cereri aici",
+    "activities": "Nu există activități aici",
+    "images": "Nu există imagini aici",
+    "error": "Ups! Ceva a mers prost",
+    "offline": "Se pare că ești offline",
+    "delete": "Chiar vrei să ștergi asta?",
+    "timer": "Conținutul este în curs de pregătire",
+    "role": "Nu există niciun rol atribuit",
+    "security": "Pagina este protejată",
+    "document-check": "Pagina este verificată",
+    "kid": "Nu este alocat un cont de copil",
+    "user": "Nu există niciun cont alocat",
+    "sync": "Sincronizare",
+    "favorites": "Nu există favorite",
+    "notification": "Fără notificări noi",
+    "payment-card": "Nicio metodă de plată disponibilă"
+  },
+  "ColorPalette": {
+    "noShades": "Nuanțele nu sunt disponibile pentru această culoare.",
+    "shade": "Umbră",
+    "selectSchemaShade": "Alegeți culoarea pentru a vedea nuanțele.",
+    "selectSchemaOpacity": "Alegeți culoarea pentru a vizualiza glisorul de opacitate.",
+    "opacity": "Opacitate"
+  },
+  "useComponentPaste": {
+    "pasteAs": "Lipiți ca",
+    "pasteHere": "Lipiți aici"
+  },
+  "IconPalette": {
+    "noIcons": "Nu s-au găsit pictograme"
+  },
+  "verticalCalendar": {
+    "today": "Astăzi",
+    "yesterday": "Ieri",
+    "last7Days": "Ultimele 7 zile",
+    "last30Days": "Ultimele 30 de zile",
+    "thisMonth": "Luna aceasta",
+    "previousMonth": "Luna trecută"
+  },
+  "SpeechButton": {
+    "label": "Convertiți vorbirea în text",
+    "error": {
+      "not-allowed": "Înregistrarea unui discurs nu este permisă în acest browser"
+    }
+  }
+}

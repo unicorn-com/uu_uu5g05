@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voice recording</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { Utils, useState, useEffect, useRef } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      function visualize(ref, stream) {
+        const canvas = ref.current;
+        const canvasCtx = canvas.getContext("2d");
+        const audioCtx = new AudioContext();
+
+        const source = audioCtx.createMediaStreamSource(stream);
+
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 2048;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        source.connect(analyser);
+
+        //analyser.connect(audioCtx.destination);
+
+        function draw() {
+          const width = canvas.width
+          const height = canvas.height;
+
+          requestAnimationFrame(draw);
+
+          analyser.getByteTimeDomainData(dataArray);
+
+          canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+          canvasCtx.fillRect(0, 0, width, height);
+
+          canvasCtx.lineWidth = 2;
+          canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+
+          canvasCtx.beginPath();
+
+          let sliceWidth = width * 1.0 / bufferLength;
+          let x = 0;
+
+          for (let i = 0; i < bufferLength; i++) {
+
+            let v = dataArray[i] / 128.0;
+            let y = v * height / 2;
+
+            if (i === 0) {
+              canvasCtx.moveTo(x, y);
+            } else {
+              canvasCtx.lineTo(x, y);
+            }
+
+            x += sliceWidth;
+          }
+
+          canvasCtx.lineTo(width, height / 2);
+          canvasCtx.stroke();
+        }
+
+        draw();
+      }
+
+      const AudioPlayer = ({ stream }) => {
+        const audioBlobUrl = URL.createObjectURL(stream);
+
+        useEffect(() => {
+          if (stream) {
+            return () => URL.revokeObjectURL(audioBlobUrl);
+          }
+        }, [stream]);
+
+        return (
+          <audio controls>
+            <source src={audioBlobUrl} type="audio/wav" />
+            Your browser does not support the audio element.
+          </audio>
+        );
+      };
+
+      //@@viewOn:example
+      const AudioRecorder = ({ onStream, onRecord }) => {
+        const [rec, setRec] = useState(false);
+        const mediaRecorderRef = useRef();
+        const streamRef = useRef();
+
+        async function startRecording() {
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            streamRef.current = stream;
+            onStream?.(stream);
+
+            mediaRecorderRef.current = new MediaRecorder(stream);
+
+            const chunks = [];
+            mediaRecorderRef.current.ondataavailable = (e) => {
+              chunks.push(e.data);
+            };
+
+            mediaRecorderRef.current.onstop = (e) => {
+              const audioBlob = new Blob(chunks, { type: "audio/wav" });
+              onRecord(new Utils.Event({ value: audioBlob }, e));
+            };
+
+            mediaRecorderRef.current.start();
+          } catch (err) {
+            console.error("Error accessing microphone:", err);
+          }
+        }
+
+        function stopRecording() {
+          onStream?.(null);
+          if (mediaRecorderRef.current) {
+            mediaRecorderRef.current.stop();
+            mediaRecorderRef.current = null;
+            streamRef.current.getTracks().find(({ kind }) => kind === "audio")?.stop();
+            streamRef.current = null;
+          }
+        }
+
+        useEffect(() => {
+          return () => stopRecording();
+        }, []);
+
+        return (
+          <Uu5Elements.Button
+            {...(rec ? {
+              icon: "uugdsstencil-shape-square-solid",
+              onClick: () => {
+                setRec(false);
+                stopRecording();
+              }
+            } : {
+              icon: "uugdsstencil-shape-circle-solid",
+              onClick: () => {
+                setRec(true);
+                startRecording();
+              },
+              className: Config.Css.css({ color: "#e53935" })
+            })}
+          />
+        );
+      };
+
+      const Visualizer = ({ stream, width, height }) => {
+        const ref = useRef();
+
+        useEffect(() => {
+          visualize(ref, stream);
+        }, []);
+
+        return (
+          <canvas ref={ref} width={width} height={height} />
+        )
+      }
+
+      function playBlob(blob) {
+        // Create a URL for the Blob
+        const url = URL.createObjectURL(blob);
+
+        // Create an audio element
+        const audioElement = document.createElement('audio');
+
+        // Set the source of the audio element to the Blob URL
+        audioElement.src = url;
+
+        // Append the audio element to the DOM
+        document.body.appendChild(audioElement);
+
+        // Play the audio
+        audioElement.play();
+
+        // Listen for the 'ended' event to remove the audio element from the DOM after it finishes playing
+        audioElement.addEventListener('ended', () => {
+          // Remove the audio element from the DOM
+          audioElement.parentNode.removeChild(audioElement);
+          // Revoke the Blob URL
+          URL.revokeObjectURL(url);
+        });
+      }
+
+      function Page() {
+        const [stream, setStream] = useState();
+        const [recordList, setRecordList] = useState([]);
+
+        function addRecord(rec) {
+          setRecordList((list) => [...list, rec]);
+        }
+
+        return (
+          <main>
+            <div className={Config.Css.css({ display: "grid", gridTemplateColumns: "auto 1fr", columnGap: 16 })}>
+              <AudioRecorder onStream={setStream} onRecord={(e) => {
+                // send to server e.data.value
+
+                // play blob from server after the response
+                // playBlob(e.data.value);
+
+                addRecord(e.data.value)
+              }} />
+              {stream && <Visualizer stream={stream} width={240} height={36} />}
+            </div>
+            {!!recordList.length && (
+              <Uu5Elements.Tile
+                header={
+                  <Uu5Elements.Text category="interface" segment="title" type="minor">
+                    Blobs to server
+                  </Uu5Elements.Text>
+                }
+                width={400}
+                className={Config.Css.css({ marginTop: 16 })}
+                actionList={[{
+                  icon: "uugds-delete",
+                  children: "Clear",
+                  colorScheme: "negative",
+                  onClick: () => setRecordList([]),
+                }]}
+                displayActionList
+              >
+                {recordList.map((rec, i) => (
+                  <div key={i} className={Config.Css.css({
+                    marginTop: 8,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                  })}>
+                    <Uu5Elements.RichIcon text={i + 1} size="xl" />
+                    <AudioPlayer stream={rec} />
+                  </div>
+                ))}
+              </Uu5Elements.Tile>
+            )}
+          </main>
+        )
+      }
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

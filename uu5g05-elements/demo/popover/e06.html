@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 06</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+  
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useState, useRef, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const onClick = (...args) => console.log("onClick", ...args);
+
+      const NoPresets = createVisualComponent({
+        render(props) {
+          return (
+            <Uu5Elements.HighlightedBox {...props} className={Config.Css.css({ margin: 10 })}>
+              No presets available
+            </Uu5Elements.HighlightedBox>
+          );
+        },
+      });
+
+      const itemList = [
+        { children: "Filter", icon: "uugds-filter" },
+        {
+          children: "Sorting",
+          icon: "uugds-sorting",
+          itemList: [
+            { children: "A - Z", iconRight: "uugds-check", onClick },
+            { children: "Z - A", onClick },
+          ],
+        },
+        {
+          children: "Views",
+          icon: "uugds-manage-columns",
+          itemList: [
+            { children: "Tile", icon: "mdi-table", onClick },
+            { children: "List", icon: "uugds-view-list", iconRight: "uugds-check", onClick },
+          ],
+        },
+        {
+          children: "Presets",
+          icon: "uugds-bookmark",
+          itemList: [{ component: NoPresets }],
+        },
+        { divider: true },
+        {
+          children: "Setting",
+          icon: "uugds-settings",
+          itemList: [
+            {
+              children: "Languages",
+              icon: "uugds-account",
+              itemList: [
+                { children: "Chinese", onClick },
+                { children: "Czech", onClick },
+                { children: "English", iconRight: "uugds-check", onClick },
+                { children: "French", onClick },
+                { children: "German", onClick },
+                { children: "Greek", onClick },
+                { children: "Italian", onClick },
+                { children: "Spanish", onClick },
+                { children: "Swedish", onClick },
+              ],
+            },
+            {
+              children: "Notification",
+              icon: "uugds-bell",
+              itemList: [
+                { children: "On", onClick },
+                { children: "Off", iconRight: "uugds-check", onClick },
+              ],
+            },
+          ],
+        },
+      ];
+
+      function moreMenuItems(count) {
+        let numbers = []
+        for (let i = 1; i <= count; i++) {
+          numbers.push(i)
+        }
+        let itemList = numbers.map((number) => ({ children: `About ${number}`, icon: "uugds-info" }))
+        return itemList
+      }
+
+      //@@viewOn:example
+      const PopoverByElement = createVisualComponent({
+        render({children, ...otherProps}) {
+          const [popoverSettings, setPopoverSettings] = useState(null);
+          const buttonRef = useRef();
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button
+                elementRef={buttonRef}
+                onClick={(e) => setPopoverSettings({ element: buttonRef.current })}
+                pressed={!!(popoverSettings || {}).element}
+                icon="uugds-dots-vertical"
+              />
+              {popoverSettings && (
+                <Uu5Elements.Popover {...otherProps} {...popoverSettings} onClose={() => setPopoverSettings(null)}>
+                  {children}
+                </Uu5Elements.Popover>
+              )}
+            </Fragment>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <h4>short MenuList</h4>
+              <PopoverByElement><Uu5Elements.MenuList itemList={[...itemList, ...moreMenuItems(1)]} /></PopoverByElement>
+
+              <h4>middle MenuList</h4>
+              <PopoverByElement><Uu5Elements.MenuList itemList={[...itemList, ...moreMenuItems(8)]} /></PopoverByElement>
+
+              <h4>long MenuList</h4>
+              <PopoverByElement><Uu5Elements.MenuList itemList={[...itemList, ...moreMenuItems(15)]} /></PopoverByElement>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+{
+  "collapse": "Collapse",
+  "expand": "Expand",
+  "moreInfo": "Help",
+  "showMore": "Show more",
+  "showLess": "Show less",
+  "cancel": "Cancel",
+  "AlertBus": {
+    "closeAll": "Close all"
+  },
+  "Alerts": {
+    "applicationNeedsReloadMessage": "Some functionalities of the application has been updated. It is necessary to reload the page for the application to work correctly.",
+    "applicationNeedsReloadReload": "Reload"
+  },
+  "ModalBus": {
+    "modalList": "Modal List"
+  },
+  "RestoreButton": {
+    "confirmMessage": "One or more modal windows will be closed. Continue?",
+    "confirm": "Close Windows"
+  },
+  "Pagination": {
+    "search": "Write page number",
+    "pageOf": "Page %d of %d"
+  },
+  "PlaceholderBox": {
+    "items": "There are no items here",
+    "document": "This document is empty",
+    "documents": "There are no documents here",
+    "folder": "This folder is empty",
+    "users": "There are no users assigned",
+    "search": "There are no search results",
+    "permission": "You are not authorized to view this content",
+    "account": "Please, log in first",
+    "forbidden": "You are not permitted to display this content",
+    "cart": "Your cart is empty",
+    "basket": "Your basket is empty",
+    "product": "There are no products here",
+    "message": "There are no messages here",
+    "ticket": "There are no tickets here",
+    "sprint": "There are no sprints here",
+    "request": "There are no requests here",
+    "activities": "There are no activities here",
+    "images": "There are no images here",
+    "error": "Oops, something went wrong",
+    "offline": "It seems you are offline",
+    "delete": "Do you really want to delete this?",
+    "timer": "Content is being prepared",
+    "role": "There is no role assigned",
+    "security": "Page is protected",
+    "document-check": "Page is verified",
+    "kid": "There is no child account assigned",
+    "user": "There is no account assigned",
+    "sync": "Syncing",
+    "favorites": "There are no favorites",
+    "notification": "No new notifications",
+    "payment-card": "No available payment method"
+  },
+  "ColorPalette": {
+    "noShades": "Shades not available for this color.",
+    "shade": "Shade",
+    "selectSchemaShade": "Choose color to view shades.",
+    "selectSchemaOpacity": "Choose color to view opacity slider.",
+    "opacity": "Opacity"
+  },
+  "useComponentPaste": {
+    "pasteAs": "Paste as",
+    "pasteHere": "Paste here"
+  },
+  "IconPalette": {
+    "noIcons": "No icons found"
+  },
+  "verticalCalendar": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "last7Days": "Last 7 days",
+    "last30Days": "Last 30 days",
+    "thisMonth": "This month",
+    "previousMonth": "Previous month"
+  },
+  "Calendar": {
+    "selectWeek": "Select the week",
+    "selectMonth": "Select the month"
+  },
+  "SpeechButton": {
+    "label": "Speech to text",
+    "error": {
+      "not-allowed": "Recording of a speech is not allowed in this browser"
+    }
+  }
+}

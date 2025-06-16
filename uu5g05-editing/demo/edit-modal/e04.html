@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 04</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      Uu5Loader.config({
+        imports: {
+          // uu5g04 dependency
+          "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+
+          uu5g04: "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04.min.js",
+          "uu5g04-bricks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-bricks.min.js",
+          "uu5g04-forms": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-forms.min.js",
+          "uu5g04-hooks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-hooks.min.js",
+          "uu5g04-bricks-editable": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-bricks-editable.min.js",
+          "uu5g04-block-layout": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-block-layout.min.js",
+
+          // uu_plus4u5g01 dependency
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+
+          uu_plus4u5g01: "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/uu_plus4u5g01.min.js",
+          "uu_plus4u5g01-app": "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/uu_plus4u5g01-app.min.js",
+          "uu_plus4u5g01-bricks": "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/uu_plus4u5g01-bricks.min.js",
+          "uu_plus4u5g01-hooks": "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/uu_plus4u5g01-hooks.min.js",
+          "uu_plus4u5g01-context": "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/uu_plus4u5g01-context.min.js",
+
+          // uu_contentkitg01 dependency
+          uu5imagingg01: "https://cdn.plus4u.net/uu-uu5imagingg01/1.0.0/uu5imagingg01.min.js",
+          uu5richtextg01: "https://cdn.plus4u.net/uu-uu5richtextg01/1.0.0/uu5richtextg01.min.js",
+          uu5tilesg01: "https://cdn.plus4u.net/uu-uu5tilesg01/3.0.0/uu5tilesg01.min.js",
+          uu_plus4u5filesg01: "https://cdn.plus4u.net/uu-plus4u5filesg01/4.0.0/uu_plus4u5filesg01.min.js",
+          
+          uu_contentkitg01: "https://cdn.plus4u.net/uu-contentkitg01/2.0.0/uu_contentkitg01.min.js",
+          "uu_contentkitg01-images": "https://cdn.plus4u.net/uu-contentkitg01/2.0.0/uu_contentkitg01-images.min.js",
+          "uu_contentkitg01-bricks": "https://cdn.plus4u.net/uu-contentkitg01/2.0.0/uu_contentkitg01-bricks.min.js",
+          uu5tilesg02: "https://cdn.plus4u.net/uu-uu5tilesg02/1.0.0/uu5tilesg02.min.js",
+          uu5codekitg01: "https://cdn.plus4u.net/uu-uu5codekitg01/1.0.0/uu5codekitg01.min.js",
+          "uu5codekitg01-markdown": "https://cdn.plus4u.net/uu-uu5codekitg01/1.0.0/uu5codekitg01-markdown.min.js",
+          immutable: "https://cdn.plus4u.net/libs/immutable/3.8.2/immutable.min.js",
+          "uu_applibraryregistryg01-bricks":
+            "https://cdn.plus4u.net/uu-applibraryregistryg01/1.0.0/uu_applibraryregistryg01-bricks.min.js",
+
+          "uu5g05-bricks": "http://localhost:53321/uu5bricksg01.js",
+          uu_dynamiccomponentcontentg02: "http://localhost:4332/uu_dynamiccomponentcontentg02.js",
+          //"https://cdn.plus4u.net/uu-dynamiccomponentcontentg02/3.0.0/uu_dynamiccomponentcontentg02.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import { LoremIpsum } from "uu5g05-dev";
+      import UuDcc from "uu_dynamiccomponentcontentg02";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Bricks from "uu5g05-bricks";
+      import UU5 from "uu5g04";
+
+      //@@viewOn:example
+      const Page = createComponent({
+        render() {
+          const componentProps = {
+            colorScheme: "primary",
+            significance: "distinct",
+            borderRadius: "elementary",
+            nestingLevel: "area",
+            card: "full",
+            headerType: "title",
+            level: 1,
+            header: "Default",
+            info: "Some info...",
+          };
+
+          return (
+            <>
+              {/*@@viewOn:example*/}
+              <h4>Uu5Elements.Block only</h4>
+              <Uu5Elements.Block {...componentProps}>
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Ex sapien vitae pellentesque sem placerat inid.
+                Pretium tellus duis convallis tempus leo eu aenean. Urna tempor pulvinar vivamus fringilla lacus nec
+                metus. Iaculis massa nisl malesuada lacinia integer nunc posuere. Semper vel class aptent taciti
+                sociosqu ad litora. Conubia nostra inceptos himenaeos orci varius natoque penatibus. Dis parturient
+                montes nascetur ridiculus mus donec rhoncus. Nulla molestie mattis scelerisque maximus eget fermentum
+                odio. Purus est efficitur laoreet mauris pharetra vestibulum fusce.
+              </Uu5Elements.Block>
+
+              <h4>Uu5Elements.Block wrapped in Dcc</h4>
+              <UuDcc.Bricks.SectionInput
+                value={`<uu5string/><Uu5Elements.Block colorScheme="primary" significance="distinct" borderRadius="elementary" nestingLevel="area" card="full" headerType="title" level=1 header="Default" info="Some info...">Lorem ipsum dolor sit amet consectetur adipiscing elit. Ex sapien vitae pellentesque sem placerat inid. Pretium tellus duis convallis tempus leo eu aenean. Urna tempor pulvinar vivamus fringilla lacusnec metus. Iaculis massa nisl malesuada lacinia integer nunc posuere. Semper vel class aptent taciti sociosqu ad litora. Conubia nostra inceptos himenaeos orci varius natoque penatibus. Dis parturient montes nascetur ridiculus mus donec rhoncus. Nulla molestie mattis scelerisque maximus eget fermentum odio. Purus est efficitur laoreet mauris pharetra vestibulum fusce.</Uu5Elements.Block>`}
+              />
+
+              {/*@@viewOff:example*/}
+            </>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

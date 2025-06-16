@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Right to left (RTL)</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+
+      [dir="rtl"] .uuelements-934ezd {
+        transform: scale(-1, 1);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { Utils, useState, useEffect, useRef } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, times } from "uu5g05-dev";
+
+      const TEXT = {
+        en: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In convallis. Mauris elementum mauris vitae tortor. Nullam dapibus fermentum ipsum. Nullam feugiat, turpis at pulvinar vulputate, erat libero tristique tellus, nec bibendum odio risus sit amet ante. Mauris tincidunt sem sed arcu. Maecenas libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Proin mattis lacinia justo. Maecenas libero. Integer vulputate sem a nibh rutrum consequat.",
+        ar: `و سأعرض مثال حي لهذا، من منا لم يتحمل جهد بدني شاق إلا من أجل الحصول على ميزة أو فائدة؟ ولكن من لديه الحق أن ينتقد شخص ما أراد أن يشعر بالسعادة التي لا تشوبها عواقب أليمة أو آخر أراد أن يتجنب الألم الذي ربما تنجم عنه بعض المتعة ؟
+          علي الجانب الآخر نشجب ونستنكر هؤلاء الرجال المفتونون بنشوة اللحظة الهائمون في الذين أخفقوا في واجباتهم نتيجة لضعف إرادتهم فيتساوي مع هؤلاء الذين يتجنبون وينأون عن تحمل الكدح والألم . من المفترض أن نفرق بين هذه الحالات بكل سهولة ومرونة. في ذاك الوقت عندما تكون قدرتنا علي الاختيار غير مقيدة بشرط وعندما لا نجد ما يمنعنا أن نفعل الأفضل فها نحن نرحب بالسرور والسعادة ونتجنب كل ما يبعث إلينا الألم. في بعض الأحيان ونظراً للالتزامات التي يفرضها علينا الواجب والعمل سنتنازل غالباً ونرفض الشعور بالسرور ونقبل ما يجلبه إلينا الأسى. الإنسان الحكيم عليه أن يمسك زمام الأمور ويختار إما أن يرفض مصادر السعادة من أجل ما هو أكثر أهمية أو يتحمل الألم من أجل ألا يتحمل ما هو أسوأ. `
+      }
+
+      const DIGITS = {
+        en: [],
+        ar: [],
+      }
+
+      times(16, (v) => {
+        const num = -5 + v;
+        DIGITS.en.push(num);
+        DIGITS.ar.push(new Intl.NumberFormat("ar-sa").format(num));
+      });
+
+      function Styles() {
+        /*
+         * text-align: start | end
+           justify-content: flex-start | flex-end
+           align-content: flex-start | flex-end
+           grid-column-start: <value>
+           grid-column-end: <value>
+           inline-size: <width>
+           margin-block-start/end: <value>
+           margin-inline-start/end: <value>
+           padding-block-start/end: <value>
+           padding-inline-start/end: <value>
+           border-inline-start/end: <value>
+         * */
+        return (
+          <>
+            <h4>Wrong!</h4>
+            <div style={{ textAlign: "left" }}>textAlign: left</div>
+            <div style={{ textAlign: "right" }}>textAlign: right</div>
+
+            <div style={{ backgroundColor: "orange", paddingLeft: 16, paddingRight: 32 }}>
+              <div style={{ backgroundColor: "lightcoral" }}>
+                <div style={{
+                  backgroundColor: "white",
+                  marginLeft: 32,
+                  marginRight: 16,
+                  borderLeft: "8px solid gray"
+                }}>
+                  paddingLeft: 16<br />
+                  paddingRight: 32<br />
+                  marginLeft: 32<br />
+                  marginRight: 16<br />
+                  borderLeft: 8
+                </div>
+              </div>
+            </div>
+
+            <div style={{ backgroundColor: "orange", padding: "0 32px 0 16px" }}>
+              <div style={{ backgroundColor: "lightcoral" }}>
+                <div style={{ backgroundColor: "white", margin: "0 32px 0 16px" }}>
+                  padding: 0 32px 0 16px<br />
+                  margin: 0 32px 0 16px<br />
+                </div>
+              </div>
+            </div>
+
+            <div style={{ float: "right" }}>
+              float: right
+            </div>
+
+            <Uu5Elements.Line margin={{ top: 32 }} />
+
+            <h4>Correct!</h4>
+            <div style={{ textAlign: "start" }}>textAlign: start</div>
+            <div style={{ textAlign: "end" }}>textAlign: end</div>
+
+            <div style={{ backgroundColor: "orange", paddingInlineStart: 16, paddingInlineEnd: 32 }}>
+              <div style={{ backgroundColor: "lightcoral" }}>
+                <div style={{
+                  backgroundColor: "white",
+                  marginInlineStart: 32,
+                  marginInlineEnd: 16,
+                  borderInlineStart: "8px solid gray"
+                }}>
+                  paddingInlineStart: 16<br />
+                  paddingInlineEnd: 32<br />
+                  marginInlineStart: 32<br />
+                  marginInlineEnd: 16<br />
+                  borderInlineStart: 8
+                </div>
+              </div>
+            </div>
+
+            <div className={Config.Css.css({ backgroundColor: "orange", padding: "0 32px 0 16px" })}>
+              <div style={{ backgroundColor: "lightcoral" }}>
+                <div className={Config.Css.css({ backgroundColor: "white", margin: "0 32px 0 16px" })}>
+                  padding: 0 32px 0 16px by Css<br />
+                  margin: 0 32px 0 16px by Css<br />
+                </div>
+              </div>
+            </div>
+
+            <div className={Config.Css.css({ float: "right" })}>
+              float: right by Css
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "end" }}>
+              <div>justifyContent: end</div>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ alignSelf: "end" }}>alignSelf: end</div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)" }}>
+              <div style={{ backgroundColor: "lightcyan" }} />
+              <div style={{ gridColumnStart: 2, gridColumnEnd: 4 }}>gridColumnStart: 2<br />gridColumnEnd: 4</div>
+              <div style={{ backgroundColor: "lightblue" }} />
+              <div style={{ backgroundColor: "lightgreen" }} />
+            </div>
+          </>
+        )
+      }
+
+      function Page() {
+        return (
+          <main>
+            <Uu5Elements.Grid templateColumns={{ xs: "1fr", m: "1fr auto 1fr" }}>
+              <div>
+                <h2>LTR</h2>
+
+                <h3>Text</h3>
+                <div>
+                  {TEXT.en}
+                </div>
+
+                <h3>Numerals</h3>
+                <div>
+                  {DIGITS.en.join(", ")}
+                </div>
+
+                <h3>Icons</h3>
+                <div>
+                  <Uu5Elements.Icon icon="uugds-account" />
+                  &nbsp;
+                  <Uu5Elements.Icon icon="uugds-checkbox-list" />
+                  &nbsp;
+                  <Uu5Elements.Svg code="uugdssvg-svg-activities" />
+                </div>
+
+                <h3>Styles</h3>
+                <Styles />
+              </div>
+              <Uu5Elements.Line direction="vertical" />
+              <div dir="rtl">
+                <h2>RTL: dir="rtl" (html)</h2>
+
+                <h3>Text</h3>
+                <div>
+                  {TEXT.ar}
+                </div>
+
+                <h3>Numerals</h3>
+                <div>
+                  {DIGITS.ar.join(", ")}
+                </div>
+
+                <h3>Icons</h3>
+                <div>
+                  <Uu5Elements.Icon icon="uugds-account" />
+                  &nbsp;
+                  <Uu5Elements.Icon icon="uugds-checkbox-list" />
+                  &nbsp;
+                  <Uu5Elements.Svg code="uugdssvg-svg-activities" />
+                </div>
+
+                <h3>Styles</h3>
+                <Styles />
+              </div>
+            </Uu5Elements.Grid>
+          </main>
+        )
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Telemetry</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      Uu5Loader.config({
+        imports: {
+          uu5codekitg01: "https://cdn.plus4u.net/uu-uu5codekitg01/2.0.0/uu5codekitg01.min.js",
+          jszip: "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js",
+        }
+      })
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5">Loading...</main>
+
+    <script type="text/babel">
+      //@@viewOn:example
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        useDataObject,
+        SessionProvider,
+        useSession,
+        useState,
+        useUpdateEffect,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import { UuDate } from "uu_i18ng01";
+      import { AuthenticationService } from "uu_appg01_oidc";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import JSZip from "jszip";
+      import Uu5CodeKit from "uu5codekitg01";
+
+      function Authenticated({ children }) {
+        const { state } = useSession();
+
+        let result;
+        switch (state) {
+          case "notAuthenticated":
+            result = <Plus4U5Elements.Unauthenticated />;
+            break;
+          case "authenticated":
+            result = children;
+            break;
+          case "pending":
+            break;
+        }
+
+        return result;
+      }
+
+      const [TelemetryContext, useTelemetryContext] = Utils.Context.create();
+
+      const TelemetryProvider = createComponent({
+        uu5Tag: Config.TAG + "TelemetryProvider",
+
+        render(props) {
+          const { baseUri, dateFrom, dateTo, children } = props;
+
+          const dto = useDataObject({
+            skipInitialLoad: !baseUri || !dateFrom || !dateTo,
+            handlerMap: {
+              load: async () => {
+                const getAttributesUri = Plus4U5.Utils.Uri.join(baseUri, "sys/uuAppStatistics/getTFileAttributes");
+
+                const uuDateFrom = new UuDate(dateFrom);
+                const uuDateTo = new UuDate(dateTo);
+                const diffDays = (uuDateTo.toDate().getTime() - uuDateFrom.toDate().getTime()) / (24 * 60 * 60 * 1000);
+
+                const promiseList = Array(diffDays + 1).fill(null).map((_, i) => {
+                  const date = i === 0 ? dateFrom : new UuDate(dateFrom).shiftDay(i).toIsoString();
+                  return (async () => {
+                    let response;
+                    try {
+                      response = await Plus4U5.Utils.AppClient.get(getAttributesUri, { date, fileType: "t56" });
+                    } catch (e) {
+                      const errorMap = e.dtoOut.uuAppErrorMap;
+                      if (!errorMap["uu-appsecondarylogstore-main/tFile/getAttributes/BinaryInfoDoesNotExist"]
+                        && !Object.values(errorMap)[0].cause?.uuAppErrorMap?.["uu-appsecondarylogstore-main/tFile/getAttributes/BinaryInfoDoesNotExist"]) {
+                        throw e;
+                      }
+                    }
+
+                    const dataList = [];
+                    if (response) {
+                      const responseBinary = await Plus4U5.Utils.AppClient.get(response.data.binaryDataUrl);
+
+                      // Initialize a new JSZip instance
+                      const jsZip = new JSZip();
+
+                      // Load the zip file data
+                      const zip = await jsZip.loadAsync(responseBinary.data);
+
+                      const zipFileNameList = Object.keys(zip.files);
+                      for (let i = 0; i < zipFileNameList.length; i++) {
+                        const zipEntry = zip.files[zipFileNameList[i]];
+                        const json = await zipEntry.async("string");
+                        const data = JSON.parse(json);
+                        dataList.push(...data.logRecordList.map((logRecord) => logRecord.logData));
+                      }
+                    }
+
+                    return dataList;
+                  })();
+                });
+
+                return (await Promise.all(promiseList)).flat();
+              }
+            }
+          });
+
+          useUpdateEffect(() => {
+            if (baseUri && dateFrom && dateTo) dto.handlerMap.load();
+          }, [baseUri, dateFrom, dateTo]);
+
+          return (
+            <TelemetryContext.Provider value={dto}>
+              {typeof children === "function" ? children(dto) : children}
+            </TelemetryContext.Provider>
+          );
+        },
+      });
+
+      const useTelemetry = useTelemetryContext;
+
+      function TelemetryToolbarServer({ data, onChange }) {
+        return (
+          <Uu5Elements.Grid templateColumns={{ xs: "1fr", m: "1fr 1fr" }}>
+            <Uu5Forms.Link
+              label="uuApp base uri"
+              value={data.baseUri}
+              onChange={(e) => onChange(new Utils.Event({ baseUri: e.data.value }, e))}
+            />
+            <Uu5Forms.DateRange
+              label="Date from - to"
+              value={[data.dateFrom, data.dateTo]}
+              onChange={(e) => onChange(new Utils.Event({ dateFrom: e.data.value?.[0], dateTo: e.data.value?.[1] }, e))}
+            />
+          </Uu5Elements.Grid>
+        );
+      }
+
+      function TelemetryData() {
+        const { state, data } = useTelemetry();
+
+        // TODO on orig data try to flat structure to be able to display in table
+        // TODO filter data by severity, time range, typeCode
+        // TODO display data by tiles with filters
+
+        return state === "pendingNoData" ? (
+          <Uu5Elements.Pending size="max" />
+        ) : (
+          <Uu5CodeKit.Json.Input
+            className={Config.Css.css({ marginTop: 16 })}
+            value={data}
+            format="pretty"
+            rows={50}
+          />
+        );
+      }
+
+      const yesterday = new UuDate().shiftDay(-1).toIsoString();
+
+      const TelemetryLog = createVisualComponent({
+        uu5Tag: Config.TAG + "TelemetryLog",
+
+        render(props) {
+          const [baseUri, setBaseUri] = useState("https://uuapp.plus4u.net/uu-webkit-maing02/b6d739b46b0a4f4980891c3c54a6df5d"); // uu5 web
+          const [dateFrom, setDateFrom] = useState(yesterday);
+          const [dateTo, setDateTo] = useState(yesterday);
+
+          return (
+            <TelemetryProvider
+              baseUri={baseUri}
+              dateFrom={dateFrom}
+              dateTo={dateTo}
+            >
+              <TelemetryToolbarServer data={{ baseUri, dateFrom, dateTo }} onChange={(e) => {
+                if (e.data.baseUri) setBaseUri(e.data.baseUri);
+                if (e.data.dateFrom) setDateFrom(e.data.dateFrom);
+                if (e.data.dateTo) setDateTo(e.data.dateTo);
+              }} />
+              <TelemetryData />
+            </TelemetryProvider>
+          );
+        }
+      });
+
+      function Page() {
+        return (
+          <SessionProvider authenticationService={AuthenticationService}>
+            <Authenticated>
+              <TelemetryLog />
+            </Authenticated>
+          </SessionProvider>
+        );
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

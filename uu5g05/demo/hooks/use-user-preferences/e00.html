@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:imports
+      import { useUserPreferences, UserPreferencesProvider } from "uu5g05";
+      //@@viewOff:imports
+
+      //@@viewOn:example
+      const PreferencesInfo = createVisualComponent({
+        render(props) {
+          const [userPreferences, setUserPreferences] = useUserPreferences();
+
+          const attrs = Utils.VisualComponent.getAttrs(props);
+          return (
+            <div {...attrs}>
+              User preferences: <pre>{JSON.stringify(userPreferences, null, 2)}</pre>
+              <Uu5Elements.Button
+                onClick={() => setUserPreferences((prefs) => ({ ...prefs, weekStartDay: 8 - prefs.weekStartDay }))}
+              >
+                Change weekStartDay
+              </Uu5Elements.Button>
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const Demo = createVisualComponent({
+        render(props) {
+          return (
+            <div>
+              <UserPreferencesProvider>
+                <PreferencesInfo />
+              </UserPreferencesProvider>
+            </div>
+          );
+        }
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

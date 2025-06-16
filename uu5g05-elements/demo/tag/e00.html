@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="uu5">Loading...</div>
+
+  <script type="text/babel">
+    import { createComponent, Utils } from "uu5g05";
+    import Uu5Elements from "uu5g05-elements";
+    import { Config } from "uu5g05-dev";
+
+    const UuGds = Uu5Elements.UuGds;
+
+    const Page = createComponent({
+      render() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>default</h4>
+            <Uu5Elements.Tag>TEXT</Uu5Elements.Tag>
+
+            <h4>icon & children</h4>
+            <Uu5Elements.Tag icon="uugds-play-circle" />&nbsp;
+            <Uu5Elements.Tag>TEXT</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag icon="uugds-play-circle">TEXT</Uu5Elements.Tag>
+
+            <h4>iconRight && onIconRightClick</h4>
+            <Uu5Elements.Tag iconRight="uugds-close" onIconRightClick={() => alert("click")}>Click</Uu5Elements.Tag>
+
+            <h4>focused</h4>
+            <Uu5Elements.Tag focused>true</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag>false</Uu5Elements.Tag>
+
+            <h4>size</h4>
+            <Uu5Elements.Tag size="xs" icon="uugds-play-circle"/>&nbsp;
+            <Uu5Elements.Tag size="xs">xs</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag size="xs" iconRight="uugds-close">xs</Uu5Elements.Tag>
+            <br /><br />
+            <Uu5Elements.Tag size="s" icon="uugds-play-circle"/>&nbsp;
+            <Uu5Elements.Tag size="s">s</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag size="s" iconRight="uugds-close">s</Uu5Elements.Tag>
+            <br /><br />
+            <Uu5Elements.Tag size="m" icon="uugds-play-circle"/>&nbsp;
+            <Uu5Elements.Tag size="m">m</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag size="m" iconRight="uugds-close">m</Uu5Elements.Tag>
+            <br /><br />
+            <Uu5Elements.Tag size="l" icon="uugds-play-circle"/>&nbsp;
+            <Uu5Elements.Tag size="l">l</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag size="l" iconRight="uugds-close">l</Uu5Elements.Tag>
+            <br /><br />
+            <Uu5Elements.Tag size="xl" icon="uugds-play-circle"/>&nbsp;
+            <Uu5Elements.Tag size="xl">xl</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag size="xl" iconRight="uugds-close">xl</Uu5Elements.Tag>
+
+            <h4>ellipsis</h4>
+            <div style={{ display: "flex", width: 300 }}>
+              <Uu5Elements.Tag size="xs" ellipsis>true Lorem ipsum dolor sit amet</Uu5Elements.Tag>&nbsp;
+              <Uu5Elements.Tag size="xs" ellipsis>true Lorem ipsum dolor sit amet</Uu5Elements.Tag>&nbsp;
+              <Uu5Elements.Tag size="xs" ellipsis>true Lorem ipsum dolor sit amet</Uu5Elements.Tag>
+            </div>
+            <div style={{ display: "flex", width: 300 }}>
+              <Uu5Elements.Tag size="xs">false Lorem ipsum dolor sit amet</Uu5Elements.Tag>
+            </div>
+
+            <h4>borderRadius</h4>
+            <Uu5Elements.Tag size="xs" borderRadius="full" icon="uugds-play-circle"/>&nbsp;
+            <Uu5Elements.Tag size="xs" borderRadius="expressive">xs</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag size="xs" borderRadius="expressive" icon="uugds-play-circle" iconRight="uugds-close">xs</Uu5Elements.Tag>
+            <br /><br />
+            <Uu5Elements.Tag size="s" borderRadius="full" icon="uugds-play-circle"/>&nbsp;
+            <Uu5Elements.Tag size="s" borderRadius="expressive">s</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag size="s" icon="uugds-play-circle" iconRight="uugds-close" borderRadius="expressive">s</Uu5Elements.Tag>
+            <br /><br />
+            <Uu5Elements.Tag size="m" borderRadius="full" icon="uugds-play-circle"/>&nbsp;
+            <Uu5Elements.Tag size="m" borderRadius="expressive">m</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag size="m" icon="uugds-play-circle" iconRight="uugds-close" borderRadius="expressive">m</Uu5Elements.Tag>
+            <br /><br />
+            <Uu5Elements.Tag size="l" borderRadius="full" icon="uugds-play-circle"/>&nbsp;
+            <Uu5Elements.Tag size="l" borderRadius="expressive">l</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag size="l" icon="uugds-play-circle" iconRight="uugds-close" borderRadius="expressive">l</Uu5Elements.Tag>
+            <br /><br />
+            <Uu5Elements.Tag size="xl" borderRadius="full" icon="uugds-play-circle"/>&nbsp;
+            <Uu5Elements.Tag size="xl" borderRadius="expressive">xl</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag size="xl" icon="uugds-play-circle" iconRight="uugds-close" borderRadius="expressive">xl</Uu5Elements.Tag>
+
+            <h4>onClick</h4>
+            <Uu5Elements.Tag onClick={() => alert("click")}>click</Uu5Elements.Tag>
+
+            <h4>iconAnimation & iconRightAnimation</h4>
+            <Uu5Elements.Tag icon="uugds-play-circle" iconAnimation="rotate" size="xl"/>&nbsp;
+            <Uu5Elements.Tag iconRight="uugds-close" iconRightAnimation="rotate" size="xl">TEXT</Uu5Elements.Tag>
+
+            <h4>tooltip</h4>
+            <Uu5Elements.Tag tooltip="Activity Count (string)">9</Uu5Elements.Tag>&nbsp;
+            <Uu5Elements.Tag tooltip={{ cs: "Počet aktivit (lsi)", en: "Activity Count (lsi)" }}>
+              9
+            </Uu5Elements.Tag>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+    });
+
+    Utils.Dom.render(<Page />, document.getElementById("uu5"));
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useState, useRef, Fragment, useEvent } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const ContextMenu = createVisualComponent({
+        render({ children, preferredPosition }) {
+          const [event, setEvent] = useState(null);
+
+          useEvent("contextmenu", e => {
+            e.preventDefault();
+            setEvent(e);
+          }, document);
+
+          let popover = null;
+          if (event) {
+            const pageX = event.pageX;
+            const pageY = event.pageY;
+
+            popover = (
+              <Uu5Elements.Popover
+                key={event.timeStamp}
+                pageX={pageX}
+                pageY={pageY}
+                onClose={() => setEvent(null)}
+                displayArrow
+                preferredPosition={preferredPosition}
+              >
+                {typeof children === "function" ? children({ event, pageX, pageY }) : children}
+              </Uu5Elements.Popover>
+            )
+          }
+
+          return popover;
+        }
+      });
+
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          const [position, setPosition] = useState("bottom-right");
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <ContextMenu preferredPosition={position}>
+                {({ pageX, pageY }) => (
+                  <ul className={Config.Css.css`padding-right: 8px;`}>
+                    <li>pageX: {pageX}</li>
+                    <li>pageY: {pageY}</li>
+                  </ul>
+                )}
+              </ContextMenu>
+              {/*@@viewOff:example*/}
+
+              <Uu5Elements.ButtonGroup itemList={[
+                "bottom-right",
+                "bottom-left",
+                "bottom-center",
+                "top-right",
+                "top-left",
+                "top-center",
+                "left-bottom",
+                "left-top",
+                "left-middle",
+                "right-bottom",
+                "right-top",
+                "right-middle",
+              ].map((v) => ({
+                children: v,
+                onClick: () => setPosition(v),
+                colorScheme: v === position ? "primary" : undefined,
+              }))} />
+              <h4>Right click to show context menu.</h4>
+            </div>
+          );
+        }
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

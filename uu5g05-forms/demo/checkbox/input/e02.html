@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, BackgroundProvider } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      function copyToClipboard(content) {
+        let actualScroll = window.scrollY || document.body.scrollTop || window.pageYOffset;
+        let tempElement = document.createElement("textarea");
+        tempElement.className = "uu5-common-temp-textarea";
+        tempElement.value = content;
+        document.body.appendChild(tempElement);
+        tempElement.select();
+        document.execCommand("copy");
+
+        if (tempElement.remove) {
+          tempElement.remove();
+        } else {
+          tempElement.parentNode.removeChild(tempElement);
+        }
+
+        document.documentElement.scrollTop = actualScroll;
+        document.body.scrollTop = actualScroll;
+      }
+
+      function Table({ className, rows, columns, columnWidth = 200, rowGap = 4, columnGap = 4 }) {
+        let columnSize, rowSize, columns2render;
+
+        if (rows) {
+          rowSize = rows.length;
+          columnSize = Math.max(...rows.map((row) => row.length));
+        } else {
+          columnSize = columns.length;
+          rowSize = Math.max(...columns.map((column) => column.length));
+          columns2render = columns.map((column, i) => {
+            if (rowSize !== column.length) {
+              column = [
+                ...column,
+                ...Array.from({ length: rowSize - column.length }, (x, i) => <span key={"fill-" + i} />),
+              ];
+            }
+            return (
+              <div
+                key={i}
+                className={Config.Css.css({
+                  display: "grid",
+                  gridTemplateColumns: "1fr",
+                  rowGap,
+                })}
+              >
+                {column}
+              </div>
+            );
+          });
+        }
+
+        return (
+          <div
+            className={Config.Css.join(
+              Config.Css.css(
+                {
+                  display: "grid",
+                  gridTemplateColumns: `repeat(auto-fit, minmax(${columnWidth}px, 1fr))`,
+                  gridTemplateRows: "auto",
+                  columnGap,
+                  justifyItems: "stretch",
+                  alignItems: "center",
+                },
+                className
+              )
+            )}
+          >
+            {rows || columns2render}
+          </div>
+        );
+      }
+
+      const STATE_MAP = {
+        accent: "hover",
+        marked: "focus",
+        saving: "print",
+      };
+
+      const SIGNIFICANCE_LIST = ["common", "highlighted"];
+
+      function ColorTable({
+                            children,
+                            background,
+                            colorScheme,
+                            config,
+                            data,
+                            hideSignificance = false,
+                            hideHeader = false,
+                          }) {
+        const items = [];
+        let backgroundColor;
+
+        const significanceKeys = SIGNIFICANCE_LIST;
+        const significanceCount = significanceKeys.length;
+        const stateCountList = significanceKeys.map((significance) => Object.keys(config[significance]).length);
+        const stateCount = Math.max(...stateCountList);
+
+        const stateMaxCountI = stateCountList.indexOf(stateCount);
+        const stateKeys = [
+          ...Object.keys(config[significanceKeys[stateMaxCountI]]).map((state) => STATE_MAP[state] || state),
+          "disabled",
+        ];
+
+        if (colorScheme) {
+          significanceKeys.forEach((significance) => {
+            Object.keys(config[significance]).forEach((state) => {
+              items.push(
+                children({
+                  key: significance + state,
+                  style: config[significance][state],
+                  data: data ? data[significance][state] : undefined,
+
+                  background,
+                  colorScheme,
+                  significance,
+                  state,
+                })
+              );
+            });
+
+            const state = "disabled";
+            items.push(
+              children({
+                key: significance + state,
+                style: config[significance].default,
+                data: data ? data[significance].default : undefined,
+
+                background,
+                colorScheme,
+                significance,
+                state,
+              })
+            );
+          });
+
+          if (background === "dark") {
+            backgroundColor = "#000";
+          } else if (background === "full") {
+            backgroundColor = UuGds.getValue(["ColorPalette", "meaning", "primary", "main"]);
+          } else if (background === "soft") {
+            backgroundColor = UuGds.getValue(["ColorPalette", "meaning", "primary", "softSolidLight"]);
+          }
+        }
+
+        return (
+          <div
+            className={Config.Css.css`
+              display: grid;
+              grid-template-columns: ${hideSignificance ? "0px" : "60px"} repeat(${stateCount + 1}, 1fr);
+              grid-template-rows: auto repeat(${significanceCount}, 1fr);
+              column-gap: 4px;
+              row-gap: 4px;
+              justify-items: center;
+              align-items: center;
+              font-size: 10px;
+            `}
+          >
+            <div className={Config.Css.css`justify-self: end;`}>{!hideHeader && <b>{colorScheme}</b>}</div>
+            {stateKeys.map((state) => (
+              <div key={state} style={{ color: colorScheme ? undefined : "transparent" }}>
+                {state}
+              </div>
+            ))}
+            {significanceKeys.map((significance, i) => (
+              <div key={significance} className={Config.Css.css`justify-self: end;`}>
+                {hideSignificance ? "" : significance}
+              </div>
+            ))}
+            <div
+              className={Config.Css.css`
+                grid-column-start: 2;
+                grid-column-end: span ${stateCount + 1};
+                grid-row-start: 2;
+                grid-row-end: span ${significanceCount};
+                display: grid;
+                grid-template-columns: repeat(${stateCount + 1}, 1fr);
+                grid-template-rows: repeat(${significanceCount}, 1fr);
+                column-gap: 4px;
+                row-gap: 4px;
+                justify-items: stretch;
+                align-items: stretch;
+                width: 100%;
+                background-color: ${backgroundColor};
+                padding: 4px;
+              `}
+            >
+              <BackgroundProvider background={background}>
+                {items}
+              </BackgroundProvider>
+            </div>
+          </div>
+        );
+      }
+
+      function Shape({ children, config, data, columnWidth }) {
+        const columns = Object.keys(config).map((bg) => {
+          return [
+            <div key={bg} className={Config.Css.css`background: #eee; text-align: center; padding: 8px;`}>
+              <b>{bg}</b>
+            </div>,
+            ...Object.keys(config[bg]).map((colorScheme) => {
+              const mData = data ? data[bg] : null;
+              return (
+                <ColorTable
+                  key={bg + colorScheme}
+                  background={bg}
+                  colorScheme={colorScheme}
+                  config={config[bg][colorScheme]}
+                  data={
+                    mData
+                      ? {
+                        ...(mData.$colorScheme
+                          ? JSON.parse(JSON.stringify(mData.$colorScheme).replace("$colorScheme", colorScheme))
+                          : null),
+                        ...mData[colorScheme],
+                      }
+                      : undefined
+                  }
+                >
+                  {children}
+                </ColorTable>
+              );
+            }),
+          ];
+        });
+
+        return (
+          <Table
+            className={Config.Css.css`padding: 4px;`}
+            headerRow
+            rowGap="16px"
+            columnGap="8px"
+            columns={columns}
+            columnWidth={columnWidth}
+          />
+        );
+      }
+
+      function ShapeBox({ style, data, background, colorScheme, significance, state }) {
+        return (
+          <div>
+            <Uu5Forms.Checkbox.Input
+              colorScheme={colorScheme}
+              significance={significance}
+              disabled={state === "disabled"}
+              className={state}
+            />
+            &nbsp;&nbsp;
+            <Uu5Forms.Checkbox.Input
+              colorScheme={colorScheme}
+              significance={significance}
+              disabled={state === "disabled"}
+              className={state}
+              icon="uugds-check"
+            />
+          </div>
+        );
+      }
+
+      const Page = createComponent({
+        render() {
+          return <Shape config={UuGds.getValue(["Shape", "formElement"])}>{(props) => <ShapeBox {...props} />}</Shape>;
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

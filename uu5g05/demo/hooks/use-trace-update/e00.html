@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState, useTraceUpdate, usePreviousValue } from "uu5g05";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+
+      //@@viewOn:example
+      const ShowProps = createComponent({
+        render(props) {
+          useTraceUpdate("ShowProps", props);
+
+          const prevProps = usePreviousValue(props);
+          return (
+            <div className={Config.Css.css({ display: "flex", "&>*": { minWidth: 256 } })}>
+              <div>
+                Props: <pre>{JSON.stringify(props, null, 2)}</pre>
+              </div>
+              <div>
+                Previous props: <pre>{JSON.stringify(prevProps, null, 2)}</pre>
+              </div>
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render(props) {
+          const [componentProps, setComponentProps] = useState({});
+
+          return (
+            <div>
+              <Uu5Elements.Button onClick={() => setComponentProps({ header: "Header", footer: "Footer" })}>
+                Set props
+              </Uu5Elements.Button>
+              <Uu5Elements.Button
+                onClick={() => setComponentProps((v) => ({ ...v, header: (v.header || "Header") + (Date.now() % 10) }))}
+              >
+                Change header
+              </Uu5Elements.Button>
+              <Uu5Elements.Button
+                onClick={() => setComponentProps((v) => ({ ...v, footer: (v.footer || "Footer") + (Date.now() % 10) }))}
+              >
+                Change footer
+              </Uu5Elements.Button>
+              <Uu5Elements.Button onClick={() => setComponentProps({})}>Clear props</Uu5Elements.Button>
+              <br />
+              See console log for props changes.
+              <br />
+              <br />
+              <ShowProps {...componentProps} />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, PropTypes, BackgroundProvider, useState, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, 336px)",
+        gap: 8,
+      });
+
+      const TileWithImage = createComponent({
+        render(props) {
+          return (
+            <Uu5Elements.Tile aspectRatio="1x1" {...props}>
+              {() => {
+                return (
+                  <img
+                    src="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                    className={Config.Css.css({
+                      display: "block",
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    })}
+                  />
+                );
+              }}
+            </Uu5Elements.Tile>
+          );
+        },
+      });
+
+      function ColorScheme() {
+        const [colorScheme, setColorScheme] = useState("building");
+        const significanceList = ["common", "distinct", "subdued"];
+        const headerSignificanceList = [undefined, "common", "highlighted", "distinct"];
+
+        const itemList = ["building", "meaning", "basic"].reduce((prev, curr) => ([
+          ...prev,
+          ...PropTypes.COLOR_SCHEME[curr].map((c) => ({
+            children: (
+              <><Uu5Elements.Badge size="l" colorScheme={c} className={Config.Css.css({ marginRight: 8 })} /> {c}</>
+            ),
+            onClick: () => setColorScheme(c),
+          }))
+        ]), []);
+
+        return (
+          <Uu5Elements.Grid
+            display="inline"
+            templateColumns="repeat(4, 1fr)"
+            alignItem="center"
+            columnGap={8}
+            rowGap={8}
+            className={Config.Css.css({ marginBottom: 16 })}
+          >
+            <Uu5Elements.Dropdown
+              label={colorScheme}
+              colorScheme={colorScheme}
+              significance="subdued"
+              itemList={itemList}
+            />
+            {significanceList.map((significance) => (
+              <b key={significance + ""}>
+                {significance + ""}
+              </b>
+            ))}
+
+            {headerSignificanceList.map((sig) => (
+              <Fragment key={sig + ""}>
+                <b>{sig + ""}</b>
+                {significanceList.map((significance) => {
+                  return (
+                    <Uu5Elements.Tile
+                      key={significance}
+                      colorScheme={colorScheme}
+                      significance={significance}
+                      header="Header"
+                      headerColorScheme={colorScheme}
+                      headerSignificance={sig}
+                      footer="Footer"
+                      footerColorScheme={colorScheme}
+                      footerSignificance={sig}
+                      onClick={() => console.log("click")}
+                    >
+                      Tile children
+                    </Uu5Elements.Tile>
+                  );
+                })}
+              </Fragment>
+            ))}
+          </Uu5Elements.Grid>
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          const actionList = [
+            {
+              icon: "uugds-download",
+              collapsedChildren: "Download",
+              onClick: (e) => alert("download"),
+            },
+            {
+              icon: "uugds-reload",
+              children: "Update",
+              collapsed: true,
+              itemList: [
+                { children: "Update name", onClick: () => alert("update name") },
+                { children: "Update surname", onClick: () => alert("update surname") },
+              ],
+            },
+            { icon: "uugds-delete", children: "Delete", collapsed: true, onClick: () => alert("delete") },
+            { icon: "uugds-refresh", children: "Refresh", collapsed: true, onClick: () => alert("refresh") },
+          ];
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>header & footer</h4>
+              <TileWithImage header="header" footer="footer" />
+
+              <h4>colorScheme & significance</h4>
+              <ColorScheme />
+
+              <h4>actionList & actionCollapsedMenuProps</h4>
+              <div className={columnsCss}>
+                <TileWithImage
+                  header="header"
+                  actionList={[
+                    {
+                      icon: "uugds-download",
+                      collapsedChildren: "Download",
+                      onClick: (e) => alert("download"),
+                    },
+                    {
+                      icon: "uugds-reload",
+                      children: "Update",
+                      collapsed: true,
+                      itemList: [
+                        { children: "Update name", onClick: () => alert("update name") },
+                        { children: "Update surname", onClick: () => alert("update surname") },
+                      ],
+                    },
+                    { icon: "uugds-delete", children: "Delete", collapsed: true, onClick: () => alert("delete") },
+                    { icon: "uugds-refresh", children: "Refresh", collapsed: true, onClick: () => alert("refresh") },
+                  ]}
+                />
+                <TileWithImage
+                  header="header"
+                  actionList={[
+                    {
+                      icon: "uugds-download",
+                      collapsedChildren: "Download",
+                      onClick: (e) => alert("download"),
+                      significance: "common",
+                    },
+                    {
+                      icon: "uugds-reload",
+                      children: "Update",
+                      collapsed: true,
+                      itemList: [
+                        { children: "Update name", onClick: () => alert("update name") },
+                        { children: "Update surname", onClick: () => alert("update surname") },
+                      ],
+                    },
+                    { icon: "uugds-delete", children: "Delete", collapsed: true, onClick: () => alert("delete") },
+                    { icon: "uugds-refresh", children: "Refresh", collapsed: true, onClick: () => alert("refresh") },
+                  ]}
+                  actionCollapsedMenuProps={{ significance: "common" }}
+                />
+              </div>
+
+              <h4>displayActionList</h4>
+              <div className={columnsCss}>
+                <TileWithImage
+                  header="undefined (default)"
+                  actionList={[
+                    {
+                      icon: "uugds-download",
+                      collapsedChildren: "Download",
+                      onClick: (e) => alert("download"),
+                    },
+                    {
+                      icon: "uugds-reload",
+                      children: "Update",
+                      collapsed: true,
+                      itemList: [
+                        { children: "Update name", onClick: () => alert("update name") },
+                        { children: "Update surname", onClick: () => alert("update surname") },
+                      ],
+                    },
+                    { icon: "uugds-delete", children: "Delete", collapsed: true, onClick: () => alert("delete") },
+                    { icon: "uugds-refresh", children: "Refresh", collapsed: true, onClick: () => alert("refresh") },
+                  ]}
+                />
+                <TileWithImage
+                  header="true"
+                  displayActionList
+                  actionList={[
+                    {
+                      icon: "uugds-download",
+                      collapsedChildren: "Download",
+                      onClick: (e) => alert("download"),
+                    },
+                    {
+                      icon: "uugds-reload",
+                      children: "Update",
+                      collapsed: true,
+                      itemList: [
+                        { children: "Update name", onClick: () => alert("update name") },
+                        { children: "Update surname", onClick: () => alert("update surname") },
+                      ],
+                    },
+                    { icon: "uugds-delete", children: "Delete", collapsed: true, onClick: () => alert("delete") },
+                    { icon: "uugds-refresh", children: "Refresh", collapsed: true, onClick: () => alert("refresh") },
+                  ]}
+                />
+                <TileWithImage
+                  header="false"
+                  displayActionList={false}
+                  actionList={[
+                    {
+                      icon: "uugds-download",
+                      collapsedChildren: "Download",
+                      onClick: (e) => alert("download"),
+                    },
+                    {
+                      icon: "uugds-reload",
+                      children: "Update",
+                      collapsed: true,
+                      itemList: [
+                        { children: "Update name", onClick: () => alert("update name") },
+                        { children: "Update surname", onClick: () => alert("update surname") },
+                      ],
+                    },
+                    { icon: "uugds-delete", children: "Delete", collapsed: true, onClick: () => alert("delete") },
+                    { icon: "uugds-refresh", children: "Refresh", collapsed: true, onClick: () => alert("refresh") },
+                  ]}
+                />
+              </div>
+
+              <h4>headerOverlap & footerOverlap</h4>
+              <TileWithImage header="header" footer="footer" headerOverlap footerOverlap actionList={actionList} />
+
+              <h4>headerSeparator & footerSeparator</h4>
+              <BackgroundProvider background="soft">
+                <TileWithImage
+                  header="header"
+                  headerSeparator
+                  footer="footer"
+                  footerSeparator
+                  headerOverlap
+                  footerOverlap
+                  actionList={actionList}
+                />
+              </BackgroundProvider>
+
+              <h4>headerHorizontalAlignment</h4>
+              <div className={columnsCss}>
+                <TileWithImage
+                  header="default (start)"
+                />
+                <TileWithImage
+                  header="center"
+                  headerHorizontalAlignment="center"
+                />
+                <TileWithImage
+                  header="end"
+                  headerHorizontalAlignment="end"
+                />
+              </div>
+              <h5>headerHorizontalAlignment with actionList</h5>
+              <div className={columnsCss}>
+                <TileWithImage
+                  header="default (start)"
+                  actionList={actionList}
+                />
+                <TileWithImage
+                  header="end"
+                  headerHorizontalAlignment="end"
+                  actionList={actionList}
+                />
+              </div>
+              <h4>footerHorizontalAlignment</h4>
+              <div className={columnsCss}>
+                <TileWithImage
+                  footer="default (start)"
+                />
+                <TileWithImage
+                  footer="center"
+                  footerHorizontalAlignment="center"
+                />
+                <TileWithImage
+                  footer="end"
+                  footerHorizontalAlignment="end"
+                />
+              </div>
+
+              <h4>onClick</h4>
+              <TileWithImage
+                onClick={() => console.log("click")}
+                header="Log to console by click"
+                actionList={actionList}
+              />
+
+              <h4>width</h4>
+              <TileWithImage width={252} header="width=252" />
+
+              <h4>height</h4>
+              <TileWithImage height={140} header="height=140" />
+
+              <h4>aspectRatio</h4>
+              <div className={columnsCss}>
+                <TileWithImage aspectRatio="4x3" header="4x3" />
+                <TileWithImage aspectRatio="2x1" header="2x1" />
+                <TileWithImage aspectRatio="1x2" header="1x2" />
+              </div>
+
+              <h4>borderRadius (with overflow: hidden)</h4>
+              <div className={columnsCss}>
+                <TileWithImage aspectRatio="2x1" borderRadius="none" header="none" />
+                <TileWithImage
+                  aspectRatio="2x1"
+                  borderRadius="elementary"
+                  header="elementary"
+                  className={Config.Css.css({ overflow: "hidden" })}
+                />
+                <TileWithImage
+                  aspectRatio="2x1"
+                  borderRadius="moderate"
+                  header="moderate"
+                  className={Config.Css.css({ overflow: "hidden" })}
+                />
+                <TileWithImage
+                  aspectRatio="2x1"
+                  borderRadius="expressive"
+                  header="expressive"
+                  className={Config.Css.css({ overflow: "hidden" })}
+                />
+                <TileWithImage
+                  aspectRatio="2x1"
+                  borderRadius="full"
+                  header="full"
+                  className={Config.Css.css({ overflow: "hidden" })}
+                />
+              </div>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

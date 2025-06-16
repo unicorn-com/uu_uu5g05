@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to create custom input</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, useLayoutEffect, useState, Utils, PropTypes } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms, {
+        withExtensionInput,
+        withValidationInput,
+        useValidatorMap,
+        withValidationMap,
+        withFormInput,
+        withFormItem
+      } from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      //@@viewOn:example
+      const ZipCodeInputView = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "ZipCodeInputView",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {
+          ...Uu5Elements.Input.propTypes,
+          value: PropTypes.number // specify type,
+        },
+        //@@viewOff:propTypes
+
+        //@@viewOn:render
+        render(props) {
+          const { value, onChange, ...propsToPass } = props;
+
+          // rendering uncompleted value, but raise only valid value
+          const inputValue = value == null ? "" : value + "";
+          const [tempValue, setTempValue] = useState(inputValue);
+
+          // update state if parent rerender itself with different value
+          useLayoutEffect(() => {
+            if (tempValue !== inputValue && value !== null) setTempValue(inputValue);
+          }, [inputValue]);
+
+          // format value
+          let formattedValue = tempValue;
+          if (tempValue.length === 5)
+            formattedValue = [tempValue.slice(0, 3), tempValue.slice(-2)].join(" ");
+
+          return (
+            <Uu5Elements.Input
+              {...propsToPass}
+              value={formattedValue}
+              onChange={(e) => {
+                // The main important part
+                let newValue = e.target.value.replace(" ", "");
+
+                if (newValue !== tempValue) { // if value was changed
+                  if (newValue && newValue.length < 5) { // not completed value
+                    setTempValue(newValue);
+
+                    // raise onChange with null because value is not completed -> badValue
+                    if (value !== null) onChange(new Utils.Event({ value: null }), e);
+
+                  } else if (!newValue || newValue.length === 5) { // completed or empty value
+                    setTempValue(newValue);
+                    onChange(new Utils.Event({ value: newValue ? +newValue : undefined }), e);
+                  }
+                }
+              }}
+              elementAttrs={{
+                onKeyDown: (e) => {
+                  // if want to write another value then number,
+                  // onKeyDown is prevented, so onChange is not called
+
+                  // TODO skip copy & paste & select all
+                  if (e.key.length === 1 && isNaN(e.key)) {
+                    e.preventDefault();
+                  }
+                },
+              }}
+            />
+          )
+        },
+        //@@viewOff:render
+      });
+
+      const ZipCodeInputExtension = withExtensionInput(ZipCodeInputView);
+
+      const ZipCodeInputValidation = withValidationInput(ZipCodeInputExtension);
+
+      const ZipCodeInputValidator = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "ZipCodeInputValidator",
+        //@@viewOff:statics
+
+        //@@viewOn:render
+        render(props) {
+          const onValidate = useValidatorMap(props, {
+            max: (value) => props.max == null || value == null || value <= props.max,
+            min: (value) => props.min == null || value == null || value >= props.min,
+            badValue: (value) => value !== null,
+          });
+
+          return (
+            <ZipCodeInputValidation {...props} onValidate={onValidate} />
+          )
+        },
+        //@@viewOff:render
+      });
+
+      // TODO lsi format is only for demo, in real usage should be lazy lsi { import, path }
+      const ZipCodeInput = withValidationMap(ZipCodeInputValidator, {
+        required: {
+          message: { en: "Zip code is required." },
+          feedback: "error",
+        },
+        max: {
+          message: { en: "Zip code must be lower then %d." },
+          feedback: "error",
+        },
+        min: {
+          message: { en: "Zip code must be bigger then %d." },
+          feedback: "error",
+        },
+        badValue: {
+          message: { en: "Zip code should be 5 numbers length." },
+          feedback: "error",
+        },
+      });
+
+      const ZipCode = withFormInput(ZipCodeInput);
+      ZipCode.Input = ZipCodeInput;
+
+      const FormZipCode = withFormItem(ZipCode);
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Forms.Form
+              gridLayout="zip, zipMinMax"
+              onSubmit={async (e) => {
+                const values = e.data.value;
+                // TODO some call to server for storing data
+                alert("Submitted with values:\n" + JSON.stringify(values, null, 2));
+              }}
+              className={Config.Css.css({ width: 240 })}
+            >
+              <FormZipCode
+                name="zip"
+                label="Zip code"
+                onChange={(e) => console.log("onChange", e.data)}
+              />
+
+              <FormZipCode
+                name="zipMinMax"
+                min={17000}
+                max={17010}
+                label="Zip code with min & max"
+                message="Zip code should be between 170&nbsp;00 and 170&nbsp;10."
+                onChange={(e) => console.log("onChange", e.data)}
+              />
+
+              <Uu5Forms.SubmitButton className={Config.Css.css({ justifySelf: "start" })} />
+            </Uu5Forms.Form>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

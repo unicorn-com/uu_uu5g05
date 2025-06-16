@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>without icon</h4>
+              <Uu5Elements.InfoItem title="Title" subtitle="Subtitle" />
+              <h4>without icon - only title</h4>
+              <Uu5Elements.InfoItem title="Title" />
+              <h4>without icon - only subtitle</h4>
+              <Uu5Elements.InfoItem subtitle="Subtitle" />
+
+              <h4>icon</h4>
+              <Uu5Elements.InfoItem icon="uugds-favorites" />
+
+              <h4>iconText</h4>
+              <Uu5Elements.InfoItem iconText="1" />
+
+              <h4>imageSrc</h4>
+              <Uu5Elements.InfoItem imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png" />
+
+              <h4>title</h4>
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title" />
+
+              <h4>subtitle</h4>
+              <Uu5Elements.InfoItem icon="uugds-react" subtitle="Subtitle" />
+
+              <h4>title & subtitle</h4>
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title" subtitle="Subtitle" />
+
+              <h4>size</h4>
+              <Uu5Elements.InfoItem icon="uugds-react" size="xxs" />
+              <Uu5Elements.InfoItem icon="uugds-react" size="xs" />
+              <Uu5Elements.InfoItem icon="uugds-react" size="s" />
+              <Uu5Elements.InfoItem icon="uugds-react" size="m" />
+              <Uu5Elements.InfoItem icon="uugds-react" size="l" />
+              <Uu5Elements.InfoItem icon="uugds-react" size="xl" />
+              <br />
+              <br />
+              <Uu5Elements.InfoItem size="xxs" iconText="1" />
+              <Uu5Elements.InfoItem size="xs" iconText="1" />
+              <Uu5Elements.InfoItem size="s" iconText="1" />
+              <Uu5Elements.InfoItem size="m" iconText="1" />
+              <Uu5Elements.InfoItem size="l" iconText="1" />
+              <Uu5Elements.InfoItem size="xl" iconText="1" />
+              <br />
+              <br />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title xxs" subtitle="Subtitle" size="xxs" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title xs" subtitle="Subtitle" size="xs" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title s" subtitle="Subtitle" size="s" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title m" subtitle="Subtitle" size="m" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title l" subtitle="Subtitle" size="l" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title xl" subtitle="Subtitle" size="xl" />
+              <br />
+              <br />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title xxs" subtitle="Subtitle" size="xxs" direction="vertical-full" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title xs" subtitle="Subtitle" size="xs" direction="vertical-full" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title s" subtitle="Subtitle" size="s" direction="vertical-full" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title m" subtitle="Subtitle" size="m" direction="vertical-full" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title l" subtitle="Subtitle" size="l" direction="vertical-full" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title xl" subtitle="Subtitle" size="xl" direction="vertical-full" />
+
+              <h4>direction</h4>
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title" subtitle="Subtitle" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title" subtitle="Subtitle" direction="horizontal" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title" subtitle="Subtitle" direction="vertical-reverse" />
+              <Uu5Elements.InfoItem icon="uugds-react" title="Title" subtitle="Subtitle" direction="vertical-full" />
+
+              <h4>href</h4>
+              <Uu5Elements.InfoItem icon="uugds-react" href="https://www.plus4u.net/" target="_blank" />
+              <br/>
+              <br/>
+              <Uu5Elements.InfoItem
+                title="Title"
+                subtitle="Subtitle"
+                href="https://www.plus4u.net/"
+                target="_blank"
+              />
+              <br/>
+              <br/>
+              <Uu5Elements.InfoItem
+                title="Title"
+                subtitle="Subtitle"
+                href="https://www.plus4u.net/"
+                target="_blank"
+                icon="uugds-react"
+              />
+
+              <h4>onClick</h4>
+              <Uu5Elements.InfoItem icon="uugds-react" onClick={(e) => console.log("onClick", e)} />
+              <Uu5Elements.InfoItem iconText="1" onClick={(e) => console.log("onClick", e)} />
+              <Uu5Elements.InfoItem
+                imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                onClick={(e) => console.log("onClick", e)}
+              />
+              <br/>
+              <br/>
+              <Uu5Elements.InfoItem
+                title="Title"
+                subtitle="Subtitle"
+                onClick={(e) => console.log("onClick", e)}
+                icon="uugds-react"
+              />
+              <Uu5Elements.InfoItem
+                iconText="1"
+                title="Title"
+                subtitle="Subtitle"
+                onClick={(e) => console.log("onClick", e)}
+              />
+              <Uu5Elements.InfoItem
+                imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                title="Title"
+                subtitle="Subtitle"
+                onClick={(e) => console.log("onClick", e)}
+              />
+
+              <h4>iconAnimation</h4>
+              <Uu5Elements.InfoItem icon="uugds-favorites" iconAnimation="rotate" />
+
+              <h4>tooltip</h4>
+              <Uu5Elements.InfoItem icon="uugds-favorites" tooltip="Tooltip string" />
+              <Uu5Elements.InfoItem icon="uugds-favorites" tooltip={{ cs: "titulek", en: "tooltip" }} title="Tooltip Lsi" />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        }
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import { ColorPalette as _ColorPalette } from "uu5g05-elements";
+
+      const cssGridStyle = {
+        maxWidth: 900,
+        display: "grid",
+        gridGap: "16px",
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        alignItems: "flex-end",
+      };
+
+      function withControlledInput(Component) {
+        return (props) => {
+          const { color: propsColor, onSelect } = props;
+
+          const [color, setColor] = useState(propsColor);
+
+          return (
+            <div>
+              <Component
+                {...props}
+                value={color}
+                onSelect={(e) => {
+                  console.log(e.data.value);
+                  typeof onSelect === "function" && onSelect(e);
+                  setColor(e.data.value);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const ColorPalette = withControlledInput(_ColorPalette);
+
+      function Page() {
+        return (
+          <div style={cssGridStyle}>
+            {/*@@viewOn:example*/}
+            <div>
+              <h4>default</h4>
+              <ColorPalette />
+            </div>
+            <div>
+              <h4>default &amp; valueType="object"</h4>
+              <ColorPalette valueType="object" />
+            </div>
+            <div>
+              <h4>default &amp; valueType="colorScheme"</h4>
+              <ColorPalette valueType="colorScheme" />
+            </div>
+
+            <div>
+              <h4>displayShade</h4>
+              <ColorPalette displayShade />
+            </div>
+            <div>
+              <h4>displayShade &amp; valueType="object"</h4>
+              <ColorPalette displayShade valueType="object" />
+            </div>
+
+            <div>
+              <h4>displayOpacity</h4>
+              <ColorPalette displayOpacity />
+            </div>
+            <div>
+              <h4>displayOpacity &amp; valueType="object"</h4>
+              <ColorPalette displayOpacity valueType="object" />
+            </div>
+
+            <div>
+              <h4>displayShade &amp; displayOpacity</h4>
+              <ColorPalette displayShade displayOpacity />
+            </div>
+            <div>
+              <h4>displayShade &amp; displayOpacity &amp; valueType="object"</h4>
+              <ColorPalette displayShade displayOpacity valueType="object" />
+            </div>
+            <div>
+              <h4>displayShade &amp; displayOpacity &amp; valueType="colorScheme"</h4>
+              <ColorPalette displayShade displayOpacity valueType="colorScheme" />
+            </div>
+
+            <div>
+              <h4>presetList</h4>
+              <ColorPalette
+                presetList={[
+                  { tooltip: "financeA", value: "#FFEFBE" },
+                  { tooltip: "financeB", value: "#FFE79E" },
+                  { tooltip: "financeC", value: "#FFD657" },
+                  { tooltip: "financeD", value: "#51E0FF" },
+                ]}
+              />
+            </div>
+            <div>
+              <h4>presetList &amp; displayShade &amp; displayOpacity</h4>
+              <ColorPalette
+                displayShade
+                displayOpacity
+                presetList={[
+                  { tooltip: "financeA", value: "#FFEFBE" },
+                  { tooltip: "financeB", value: "#FFE79E" },
+                  { tooltip: "financeC", value: "#FFD657" },
+                  { tooltip: "financeD", value: "#51E0FF" },
+                ]}
+              />
+            </div>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

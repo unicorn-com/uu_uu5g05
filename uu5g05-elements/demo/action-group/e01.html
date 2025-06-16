@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Fragment, createComponent, Lsi, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const onClick = (...args) => console.log("onClick", ...args);
+
+      const itemList = [
+        { icon: "uugds-info-circle-solid", children: "Info", onClick: () => alert("info") },
+        { icon: "uugds-search", children: "Search", onClick: () => alert("search") },
+        {
+          children: "Create",
+          icon: "uugds-plus",
+          itemList: [
+            {
+              children: "Document",
+              icon: "uugds-plus",
+              onClick,
+              itemList: [
+                { children: "DOC", icon: "uugds-plus", onClick },
+                { children: "PDF", icon: "uugds-plus", onClick },
+                { children: "TXT", icon: "uugds-plus", onClick },
+              ],
+            },
+            { children: "Form", icon: "uugds-plus", onClick },
+            { children: "Table", icon: "uugds-plus", onClick },
+            { children: "Chart", icon: "uugds-plus", onClick },
+            {
+              children: "Picture",
+              icon: "uugds-plus",
+              onClick,
+              itemList: [
+                { children: "PNG", icon: "uugds-plus", onClick },
+                { children: "JPG", icon: "uugds-plus", onClick },
+              ],
+            },
+          ],
+        },
+        { collapsedChildren: "Reload", collapsed: true, icon: "uugds-reload", onClick },
+      ];
+
+      const Page = createComponent({
+        render() {
+          const [measuredInfo, setMeasuredInfo] = useState(null);
+
+          return (
+            <div>
+              <h4>itemList</h4>
+              <div className={Config.Css.css({ marginBottom: 16 })}>
+                (with order - "Close" item is always at the end)
+              </div>
+              <div className={Config.Css.css({ display: "flex" })}>
+                <textarea placeholder="Resize using lower right corner" />
+                {/*@@viewOn:example*/}
+                <Uu5Elements.ActionGroup
+                  itemList={[
+                    {
+                      primary: true,
+                      collapsed: false,
+                      icon: "uugds-info-circle-solid",
+                      children: "Info",
+                      onClick: () => alert("info"),
+                    },
+                    { icon: "uugds-search", children: "Search", onClick: () => alert("search") },
+                    { icon: "uugds-plus", collapsedChildren: "Create", onClick: () => alert("create") },
+                    {
+                      order: 1,
+                      collapsed: false,
+                      icon: "uugds-close",
+                      children: "Close",
+                      onClick: () => alert("close"),
+                    },
+                  ]}
+                />
+                {/*@@viewOff:example*/}
+              </div>
+
+              <h4>collapsedMenuProps</h4>
+              <div className={Config.Css.css({ display: "flex" })}>
+                <textarea placeholder="Resize using lower right corner" />
+                {/*@@viewOn:example*/}
+
+                <Uu5Elements.ActionGroup
+                  collapsedMenuProps={{ colorScheme: "positive", significance: "highlighted" }}
+                  itemList={itemList}
+                />
+                {/*@@viewOff:example*/}
+              </div>
+
+              <h4>alignment="left"</h4>
+              <div className={Config.Css.css({ display: "flex" })}>
+                {/*@@viewOn:example*/}
+
+                <Uu5Elements.ActionGroup alignment="left" itemList={itemList} />
+                {/*@@viewOff:example*/}
+                <textarea placeholder="Resize using lower right corner" />
+              </div>
+
+              <h4>onMeasure</h4>
+              <div className={Config.Css.css({ display: "flex" })}>
+                <textarea placeholder="Resize using lower right corner" />
+                {/*@@viewOn:example*/}
+
+                <Uu5Elements.ActionGroup onMeasure={(e) => setMeasuredInfo(e.data)} itemList={itemList} />
+                {/*@@viewOff:example*/}
+              </div>
+              <div>
+                Measured info: <code>{JSON.stringify(measuredInfo)}</code>
+              </div>
+
+              <h4>itemList & openSubmenuAction="click"</h4>
+              <div className={Config.Css.css({ display: "flex" })}>
+                <textarea placeholder="Resize using lower right corner" />
+                {/*@@viewOn:example*/}
+
+                <Uu5Elements.ActionGroup itemList={itemList} openSubmenuAction="click" />
+                {/*@@viewOff:example*/}
+              </div>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

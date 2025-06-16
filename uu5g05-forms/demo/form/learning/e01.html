@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to create form with lsi</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Lsi } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      // just for demo
+      Utils.Language.setLanguage("en");
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Uu5Elements.LanguageSelector
+                languageList={["en", "cs"]}
+                className={Config.Css.css({ marginBottom: 32 })}
+              />
+
+              {/*@@viewOn:example*/}
+              <Uu5Forms.Form
+                gridLayout="name, note"
+                onSubmit={(e) => {
+                  const values = e.data.value;
+                  // TODO some call to server for storing data
+                  alert("Submitted with values:\n" + JSON.stringify(values, null, 2));
+                }}
+              >
+                <Uu5Forms.FormText
+                  name="name"
+                  label={{ en: "Name", cs: "Jméno" }}
+                  info={{
+                    en: "You can find your name on your ID card.",
+                    cs: "Své jméno najdete v občaském průkazu.",
+                  }}
+                  placeholder={{ en: "John Smith", cs: "Jan Novák" }}
+                  message={{ en: "Name and surname", cs: "Jméno a příjmení" }}
+                  required
+                />
+
+                <Uu5Forms.FormTextArea
+                  name="note"
+                  label={<Lsi lsi={{ en: "Note", cs: "Poznámka" }} />}
+                  info={
+                    <Lsi lsi={{
+                      en: "Write your preferences.",
+                      cs: "Napište své preference.",
+                    }} />
+                  }
+                  placeholder={{
+                    en: "Size, delivery time?",
+                    cs: "Velikost, čas doručení?"
+                  }}
+                  message={
+                    <Lsi lsi={{
+                      en: (
+                        <>
+                          {"More info about your "}
+                          <Uu5Elements.Link href="https://unicorn.com" target="_blank">
+                            preferences
+                          </Uu5Elements.Link>
+                        </>
+                      ),
+                      cs: (
+                        <>
+                          {"Více informací o vašich "}
+                          <Uu5Elements.Link href="https://unicorn.com" target="_blank">
+                            preferencích
+                          </Uu5Elements.Link>
+                        </>
+                      ),
+                    }} />
+                  }
+                />
+
+                <Uu5Forms.SubmitButton className={Config.Css.css({ justifySelf: "end" })}>
+                  <Lsi lsi={{ en: "Order", cs: "Objednat" }} />
+                </Uu5Forms.SubmitButton>
+              </Uu5Forms.Form>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

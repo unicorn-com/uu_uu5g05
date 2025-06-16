@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        Fragment,
+        useState,
+        useEffect,
+        useRoute,
+        useRouteLeave,
+        useRouteBack,
+        RouteProvider,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const RouteAbout = createVisualComponent({
+        render(props) {
+          return (
+            <div {...Utils.VisualComponent.getAttrs(props)}>
+              <LoremIpsum />
+            </div>
+          );
+        },
+      });
+
+      const PreventRouteLeaveDialog = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "PreventRouteLeaveDialog",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          let { allow, refuse, ...restProps } = props;
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <Uu5Elements.Dialog
+              header="Do you want to leave this page?"
+              icon="uugds-alert-circle"
+              actionDirection="horizontal"
+              actionList={[
+                { children: "Stay", onClick: () => refuse() },
+                { children: "Leave", onClick: () => allow(), colorScheme: "negative", significance: "highlighted" },
+              ]}
+              {...restProps}
+              onClose={() => refuse()}
+            >
+              Changes you made may not be saved.
+            </Uu5Elements.Dialog>
+          );
+          //@@viewOff:render
+        },
+      });
+
+      const SettingsStep1 = createVisualComponent({
+        render(props) {
+          const { onBack, onNext } = props;
+          return (
+            <Uu5Elements.Block header="Settings step 1" headerType="title" card="full">
+              Content of step 1
+              <div>
+                <Uu5Elements.Button onClick={onNext}>Next</Uu5Elements.Button>
+              </div>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const SettingsStep2 = createVisualComponent({
+        render(props) {
+          const { onBack, onNext } = props;
+
+          return (
+            <Uu5Elements.Block
+              header={
+                <>
+                  <Uu5Elements.Button onClick={onBack} icon="uugds-left" significance="subdued" />
+                  Settings step 2
+                </>
+              }
+              headerType="title"
+              card="full"
+            >
+              Content of step 2 - you can go back from here via button or browser's Back.
+              <div>
+                <Uu5Elements.Button onClick={onNext}>Next</Uu5Elements.Button>
+              </div>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const SettingsStep3 = createVisualComponent({
+        render(props) {
+          const { onBack, onNext } = props;
+          let { prevent, allow, nextRoute, refuse } = useRouteLeave(); // initially prevented; will become allowed on unmount
+
+          return (
+            <Uu5Elements.Block
+              header={
+                <>
+                  <Uu5Elements.Button onClick={onBack} icon="uugds-left" significance="subdued" />
+                  Settings step 3
+                </>
+              }
+              headerType="title"
+              card="full"
+            >
+              Content of step 3 - you'll be asked for confirmation if you attempt to go back from here (except for
+              Submit).
+              <div>
+                <Uu5Elements.Button
+                  onClick={(e) => {
+                    allow();
+                    onNext(e);
+                  }}
+                >
+                  Submit
+                </Uu5Elements.Button>
+              </div>
+              <PreventRouteLeaveDialog open={!!nextRoute} allow={allow} refuse={refuse} />
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      //@@viewOn:example
+      const RouteSettings = createVisualComponent({
+        render(props) {
+          const [step, setStep] = useState(0);
+          const { prevent, allow } = useRouteBack();
+
+          useEffect(() => {
+            if (step > 0) {
+              prevent(() => {
+                setStep(step - 1);
+              });
+              return () => allow();
+            }
+          }, [step]);
+
+          function handleNext() {
+            setStep((step) => step + 1);
+          }
+          function handleBack() {
+            history.go(-1); // so that "preventLeave" functionality gets processed too
+          }
+
+          return (
+            <div {...Utils.VisualComponent.getAttrs(props)}>
+              {step === 0 ? (
+                <SettingsStep1 onNext={handleNext} onBack={handleBack} />
+              ) : step === 1 ? (
+                <SettingsStep2 onNext={handleNext} onBack={handleBack} />
+              ) : (
+                <SettingsStep3 onNext={() => alert("Done.")} onBack={handleBack} />
+              )}
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const DemoRouter = createComponent({
+        render() {
+          let [route, setRoute] = useRoute();
+          return route.uu5Route === "about" ? <RouteAbout /> : <RouteSettings />;
+        },
+      });
+
+      const Demo = createComponent({
+        render() {
+          return (
+            <RouteProvider>
+              {frameElement && location.href === "about:srcdoc" ? (
+                <h3>Open the demo in new tab using `Try me` button to make it work correctly.</h3>
+              ) : null}
+
+              <ul className={Config.Css.css({ margin: "16px 0" })}>
+                <li>
+                  <Uu5Elements.Link href="about">About</Uu5Elements.Link>
+                </li>
+                <li>
+                  <Uu5Elements.Link href="settings">Settings</Uu5Elements.Link>
+                </li>
+              </ul>
+              <DemoRouter />
+            </RouteProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

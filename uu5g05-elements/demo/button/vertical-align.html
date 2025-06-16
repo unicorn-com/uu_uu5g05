@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script
+      src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js?"
+      crossorigin
+    ></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const Edit = createComponent({
+        render(props) {
+          let { value, onChange } = props;
+          return <Uu5Elements.Input width={200} value={value} onChange={(e) => onChange(e.data.value)} />;
+        },
+      });
+
+      const Buttons = createComponent({
+        render(props) {
+          let [icon, setIcon] = useState(props.icon);
+          let [iconRight, setIconRight] = useState(props.iconRight);
+          return (
+            <div>
+              <h4>
+                icon=
+                <Edit value={icon} onChange={setIcon} /> & iconRight=
+                <Edit value={iconRight} onChange={setIconRight} />
+              </h4>
+              a<Uu5Elements.Button size="xxs">xxs</Uu5Elements.Button>a
+              <Uu5Elements.Button size="xxs" icon={icon} />a
+              <Uu5Elements.Button size="xxs" icon={icon}>
+                xxs
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="xxs" iconRight={iconRight}>
+                xxs
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="xxs" icon={icon} iconRight={iconRight}>
+                xxs
+              </Uu5Elements.Button>
+              a
+              <br />a<Uu5Elements.Button size="xs">xs</Uu5Elements.Button>a
+              <Uu5Elements.Button size="xs" icon={icon} />a
+              <Uu5Elements.Button size="xs" icon={icon}>
+                xs
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="xs" iconRight={iconRight}>
+                xs
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="xs" icon={icon} iconRight={iconRight}>
+                xs
+              </Uu5Elements.Button>
+              a
+              <br />a<Uu5Elements.Button size="s">s</Uu5Elements.Button>a
+              <Uu5Elements.Button size="s" icon={icon} />a
+              <Uu5Elements.Button size="s" icon={icon}>
+                s
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="s" iconRight={iconRight}>
+                s
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="s" icon={icon} iconRight={iconRight}>
+                s
+              </Uu5Elements.Button>
+              a
+              <br />a<Uu5Elements.Button size="m">m</Uu5Elements.Button>a
+              <Uu5Elements.Button size="m" icon={icon} />a
+              <Uu5Elements.Button size="m" icon={icon}>
+                m
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="m" iconRight={iconRight}>
+                m
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="m" icon={icon} iconRight={iconRight}>
+                m
+              </Uu5Elements.Button>
+              a
+              <br />a<Uu5Elements.Button size="l">l</Uu5Elements.Button>a
+              <Uu5Elements.Button size="l" icon={icon} />a
+              <Uu5Elements.Button size="l" icon={icon}>
+                l
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="l" iconRight={iconRight}>
+                l
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="l" icon={icon} iconRight={iconRight}>
+                l
+              </Uu5Elements.Button>
+              a
+              <br />a<Uu5Elements.Button size="xl">xl</Uu5Elements.Button>a
+              <Uu5Elements.Button size="xl" icon={icon} />a
+              <Uu5Elements.Button size="xl" icon={icon}>
+                xl
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="xl" iconRight={iconRight}>
+                xl
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button size="xl" icon={icon} iconRight={iconRight}>
+                xl
+              </Uu5Elements.Button>
+              a
+            </div>
+          );
+        },
+      });
+
+      const Various = createComponent({
+        render(props) {
+          let [icon, setIcon] = useState(props.icon);
+          let [iconRight, setIconRight] = useState(props.iconRight);
+          return (
+            <div>
+              <h4>
+                icon=
+                <Edit value={icon} onChange={setIcon} /> & iconRight=
+                <Edit value={iconRight} onChange={setIconRight} />
+              </h4>
+              <Baseline />
+              <Uu5Elements.Badge icon="empty" />
+              text
+              <Uu5Elements.Badge icon={icon} />
+              <Uu5Elements.Badge icon={icon}>badge</Uu5Elements.Badge>
+              <Uu5Elements.Badge icon={icon} size="xl">
+                badge xl
+              </Uu5Elements.Badge>
+              <Uu5Elements.Button icon={icon} iconRight={iconRight}>
+                button
+              </Uu5Elements.Button>
+              <Uu5Elements.Dropdown icon={icon} iconRight={iconRight} label="dropdown" />
+              <Uu5Elements.Input value="text in input" width={100} />
+              <Plus4U5Elements.ArtifactLink typeIcon="uubml-artifact" stateIcon="uubml-state-s00-initial" href="#">
+                Artifact with wrappable long long long name
+              </Plus4U5Elements.ArtifactLink>
+              text
+              <Plus4U5Elements.ArtifactLink
+                typeIcon="uubml-artifact"
+                stateIcon="uubml-state-s00-initial"
+                href="#"
+                ellipsis
+                style={{ width: 100 }}
+              >
+                Artifact with ellipsis
+              </Plus4U5Elements.ArtifactLink>
+              icons
+              <Uu5Elements.Icon icon={icon} />
+              <Uu5Elements.Icon icon={iconRight} />
+              text
+            </div>
+          );
+        },
+      });
+
+      const Baseline = createComponent({
+        render(props) {
+          return (
+            <span
+              className={Config.Css.css({
+                // display: "inline-block",
+                // "&:before": { content: '"\\200b"' },
+                // "&:after": {
+                //   content: '""',
+                //   position: "absolute",
+                //   display: "block",
+                //   left: "0",
+                //   right: "0",
+                //   marginTop: "-1px",
+                //   borderBottom: "1px solid rgba(0,0,0,0.4)",
+                //   zIndex: "2",
+                // },
+              })}
+            />
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <a
+                href="https://uuapp.plus4u.net/uu-bookkit-maing01/ed11ec379073476db0aa295ad6c00178/book/page?code=icons"
+                target="_blank"
+              >
+                Icons
+              </a>
+              {/*@@viewOn:example*/}a
+              <Buttons icon="uugds-favorites" iconRight="uugds-menu-down" />a
+              <Buttons icon="plus4u-pencil" iconRight="plus4u5-trash-can" />a
+              <Buttons icon="uu5-calendar" iconRight="uu5-arrow-left" />a
+              <Buttons icon="uubml-artifact" iconRight="fa-cogs" />a
+              <Various icon="uugds-favorites" iconRight="uugds-menu-down" />
+              <h4>
+                <Baseline />
+                <Uu5Elements.Button size="xxs" icon="mdi-start" iconRight="uugds-menu-down">
+                  xxs
+                </Uu5Elements.Button>
+                <Uu5Elements.Button size="xs" icon="mdi-start" iconRight="uugds-menu-down">
+                  xs
+                </Uu5Elements.Button>
+                <Uu5Elements.Button size="s" icon="mdi-start" iconRight="uugds-menu-down">
+                  s
+                </Uu5Elements.Button>
+                <Uu5Elements.Button size="m" icon="mdi-start" iconRight="uugds-menu-down">
+                  m
+                </Uu5Elements.Button>
+                <Uu5Elements.Button size="l" icon="mdi-start" iconRight="uugds-menu-down">
+                  l
+                </Uu5Elements.Button>
+                <Uu5Elements.Button size="xl" icon="mdi-start" iconRight="uugds-menu-down">
+                  xl
+                </Uu5Elements.Button>
+              </h4>
+              <h4>width</h4>
+              <br />a<Uu5Elements.Button width="15%">15%</Uu5Elements.Button>a
+              <Uu5Elements.Button width="15%" icon="uugds-favorites" />a
+              <Uu5Elements.Button width="15%" icon="uugds-favorites">
+                15%
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button width="15%" iconRight="uugds-menu-down">
+                15%
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button width="15%" icon="uugds-favorites" iconRight="uugds-menu-down">
+                15%
+              </Uu5Elements.Button>
+              a
+              <br />a<Uu5Elements.Button width="15%">15% longer longer longer longer text</Uu5Elements.Button>a
+              <Uu5Elements.Button width="15%" icon="uugds-favorites">
+                15% longer longer longer longer text
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button width="15%" iconRight="uugds-menu-down">
+                15% longer longer longer longer text
+              </Uu5Elements.Button>
+              a
+              <Uu5Elements.Button width="15%" icon="uugds-favorites" iconRight="uugds-menu-down">
+                15% longer longer longer longer text
+              </Uu5Elements.Button>
+              a{/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

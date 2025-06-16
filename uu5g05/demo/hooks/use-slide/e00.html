@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      import { useSlide } from "uu5g05";
+
+      const Slider = createVisualComponent({
+        render(props) {
+          const [state, setState] = useState();
+
+          const { ref, style } = useSlide({
+            onStart(e) {
+              setState({ start: e.data });
+            },
+            onEnd(e) {
+              setState(e.data);
+            },
+          });
+
+          return (
+            <Uu5Elements.Box
+              elementRef={ref}
+              className={Config.Css.css({ ...style, minHeight: 548, padding: 16, touchAction: "none" })}
+            >
+              {state ? <pre>{JSON.stringify(state, null, 2)}</pre> : "Slide on me"}
+            </Uu5Elements.Box>
+          );
+        },
+      });
+
+      const SliderMove = createVisualComponent({
+        render(props) {
+          const [state, setState] = useState();
+
+          const { ref, style } = useSlide({
+            onStart(e) {
+              setState({ start: e.data });
+            },
+            onEnd(e) {
+              setState(e.data);
+            },
+            onMove(e) {
+              const { start, end, ...data } = e.data;
+              setState({ start, move: end, ...data });
+            }
+          });
+
+          return (
+            <Uu5Elements.Box
+              elementRef={ref}
+              className={Config.Css.css({ ...style, minHeight: 548, padding: 16, touchAction: "none" })}
+            >
+              {state ? <pre>{JSON.stringify(state, null, 2)}</pre> : "Slide on me"}
+            </Uu5Elements.Box>
+          );
+        },
+      });
+
+      //@@viewOff:example
+
+      function Demo() {
+        return (
+          <Uu5Elements.Grid templateColumns={{ xs: "1fr", m: "1fr 1fr" }}>
+            <Slider />
+            <SliderMove />
+          </Uu5Elements.Grid>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

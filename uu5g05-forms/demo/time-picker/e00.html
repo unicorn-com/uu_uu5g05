@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        createVisualComponent,
+        Utils,
+        useState,
+        useUserPreferences,
+        useScreenSize,
+        UserPreferencesProvider,
+      } from "uu5g05";
+      import { UuDate } from "uu_i18ng01";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms, { Checkbox } from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      function withControlledInput(TimePicker) {
+        return (props) => {
+          const { onSelect, value: propsValue, ...restProps } = props;
+          const [screenSize] = useScreenSize();
+          const isSmallScreenSize = ["xs"].indexOf(screenSize) > -1 ? true : false;
+
+          const [value, setValue] = useState(propsValue);
+
+          return (
+            <div
+              className={Config.Css.css({
+                border: "1px dashed lightgray",
+                borderRadius: "5px",
+                width: isSmallScreenSize ? "auto" : "fit-content",
+              })}
+            >
+              <TimePicker
+                {...restProps}
+                value={value}
+                onSelect={(e) => {
+                  if (typeof onSelect === "function") {
+                    onSelect(e);
+                  } else {
+                    console.log("onSelect", e.data);
+                  }
+                  setValue(e.data.value);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const TimePicker = withControlledInput(Uu5Forms._TimePicker);
+
+      const Page = createVisualComponent({
+        render() {
+          return (
+            <div
+              className={Config.Css.css({
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: "15px",
+              })}
+            >
+              {/*@@viewOn:example*/}
+              <div>
+                <h3>format=24</h3>
+                <h4>onSelect (in console)</h4>
+                <TimePicker onSelect={(e) => console.log("onSelect", e.data.value)} />
+
+                <h4>value</h4>
+                <div>
+                  <p>value="16:50:00"</p>
+                  <TimePicker value="16:50:00" step={600} />
+                </div>
+
+                <h4>displaySeconds</h4>
+                <div>
+                  <p>displaySeconds=true</p>
+                  <TimePicker displaySeconds={true} />
+                </div>
+
+                <h4>displayTitles</h4>
+                <div>
+                  <p>displayTitles=true</p>
+                  <TimePicker displaySeconds={true} displayTitles={true} />
+                </div>
+
+                <h4>step</h4>
+                <div>
+                  <div>
+                    <p>step=900</p>
+                    <TimePicker step={900} />
+                  </div>
+                  <div>
+                    <p>step=1200</p>
+                    <TimePicker step={1200} />
+                  </div>
+                  <div>
+                    <p>step=1800</p>
+                    <TimePicker step={1800} />
+                  </div>
+                  <div>
+                    <p>step=3600</p>
+                    <TimePicker step={3600} />
+                  </div>
+                </div>
+
+                <h4>min & max</h4>
+                <div>
+                  <div>
+                    <p>min=05:00</p>
+                    <TimePicker min="05:00" />
+                  </div>
+                  <div>
+                    <p>max=10:00</p>
+                    <TimePicker max="10:00" />
+                  </div>
+                  <div>
+                    <p>min=05:00 & max=10:00</p>
+                    <TimePicker min="05:00" max="10:00" />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3>format=12</h3>
+
+                <h4>onSelect (in console)</h4>
+                <TimePicker onSelect={(e) => console.log("onSelect", e.data)} format={12} />
+
+                <h4>value</h4>
+                <div>
+                  <p>value="16:50:00"</p>
+                  <TimePicker value="16:50:00" step={600} format={12} />
+                </div>
+
+                <h4>displaySeconds</h4>
+                <div>
+                  <p>displaySeconds=true</p>
+                  <TimePicker displaySeconds={true} format={12} />
+                </div>
+
+                <h4>displayTitles</h4>
+                <div>
+                  <p>displayTitles=true</p>
+                  <TimePicker displaySeconds={true} format={12} displayTitles={true} />
+                </div>
+
+                <h4>step</h4>
+                <div>
+                  <div>
+                    <p>step=900</p>
+                    <TimePicker step={900} format={12} />
+                  </div>
+                  <div>
+                    <p>step=1200</p>
+                    <TimePicker step={1200} format={12} />
+                  </div>
+                  <div>
+                    <p>step=1800</p>
+                    <TimePicker step={1800} format={12} />
+                  </div>
+                  <div>
+                    <p>step=3600</p>
+                    <TimePicker step={3600} format={12} />
+                  </div>
+                </div>
+
+                <h4>min & max</h4>
+                <div>
+                  <div>
+                    <p>min=05:00</p>
+                    <TimePicker min="05:00" format={12} />
+                  </div>
+                  <div>
+                    <p>max=10:00</p>
+                    <TimePicker max="10:00" format={12} />
+                  </div>
+                  <div>
+                    <p>min=05:00 & max=10:00</p>
+                    <TimePicker min="05:00" max="10:00" format={12} />
+                  </div>
+                </div>
+              </div>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, ErrorBoundary, Utils } from "uu5g05";
+      import { Config } from "uu5g05-dev";
+
+      const demoClassName = Config.Css.css`
+    color: #d50000;
+    background-color: #FFEBEE;
+    margin: 8px;
+    padding: 8px;
+    overflow: auto;
+  `;
+
+      const ThrowingComponent = createComponent({
+        uu5Tag: Config.TAG + "ThrowingComponent",
+        render(props) {
+          throw new Error("Testing error.");
+        }
+      });
+
+      const FallbackComponent = createComponent({
+        uu5Tag: Config.TAG + "FallbackComponent",
+        render(props) {
+          return (
+            <div className={demoClassName}>
+              Fallback using custom component. Received error:
+              <pre>{props.error.stack}</pre>
+              Component stack:
+              <pre>{props.componentStack}</pre>
+            </div>
+          );
+        }
+      });
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <ErrorBoundary fallback={<div className={demoClassName}>Fallback using JSX.</div>}>
+              <ThrowingComponent />
+            </ErrorBoundary>
+
+            <ErrorBoundary fallback={FallbackComponent}>
+              <ThrowingComponent />
+            </ErrorBoundary>
+            {/*@@viewOff:example*/}
+          </div>
+        )
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

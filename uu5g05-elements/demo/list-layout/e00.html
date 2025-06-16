@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+
+      Utils.Language.setLanguage("en");
+
+      const Page = createComponent({
+        render() {
+          const [modalKey, setModalKey] = useState();
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <Uu5Elements.ListLayout
+                itemList={[
+                  {
+                    label: "Name",
+                    children: "John",
+                    actionList: [
+                      { icon: "uugds-pencil", onClick: (e) => setModalKey("name"), significance: "common" },
+                      { icon: "uugds-copy", onClick: (e) => Utils.Clipboard.write("John"), significance: "common" }
+                    ]
+                  },
+                  { label: { en: "Surname", cs: "Příjmení" }, children: "Doe", info: "Some info" },
+                  {
+                    label: "Input",
+                    children: <Uu5Elements.Input size="s" significance="subdued" value="input text" />
+                  },
+                  {
+                    label: "Input readOnly",
+                    children: <Uu5Elements.Input readOnly size="s" significance="subdued" value="read only" />
+                  },
+                  {
+                    label: "Area",
+                    children: <Uu5Elements.Input type="textarea" size="s" width="100%" significance="subdued"
+                                                 value={`text area\nnext row`} />
+                  },
+                  {
+                    label: "Address",
+                    children: <span>Street 22<br />City 123 45</span>,
+                    actionList: [{ icon: "uugds-pencil", onClick: (e) => setModalKey("address"), significance: "common" }]
+                  },
+                  { label: "Description", children: "<uu5string/><Uu5Dev.LoremIpsum />" },
+                ]}
+                collapsibleItemList={[
+                  { label: "Age", children: 33 },
+                  { label: "Sex", children: "Male" },
+                  {
+                    label: "Agreement",
+                    children: <Uu5Elements.Icon icon="uugdsstencil-security-shield-check" colorScheme="positive" />
+                  }
+                ]}
+              />
+
+              <Uu5Elements.Modal open={!!modalKey} onClose={() => setModalKey(null)} header={modalKey}>
+                TODO Form
+              </Uu5Elements.Modal>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        }
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      const gridCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: 16,
+      });
+
+      const CODES = [
+        "account", "activities", "basket", "cart", "delete", "document", "documents", "error", "folder", "forbidden",
+        "images", "items", "message", "offline", "permission", "product", "request", "search", "sprint", "ticket",
+        "users"
+      ];
+
+      const code = CODES[0];
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Uu5Elements.LanguageSelector languageList={["cs", "en", "uk", "ru", "en-gb", "en-us", "es"]} />
+              <div className={gridCss}>
+                <div key={code}>
+                  <h4 style={{ textAlign: "center" }}>code = {code}</h4>
+                  {/*@@viewOn:example*/}
+                  <Uu5Elements.PlaceholderBox code={code} />
+                  {/*@@viewOff:example*/}
+                </div>
+              </div>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

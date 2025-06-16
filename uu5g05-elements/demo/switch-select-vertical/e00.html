@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, useState, Utils, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const Page = createComponent({
+        render() {
+          /*@@viewOn:example*/
+          const [value, setValue] = useState("Failed");
+
+          const props = {
+            height: 200,
+            width: 200,
+            itemList: ["Initial", "Active", "Final", "Alternative", "Problem", "Passive", "Failed", "Cancelled"].map(
+              (name, i) => ({
+                value: name,
+                onClick: (e) => console.log("onClick", name, e),
+                children: (
+                  <Fragment>
+                    <Uu5Elements.Badge
+                      size="l"
+                      className={Config.Css.css({ marginRight: 8 })}
+                      colorScheme={name.toLowerCase()}
+                      icon="uugds-play-circle"
+                    />
+                    {name}
+                  </Fragment>
+                ),
+              })
+            ),
+          };
+
+          return (
+            <div>
+              <h4>Uncontrolled</h4>
+              <Uu5Elements.SwitchSelectVertical {...props} />
+
+              <h4>Controlled</h4>
+              <Uu5Elements.SwitchSelectVertical
+                value={value}
+                onChange={(value) => {
+                  console.log("onChange", value);
+                  setValue(value);
+                }}
+                {...props}
+              />
+            </div>
+          );
+          /*@@viewOff:example*/
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

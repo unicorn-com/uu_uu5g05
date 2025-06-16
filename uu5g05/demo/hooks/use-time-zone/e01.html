@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, PropTypes, createComponent, useState, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import { UuDate, UuDateTime } from "uu_i18ng01";
+
+      Utils.Language.setLanguage("en-US");
+
+      //@@viewOn:example
+      //@@viewOn:imports
+      import { useTimeZone, TimeZoneProvider } from "uu5g05";
+      //@@viewOff:imports
+
+      const HourDisplay = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "HourDisplay",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {
+          date: PropTypes.object.isRequired,
+        },
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {
+          date: undefined,
+        },
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const { date } = props;
+          const [timeZone, setTimeZone] = useTimeZone();
+          //@@viewOn:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          const timeString = date.format("cs-CZ", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZone,
+          });
+          return (
+            <div>
+              <span className={Config.Css.css`display: inline-block; width: 250px;`}>
+                Time in {timeZone || "default OS timezone"}:
+              </span>
+              {timeString}
+            </div>
+          );
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      const TimeZoneSwitch = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "TimeZoneSwitch",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const [timeZone, setTimeZone] = useTimeZone();
+          //@@viewOn:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <div>
+              <Uu5Elements.Button
+                onClick={() => setTimeZone(undefined)}
+                significance={timeZone === undefined ? "highlighted" : "common"}
+              >
+                OS-specific (default)
+              </Uu5Elements.Button>{" "}
+              <Uu5Elements.Button
+                onClick={() => setTimeZone("UTC")}
+                significance={timeZone === "UTC" ? "highlighted" : "common"}
+              >
+                UTC
+              </Uu5Elements.Button>{" "}
+              <Uu5Elements.Button
+                onClick={() => setTimeZone("Europe/Prague")}
+                significance={timeZone === "Europe/Prague" ? "highlighted" : "common"}
+              >
+                Europe/Prague
+              </Uu5Elements.Button>{" "}
+              <Uu5Elements.Button
+                onClick={() => setTimeZone("Pacific/Honolulu")}
+                significance={timeZone === "Pacific/Honolulu" ? "highlighted" : "common"}
+              >
+                Pacific/Honolulu (-10:00)
+              </Uu5Elements.Button>{" "}
+              <Uu5Elements.Button
+                onClick={() => setTimeZone("Asia/Vladivostok")}
+                significance={timeZone === "Asia/Vladivostok" ? "highlighted" : "common"}
+              >
+                Asia/Vladivostok (+10:00)
+              </Uu5Elements.Button>{" "}
+            </div>
+          );
+          //@@viewOff:render
+        },
+      });
+
+      function Page() {
+        let [date, setDate] = useState(() => new UuDateTime());
+        useEffect(() => {
+          let intervalId = setInterval(() => setDate(new UuDateTime()));
+          return () => clearInterval(intervalId);
+        }, []);
+
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <TimeZoneProvider>
+              <TimeZoneSwitch />
+              <HourDisplay date={date} />
+            </TimeZoneProvider>
+
+            <TimeZoneProvider timeZone="UTC">
+              <HourDisplay date={date} />
+            </TimeZoneProvider>
+
+            <TimeZoneProvider timeZone="Europe/Prague">
+              <HourDisplay date={date} />
+            </TimeZoneProvider>
+
+            <TimeZoneProvider timeZone="America/Los_Angeles">
+              <HourDisplay date={date} />
+            </TimeZoneProvider>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

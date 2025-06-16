@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, UserPreferencesProvider } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import { wait } from "uu5g05-dev";
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const {
+            value: propsValue,
+            onChange,
+            onValidationStart,
+            onValidationEnd,
+            feedback,
+            message,
+            messageParams,
+          } = props;
+
+          const [value, setValue] = useState(propsValue);
+          const [errorList, setErrorList] = useState(null);
+          const [pending, setPending] = useState();
+
+          return (
+            <div>
+              <Input
+                {...props}
+                value={value}
+                feedback={errorList?.[0].feedback || feedback}
+                message={errorList?.[0].message || message}
+                messageParams={errorList?.[0].messageParams || messageParams}
+                pending={pending}
+                onChange={(e) => {
+                  typeof onChange === "function" && onChange(e);
+                  setValue(e.data.value);
+                }}
+                onValidationStart={(e) => {
+                  typeof onValidationStart === "function" && onValidationStart(e);
+                  setPending(true);
+                }}
+                onValidationEnd={(e) => {
+                  typeof onValidationEnd === "function" && onValidationEnd(e);
+                  setErrorList(e.data.errorList.length ? e.data.errorList : null);
+                  setPending(false);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const Time = withControlledInput(Uu5Forms.Time);
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>value & onChange (in console)</h4>
+            <Time
+              value="10:30"
+              onChange={(e) => {
+                console.log("onChange", e);
+                // TODO save value to state
+              }}
+            />
+
+            <h4>pickerType</h4>
+            <div
+              className={Config.Css.css({
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: "15px",
+              })}
+            >
+              <div>
+                <p>pickerType="vertical"</p>
+                <Time
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <p>pickerType="native"</p>
+                <Time
+                  pickerType="native"
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+            </div>
+
+            <h4>step = 1800 (30 minutes) & pickerType="native"</h4>
+            <Time step={1800} pickerType="native" />
+
+            <h4>onValidate: {`>`}= 12:00 is invalid</h4>
+            <Time
+              onValidate={async (e) => {
+                console.log("onValidate", e);
+
+                const value = e.data.value;
+
+                // TODO some async validation e.g. on server
+                await wait();
+
+                if (value != null) {
+                  if (value >= "12:00") {
+                    return {
+                      code: "badAsyncValue",
+                      feedback: "error",
+                      message: {
+                        en: "Bad async value. It must be earlier than %s.",
+                      },
+                      messageParams: ["12:00"],
+                    };
+                  }
+                }
+              }}
+              onValidationStart={(e) => {
+                console.log("onValidationStart", e);
+                // TODO set pending state to input
+              }}
+              onValidationEnd={(e) => {
+                console.log("onValidationEnd", e);
+                // TODO save error data to state
+                // TODO set pending state to input to false
+              }}
+            />
+
+            <h4>validateOnChange: min = 10:30, max = 21:30</h4>
+            <Time min="10:30" max="21:30" validateOnChange />
+
+            <h4>validationMap: min = 10:30, max = 21:30 (in console)</h4>
+            <Time
+              min="10:30"
+              max="21:30"
+              validationMap={{
+                min: {
+                  feedback: "warning",
+                  message: {
+                    en: "Minimum time should be later then %s.",
+                    cs: "Čas by měl být větší než %s.",
+                  },
+                },
+              }}
+            />
+
+            <h4>preselectedPickerValue = 10:00</h4>
+            <Time preselectedPickerValue="10:00" />
+
+            <h4>autoComplete</h4>
+            <form id="myForm" method="POST">
+              <Time label="On" name="on" autoComplete />
+              <Time label="Off" name="off" autoComplete={false} />
+              <br />
+              <Uu5Elements.Button type="submit">Submit</Uu5Elements.Button>
+            </form>
+
+            <div
+              className={Config.Css.css({
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: "15px",
+              })}
+            >
+              <div>
+                <UserPreferencesProvider hourFormat={24}>
+                  <h3>format=24</h3>
+
+                  <h4>value</h4>
+                  <div>
+                    <p>value="16:50:00"</p>
+                    <Time value="16:50:00" />
+                  </div>
+
+                  <h4>displaySeconds</h4>
+                  <div>
+                    <p>displaySeconds=true</p>
+                    <Time displaySeconds={true} />
+                  </div>
+
+                  <h4>step</h4>
+                  <div>
+                    <div>
+                      <p>step=120 (2 min)</p>
+                      <Time step={120} />
+                    </div>
+                    <div>
+                      <p>step=180 (3 min)</p>
+                      <Time step={180} />
+                    </div>
+                    <div>
+                      <p>step=240 (4 min)</p>
+                      <Time step={240} />
+                    </div>
+                    <div>
+                      <p>step=300 (5 min)</p>
+                      <Time step={300} />
+                    </div>
+                    <div>
+                      <p>step=360 (6 min)</p>
+                      <Time step={360} />
+                    </div>
+                    <div>
+                      <p>step=600 (10 min)</p>
+                      <Time step={600} />
+                    </div>
+                    <div>
+                      <p>step=720 (12 min)</p>
+                      <Time step={720} />
+                    </div>
+                    <div>
+                      <p>step=900 (15 min)</p>
+                      <Time step={900} />
+                    </div>
+                    <div>
+                      <p>step=1200 (20 min)</p>
+                      <Time step={1200} />
+                    </div>
+                    <div>
+                      <p>step=1800 (30 min)</p>
+                      <Time step={1800} />
+                    </div>
+                    <div>
+                      <p>step=3600 (1 hour)</p>
+                      <Time step={3600} />
+                    </div>
+                  </div>
+                </UserPreferencesProvider>
+              </div>
+
+              <div>
+                <UserPreferencesProvider hourFormat={12}>
+                  <h3>format=12</h3>
+
+                  <h4>value</h4>
+                  <div>
+                    <p>value="16:50:00"</p>
+                    <Time value="16:50:00" />
+                  </div>
+
+                  <h4>displaySeconds</h4>
+                  <div>
+                    <p>displaySeconds=true</p>
+                    <Time displaySeconds={true} />
+                  </div>
+
+                  <h4>step</h4>
+                  <div>
+                    <div>
+                      <p>step=120 (2 min)</p>
+                      <Time step={120} />
+                    </div>
+                    <div>
+                      <p>step=180 (3 min)</p>
+                      <Time step={180} />
+                    </div>
+                    <div>
+                      <p>step=240 (4 min)</p>
+                      <Time step={240} />
+                    </div>
+                    <div>
+                      <p>step=300 (5 min)</p>
+                      <Time step={300} />
+                    </div>
+                    <div>
+                      <p>step=360 (6 min)</p>
+                      <Time step={360} />
+                    </div>
+                    <div>
+                      <p>step=600 (10 min)</p>
+                      <Time step={600} />
+                    </div>
+                    <div>
+                      <p>step=720 (12 min)</p>
+                      <Time step={720} />
+                    </div>
+                    <div>
+                      <p>step=900 (15 min)</p>
+                      <Time step={900} />
+                    </div>
+                    <div>
+                      <p>step=1200 (20 min)</p>
+                      <Time step={1200} />
+                    </div>
+                    <div>
+                      <p>step=1800 (30 min)</p>
+                      <Time step={1800} />
+                    </div>
+                    <div>
+                      <p>step=3600 (1 hour)</p>
+                      <Time step={3600} />
+                    </div>
+                  </div>
+                </UserPreferencesProvider>
+              </div>
+            </div>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

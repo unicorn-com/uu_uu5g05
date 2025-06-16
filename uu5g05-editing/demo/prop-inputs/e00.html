@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState, useEffect } from "uu5g05";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Editing from "uu5g05-editing";
+
+      Utils.Language.setLanguage("en");
+
+      const origConsoleError = console.error;
+
+      //@@viewOn:example
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Forms.Form onSubmit={(e) => alert(JSON.stringify(e.data.value, null, 2))}>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fit, minmax(320px, 1fr))" rowGap={8}>
+                {Object.keys(Uu5Editing).filter(((k) => /^Form/.test(k))).map((k) => {
+                  const Input = Uu5Editing[k];
+                  return <Input key={k} name={k.replace(/^Form([A-Z])/, (_, v) => v.toLowerCase())} />
+                })}
+              </Uu5Elements.Grid>
+              <div className={Config.Css.css({ textAlign: "right", marginTop: 16 })}>
+                <Uu5Forms.SubmitButton />
+              </div>
+            </Uu5Forms.Form>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

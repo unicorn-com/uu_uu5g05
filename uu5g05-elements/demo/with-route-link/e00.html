@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  import {
+    Utils,
+    createComponent,
+    createVisualComponent,
+    Fragment,
+    useRoute,
+    RouteProvider,
+  } from "uu5g05";
+  import Uu5Elements from "uu5g05-elements";
+
+  /*@@viewOn:example*/
+  const CustomLink = Uu5Elements.withRouteLink(createVisualComponent({
+    render({ children, ...props }) {
+      return (
+        <a {...props}>
+          {children}
+        </a>
+      )
+    }
+  }));
+  /*@@viewOff:example*/
+
+  /*@@viewOn:example*/
+  const HomeRoute = createVisualComponent({
+    render() {
+      const [route] = useRoute();
+
+      return (
+        <Uu5Elements.Block
+          header={<Uu5Elements.Text category="story" segment="heading" type="h2">Home</Uu5Elements.Text>}
+        >
+          route: {JSON.stringify(route)}
+          <br /><br />
+          <CustomLink href="https://www.plus4u.net/about?id=1">About uuApp 1</CustomLink><br />
+          <CustomLink href="https://www.plus4u.net/about?id=2">About uuApp 2</CustomLink>
+        </Uu5Elements.Block>
+      );
+    },
+  });
+  /*@@viewOff:example*/
+
+  const AboutRoute = createComponent({
+    render() {
+      const [route] = useRoute();
+
+      return (
+        <Uu5Elements.Block
+          header={
+            <Uu5Elements.Text category="story" segment="heading" type="h2">
+              About {route.params.id}
+            </Uu5Elements.Text>
+          }
+        >
+          route: {JSON.stringify(route)}
+          <br /><br />
+          <CustomLink href="https://www.plus4u.net/home">Home</CustomLink>
+        </Uu5Elements.Block>
+      );
+    },
+  });
+
+  const ErrorRoute = createVisualComponent({
+    render() {
+      const [route, setRoute] = useRoute();
+
+      return (
+        <Uu5Elements.Block
+          header={<Uu5Elements.Text category="story" segment="heading" type="h2">Error</Uu5Elements.Text>}
+        >
+          route: {JSON.stringify(route)}
+          <br /><br />
+          <CustomLink href="https://www.plus4u.net/home">Home</CustomLink>
+        </Uu5Elements.Block>
+      );
+    },
+  });
+
+  const CustomRouter = createComponent({
+    render() {
+      const [route] = useRoute();
+
+      let result;
+      switch (route.uu5Route) {
+        case "home":
+          result = <HomeRoute />;
+          break;
+        case "about":
+          result = <AboutRoute />;
+          break;
+        default:
+          result = <ErrorRoute />;
+      }
+
+      return result;
+    },
+  });
+
+  const Demo = createComponent({
+    render() {
+      return (
+        <Fragment>
+          {/*@@viewOn:example*/}
+          <RouteProvider initialRoute={{ uu5Route: "home" }} aliasList={["https://www.plus4u.net/"]}>
+            <CustomRouter />
+          </RouteProvider>
+          {/*@@viewOff:example*/}
+        </Fragment>
+      );
+    },
+  });
+
+  Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

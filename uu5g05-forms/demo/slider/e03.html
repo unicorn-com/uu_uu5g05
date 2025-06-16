@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import { withControlledFormInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: 24,
+      });
+
+      const Slider = withControlledFormInput(Uu5Forms.Slider);
+
+      function Page() {
+        return (
+          <div className={columnsCss}>
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>autoFocus</h4>
+              <Slider autoFocus label="Label" />
+
+              <h4>id & name</h4>
+              <Slider id="id" name="name" label="Label" />
+
+              <h4>readOnly</h4>
+              <Slider readOnly label="Label" />
+              <Slider readOnly label="Label" value={50} />
+
+              <h4>disabled</h4>
+              <Slider disabled label="Label" />
+              <Slider disabled label="Label" value={50} />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>size</h4>
+              <Slider size="s" placeholder="Size s" label="Label" message="Message..." />
+              <Slider size="m" placeholder="Size m" label="Label" message="Message..." />
+              <Slider size="l" placeholder="Size l" label="Label" message="Message..." />
+
+              <h4>onFocus & onBlur (in console)</h4>
+              <Slider
+                label="Label"
+                onFocus={(e) => console.log("onFocus", e)}
+                onBlur={(e) => console.log("onBlur", e)}
+              />
+              {/*@@viewOff:example*/}
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

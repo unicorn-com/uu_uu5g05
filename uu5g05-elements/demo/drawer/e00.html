@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+  </style>
+</head>
+
+<body>
+  <div id="renderHere">Loading...</div>
+
+  <script type="text/babel">
+    import { Utils, Lsi, createComponent, useState } from "uu5g05";
+    import Uu5Elements from "uu5g05-elements";
+    import { Config, LoremIpsum } from "uu5g05-dev";
+
+    const CONTENTS = [
+      <LoremIpsum paragraphCount={3} />,
+      <>
+        <Uu5Elements.HighlightedBox>Information Box</Uu5Elements.HighlightedBox>
+        <Uu5Elements.HighlightedBox colorScheme="warning">Warning Box</Uu5Elements.HighlightedBox>
+        <Uu5Elements.HighlightedBox colorScheme="positive">Positive Box</Uu5Elements.HighlightedBox>
+        <Uu5Elements.HighlightedBox colorScheme="negative">Negative Box</Uu5Elements.HighlightedBox>
+      </>,
+    ];
+
+    const TABS = [
+      { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      { icon: "mdi-border-style", children: <Lsi lsi={{ en: "Highlighted Boxes" }} /> },
+    ];
+
+    //@@viewOn:example
+    const Page = createComponent({
+      render() {
+        const [menuOpen, setMenuOpen] = useState(false);
+        const [selectedItem, setSelectedItem] = useState(0);
+
+        return (
+          <Uu5Elements.Drawer
+            open={menuOpen}
+            onClose={() => setMenuOpen(false)}
+            content={(
+              <Uu5Elements.MenuList
+                itemBorderRadius="moderate"
+                itemList={TABS.map((tab, i) => ({
+                  ...tab,
+                  onClick: () => setSelectedItem(i),
+                  focused: selectedItem === i,
+                }))}
+              />
+            )}
+          >
+            <div className={Config.Css.css({ padding: 24 })}>
+              <Uu5Elements.Button
+                icon={menuOpen ? "uugds-close" : "uugds-menu"}
+                children={menuOpen ? "Close Drawer" : "Open Drawer"}
+                significance="highlighted"
+                onClick={() => setMenuOpen((prev) => !prev)}
+                className={Config.Css.css({ marginBottom: 24 })}
+              />
+              {CONTENTS[selectedItem]}
+            </div>
+          </Uu5Elements.Drawer>
+        );
+      },
+    });
+    //@@viewOff:example
+
+    Utils.Dom.render(<Page />, document.getElementById("renderHere"));
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, UserPreferencesProvider } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { wait, Config } from "uu5g05-dev";
+      import { withControlledInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const CLASS_NAMES = {
+        pickers: () =>
+          Config.Css.css({
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "15px",
+          }),
+      };
+      
+      const MonthRangeInput = withControlledInput(Uu5Forms.MonthRange.Input);
+
+      const min = "2021-08";
+      const max = "2021-12";
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>value & onChange (in console)</h4>
+            <MonthRangeInput
+              value="2021-10"
+              onChange={(e) => {
+                console.log("onChange", e);
+                // TODO save value to state
+              }}
+            />
+
+            <h4>
+              min = {min} & max = {max} & step = 2
+            </h4>
+            <MonthRangeInput
+              min={min}
+              max={max}
+              value="2021-10"
+              step={2}
+              onValidationEnd={(e) => {
+                console.log("onValidationEnd", e);
+                // TODO save error data to state
+              }}
+            />
+
+            <h4>onValidate: >= {max} is invalid</h4>
+            <MonthRangeInput
+              onValidate={async (e) => {
+                console.log("onValidate", e);
+
+                const value = e.data.value;
+
+                // TODO some async validation e.g. on server
+                await wait();
+
+                if (value != null) {
+                  if (value >= max) {
+                    return {
+                      code: "badAsyncValue",
+                      feedback: "error",
+                      message: {
+                        en: "Bad async value. It must be smaller than %s.",
+                      },
+                      messageParams: [max],
+                    };
+                  }
+                }
+              }}
+              onValidationStart={(e) => {
+                console.log("onValidationStart", e);
+                // TODO set pending state to input
+              }}
+              onValidationEnd={(e) => {
+                console.log("onValidationEnd", e);
+                // TODO save error data to state
+                // TODO set pending state to input to false
+              }}
+            />
+
+            <h4>
+              validationMap: min = {min}, max = {max}
+            </h4>
+            <MonthRangeInput
+              min={min}
+              max={max}
+              validationMap={{
+                min: {
+                  feedback: "warning",
+                  message: {
+                    en: "Minimum month should be higher then %s.",
+                    cs: "Minimální měsíc by měl být vyšší než %s.",
+                  },
+                },
+              }}
+              onValidationEnd={(e) => {
+                console.log("onValidationEnd", e);
+                // TODO save error data to state
+              }}
+            />
+
+            <h4>iconLeft</h4>
+            <MonthRangeInput iconLeft="uugds-calendar" />
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

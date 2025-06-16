@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>e01</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5g05/1.31.1-alpha-select.2/assets/example-config.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  import { createComponent, Utils, useState, SessionProvider } from "uu5g05";
+  import Uu5Elements from "uu5g05-elements";
+  import Uu5Forms from "uu5g05-forms";
+  import Plus4U5Elements from "uu_plus4u5g02-elements";
+  import { AuthenticationService } from "uu_appg01_oidc";
+  import { Config } from "uu5g05-dev";
+
+  const ITEM_LIST = [
+    {
+      value: "7-7948-1",
+      text: "Ondřej Čapek"
+    },
+    {
+      value: "127-0000-0000-1",
+      text: "Milan Šatka"
+    },
+    {
+      value: "4995-4237-1",
+      text: "Varditer Arzumanyan"
+    },
+    {
+      value: "7611-1",
+      text: "Josef Vegner"
+    },
+    {
+      value: "6959-2766-1",
+      text: "Martina Vilímová"
+    },
+    {
+      value: "7888-8591-1",
+      text: "Jakub Šírek"
+    }
+  ]
+
+  function PersonItem({ uuIdentity, selected }) {
+    const className = { width: "100%", display: "flex", alignItems: "center", gap: Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "b"]) };
+    if (!selected) {
+      className["[role=img]"] = { width: 24, height: 24 };
+    }
+    return (
+      <div className={Config.Css.css(className)}>
+        <Plus4U5Elements.PersonItem uuIdentity={uuIdentity} />
+        {selected && <Uu5Elements.Text colorScheme="dim">{uuIdentity}</Uu5Elements.Text>}
+      </div>
+    );
+  }
+
+  const Page = createComponent({
+    render() {
+      const [open, setOpen] = useState(false);
+
+      function handleClose() {
+        setOpen(false);
+      }
+
+      function handleSubmit(e) {
+        console.log("onSubmit", e);
+        handleClose();
+      }
+
+      return (
+        <SessionProvider authenticationService={AuthenticationService}>
+          <Uu5Elements.Button onClick={() => setOpen(true)}>Teachers</Uu5Elements.Button>
+          <Uu5Forms.Form.Provider onSubmit={handleSubmit}>
+            <Uu5Elements.Modal
+              open={open}
+              onClose={handleClose}
+              header={
+                <div className={Config.Css.css({ display: "flex", flexDirection: "column" })}>
+                  <Uu5Elements.Text category="interface" segment="content" type="small" significance="subdued">Web design</Uu5Elements.Text>
+                  <Uu5Elements.Text>Teachers</Uu5Elements.Text>
+                </div>
+              }
+              footer={
+                <Uu5Elements.Grid
+                  templateColumns={{xs: "repeat(2, 1fr)", s: "repeat(2, auto)"}}
+                  columnGap={Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "c"])}
+                  justifyContent={{s: "end"}}
+                >
+                  <Uu5Forms.CancelButton onClick={handleClose}>Cancel</Uu5Forms.CancelButton>
+                  <Uu5Forms.SubmitButton>Submit</Uu5Forms.SubmitButton>
+                </Uu5Elements.Grid>
+              }
+            >
+              <Uu5Forms.Form.View className={Config.Css.css({ minHeight: 400 })}>
+                <Uu5Forms.FormTextSelect
+                  name="teachers"
+                  displayTags={false}
+                  multiple
+                  placeholder="Search by name"
+                  info="Search or select teacher/s."
+                  label="Teachers"
+                  required
+                  itemList={ITEM_LIST.map((item) => ({
+                    value: item.value,
+                    children: <PersonItem uuIdentity={item.value} />,
+                    selectedChildren: <PersonItem uuIdentity={item.value} selected />,
+                    text: item.text,
+                  }))}
+                  displayCheckboxes
+                >
+                  <Uu5Forms.FormTextSelect.Field />
+                  <Uu5Forms.FormTextSelect.SelectedOptions className={Config.Css.css({ width: "100%", marginTop: Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "b"]) })} />
+                </Uu5Forms.FormTextSelect>
+              </Uu5Forms.Form.View>
+            </Uu5Elements.Modal>
+          </Uu5Forms.Form.Provider>
+        </SessionProvider>
+      )
+    }
+  });
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+
+</html>

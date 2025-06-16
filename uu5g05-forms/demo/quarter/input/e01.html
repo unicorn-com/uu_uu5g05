@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import { withControlledInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: 16,
+      });
+
+      const QuarterInput = withControlledInput(Uu5Forms.Quarter.Input);
+
+      function Page() {
+        return (
+          <div className={columnsCss}>
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>autoFocus</h4>
+              <QuarterInput autoFocus />
+
+              <h4>id & name </h4>
+              <QuarterInput id="id" name="name" />
+
+              <h4>readOnly</h4>
+              <QuarterInput readOnly value="2021-Q3" />
+
+              <h4>disabled</h4>
+              <QuarterInput disabled value="2021-Q3" />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>size</h4>
+              <QuarterInput size="xxs" />
+              <QuarterInput size="xs" />
+              <QuarterInput size="s" />
+              <QuarterInput size="m" />
+              <QuarterInput size="l" />
+              <QuarterInput size="xl" />
+
+              <h4>borderRadius</h4>
+              <QuarterInput borderRadius="none" />
+              <QuarterInput borderRadius="elementary" />
+              <QuarterInput borderRadius="moderate" />
+              <QuarterInput borderRadius="expressive" />
+              <QuarterInput borderRadius="full" />
+
+              <h4>width</h4>
+              <QuarterInput width={300} />
+              <QuarterInput width="50%" />
+              <QuarterInput width="10em" />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>required</h4>
+              <QuarterInput required />
+              <QuarterInput required value="2021-Q3" />
+
+              <h4>onFocus & onBlur (in console)</h4>
+              <QuarterInput onFocus={(e) => console.log("onFocus", e)} onBlur={(e) => console.log("onBlur", e)} />
+              {/*@@viewOff:example*/}
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

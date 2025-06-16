@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to validate form</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config, wait } from "uu5g05-dev";
+
+      const Calls = {
+        async getItemAvailability() {
+          // could check on backend; for demo we'll simply wait and return a random value 0-5
+          await wait();
+          return { maxAvailable: Utils.Number.random(5) };
+        },
+      };
+
+      const Page = createComponent({
+        render() {
+          return (
+            //@@viewOn:example
+            <Uu5Forms.Form
+              gridLayout="count"
+              onSubmit={(e) => {
+                const values = e.data.value;
+                // TODO some call to server for storing data
+                alert("Submitted with values:\n" + JSON.stringify(values, null, 2));
+              }}
+            >
+              <Uu5Forms.FormNumber
+                name="count"
+                label="Count"
+                initialValue={1}
+                required
+                min={1}
+                max={5}
+                message="Item count is limited by current stock reserve."
+                onValidate={async (e) => {
+                  const { value } = e.data;
+
+                  // some async call
+                  const { maxAvailable } = await Calls.getItemAvailability();
+
+                  if (value > maxAvailable) {
+                    return {
+                      feedback: "error",
+                      messageParams: [maxAvailable],
+                      message: {
+                        en: "Unfortunately, %d items are currently available.",
+                      },
+                    };
+                  }
+                }}
+              />
+
+              <Uu5Forms.SubmitButton className={Config.Css.css({ justifySelf: "end" })} />
+            </Uu5Forms.Form>
+            //@@viewOff:example
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

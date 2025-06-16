@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        useDataList,
+        createComponent,
+        createVisualComponent,
+        SessionProvider,
+        useSession,
+        useState,
+        useRef,
+        useMemo,
+        useCallback,
+        useEffect,
+        useUnmountedRef,
+        useScreenSize,
+        AutoLoad,
+        Content,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { AuthenticationService } from "uu_appg01_oidc";
+      import { Client } from "uu_appg01";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5App from "uu_plus4u5g02-app";
+
+      const MAX_AUTHENTICATION_AGE = 60;
+      const REQUIRED_ACR_VALUES = ["high", "veryHigh"];
+
+      let globalMfaMaxAge;
+      let globalMfaAcr;
+
+      let callDelay = 0;
+      let error = false;
+      let labelClassName = Config.Css.css`
+        width: 40%;
+        color: rgba(0,0,0,0.54);
+        display: inline-block;
+        text-align: right;
+        padding: 6px 16px;
+      `;
+      let inputClassName = Config.Css.css`
+        width: 60%;
+        border: 1px solid #bdbdbd;
+        outline: none;
+        min-height: 32px;
+        padding: 6px 8px 6px;
+        margin-bottom: 8px;
+        &:focus {
+          border-color: #2196f3;
+        }
+      `;
+      let controlsClassName = Config.Css.css`
+        margin: 8px 16px;
+        text-align: center;
+        &>* {
+          min-width: 96px;
+        }
+      `;
+
+      /*@@viewOn:example*/
+      const Calls = {
+        // ...
+        load(dtoIn) {
+          const commandUri = Calls.getCommandUri("joke/list");
+          return Calls.call("get", commandUri, dtoIn);
+        },
+
+        loadItem(dtoIn) {
+          const commandUri = Calls.getCommandUri("joke/get");
+          return Calls.call("get", commandUri, dtoIn);
+        },
+
+        updateItem(newData) {
+          const commandUri = Calls.getCommandUri("joke/update");
+          return Calls.call("post", commandUri, newData);
+        },
+
+        createItem(newData) {
+          const commandUri = Calls.getCommandUri("joke/create");
+          return Calls.call("post", commandUri, newData);
+        },
+
+        deleteItem(dtoIn) {
+          const commandUri = Calls.getCommandUri("joke/delete");
+          return Calls.call("post", commandUri, dtoIn);
+        },
+      };
+      /*@@viewOff:example*/
+
+      Calls.call = async (method, uri, dtoIn) => {
+        const startTime = Date.now();
+        try {
+          const clientOptions = error ? { headers: { authorization: null } } : undefined;
+          const response = await Client[method](uri, dtoIn, clientOptions);
+          return response.data;
+        } finally {
+          await new Promise((resolve) => setTimeout(resolve, Math.max(0, callDelay - (Date.now() - startTime))));
+        }
+      };
+      Calls.getCommandUri = (useCase) =>
+        "https://uuappg01-eu-w-1.plus4u.net/uu-jokes-maing01/4ef6a7b01b5942ecbfb925b249af987f/" + useCase;
+
+      // fix uu_appg01_core <= 5.20.1 regarding trust verification (otherwise there would be loop due to our mocking logic)
+      const { UntrustedCredentials, Session } = Uu5Loader.get("uu_appg01_core").Authentication;
+      Session.prototype.assertTrustiness = function (constraints = {}) {
+        let mla = constraints.minAuthenticationLevelOfAssurance;
+        if (mla != undefined && mla != null && mla > this.getAuthenticationLevelOfAssurance()) {
+          throw new UntrustedCredentials(this, "Minimum login level of assurance not met.");
+        }
+        let maxAge = constraints.maxAuthenticationAge;
+        if (maxAge != undefined && maxAge != null) {
+          let epochAuthTime = this.getAuthenticationTime().getTime() / 1000;
+          let epochCurTime = Date.now() / 1000; // bug here: `Date.now / 1000` missing parentheses
+          if (epochAuthTime + maxAge < epochCurTime) {
+            throw new UntrustedCredentials(this, "User re-authentication required.");
+          }
+        }
+      };
+
+      // mocking - simulate access policy error
+      const origFetch = fetch;
+      window.fetch = function (...args) {
+        if (typeof args[0] === "string" && args[0].startsWith(Calls.getCommandUri("joke/list"))) {
+          let response;
+          let oidcSession = AuthenticationService.getCurrentSession();
+          let curAge = (Date.now() - oidcSession.getAuthenticationTime().getTime()) / 1000;
+          if (
+            (globalMfaAcr && !REQUIRED_ACR_VALUES.includes(oidcSession?.getAttribute?.("acr"))) ||
+            (globalMfaMaxAge && curAge > MAX_AUTHENTICATION_AGE)
+          ) {
+            let dtoOut = {
+              uuAppErrorMap: {
+                "uu-app-oidc/verifyAccessPolicy/untrustedSession": {
+                  type: "error",
+                  code: "uu-app-oidc/verifyAccessPolicy/untrustedSession",
+                  message: "Session is not trusted as it does not meet expected criteria.",
+                  paramMap: {
+                    maxAuthenticationAge: globalMfaMaxAge ? MAX_AUTHENTICATION_AGE : undefined,
+                    supportedAcrValues: globalMfaAcr ? REQUIRED_ACR_VALUES : undefined,
+                  },
+                },
+              },
+            };
+            response = new Response(JSON.stringify(dtoOut), {
+              status: 401,
+              headers: { "Content-Type": "application/json;charset=utf-8" },
+            });
+            return Promise.resolve(response);
+          }
+        }
+        return origFetch.apply(this, arguments);
+      };
+      // end mocking
+
+      const ControlPanel = createVisualComponent({
+        render(props) {
+          const { dataListResult } = props;
+          const { state, data, newData, errorData, pendingData, handlerMap } = dataListResult;
+          const [callDelayValue, setCallDelayValue] = useState(callDelay);
+          const [checkMaxAge, setCheckMaxAge] = useState(true);
+          const [checkAcr, setCheckAcr] = useState(true);
+
+          globalMfaMaxAge = checkMaxAge;
+          globalMfaAcr = checkAcr;
+          callDelay = callDelayValue;
+
+          const { session } = useSession();
+          const [currentAgeLimited, setCurrentAgeLimited] = useState();
+          useEffect(() => {
+            let interval = setInterval(() => {
+              const curAge = session ? (Date.now() - session.getAuthenticationTime().getTime()) / 1000 : undefined;
+              setCurrentAgeLimited(curAge);
+              if (curAge == null || curAge > MAX_AUTHENTICATION_AGE) clearInterval(interval);
+            }, 1000);
+            return () => clearInterval(interval);
+          }, [session]);
+
+          return (
+            <Uu5Elements.Block
+              className={Config.Css.css`margin: 16px 0;`}
+              header={
+                <Uu5Elements.Text category="story" segment="heading" type="h2">
+                  Settings
+                </Uu5Elements.Text>
+              }
+            >
+              <Uu5Forms.Checkbox
+                label={`Require maxAge: ${MAX_AUTHENTICATION_AGE}s`}
+                value={checkMaxAge}
+                onChange={(e) => setCheckMaxAge(e.data.value)}
+              />
+              <Uu5Forms.Checkbox
+                label={`Require one of acrValues: ${REQUIRED_ACR_VALUES}`}
+                value={checkAcr}
+                onChange={(e) => setCheckAcr(e.data.value)}
+              />
+
+              <div>
+                Current session age:{" "}
+                {currentAgeLimited == null ? (
+                  <Uu5Elements.Pending nestingLevel="inline" />
+                ) : currentAgeLimited > MAX_AUTHENTICATION_AGE ? (
+                  "exceeded " + MAX_AUTHENTICATION_AGE + "s"
+                ) : (
+                  <Uu5Elements.Progress
+                    text={Math.round(currentAgeLimited) + "s"}
+                    value={100 * Math.round(currentAgeLimited) / MAX_AUTHENTICATION_AGE}
+                  />
+                )}
+              </div>
+              <div>Current session acr: {session?.getAttribute("acr")}</div>
+
+              <details>
+                <summary className={Config.Css.css`display: inline-block; cursor: pointer;`}>
+                  useDataList result
+                </summary>
+                <pre className={Config.Css.css`background: #f5f5f5; padding: 16px; height: 400px; overflow: auto;`}>
+                  {JSON.stringify(
+                    {
+                      state,
+                      data: data ? JSON.stringify(data).replace(/"/g, "'") : null,
+                      newData: newData ? JSON.stringify(newData).replace(/"/g, "'") : null,
+                      pendingData: pendingData ? JSON.stringify(pendingData).replace(/"/g, "'") : null,
+                      errorData,
+                      handlerMap: Object.keys(handlerMap).reduce(
+                        (r, k) => ((r[k] = handlerMap[k] ? "fn(...)" : null), r),
+                        {}
+                      ),
+                      "data[0].handlerMap":
+                        data && data[0]
+                          ? Object.keys(data[0].handlerMap).reduce(
+                              (r, k) => ((r[k] = data[0].handlerMap[k] ? "fn(...)" : null), r),
+                              {}
+                            )
+                          : null,
+                    },
+                    null,
+                    2
+                  )}
+                </pre>
+              </details>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const SIZES_REVERSED = ["xl", "l", "m", "s", "xs"];
+      const Column = createVisualComponent({
+        render(props) {
+          let { colWidth } = props;
+          let [screenSize] = useScreenSize();
+          let parsed = Utils.ScreenSize.parseValue(colWidth);
+          let widthValue =
+            parsed[screenSize] ||
+            parsed[SIZES_REVERSED.slice(SIZES_REVERSED.indexOf(screenSize)).find((it) => parsed[it])];
+          let currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, Column);
+          let attrs = Utils.VisualComponent.getAttrs(
+            props,
+            Config.Css.css`
+              width: ${Math.floor(1e5 * ((widthValue / 12) * 100)) / 1e5}%;
+              padding: 8px;
+            `
+          );
+          return (
+            <div {...attrs}>
+              <Content nestingLevel={currentNestingLevel}>{props.children}</Content>
+            </div>
+          );
+        },
+      });
+
+      const Joke = Utils.Component.memo(
+        createVisualComponent({
+          render(props) {
+            const { onUpdate, onDelete, data, processingItem = {} } = props;
+            const attrs = Utils.VisualComponent.getAttrs(props);
+            return (
+              <Uu5Elements.Block
+                {...attrs}
+                card="full"
+                colorScheme={processingItem.errorData ? "negative" : undefined}
+                significance="distinct"
+                actionList={[
+                  {
+                    children: "Update",
+                    icon: "uugds-reload",
+                    disabled: !onUpdate,
+                    meaning: "primary",
+                    primary: true,
+                    collapsed: false,
+                    onClick: () => onUpdate(processingItem),
+                  },
+                  {
+                    children: "Delete",
+                    icon: "uugds-delete",
+                    disabled: !onDelete,
+                    meaning: "negative",
+                    primary: true,
+                    collapsed: false,
+                    onClick: () => onDelete(processingItem),
+                  },
+                ]}
+                header={
+                  <Uu5Elements.Text category="interface" segment="title" type="common">
+                    {data.name}
+                  </Uu5Elements.Text>
+                }
+              >
+                {data.text}
+              </Uu5Elements.Block>
+            );
+          },
+        })
+      );
+
+      /*@@viewOn:example*/
+      const Example = createVisualComponent({
+        render() {
+          const pageSize = 8;
+          const dataListResult = useDataList({
+            pageSize,
+            handlerMap: {
+              load: Calls.load,
+              createItem: Calls.createItem,
+            },
+            itemHandlerMap: {
+              load: Calls.loadItem,
+              update: Calls.updateItem,
+              delete: Calls.deleteItem,
+            },
+          });
+          const { state, data, newData, errorData, pendingData, handlerMap } = dataListResult;
+          console.log(dataListResult);
+
+          const unmountedRef = useUnmountedRef();
+
+          const [modalProps, setModalProps] = useState();
+          const showModal = useCallback((joke, onSave) => {
+            setModalProps({
+              header: joke ? "Edit Joke" : "Create Joke",
+              children: (
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    try {
+                      let values = {};
+                      for (let el of e.target.elements) if (el.name) values[el.name] = el.value;
+                      await onSave({ values });
+                      if (unmountedRef.current) return;
+                      setModalProps(null);
+                    } catch (e) {
+                      if (unmountedRef.current) return;
+                      // TODO AlertBus.
+                      alert(`${joke ? "Updating" : "Creating"} on server failed.`);
+                    }
+                  }}
+                >
+                  <label>
+                    <span className={labelClassName}>Name</span>
+                    <input
+                      label="Name"
+                      name="name"
+                      defaultValue={joke ? joke.name : undefined}
+                      className={inputClassName}
+                    />
+                  </label>
+                  <br />
+                  <label>
+                    <span className={labelClassName}>Text</span>
+                    <textarea
+                      name="text"
+                      defaultValue={joke ? joke.text : undefined}
+                      className={inputClassName + " " + Config.Css.css`vertical-align: top;`}
+                    />
+                  </label>
+                  <br />
+                  <div className={controlsClassName}>
+                    <Uu5Elements.Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setModalProps(null);
+                      }}
+                      children="Cancel"
+                    />{" "}
+                    <Uu5Elements.Button type="submit" children="OK" colorScheme="primary" />{" "}
+                  </div>
+                </form>
+              ),
+            });
+          }, []);
+
+          const handleJokeUpdate = useCallback(
+            (item) => {
+              showModal(item.data, async ({ values }) => {
+                return await item.handlerMap.update(values);
+              });
+            },
+            [showModal, unmountedRef]
+          );
+
+          const handleJokeDelete = useCallback((item) => {
+            item.handlerMap.delete();
+          }, []);
+
+          return (
+            <div className={Config.Css.css({ padding: "16px 32px" })}>
+              <Uu5Elements.Button disabled={!handlerMap.load} onClick={() => handlerMap.load()}>
+                Reload
+              </Uu5Elements.Button>{" "}
+              <ControlPanel dataListResult={dataListResult} />
+              <Uu5Elements.Block
+                header={
+                  <Uu5Elements.Text category="story" segment="heading" type="h3">
+                    Data
+                  </Uu5Elements.Text>
+                }
+              >
+                {errorData ? (
+                  <Uu5Elements.HighlightedBox colorScheme="negative">
+                    An error happenned when loading the data.{" "}
+                    <Uu5Elements.Button onClick={() => handlerMap.load(errorData.dtoIn)}>Try again</Uu5Elements.Button>
+                  </Uu5Elements.HighlightedBox>
+                ) : null}
+                <div className={Config.Css.css`display: flex; flex-wrap: wrap; align-items: flex-start;`}>
+                  {data
+                    ? data
+                        .filter((item) => item != null)
+                        .map((item) => (
+                          <Column key={item.data.id} colWidth="m-6 l-4 xl-3">
+                            <Joke
+                              data={item.data}
+                              onUpdate={!item.handlerMap.update ? null : handleJokeUpdate}
+                              onDelete={!item.handlerMap.delete ? null : handleJokeDelete}
+                              processingItem={item}
+                            />
+                          </Column>
+                        ))
+                    : null}
+                </div>
+
+                <AutoLoad data={data} handleLoadNext={handlerMap.loadNext} distance={window.innerHeight} />
+
+                {pendingData && pendingData.operation === "loadNext" ? (
+                  <div className={Config.Css.css`text-align: center;`}>(loading {pageSize} more...)</div>
+                ) : errorData && errorData.operation === "loadNext" ? (
+                  <Uu5Elements.Button onClick={() => handlerMap.loadNext()} children="Load more (auto-load failed)" />
+                ) : null}
+              </Uu5Elements.Block>
+              <Uu5Elements.Modal {...modalProps} open={!!modalProps} onClose={() => setModalProps(null)} />
+            </div>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      const AuthenticatedDemo = createComponent({
+        render() {
+          let { identity, login } = useSession();
+          return identity ? (
+            <Example />
+          ) : identity === null ? (
+            <Uu5Elements.Button onClick={() => login()} children="Log in" />
+          ) : null;
+        },
+      });
+
+      const Page = createVisualComponent({
+        render() {
+          return (
+            <Plus4U5.SpaProvider initialLanguageList={["cs", "en"]}>
+              <Plus4U5App.Spa>
+                <AuthenticatedDemo />
+              </Plus4U5App.Spa>
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

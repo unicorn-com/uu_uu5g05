@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, PortalElementProvider, useState, useRef } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const FullScreenComponent = createComponent({
+        render(props) {
+          const [portalRootElement, setPortalRootElement] = useState();
+          const [aboutModalProps, setAboutModalProps] = useState();
+          const fullscreenContainerRef = useRef();
+
+          return (
+            /*@@viewOn:example*/
+            <PortalElementProvider element={portalRootElement}>
+              <div ref={fullscreenContainerRef}>
+                <Uu5Elements.Block
+                  header="Lorem ipsum"
+                  headerType="title"
+                  card="full"
+                  height="100%"
+                  maxHeight="100%"
+                  actionList={[
+                    {
+                      icon: "uugdsstencil-uiaction-maximize",
+                      tooltip: "Toggle component full-screen mode",
+                      onClick: () =>
+                        document.fullscreenElement === fullscreenContainerRef.current
+                          ? document.exitFullscreen()
+                          : fullscreenContainerRef.current.requestFullscreen(),
+                      collapsed: false,
+                    },
+                    { children: "About", collapsed: true, onClick: () => setAboutModalProps({ open: true }) },
+                  ]}
+                >
+                  Dropdown menus, modals, ..., wouldn't be visible in component full-screen mode without
+                  PortalElementProvider.
+                  <LoremIpsum paragraphCount={15} className={Config.Css.css({ marginTop: 16 })} />
+                  <Uu5Elements.Modal {...aboutModalProps} onClose={() => setAboutModalProps()} header="About">
+                    <LoremIpsum paragraphCount={2} />
+                    <Uu5Elements.Button onClick={() => setAboutModalProps()}>Close</Uu5Elements.Button>
+                  </Uu5Elements.Modal>
+                </Uu5Elements.Block>
+
+                <div ref={setPortalRootElement} />
+              </div>
+            </PortalElementProvider>
+            /*@@viewOff:example*/
+          );
+        },
+      });
+
+      function ModalButton({ path = "" }) {
+        const [open, setOpen] = useState(false);
+
+        const name = "Modal";
+        const newPath = path + "/" + name.toLowerCase();
+        const header = name + (path ? `(${path})` : "");
+
+        return (
+          <>
+            <Uu5Elements.Button onClick={() => setOpen(true)}>Open {name}</Uu5Elements.Button>
+            <Uu5Elements.Modal open={open} onClose={() => setOpen(false)} header={header}>
+              <ModalButton path={newPath} />
+              <PopoverButton path={newPath} />
+              <AlertButton path={newPath} />
+            </Uu5Elements.Modal>
+          </>
+        );
+      }
+
+      function PopoverButton({ path = "" }) {
+        const [open, setOpen] = useState(false);
+
+        const name = "Popover";
+        const newPath = path + "/" + name.toLowerCase();
+        const header = name + (path ? `(${path})` : "");
+
+        const ref = useRef();
+
+        return (
+          <>
+            <Uu5Elements.Button onClick={() => setOpen(true)} elementRef={ref}>Open {name}</Uu5Elements.Button>
+            {open && (
+              <Uu5Elements.Popover
+                onClose={() => setOpen(false)}
+                element={ref.current}
+                className={Config.Css.css({ padding: 16 })}
+              >
+                <h4>{header}</h4>
+
+                <ModalButton path={newPath} />
+                <PopoverButton path={newPath} />
+                <AlertButton path={newPath} />
+              </Uu5Elements.Popover>
+            )}
+          </>
+        );
+      }
+
+      function AlertButton({ path = "" }) {
+        const [open, setOpen] = useState(false);
+
+        const name = "Alert";
+        const newPath = path + "/" + name.toLowerCase();
+        const header = name + (path ? `(${path})` : "");
+
+        return (
+          <>
+            <Uu5Elements.Button onClick={() => setOpen(true)}>Open {name}</Uu5Elements.Button>
+            {open && (
+              <Uu5Elements.Alert
+                onClose={() => setOpen(false)}
+                header={header}
+                priority="error"
+                controlList={[
+                  { element: <ModalButton path={newPath} /> },
+                  { element: <PopoverButton path={newPath} /> },
+                  { element: <AlertButton path={newPath} /> },
+                ]}
+              />
+            )}
+          </>
+        );
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <main>
+              <Uu5Elements.AlertBus>
+                <Uu5Elements.ModalBus>
+                  <ModalButton />
+                  <PopoverButton />
+                  <AlertButton />
+
+                  <br /><br />
+
+                  <FullScreenComponent />
+                </Uu5Elements.ModalBus>
+              </Uu5Elements.AlertBus>
+            </main>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

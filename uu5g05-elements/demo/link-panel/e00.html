@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import Uu5Elements, { SpacingProvider } from "uu5g05-elements";
+      import { LoremIpsum, Config } from "uu5g05-dev";
+
+      const Page = createComponent({
+        render() {
+          const [open, setOpen] = useState(false);
+
+          return (
+            <div>
+              <h4>Default props & header</h4>
+              <Uu5Elements.LinkPanel header="Header">
+                <LoremIpsum />
+              </Uu5Elements.LinkPanel>
+
+              <h4>open</h4>
+              <Uu5Elements.LinkPanel header="Header" open>
+                <LoremIpsum />
+              </Uu5Elements.LinkPanel>
+
+              <h4>onChange</h4>
+              <Uu5Elements.LinkPanel header="Header" open={open} onChange={(e) => setOpen(e.data.open)}>
+                <LoremIpsum />
+              </Uu5Elements.LinkPanel>
+
+              <h4>colorScheme & significance</h4>
+              <Uu5Elements.Grid
+                templateColumns={{ xs: "1fr", m: "1fr 1fr 1fr" }}
+                columnGap={16}
+                rowGap={16}
+                alignItems="baseline"
+              >
+                <div>common</div>
+                <Uu5Elements.LinkPanel header="Building">
+                  <LoremIpsum />
+                </Uu5Elements.LinkPanel>
+                <Uu5Elements.LinkPanel header="Primary" colorScheme="primary">
+                  <LoremIpsum />
+                </Uu5Elements.LinkPanel>
+
+                <div>subdued</div>
+                <Uu5Elements.LinkPanel header="Building" significance="subdued">
+                  <LoremIpsum />
+                </Uu5Elements.LinkPanel>
+                <Uu5Elements.LinkPanel header="Primary" significance="subdued" colorScheme="primary">
+                  <LoremIpsum />
+                </Uu5Elements.LinkPanel>
+              </Uu5Elements.Grid>
+
+              <h4>children as a function</h4>
+              <Uu5Elements.LinkPanel header="Header">{() => <LoremIpsum />}</Uu5Elements.LinkPanel>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

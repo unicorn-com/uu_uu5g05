@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState, RenderCounter } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const Page = createComponent({
+        render() {
+          const [key, setKey] = useState(0);
+          const [, forceRender] = useState(0);
+          return (
+            <div>
+              <div className={Config.Css.css({ marginBottom: 16 })}>
+                <Uu5Elements.Button onClick={() => forceRender((v) => v + 1)}>Re-render</Uu5Elements.Button>{" "}
+                <Uu5Elements.Button onClick={() => setKey((v) => v + 1)}>Re-mount</Uu5Elements.Button>{" "}
+              </div>
+
+              {/*@@viewOn:example*/}
+              <h4>default props</h4>
+              <RenderCounter key={key} />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>icon & icon+text & iconNotification</h4>
+              <Uu5Elements.MenuItem icon="mdi-rhombus-split" />
+              <Uu5Elements.MenuItem icon="mdi-rhombus-split">Menu Item</Uu5Elements.MenuItem>
+              <Uu5Elements.MenuItem icon="uugds-check" iconNotification />
+
+              <h4>RichIcon & RichIcon+text</h4>
+              <Uu5Elements.MenuItem significance="distinct">
+                <Uu5Elements.RichIcon
+                  size="xxs"
+                  imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                />
+              </Uu5Elements.MenuItem>
+              &nbsp;
+              <Uu5Elements.MenuItem significance="distinct">
+                <div
+                  className={Config.Css.css({
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                  })}
+                >
+                  <Uu5Elements.RichIcon
+                    size="xxs"
+                    imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                  />
+                  <div>Menu Item</div>
+                </div>
+              </Uu5Elements.MenuItem>
+
+              <h4>MenuItem+Badge</h4>
+              <Uu5Elements.MenuItem icon="uugds-check" colorScheme="primary" significance="distinct">
+                <div
+                  className={Config.Css.css({
+                    display: "flex",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  })}
+                >
+                  <div>Menu Item</div>
+                  <Uu5Elements.Badge
+                    colorScheme="primary"
+                    significance="highlighted"
+                    borderRadius="expressive"
+                    size="s"
+                  >
+                    2
+                  </Uu5Elements.Badge>
+                </div>
+              </Uu5Elements.MenuItem>
+
+              <h4>MenuItem+suffix</h4>
+              <Uu5Elements.MenuItem icon="uugds-check" colorScheme="primary" significance="distinct">
+                <div
+                  className={Config.Css.css({
+                    display: "flex",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  })}
+                >
+                  <div>Menu Item</div>
+                  <Uu5Elements.Text colorScheme="building" significance="subdued">
+                    Suffix
+                  </Uu5Elements.Text>
+                </div>
+              </Uu5Elements.MenuItem>
+
+              <h4>InfoItem</h4>
+              <Uu5Elements.MenuItem colorScheme="primary" significance="distinct">
+                <Uu5Elements.InfoItem size="xs" icon="uugds-check" title="Title" subtitle="Subtitle" />
+              </Uu5Elements.MenuItem>
+              
+              <h4>Title+Subtitle</h4>
+              <Uu5Elements.MenuItem icon="uugds-check" colorScheme="primary" significance="distinct">
+                <div className={Config.Css.css({ display: "flex", flexDirection: "column" })}>
+                  <Uu5Elements.Text type="xsmall" category="interface" segment="content" style={{ fontWeight: 700 }}>
+                    Title
+                  </Uu5Elements.Text>
+                  <Uu5Elements.Text
+                    type="xsmall"
+                    category="interface"
+                    segment="content"
+                    colorScheme="building"
+                    significance="subdued"
+                  >
+                    Subtitle
+                  </Uu5Elements.Text>
+                </div>
+              </Uu5Elements.MenuItem>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

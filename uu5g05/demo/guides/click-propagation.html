@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Click propagation</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createVisualComponent, Content, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      function BoxWithButton() {
+        return (
+          <Uu5Elements.Box onClick={(e) => alert("Click on the Box")}>
+            <h2>Box with Button</h2>
+            <Uu5Elements.Button onClick={(e) => {
+              e.stopPropagation();
+              alert("Click on the button in the Box");
+            }}>
+              Click
+            </Uu5Elements.Button>
+          </Uu5Elements.Box>
+        )
+      }
+
+      function BoxWithComponentWithoutOnClickAPI() {
+        return (
+          <Uu5Elements.Box onClick={(e) => alert("Click on the Box")}>
+            <h2>Box with Component without onClick API</h2>
+            <div className={Config.Css.css({ display: "contents" })}  onClick={(e) => e.stopPropagation()}>
+              <Uu5Forms.Select
+                placeholder="Click"
+                itemList={[{ value: "A" }, { value: "B" }]}
+              />
+            </div>
+          </Uu5Elements.Box>
+        )
+      }
+
+      function Page() {
+        return (
+          <div>
+            I have some card component with onClick and inside I have another component which has also onClick.
+            If I click to nested component, I do not want to propagate click to the parent component.
+
+            <BoxWithButton />
+            <BoxWithComponentWithoutOnClickAPI />
+          </div>
+        )
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

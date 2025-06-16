@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, Lsi } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+
+      Utils.Language.setLanguage("en");
+
+      const CustomComponent = createVisualComponent({
+        render(props) {
+          return (
+            <Uu5Elements.Button icon="uugds-account" colorScheme="blue" {...props}>
+              User profile
+            </Uu5Elements.Button>
+          );
+        },
+      });
+
+      const itemList = [
+        {
+          imageSrc: "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png",
+          subtitle: "Owner",
+          title: "Jane Doe",
+        },
+        { subtitle: "Date of purchase", title: "22.06.2022" },
+        { subtitle: "Date of expiration", title: "22.06.2023" },
+        { subtitle: "Number of activations", title: "5 / 10" },
+        {
+          subtitle: <Lsi lsi={{ en: "License code", cs: "Kód licence" }} />,
+          title: "1225 3658 3336 9000",
+        },
+        { subtitle: <Lsi lsi={{ en: "Price", cs: "Cena" }} />, title: "124 Euro" },
+        { subtitle: "Order number", title: "6324 17889 0073 2509" },
+        {
+          subtitle: "Licence verification code",
+          title: "1234 0800 7667 0001 0005 5477 0100 3658",
+        },
+        {
+          iconAnimation: "rotate", 
+          icon: "uugds-favorites"
+        },
+        { component: CustomComponent },
+      ];
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>direction="horizontal"</h4>
+              <Uu5Elements.InfoGroup itemList={itemList} direction="horizontal" />
+
+              <h4>direction="horizontal" && autoResize=false</h4>
+              <Uu5Elements.InfoGroup itemList={itemList} direction="horizontal" autoResize={false} />
+
+              <h4>direction="vertical"</h4>
+              <Uu5Elements.InfoGroup itemList={itemList} direction="vertical" />
+
+              <h4>itemDirection="vertical"</h4>
+              <Uu5Elements.InfoGroup itemList={itemList} itemDirection="vertical" />
+
+              <h4>itemDirection="horizontal"</h4>
+              <Uu5Elements.InfoGroup itemList={itemList} itemDirection="horizontal" />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

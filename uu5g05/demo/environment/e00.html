@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+
+    <script>
+      const envMap = {
+        "uu5Environment": {
+          uu5g05_libraryRegistryBaseUri: "https://libraryRegistry.eu/123456789",
+          uu5g05_libraryLoadUri: "https://libraryRegistry.com/load",
+          uu5g05_libraryLoadDisabled: true,
+          uu5g05_cdnBaseUri: "https://cdn.base.uri",
+          uu5g05_libraryStatsUri: "https://libraryRegistry.com/stats",
+          uu5g05_libraryStatsDisabled: true,
+          uu5g05_logLevel: "warn",
+          uu5g05_defaultLanguage: "fr",
+          uu5g05_fontUri: "https://cdn.plus4u.net/libs/roboto/1.0.0/roboto.min.css",
+          uu5g05_isSimpleRender: true,
+          uu5stringg01_textEntityDisabled: true,
+
+          uu5g05_iconLibraryMap: {
+            uu5: "https://cdn-base.uri/uu5",
+          },
+          uu5g05_trustedUriRegExp: ".*",
+        },
+        "UU5.Environment": {
+          COMPONENT_REGISTRY_URL: "https://libraryRegistry.com/load",
+          useLibraryRegistry: false,
+          CDN_URL: "https://cdn.base.uri",
+          statisticsLogLibrariesUri: "https://libraryRegistry.com/stats",
+          allowStatistics: false,
+          defaultLanguage: "fr",
+          fontCssUrl: "https://cdn.plus4u.net/libs/roboto/1.0.0/roboto.min.css",
+          textEntityReplace: false,
+          trustedDomainRegexp: ".*",
+        },
+      };
+
+      const lsKey = "uu5-demo-env";
+      const lsValue = localStorage.getItem(lsKey) || "uu5Environment";
+      delete window.uu5Environment;
+      delete window.UU5;
+      if (lsValue === "uu5Environment") window.uu5Environment = envMap[lsValue];
+      if (lsValue === "UU5.Environment") window.UU5 = { Environment: envMap[lsValue] };
+    </script>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Environment, Utils, DynamicLibraryComponent, Lsi, Content } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+
+      //@@viewOn:example
+      //@@viewOff:example
+
+      function Demo() {
+        return (
+          <div>
+            {["default values", "uu5Environment", "UU5.Environment"].map((name) => (
+              <Uu5Elements.Button
+                key={name}
+                pressed={name === lsValue}
+                onClick={() => {
+                  localStorage.setItem(lsKey, name);
+                  location.reload();
+                }}
+              >
+                {name}
+              </Uu5Elements.Button>
+            ))}
+
+            {lsValue !== "default values" ? (
+              <>
+                <h4>Fail during loading is correct for the test</h4>
+                <DynamicLibraryComponent uu5Tag="Uu5Forms.Text" />
+                <h4>defaultLanguage: fr</h4>
+                <Lsi lsi={{ en: "EN lsi", fr: "FR lsi" }} />
+                <h4>text entities: false</h4>
+                <Content>{`<uu5string/>:-)`}</Content>
+                <h4>uu5 icon - should fail to load in g05 (uu5Environment)</h4>
+                mdi: <Uu5Elements.Icon icon="uugds-calendar" />
+                <br />
+                uu5: <Uu5Elements.Icon icon="uu5-calendar" />
+              </>
+            ) : null}
+
+            <h4>Environment API</h4>
+            <pre>{JSON.stringify(Environment, null, 2)}</pre>
+
+            <h4>All constants</h4>
+            <pre>{JSON.stringify(Environment._constants, null, 2)}</pre>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import { withControlledInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(500px, 1fr))",
+        gap: 16,
+      });
+
+      function Layout({ header, withBox, withoutBox }) {
+        let cssGrid = {
+          display: "grid",
+          gap: 4,
+        };
+        return (
+          <>
+            <h4>{header}</h4>
+            <div
+              className={Config.Css.css({ ...cssGrid, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" })}
+            >
+              <div className={Config.Css.css(cssGrid)}>{withBox}</div>
+              <div className={Config.Css.css(cssGrid)}>{withoutBox}</div>
+            </div>
+          </>
+        );
+      }
+
+      const RadiosInput = withControlledInput(Uu5Forms.Radios.Input);
+
+      function Page() {
+        const itemList = [
+          { children: "Yes", value: "yes" },
+          { children: "Maybe", value: "maybe" },
+          { children: "No", value: "no" },
+        ];
+
+        return (
+          <div className={columnsCss}>
+            <div>
+              {/*@@viewOn:example*/}
+              <Layout
+                header="autoFocus"
+                withBox={<RadiosInput autoFocus value="yes" itemList={itemList} />}
+                withoutBox={<RadiosInput autoFocus value="yes" box={false} itemList={itemList} />}
+              />
+
+              <Layout
+                header="id & name"
+                withBox={<RadiosInput id="id" name="name" itemList={itemList} />}
+                withoutBox={<RadiosInput id="id" name="name" box={false} itemList={itemList} />}
+              />
+
+              <Layout
+                header="readOnly"
+                withBox={
+                  <>
+                    <RadiosInput readOnly itemList={itemList} />
+                    <RadiosInput readOnly itemList={itemList} value="yes" />
+                  </>
+                }
+                withoutBox={
+                  <>
+                    <RadiosInput readOnly box={false} itemList={itemList} />
+                    <RadiosInput readOnly box={false} itemList={itemList} value="yes" />
+                  </>
+                }
+              />
+
+              <Layout
+                header="disabled"
+                withBox={
+                  <>
+                    <RadiosInput disabled itemList={itemList} />
+                    <RadiosInput disabled itemList={itemList} value="yes" />
+                  </>
+                }
+                withoutBox={
+                  <>
+                    <RadiosInput disabled box={false} itemList={itemList} />
+                    <RadiosInput disabled box={false} itemList={itemList} value="yes" />
+                  </>
+                }
+              />
+
+              <Layout
+                header="required"
+                withBox={<RadiosInput required itemList={itemList} />}
+                withoutBox={<RadiosInput required box={false} itemList={itemList} />}
+              />
+
+              <Layout
+                header="onFocus & onBlur (in console)"
+                withBox={
+                  <RadiosInput
+                    itemList={itemList}
+                    onFocus={(e) => console.log("onFocus", e)}
+                    onBlur={(e) => console.log("onBlur", e)}
+                  />
+                }
+                withoutBox={
+                  <RadiosInput
+                    itemList={itemList}
+                    box={false}
+                    onFocus={(e) => console.log("onFocus", e)}
+                    onBlur={(e) => console.log("onBlur", e)}
+                  />
+                }
+              />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <Layout
+                header="size"
+                withBox={
+                  <>
+                    <RadiosInput size="xxs" itemList={itemList} value="yes" />
+                    <RadiosInput size="xs" itemList={itemList} value="yes" />
+                    <RadiosInput size="s" itemList={itemList} value="yes" />
+                    <RadiosInput size="m" itemList={itemList} value="yes" />
+                    <RadiosInput size="l" itemList={itemList} value="yes" />
+                    <RadiosInput size="xl" itemList={itemList} value="yes" />
+                  </>
+                }
+                withoutBox={
+                  <>
+                    <RadiosInput size="xxs" box={false} itemList={itemList} value="yes" />
+                    <RadiosInput size="xs" box={false} itemList={itemList} value="yes" />
+                    <RadiosInput size="s" box={false} itemList={itemList} value="yes" />
+                    <RadiosInput size="m" box={false} itemList={itemList} value="yes" />
+                    <RadiosInput size="l" box={false} itemList={itemList} value="yes" />
+                    <RadiosInput size="xl" box={false} itemList={itemList} value="yes" />
+                  </>
+                }
+              />
+
+              <Layout
+                header="borderRadius"
+                withBox={
+                  <>
+                    <RadiosInput borderRadius="none" itemList={itemList} value="yes" />
+                    <RadiosInput borderRadius="elementary" itemList={itemList} value="yes" />
+                    <RadiosInput borderRadius="moderate" itemList={itemList} value="yes" />
+                    <RadiosInput borderRadius="expressive" itemList={itemList} value="yes" />
+                    <RadiosInput borderRadius="full" itemList={itemList} value="yes" />
+                  </>
+                }
+                withoutBox={
+                  <>
+                    <RadiosInput borderRadius="none" box={false} itemList={itemList} value="yes" />
+                    <RadiosInput borderRadius="elementary" box={false} itemList={itemList} value="yes" />
+                    <RadiosInput borderRadius="moderate" box={false} itemList={itemList} value="yes" />
+                    <RadiosInput borderRadius="expressive" box={false} itemList={itemList} value="yes" />
+                    <RadiosInput borderRadius="full" box={false} itemList={itemList} value="yes" />
+                  </>
+                }
+              />
+
+              {/*@@viewOff:example*/}
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Fragment, createComponent, useState, useRef, useEffect, Lsi } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      //@@viewOn:example
+      const Page = createComponent({
+        render() {
+          const [open, setOpen] = useState(false);
+
+          return (
+            <div>
+              <Uu5Elements.Button onClick={() => setOpen(true)}>Open Dialog</Uu5Elements.Button>
+              <Uu5Elements.Dialog
+                open={open}
+                onClose={() => setOpen(false)}
+                header={
+                  <Lsi
+                    lsi={{
+                      cs: "Smazat tento soubor?",
+                      en: "Delete this file?",
+                    }}
+                  />
+                }
+                icon={<Uu5Elements.Svg code="uugdssvg-svg-delete" />}
+                info={
+                  <Lsi
+                    lsi={{
+                      cs: "Data souboru nelze obnovit",
+                      en: "File data cannot be recovered",
+                    }}
+                  />
+                }
+                actionDirection="horizontal"
+                actionList={[
+                  {
+                    children: <Lsi lsi={{ en: "Cancel", cs: "Zrušit" }} />,
+                    onClick: () => console.log("Cancel"),
+                  },
+                  {
+                    children: <Lsi lsi={{ en: "Delete", cs: "Smazat" }} />,
+                    onClick: () => console.log("Delete"),
+                    colorScheme: "negative",
+                    significance: "highlighted",
+                  },
+                ]}
+              />
+              <br />
+              <LoremIpsum paragraphCount={20} />
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

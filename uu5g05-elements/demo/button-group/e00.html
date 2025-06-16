@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const onClick = (...args) => console.log("onClick", ...args);
+
+      const CustomComponent = createVisualComponent({
+        render(props) {
+          return (
+            <div className={Config.Css.css({ display: "flex", flexDirection: "column" })}>
+              <Uu5Elements.Button {...props} className={Config.Css.css({ margin: 5 })} />
+            </div>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          /*@@viewOn:example*/
+          const itemList = [
+            {
+              icon: "uugds-insert-above",
+              tooltip: "Add before",
+              onClick,
+            },
+            {
+              children: "Add after",
+              onClick,
+            },
+            {
+              icon: "uugdsstencil-edit-section-plus",
+              children: "Add at index",
+              itemList: [{ children: 0 }, { children: 1 }, { children: 2 }, { children: "other..." }],
+            },
+          ];
+
+          /*@@viewOff:example*/
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>itemList</h4>
+              <Uu5Elements.ButtonGroup itemList={itemList} />
+
+              <h4>size="xxs|xs|s|m|l|xl"</h4>
+              <Uu5Elements.ButtonGroup size="xxs" itemList={itemList} />
+              <br />
+              <Uu5Elements.ButtonGroup size="xs" itemList={itemList} />
+              <br />
+              <Uu5Elements.ButtonGroup size="s" itemList={itemList} />
+              <br />
+              <Uu5Elements.ButtonGroup size="m" itemList={itemList} />
+              <br />
+              <Uu5Elements.ButtonGroup size="l" itemList={itemList} />
+              <br />
+              <Uu5Elements.ButtonGroup size="xl" itemList={itemList} />
+
+              <h4>borderRadius="none|elementary|moderate|expresive|full"</h4>
+              <Uu5Elements.ButtonGroup borderRadius="none" itemList={itemList} />
+              <br />
+              <Uu5Elements.ButtonGroup borderRadius="elementary" itemList={itemList} />
+              <br />
+              <Uu5Elements.ButtonGroup borderRadius="moderate" itemList={itemList} />
+              <br />
+              <Uu5Elements.ButtonGroup borderRadius="expressive" itemList={itemList} />
+              <br />
+              <Uu5Elements.ButtonGroup borderRadius="full" itemList={itemList} />
+
+              <h4>width</h4>
+              <Uu5Elements.ButtonGroup width="50%" itemList={itemList} />
+              {" 50%"}
+              <br />
+              <Uu5Elements.ButtonGroup width={300} itemList={itemList} />
+              {" 300"}
+
+              <h4>effect: ground & upper</h4>
+              <div
+                className={Config.Css.css({
+                  display: "grid",
+                  gap: 16,
+                  gridTemplateColumns: "auto 1fr",
+                  placeItems: "center start",
+                })}
+              >
+                <Uu5Elements.ButtonGroup effect="ground" itemList={itemList} />
+                {" ground"}
+                <Uu5Elements.ButtonGroup effect="upper" itemList={itemList} />
+                {" upper"}
+              </div>
+
+              <h4>itemList & component</h4>
+              <Uu5Elements.ButtonGroup
+                itemList={[
+                  ...itemList,
+                  {
+                    component: CustomComponent,
+                    children: "Delete",
+                    icon: "uugds-delete",
+                    onClick,
+                    width: 200,
+                    tooltip: "Tooltip",
+                  },
+                ]}
+              />
+              {/*@@viewOff:example*/}
+              <br />
+              <br />
+              <LoremIpsum paragraphCount={15} />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import { Config } from "uu5g05-dev";
+      import { Button } from "uu5g05-elements";
+      import Uu5Editing from "uu5g05-editing";
+      import Uu5Forms from "uu5g05-forms";
+
+      const DEFAULT_PROPS_MAP = {
+        colorScheme: "primary",
+        significance: "highlighted",
+        nestingLevel: "box",
+        aspectRatio: "16x9",
+        size: "m",
+        card: "full",
+        borderRadius: "moderate",
+        info: "Some info...",
+        headerType: "title",
+        level: 3,
+      };
+
+      //@@viewOn:example
+      const Page = createComponent({
+        render() {
+          const [openModalOne, setOpenModalOne] = useState(false);
+          const [openModalTwo, setOpenModalTwo] = useState(false);
+          const [openModalThree, setOpenModalThree] = useState(false);
+
+          const propInputMap = {
+            info: {
+              component: Uu5Forms.FormTextArea,
+              props: {
+                label: { en: "Info" },
+                autoResize: true,
+                required: true,
+              },
+            },
+            headerType: {
+              component: Uu5Forms.FormSwitchSelect,
+              props: {
+                label: { en: "Header Type" },
+                itemList: [
+                  { value: "title", children: "Title" },
+                  { value: "heading", children: "Heading" },
+                ],
+              },
+            },
+            level: {
+              component: Uu5Forms.FormSwitchSelect,
+              props: {
+                label: { en: "Header Level" },
+                itemList: [1, 2, 3, 4, 5].map((level) => ({ value: level })),
+                info: {
+                  en: "This prop has dependency on nesting level. It is enabled only when nestingLevel='area'.",
+                },
+              },
+            },
+            headerSeparator: {
+              component: Uu5Forms.FormCheckbox,
+              props: {
+                label: { en: "Show header separator" },
+              },
+            },
+          };
+
+          return (
+            <div>
+              <h4>template tab "visual"</h4>
+              <Button className={Config.Css.css({ marginBottom: 16 })} onClick={() => setOpenModalOne(true)}>
+                Open Edit Modal #1
+              </Button>
+              <Uu5Editing.EditModal
+                header="Edit Modal with a template tab 'visual'"
+                open={openModalOne}
+                onClose={() => setOpenModalOne(false)}
+                width={900}
+                onSave={({ props }) =>
+                  alert("Submitted with values:\n" + JSON.stringify(props, null, 2))
+                }
+                uu5Tag="Uu5Editing.EditModal"
+                props={DEFAULT_PROPS_MAP}
+                tabList={["visual"]}
+              />
+
+              <h4>custom tab "Basic Properties"</h4>
+              <Button className={Config.Css.css({ marginBottom: 16 })} onClick={() => setOpenModalThree(true)}>
+                Open Edit Modal #2
+              </Button>
+              <Uu5Editing.EditModal
+                header="Edit Modal with a custom tab"
+                open={openModalThree}
+                onClose={() => setOpenModalThree(false)}
+                width={900}
+                onSave={({ props }) =>
+                  alert("Submitted with values:\n" + JSON.stringify(props, null, 2))
+                }
+                uu5Tag="Uu5Editing.EditModal"
+                props={DEFAULT_PROPS_MAP}
+                tabList={[
+                  {
+                    label: { en: "Basic Properties" },
+                    icon: "uugds-settings",
+                    layout: {
+                      xs: `info, headerType, level, headerSeparator, card, borderRadius`,
+                      m: `info info info info,
+                          headerType headerType level level,
+                          headerSeparator headerSeparator . .,
+                          card card borderRadius borderRadius`,
+                    },
+                    propInputMap: {
+                      borderRadius: {
+                        props: {
+                          valueList: ["none", "elementary", "moderate"],
+                        },
+                      },
+                    },
+                    columns: { m: "repeat(4, 1fr)" },
+                  },
+                ]}
+                propInputMap={propInputMap}
+              />
+
+              <h4>tabs with custom props</h4>
+              <Button className={Config.Css.css({ marginBottom: 16 })} onClick={() => setOpenModalTwo(true)}>
+                Open Edit Modal #3
+              </Button>
+              <Uu5Editing.EditModal
+                header="Edit Modal with custom props and cross tab prop dependency"
+                open={openModalTwo}
+                onClose={() => setOpenModalTwo(false)}
+                width={900}
+                onSave={({ props }) =>
+                  alert("Submitted with values:\n" + JSON.stringify(props, null, 2))
+                }
+                uu5Tag="Uu5Editing.EditModal"
+                props={DEFAULT_PROPS_MAP}
+                tabList={[
+                  {
+                    label: { en: "Basic Properties" },
+                    icon: "uugds-settings",
+                    layout: {
+                      xs: `info, headerType, level, headerSeparator`,
+                      m: `info info info info,
+                          headerType headerType level level,
+                          headerSeparator headerSeparator . .`,
+                    },
+                    propInputMap: {
+                      level: {
+                        props: ({ componentProps }) => ({
+                          disabled: componentProps.nestingLevel !== "area",
+                        }),
+                      },
+                    },
+                    columns: { m: "repeat(4, 1fr)" },
+                  },
+                  {
+                    template: "visual",
+                    icon: "uugds-pencil",
+                    propInputMap: {
+                      colorScheme: {
+                        props: {
+                          valueList: ["building", "meaning", "basic"],
+                        },
+                      },
+                      nestingLevel: {
+                        props: {
+                          valueList: ["box", "area", "inline", "spot"],
+                        },
+                      },
+                    },
+                  },
+                ]}
+                propInputMap={propInputMap}
+              />
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

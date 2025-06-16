@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 04</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            "uu5g05": "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            "uu_i18ng01": "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js"
+          }
+        })
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, Fragment, UserPreferencesProvider } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { UuDateTime } from "uu_i18ng01";
+      import { withControlledInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const DateTimeInput = withControlledInput(Uu5Forms.DateTime.Input);
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <Uu5Elements.Grid templateColumns={{ m: "auto 1fr 1fr 1fr" }}>
+              <h4></h4>
+              <h4>Default</h4>
+              <h4>
+                2023-03-26T00:00:00.000Z
+                <br />
+                local: <Uu5Elements.DateTime value="2023-03-26T00:00:00.000Z" />
+              </h4>
+              <h4>
+                2023-10-29T02:00:00.000Z
+                <br />
+                local: <Uu5Elements.DateTime value="2023-10-29T02:00:00.000Z" />
+              </h4>
+
+              <Uu5Elements.Grid.Item alignSelf="center">
+                <b>Default</b>
+              </Uu5Elements.Grid.Item>
+              <DateTimeInput
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <DateTimeInput
+                value="2023-03-26T00:00:00.000Z"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <DateTimeInput
+                value="2023-10-29T02:00:00.000Z"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+
+              <Uu5Elements.Grid.Item alignSelf="center">
+                <b>12h</b>
+              </Uu5Elements.Grid.Item>
+              <DateTimeInput
+                timeFormat={12}
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <DateTimeInput
+                timeFormat={12}
+                value="2023-03-26T00:00:00.000Z"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <DateTimeInput
+                timeFormat={12}
+                value="2023-10-29T02:00:00.000Z"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+
+              <Uu5Elements.Grid.Item alignSelf="center">
+                <b>Step 15min</b>
+              </Uu5Elements.Grid.Item>
+              <DateTimeInput
+                step={15 * 60}
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <DateTimeInput
+                step={15 * 60}
+                value="2023-03-26T00:00:00.000Z"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <DateTimeInput
+                step={15 * 60}
+                value="2023-10-29T02:00:00.000Z"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+
+              <Uu5Elements.Grid.Item alignSelf="center">
+                <b>12h + step 15min</b>
+              </Uu5Elements.Grid.Item>
+              <DateTimeInput
+                timeFormat={12}
+                step={15 * 60}
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <DateTimeInput
+                timeFormat={12}
+                step={15 * 60}
+                value="2023-03-26T00:00:00.000Z"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <DateTimeInput
+                timeFormat={12}
+                step={15 * 60}
+                value="2023-10-29T02:00:00.000Z"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+
+              <Uu5Elements.Grid.Item alignSelf="center">
+                <b>min & max</b>
+              </Uu5Elements.Grid.Item>
+              <DateTimeInput
+                min={new UuDateTime().setHour(10, 30, 0, 0).toIsoString()}
+                max={new UuDateTime().setHour(21, 30, 0, 0).toIsoString()}
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <DateTimeInput
+                value="2023-03-26T00:00:00.000Z"
+                min="2023-03-25T23:30:00.000Z"
+                max="2023-03-26T11:30:00.000Z"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <DateTimeInput
+                value="2023-10-29T02:00:00.000Z"
+                min="2023-10-28T23:30:00.000Z"
+                max="2023-10-29T11:30:00.000Z"
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+            </Uu5Elements.Grid>
+
+            <h4>summerTimeTemplate & winterTimeTemplate</h4>
+            <DateTimeInput
+              value="2023-10-29T02:00:00.000Z"
+              summerTimeTemplate={(v) => v + "A"}
+              winterTimeTemplate={(v) => v + "B"}
+              onChange={(e) => {
+                console.log("onChange", e.data.value);
+                // TODO save value to state
+              }}
+            />
+            &nbsp;A|B
+
+            <br />
+
+            <DateTimeInput
+              value="2023-10-29T02:00:00.000Z"
+              summerTimeTemplate={null}
+              winterTimeTemplate={(v) => "*" + v}
+              onChange={(e) => {
+                console.log("onChange", e.data.value);
+                // TODO save value to state
+              }}
+            />
+            &nbsp;*
+
+            <h4>summerTimeSuffix & winterTimeSuffix</h4>
+            <div style={{ display: "flex", gap: 2, alignItems: "center" }}>
+              <DateTimeInput
+                value="2023-10-29T02:00:00.000Z"
+                summerTimeSuffix={
+                  <Uu5Elements.Badge colorScheme="orange">
+                    CET
+                  </Uu5Elements.Badge>
+                }
+                winterTimeSuffix={
+                  <Uu5Elements.Badge colorScheme="orange">
+                    CEST
+                  </Uu5Elements.Badge>
+                }
+                onChange={(e) => {
+                  console.log("onChange", e.data.value);
+                  // TODO save value to state
+                }}
+              />
+              <div style={{ display: "flex", gap: 2, alignItems: "center" }}>
+                <Uu5Elements.Badge colorScheme="orange">
+                  CET
+                </Uu5Elements.Badge>
+                {"|"}
+                <Uu5Elements.Badge colorScheme="orange">
+                  CEST
+                </Uu5Elements.Badge>
+              </div>
+            </div>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

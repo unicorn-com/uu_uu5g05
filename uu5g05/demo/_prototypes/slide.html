@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body:not(:fullscreen) {
+        padding: 16px 32px;
+      }
+      body:fullscreen::backdrop {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useElementSize, useRef, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const SLIDE_NOMINAL_WIDTH = 800;
+      const SLIDE_NOMINAL_HEIGHT = 600;
+
+      const SlideProvider = createVisualComponent({
+        defaultProps: {
+          width: SLIDE_NOMINAL_WIDTH,
+          height: SLIDE_NOMINAL_HEIGHT,
+        },
+        render(props) {
+          const { width, height } = props;
+
+          // NOTE availableWidth is before CSS transforms.
+          const { ref, width: availableWidth } = useElementSize({ width, height });
+          const [attrs, otherProps] = Utils.VisualComponent.splitProps(
+            props,
+            Config.Css.css({
+              maxWidth: `min(100%, 100vw)`,
+              maxHeight: `100vh`, // TODO `min(100%, 100vh)` doesn't work
+              minHeight: 0,
+              margin: "auto",
+              aspectRatio: `${width} / ${height}`,
+              ".uu-bookkit-page-editation &": {
+                width,
+                height,
+              },
+            })
+          );
+
+          return (
+            <div {...attrs} ref={Utils.Component.combineRefs(props.elementRef, ref)}>
+              {props.children({
+                style: {
+                  width,
+                  height,
+                  transformOrigin: "left top",
+                  scale: (availableWidth / width || 1) + "",
+                },
+              })}
+            </div>
+          );
+        },
+      });
+
+      const Slide = createVisualComponent({
+        render(props) {
+          return (
+            <SlideProvider>
+              {({ style }) => <div className={Config.Css.css(style)}>{props.children}</div>}
+            </SlideProvider>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Slide>
+                <Uu5Elements.HighlightedBox style={{ width: "100%", height: "100%" }}>
+                  Slide (natural size {SLIDE_NOMINAL_WIDTH} x {SLIDE_NOMINAL_HEIGHT})
+                  <br />
+                  <br />
+                  <LoremIpsum paragraphCount={2} />
+                </Uu5Elements.HighlightedBox>
+              </Slide>
+              <Uu5Elements.Button onClick={() => document.body.requestFullscreen({ navigationUI: "hide" })}>
+                Fullscreen
+              </Uu5Elements.Button>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Fragment, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const Page = createComponent({
+        render() {
+          const [visible, setVisible] = useState(true);
+          const [visible2, setVisible2] = useState(true);
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <Uu5Elements.HighlightedBox>
+                <LoremIpsum />
+              </Uu5Elements.HighlightedBox>
+
+              <h4>icon</h4>
+              <Uu5Elements.HighlightedBox icon="uugds-favorites">
+                <LoremIpsum />
+              </Uu5Elements.HighlightedBox>
+
+              <h4>icon=null</h4>
+              <Uu5Elements.HighlightedBox icon={null}>
+                <LoremIpsum />
+              </Uu5Elements.HighlightedBox>
+
+              <h4>iconText</h4>
+              <Uu5Elements.HighlightedBox iconText="A1">
+                <LoremIpsum />
+              </Uu5Elements.HighlightedBox>
+
+              <h4>close button</h4>
+              {visible && (
+                <Uu5Elements.HighlightedBox onClose={() => setVisible(false)}>
+                  <LoremIpsum />
+                </Uu5Elements.HighlightedBox>
+              )}
+              
+              <Uu5Elements.HighlightedBox durationMs={1000000} onClose={() => console.log("close")}>
+                <LoremIpsum />
+              </Uu5Elements.HighlightedBox>
+              {/*@@viewOff:example*/}
+              {!visible && (
+                <Uu5Elements.Button
+                  onClick={() => {
+                    setVisible(true);
+                  }}
+                >
+                  Show alert
+                </Uu5Elements.Button>
+              )}
+              {/*@@viewOn:example*/}
+
+              <h4>controlPosition</h4>
+              <Uu5Elements.HighlightedBox
+                controlPosition="right"
+                controlList={[
+                  { children: "Dismiss", significance: "distinct" },
+                  { children: "Confirm", significance: "highlighted" },
+                ]}
+              >
+                <LoremIpsum avgSentences={1} />
+              </Uu5Elements.HighlightedBox>
+              <br />
+              <Uu5Elements.HighlightedBox
+                controlPosition="right"
+                controlList={[
+                  { children: "Dismiss", significance: "distinct" },
+                  { children: "Confirm", significance: "highlighted" },
+                ]}
+              >
+                <LoremIpsum />
+              </Uu5Elements.HighlightedBox>
+
+              <br />
+              <Uu5Elements.HighlightedBox
+                controlPosition="bottom"
+                controlList={[
+                  { children: "Dismiss", significance: "distinct" },
+                  { children: "Confirm", significance: "highlighted" },
+                ]}
+              >
+                <LoremIpsum />
+              </Uu5Elements.HighlightedBox>
+              <br />
+              <Uu5Elements.HighlightedBox
+                controlPosition="bottom"
+                controlList={[
+                  { children: "Dismiss", significance: "distinct" },
+                  { children: "Confirm", significance: "highlighted" },
+                ]}
+                significance="subdued"
+              >
+                <LoremIpsum />
+              </Uu5Elements.HighlightedBox>
+
+              <h4>close button && controlList</h4>
+              {visible2 && (
+                <Uu5Elements.HighlightedBox
+                  onClose={() => setVisible2(false)}
+                  controlList={[
+                    { children: "Dismiss", significance: "distinct" },
+                    { children: "Confirm", significance: "highlighted" },
+                  ]}
+                >
+                  <LoremIpsum />
+                </Uu5Elements.HighlightedBox>
+              )}
+              {/*@@viewOff:example*/}
+              {!visible2 && (
+                <Uu5Elements.Button
+                  onClick={() => {
+                    setVisible2(true);
+                  }}
+                >
+                  Show alert
+                </Uu5Elements.Button>
+              )}
+              {/*@@viewOn:example*/}
+
+              <h4>borderRadius</h4>
+              <Uu5Elements.HighlightedBox borderRadius="none">
+                none
+                <LoremIpsum avgSentences={1} />
+              </Uu5Elements.HighlightedBox>
+              <br />
+              <Uu5Elements.HighlightedBox borderRadius="elementary">
+                elementary
+                <LoremIpsum avgSentences={1} />
+              </Uu5Elements.HighlightedBox>
+              <br />
+              <Uu5Elements.HighlightedBox borderRadius="moderate">
+                moderate
+                <LoremIpsum avgSentences={1} />
+              </Uu5Elements.HighlightedBox>
+              <br />
+              <Uu5Elements.HighlightedBox borderRadius="expressive">
+                expressive
+                <LoremIpsum avgSentences={1} />
+              </Uu5Elements.HighlightedBox>
+              <br />
+              <Uu5Elements.HighlightedBox borderRadius="full">
+                full
+                <LoremIpsum avgSentences={1} />
+              </Uu5Elements.HighlightedBox>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+
+</head>
+<body>
+<div id="renderHere">Loading...</div>
+
+<script type="text/babel">
+  import { Utils, Lsi, createComponent, useState, AppBackgroundProvider, createVisualComponent, useAppBackground } from "uu5g05";
+  import Uu5Elements from "uu5g05-elements";
+  import Uu5Forms from "uu5g05-forms";
+  import { Config, LoremIpsum } from "uu5g05-dev";
+
+  const CONTENTS = [
+    <LoremIpsum paragraphCount={3} />,
+    <>
+      <Uu5Elements.HighlightedBox>Information Box</Uu5Elements.HighlightedBox>
+      <Uu5Elements.HighlightedBox colorScheme="warning">Warning Box</Uu5Elements.HighlightedBox>
+      <Uu5Elements.HighlightedBox colorScheme="positive">Positive Box</Uu5Elements.HighlightedBox>
+      <Uu5Elements.HighlightedBox colorScheme="negative">Negative Box</Uu5Elements.HighlightedBox>
+    </>,
+  ];
+
+  const TABS = [
+    { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+    { icon: "mdi-border-style", children: <Lsi lsi={{ en: "Highlighted Boxes" }} /> },
+  ];
+
+  //@@viewOn:example
+  const Page = createComponent({
+    render() {
+      const [leftMenuOpen, setLeftMenuOpen] = useState(false);
+      const [rightMenuOpen, setRightMenuOpen] = useState(false);
+      const [selectedItem, setSelectedItem] = useState(0);
+
+      return (
+        <AppBackgroundProvider>
+          <section>
+            <main>
+              <Uu5Elements.Block
+                card="full"
+                header={
+                  <div className={Config.Css.css({ display: "flex", alignItems: "center", gap: 8 })}>
+                    <Uu5Elements.Button icon="uugds-sidebar-left" onClick={() => setLeftMenuOpen((prev) => !prev)} significance="subdued" />
+                    Left + right drawer
+                  </div>
+                }
+                headerType="heading"
+                headerSeparator
+                actionList={[
+                  { icon: "uugds-sidebar-right", onClick: () => setRightMenuOpen((prev) => !prev) },
+                ]}
+              >
+                {({ style }) => (
+                  <Uu5Elements.Drawer
+                    type="flat"
+                    open={leftMenuOpen}
+                    position="left"
+                    onChange={(event) => {
+                      typeof event.data.open === "boolean" && setLeftMenuOpen(event.data.open);
+                    }}
+                    content={(
+                      <Uu5Elements.MenuList
+                        itemBorderRadius="moderate"
+                        itemList={TABS.map((tab, i) => ({
+                          ...tab,
+                          onClick: () => setSelectedItem(i),
+                          focused: selectedItem === i,
+                        }))}
+                      />
+                    )}
+                  >
+                    <Uu5Elements.Drawer
+                      type="flat"
+                      open={rightMenuOpen}
+                      position="right"
+                      onChange={(event) => {
+                        typeof event.data.open === "boolean" && setRightMenuOpen(event.data.open);
+                      }}
+                      content={(
+                        <Uu5Elements.MenuList
+                          itemBorderRadius="moderate"
+                          itemList={TABS.map((tab, i) => ({
+                            ...tab,
+                            onClick: () => setSelectedItem(i),
+                            focused: selectedItem === i,
+                          }))}
+                        />
+                      )}
+                    >
+                      <div className={Config.Css.css({ ...style })}>
+                        {CONTENTS[selectedItem % 2]}
+                      </div>
+                    </Uu5Elements.Drawer>
+                  </Uu5Elements.Drawer>
+                )}
+              </Uu5Elements.Block>
+            </main>
+          </section>
+        </AppBackgroundProvider>
+      );
+    },
+  });
+  //@@viewOff:example
+
+  Utils.Dom.render(<Page />, document.getElementById("renderHere"));
+</script>
+</body>
+</html>

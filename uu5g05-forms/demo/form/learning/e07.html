@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to create wrapped input</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script>
+      Uu5Loader.config({
+        imports: {
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+
+          uu_plus4u5g02: `https://cdn.plus4u.net/uu-plus4u5g02/1.0.0/uu_plus4u5g02.min.js`,
+          "uu_plus4u5g02-app": `https://cdn.plus4u.net/uu-plus4u5g02/1.0.0/uu_plus4u5g02-app.min.js`,
+          "uu_plus4u5g02-elements": `https://cdn.plus4u.net/uu-plus4u5g02/1.0.0/uu_plus4u5g02-elements.min.js`,
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+
+      //@@viewOn:example
+      const Calls = {
+        async search(search) {
+          const dtoOut = await Plus4U5.Utils.AppClient.get(
+            "https://uuapp.plus4u.net/uu-plus4upeople-maing01/56ac93ddb0034de8b8e4f4b829ff7d0f/people/findPerson",
+            { private: false, name: search }
+          );
+          return dtoOut.data;
+        },
+      };
+
+      const FormPerson = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "FormPerson",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const { ...propsToPass } = props;
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <Uu5Forms.FormTextSelectAsync
+              {...propsToPass}
+              onSearch={async (e) => {
+                const data = await Calls.search(e.data.value);
+                return data.itemList.map(({ uuIdentity, name }) => ({
+                  value: uuIdentity,
+                  name,
+                  text: [name, uuIdentity].join(" "),
+                  children: (
+                    <>
+                      <Plus4U5Elements.PersonPhoto uuIdentity={uuIdentity} size="xs" />
+                      &nbsp;{name} ({uuIdentity})
+                    </>
+                  ),
+                }));
+              }}
+            />
+          );
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Plus4U5.SpaProvider>
+              <Uu5Forms.Form
+                gridLayout="person, personList"
+                onSubmit={async (e) => {
+                  const values = e.data.value;
+
+                  // update value of TextSelectAsync
+                  values.person = values.person?.value;
+                  values.personList = values.personList?.map(({ value }) => value);
+
+                  // TODO some call to server for storing data
+                  alert("Submitted with values:\n" + JSON.stringify(values, null, 2));
+                }}
+              >
+                <FormPerson name="person" label="Person" placeholder="Find name" />
+                <FormPerson name="personList" label="Persons" placeholder="Find name" multiple />
+
+                <Uu5Forms.SubmitButton className={Config.Css.css({ justifySelf: "end" })} />
+              </Uu5Forms.Form>
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

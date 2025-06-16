@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Fragment, useState, PropTypes } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const ASPECT_RATIO = Object.keys(UuGds.getValue(["SizingPalette"]).box);
+
+      function Shape() {
+        const [colorScheme, setColorScheme] = useState("building");
+        const significanceList = ["common", "highlighted", "distinct", "subdued"];
+
+        const itemList = ["building", "meaning", "basic"].reduce((prev, curr) => ([
+          ...prev,
+          ...PropTypes.COLOR_SCHEME[curr].map((c) => ({
+            children: (
+              <><Uu5Elements.Badge size="l" colorScheme={c} className={Config.Css.css({ marginRight: 8 })} /> {c}</>
+            ),
+            onClick: () => setColorScheme(c),
+          }))
+        ]), []);
+
+        return (
+          <div className={Config.Css.css({
+            display: "inline-grid",
+            gridTemplateColumns: "repeat(5, 1fr)",
+            alignItems: "center",
+            gap: 8,
+            marginBottom: 16,
+          })}>
+            <Uu5Elements.Dropdown
+              label={colorScheme}
+              colorScheme={colorScheme}
+              significance="subdued"
+              itemList={itemList}
+            />
+            {significanceList.map((significance) => (
+              <b key={significance}>
+                {significance}
+              </b>
+            ))}
+
+            {["ground", "interactiveElement", "interactiveItem", "background"].map((shape) => (
+              <Fragment key={shape}>
+                <b>{shape}</b>
+                {significanceList.map((significance) => {
+                  return (
+                    <Uu5Elements.Box
+                      key={significance}
+                      shape={shape}
+                      colorScheme={colorScheme}
+                      significance={significance}
+                      onClick={() => console.log("click")}
+                    >
+                      Box
+                    </Uu5Elements.Box>
+                  );
+                })}
+              </Fragment>
+            ))}
+          </div>
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <h4>default</h4>
+              <Uu5Elements.Box>Box</Uu5Elements.Box>
+
+              <h4>shape</h4>
+              <Shape />
+
+              <h4>onClick</h4>
+              <Uu5Elements.Box onClick={() => console.log("click")}>
+                Log to console by click
+              </Uu5Elements.Box>
+
+              <h4>width</h4>
+              <Uu5Elements.Box aspectRatio="1x2">
+                1x2
+              </Uu5Elements.Box><br />
+              <Uu5Elements.Box aspectRatio="2x1" width={126}>
+                2x1<br />
+                width: 126
+              </Uu5Elements.Box>
+
+              <h4>height</h4>
+              <Uu5Elements.Box aspectRatio="2x1">
+                2x1
+              </Uu5Elements.Box>
+              <Uu5Elements.Box aspectRatio="1x2" height={140}>
+                1x2<br />
+                height: 140
+              </Uu5Elements.Box>
+
+              <h4>borderRadius</h4>
+              <Uu5Elements.Box aspectRatio="2x1" borderRadius="none">
+                none
+              </Uu5Elements.Box>
+              <Uu5Elements.Box aspectRatio="2x1" borderRadius="elementary">
+                elementary
+              </Uu5Elements.Box>
+              <Uu5Elements.Box aspectRatio="2x1" borderRadius="moderate">
+                moderate
+              </Uu5Elements.Box>
+              <Uu5Elements.Box aspectRatio="2x1" borderRadius="expressive">
+                expressive
+              </Uu5Elements.Box>
+              <Uu5Elements.Box aspectRatio="2x1" borderRadius="full">
+                full
+              </Uu5Elements.Box>
+              <Uu5Elements.Box aspectRatio="1x2" borderRadius="full">
+                full
+              </Uu5Elements.Box>
+
+              <h4>aspectRatio & size</h4>
+              {ASPECT_RATIO.map(aspectRatio => (
+                <div key={aspectRatio}>
+                  {["xs", "s", "m", "l"].map(size => (
+                    <Uu5Elements.Box key={size} size={size} aspectRatio={aspectRatio}>
+                      {aspectRatio}<br />
+                      {size}
+                    </Uu5Elements.Box>
+                  ))}
+                </div>
+              ))}
+            </div>
+          );
+        }
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

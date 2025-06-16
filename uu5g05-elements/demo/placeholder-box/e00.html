@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+      const UuGds = Uu5Elements.UuGds;
+
+      const gridCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: 16,
+      });
+
+      const CODES = Object.keys(Uu5Elements.PlaceholderBox.CODE_MAP).sort();
+
+      const NESTING_LEVELS = ["area", "box", "spot", "inline"];
+      const COLOR_SCHEMES = ["building"];
+      const meaning = Object.keys(UuGds.getValue(["ColorPalette", "meaning"]));
+      const basic = Object.keys(UuGds.getValue(["ColorPalette", "basic"]));
+      COLOR_SCHEMES.push(...meaning, ...basic);
+
+      const Page = createComponent({
+        render() {
+          const [nestingLevel, setNestingLevel] = useState("box");
+          const [colorScheme, setcolorScheme] = useState("steel");
+
+          return (
+            <div>
+              <Uu5Elements.LanguageSelector languageList={["cs", "en", "uk", "ru"]} />{" "}
+              <Uu5Elements.Dropdown
+                label={nestingLevel}
+                itemList={NESTING_LEVELS.map(it => ({ children: it, onClick: () => setNestingLevel(it) }))}
+              />
+              <Uu5Elements.Dropdown
+                label={colorScheme}
+                itemList={COLOR_SCHEMES.map(it => ({ children: it, onClick: () => setcolorScheme(it) }))}
+              />
+
+              <div className={gridCss}>
+                {CODES.map((code) => (
+                  <div key={code}>
+                    <h4 style={{ textAlign: "center" }}>code = {code}</h4>
+                    {/*@@viewOn:example*/}
+                    <Uu5Elements.PlaceholderBox code={code} nestingLevel={nestingLevel} colorScheme={colorScheme} />
+                    {/*@@viewOff:example*/}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Move artifact</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5" style="height: 100%">Loading...</main>
+
+    <script type="text/babel">
+      //@@viewOn:example
+      import { Utils, SessionProvider, useSession, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import { AuthenticationService } from "uu_appg01_oidc";
+
+      function Authenticated({ children }) {
+        const { state } = useSession();
+
+        let result;
+        switch (state) {
+          case "notAuthenticated":
+            result = <Plus4U5Elements.Unauthenticated />;
+            break;
+          case "authenticated":
+            result = children;
+            break;
+          case "pending":
+            break;
+        }
+
+        return result;
+      }
+
+      //@@viewOn:example
+      function MoveArtifact() {
+        const { addAlert } = Uu5Elements.useAlertBus();
+        const [counter, setCounter] = useState(0);
+
+        return (
+          <Uu5Forms.Form
+            key={counter}
+            gridLayout="artUri, fldUri, submit"
+            className={Config.Css.css({ maxWidth: "100%", width: 800 })}
+            onSubmit={async (e) => {
+              let { artUri, fldUri } = e.data.value;
+
+              const fldUrl = new URL(fldUri);
+              const baseUri = (fldUrl.origin + fldUrl.pathname).match(/^\S+\/[0-9a-f]{32}/)[0];
+
+              const dtoIn = {};
+
+              if (fldUrl.searchParams.get("id")) dtoIn.folder = fldUrl.searchParams.get("id");
+              else if (fldUrl.searchParams.get("code")) dtoIn.folderCode = fldUrl.searchParams.get("code");
+
+              if (/^[0-9a-f]{24}$/.test(artUri)) {
+                dtoIn.id = artUri;
+                artUri = Plus4U5.Utils.Uri.join(baseUri, "userGate/artifactInfo?id=" + dtoIn.id);
+              } else {
+                const artUrl = new URL(artUri);
+
+                if (artUrl.searchParams.get("id")) dtoIn.id = artUrl.searchParams.get("id");
+                else if (artUrl.searchParams.get("code")) dtoIn.code = artUrl.searchParams.get("code");
+              }
+
+              await Plus4U5.Utils.AppClient.post(Plus4U5.Utils.Uri.join(baseUri, "uuArtifactIfc/setHomeFolder"), dtoIn);
+
+              addAlert({
+                header: "Successful moving",
+                message: <><Uu5Elements.Link href={artUri}>Artifact</Uu5Elements.Link> was moved to the
+                  new <Uu5Elements.Link href={fldUri}>location</Uu5Elements.Link>.</>,
+                durationMs: 5000,
+              });
+
+              setCounter(counter + 1);
+            }}
+          >
+            <Uu5Forms.FormText name="artUri" label="Artifact (obc) uri/id" required />
+            <Uu5Forms.FormLink name="fldUri" label="Target folder uri" required />
+
+            <Uu5Forms.SubmitButton className={Config.Css.css({ justifySelf: "end" })} />
+          </Uu5Forms.Form>
+        )
+      }
+
+      //@@viewOff:example
+
+      function Page() {
+        return (
+          <SessionProvider authenticationService={AuthenticationService}>
+            <Authenticated>
+              <Uu5Elements.AlertBus>
+                <MoveArtifact />
+              </Uu5Elements.AlertBus>
+            </Authenticated>
+          </SessionProvider>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

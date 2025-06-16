@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js"
+      crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js"
+      crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, createComponent, createVisualComponent, useRef } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, wait } from "uu5g05-dev";
+      import { withControlledInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const SliderInput = withControlledInput(Uu5Forms.Slider.Input);
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Elements.Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))">
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>value = [20, 60]</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>value = [20, 60] & displayTick = false</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  displayTick={false}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>value = [null, 60]</h4>
+                <SliderInput
+                  value={[null, 60]}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>value = [0, null] & min = -60 & max = 60 & step = 20</h4>
+                <SliderInput
+                  value={[0, null]}
+                  min={-60}
+                  max={60}
+                  step={20}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>valueUnique</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  valueUnique
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>intervals {"[{ value: 20, open: true }, 60]"}</h4>
+                <SliderInput
+                  value={[{ value: 20, open: true }, 60]}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+                {/*@@viewOff:example*/}
+              </div>
+              <div>
+                <h4>value = [20, 60]</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  displayNumberInputs
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>value = [20, 60] & displayTick = false</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  displayNumberInputs
+                  width={320}
+                  displayTick={false}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>value = [null, 60]</h4>
+                <SliderInput
+                  value={[null, 60]}
+                  displayNumberInputs
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>value = [0, null] & min = -60 & max = 60 & step = 20</h4>
+                <SliderInput
+                  value={[0, null]}
+                  min={-60}
+                  max={60}
+                  step={20}
+                  displayNumberInputs
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>valueUnique</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  valueUnique
+                  displayNumberInputs
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>intervals {"[{ value: 20, open: true }, 60]"}</h4>
+                <SliderInput
+                  value={[{ value: 20, open: true }, 60]}
+                  displayNumberInputs
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>width = 200</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  displayNumberInputs
+                  width={200}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>numberInputProps</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  displayNumberInputs
+                  numberInputProps={{ suffix: "Kč", width: 64 }}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+              </div>
+              <div>
+                <h4>value = [20, 60]</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  displayNumberInputs
+                  displayIntervalTypeSwitch
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>value = [20, 60] & displayTick = false</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  displayNumberInputs
+                  displayIntervalTypeSwitch
+                  displayTick={false}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>value = [null, 60]</h4>
+                <SliderInput
+                  value={[null, 60]}
+                  displayNumberInputs
+                  displayIntervalTypeSwitch
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>value = [0, null] & min = -60 & max = 60 & step = 20</h4>
+                <SliderInput
+                  value={[0, null]}
+                  min={-60}
+                  max={60}
+                  step={20}
+                  displayNumberInputs
+                  displayIntervalTypeSwitch
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>valueUnique</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  valueUnique
+                  displayNumberInputs
+                  displayIntervalTypeSwitch
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>intervals {"[{ value: 20, open: true }, 60]"}</h4>
+                <SliderInput
+                  value={[{ value: 20, open: true }, 60]}
+                  displayNumberInputs
+                  displayIntervalTypeSwitch
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>width = 200</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  displayNumberInputs
+                  displayIntervalTypeSwitch
+                  width={200}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+
+                <h4>numberInputProps</h4>
+                <SliderInput
+                  value={[20, 60]}
+                  displayNumberInputs
+                  displayIntervalTypeSwitch
+                  numberInputProps={{ suffix: "Kč", width: 64 }}
+                  onChange={(e) => console.log("onChange", e.data.value)}
+                />
+              </div>
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

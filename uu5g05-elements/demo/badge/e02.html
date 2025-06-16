@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Fragment, useState, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      function copyToClipboard(content) {
+        let actualScroll = window.scrollY || document.body.scrollTop || window.pageYOffset;
+        let tempElement = document.createElement("textarea");
+        tempElement.className = "uu5-common-temp-textarea";
+        tempElement.value = content;
+        document.body.appendChild(tempElement);
+        tempElement.select();
+        document.execCommand("copy");
+
+        if (tempElement.remove) {
+          tempElement.remove();
+        } else {
+          tempElement.parentNode.removeChild(tempElement);
+        }
+
+        document.documentElement.scrollTop = actualScroll;
+        document.body.scrollTop = actualScroll;
+      }
+
+      function Table({ className, rows, columns, headerRow = 0, columnRow = 0, rowGap = "4px", columnGap = "4px" }) {
+        // TODO
+        let columnSize, rowSize, columns2render, headerRowHeight = "", headerColumnHeight = "", rows2render;
+
+        if (rows) {
+          rowSize = rows.length;
+          columnSize = Math.max(...rows.map(row => row.length));
+        } else {
+          columnSize = columns.length;
+          rowSize = Math.max(...columns.map(column => column.length));
+          columns2render = columns.map(column => {
+            if (rowSize !== column.length) {
+              column = [
+                ...column,
+                ...Array.from({ length: rowSize - column.length }, (x, i) => <span key={"fill-" + i} />)
+              ];
+            }
+            return column;
+          });
+        }
+
+        if (headerRow) {
+          if (typeof headerRow === "boolean") headerRow = 1;
+          headerRowHeight = new Array(headerRow).fill("auto").join(" ");
+        }
+
+        if (columnRow) {
+          if (typeof columnRow === "boolean") columnRow = 1;
+          headerColumnHeight = new Array(columnRow).fill("auto").join(" ");
+        }
+
+        return (
+          <div className={Config.Css.css`
+            height: 100%;
+            display: grid;
+            grid-template-columns: ${headerColumnHeight} repeat(${columnSize - columnRow}, 1fr);
+            grid-template-rows: ${headerRowHeight} repeat(${rowSize - headerRow}, 1fr);
+            grid-auto-flow: ${rows ? "row" : "column"};
+            column-gap: ${columnGap};
+            row-gap: ${rowGap};
+            justify-items: stretch;
+            align-items: center;
+            ${className}
+          `}>
+            {rows || columns2render}
+          </div>
+        );
+      }
+
+      function LeftVerticalHeaderRow({ header, children, className }) {
+        return (
+          <div className={Config.Css.css`display: inline-flex; margin: 8px 0;${className}`}>
+            <div className={Config.Css.css`
+              display: flex;
+              justify-content: center;
+              text-orientation: upright;
+              writing-mode: vertical-lr;
+              padding: 8px;
+              text-transform: uppercase;
+              background-color: #eee;
+            `}>
+              {header}
+            </div>
+            <div className={Config.Css.css`flex-grow: 1; margin-left: 4px;`}>
+              {children}
+            </div>
+          </div>
+        )
+      }
+
+      function Typography({ children, config }) {
+        const { largeScreen, smallScreen } = config;
+
+        return (
+          <div className={Config.Css.css`display: inline-block;`}>
+            {Object.keys(largeScreen).map(category => (
+              <div key={category}>
+                <LeftVerticalHeaderRow key={category} header={category} className={Config.Css.css`height: 400px;`}>
+                  <Table
+                    headerRow={2}
+                    columns={Object.keys(largeScreen[category]).map(segment => [
+                      <div
+                        key={category + segment + "1"}
+                        className={Config.Css.css`padding: 4px; background-color: #eee; text-align: center;`}
+                      >
+                        <b>{segment}</b>
+                      </div>,
+                      <div
+                        key={category + segment + "2"}
+                        className={Config.Css.css`
+                          padding: 4px;
+                          background-color: #eee;
+                          display: flex;
+                          justify-content:
+                          space-evenly;
+                          font-size: 0.8em;
+                        `}
+                      >
+                        <span>largeScreen</span>
+                        <span>smallScreen</span>
+                      </div>,
+                      ...Object.keys(largeScreen[category][segment]).map(type => children({
+                        key: category + segment + type,
+
+                        category,
+                        segment,
+                        type,
+
+                        largeScreenStyle: largeScreen[category][segment][type],
+                        smallScreenStyle: smallScreen[category][segment][type]
+                      }))
+                    ])}
+                  />
+                </LeftVerticalHeaderRow>
+              </div>
+            ))}
+          </div>
+        )
+      }
+
+      function Badge(props) {
+        const { fontSize, height, paddingIcon, paddingChildren, iconMargin, topAlignment } = useStyleContext();
+
+        const className = Config.Css.css({
+          fontSize,
+          height,
+          minWidth: height,
+          // TODO
+          "&:before": {
+            marginTop: topAlignment,
+          },
+
+          paddingLeft: props.icon && props.children ? paddingIcon : (props.children ? paddingChildren : undefined),
+          paddingRight: props.children ? paddingChildren : undefined,
+
+          "& > span": props.icon && props.children ? {
+            marginRight: iconMargin
+          } : undefined,
+        });
+
+        return (
+          <Uu5Elements.Badge {...props} className={className} />
+        )
+      }
+
+      function Text({ category, segment, type, style }) {
+        return (
+          <span className={Config.Css.css({ ...style })} style={{ backgroundColor: "lightpink" }}>
+            <Badge icon="uugds-check" colorScheme="final" />&nbsp;Čj&nbsp;
+            <Badge colorScheme="positive">OK</Badge>&nbsp;Čj&nbsp;
+            <Badge colorScheme="negative" icon="uugds-alert-circle">ERR</Badge>
+          </span>
+        )
+      }
+
+      function TypographyBox({ largeScreenStyle, smallScreenStyle, ...props }) {
+        const properties = `category="${props.category}" segment="${props.segment}" type="${props.type}"`;
+        const syntax = `<Uu5Elements.Text ${properties}>
+  ${props.type}
+</Uu5Elements.Text>`;
+
+        return (
+          <div
+            className={Config.Css.css`
+              display: flex;
+              justify-content: space-evenly;
+              align-items: baseline;
+              cursor: pointer;
+              column-gap: 4px;
+            `}
+            title={properties}
+            onClick={() => copyToClipboard(syntax)}
+          >
+            <Text {...props} style={largeScreenStyle} />
+            <Text {...props} style={smallScreenStyle} />
+          </div>
+        )
+      }
+
+      const Demo = createComponent({
+        render() {
+          return (
+            <div>
+              <div>
+                <Typography config={{
+                  largeScreen: UuGds.getValue(["Typography", "largeScreen"]),
+                  smallScreen: UuGds.getValue(["Typography", "smallScreen"]),
+                }}>
+                  {props => <TypographyBox {...props} />}
+                </Typography>
+              </div>
+              <div>
+                {Object.entries({
+                  expose: {
+                    default: ["hero", "lead", "broad", "notice", "distinct"],
+                  },
+                  interface: {
+                    title: ["major", "common", "minor", "micro"],
+                    content: ["large", "medium", "small", "xsmall"],
+                    highlight: ["major", "common", "minor"],
+                    interactive: ["xsmall", "small", "medium", "large"],
+                  },
+                  story: {
+                    heading: ["h1", "h2", "h3", "h4", "h5"],
+                    body: ["major", "common", "minor"],
+                    special: ["caption", "code"],
+                  },
+                }).map(([category, catObj]) => Object.entries(catObj).map(([segment, segList]) => segList.map(type => (
+                  <div key={category + segment + type}>
+                    <h1>{category} -> {segment} -> {type}</h1>
+                    <Uu5Elements.Text category={category} segment={segment} type={type}>
+                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br />
+                      Pellentesque arcu. Duis pulvinar. Curabitur bibendum justo non orci. Integer tempor. Duis pulvinar.<br />
+                      Pellentesque sapien <Badge icon="uugds-check" colorScheme="final" />&nbsp;Čj&nbsp;
+                      <Badge colorScheme="positive">OK</Badge>&nbsp;Čj&nbsp;
+                      <Badge colorScheme="negative" icon="uugds-alert-circle">ERR</Badge> Class aptent taciti sociosqu ad litora torquent per conubia nostra,<br />
+                      per inceptos hymenaeos. Aliquam erat volutpat. Nulla quis diam. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et,<br />
+                      dolor. Donec iaculis gravida nulla. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui.
+                    </Uu5Elements.Text>
+                  </div>
+                ))))}
+              </div>
+            </div>
+          );
+        }
+      });
+
+      const [StyleContext, useStyleContext] = Utils.Context.create({});
+
+      function Page() {
+        const [style, setStyle] = useState({
+          fontSize: "0.6em",
+          height: "1.3em",
+          paddingIcon: "0.1em",
+          paddingChildren: "0.3em",
+          iconMargin: "0.1em",
+          topAlignment: "0.5em",
+        });
+
+        return (
+          <Fragment>
+            {Object.entries(style).map(([k, v]) => (
+              <Uu5Forms.Text
+                key={k}
+                label={k}
+                value={v}
+                onChange={e => setStyle(s => ({ ...s, [k]: e.data.value }))}
+              />
+            ))}
+            <StyleContext.Provider value={style}>
+              <Demo />
+            </StyleContext.Provider>
+          </Fragment>
+        )
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

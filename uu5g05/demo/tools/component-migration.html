@@ -1,0 +1,2131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Component migration</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js"
+      crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js"
+      crossorigin></script>
+
+    <script>
+      Uu5Loader.config({
+        imports: {
+          uu5codekitg01: "https://cdn.plus4u.net/uu-uu5codekitg01/2.0.0/uu5codekitg01.min.js",
+
+          "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+          uu5g04: "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04.min.js",
+        },
+      });
+    </script>
+  </head>
+  <body>
+    <main id="uu5" style="height: 100%">Loading...</main>
+
+    <script type="text/babel">
+      //@@viewOn:example
+      import UU5 from "uu5g04";
+      import {
+        Utils,
+        SessionProvider,
+        useSession,
+        useState,
+        Content,
+        useElementSize,
+        useMemo,
+        useUpdateLayoutEffect,
+        PropTypes,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import { AuthenticationService } from "uu_appg01_oidc";
+      import { Uu5String } from "uu5stringg01";
+      import Uu5CodeKit from "uu5codekitg01";
+
+      if (location.hostname === "localhost") document.body.style.padding = "16px 32px";
+
+      function Authenticated({ children }) {
+        const { state } = useSession();
+
+        let result;
+        switch (state) {
+          case "notAuthenticated":
+            result = <Plus4U5Elements.Unauthenticated />;
+            break;
+          case "authenticated":
+            result = children;
+            break;
+          case "pending":
+            break;
+        }
+
+        return result;
+      }
+
+      const LEGACY_UU5STRING = `<UU5.RichText.Block uu5string="<uu5string/><UU5.Bricks.Div><strong>bold </strong><i>italic </i><u>underline <strong><i>all</i></strong></u></UU5.Bricks.Div><UU5.Bricks.Div><s>strike</s><UU5.Bricks.Span style=\\"<uu5json/>{
+  \\\\\\"verticalAlign\\\\\\": \\\\\\"sub\\\\\\",
+  \\\\\\"fontSize\\\\\\": \\\\\\"0.8em\\\\\\"
+}\\">subscript</UU5.Bricks.Span><UU5.Bricks.Span style=\\"<uu5json/>{
+  \\\\\\"verticalAlign\\\\\\": \\\\\\"super\\\\\\",
+  \\\\\\"fontSize\\\\\\": \\\\\\"0.8em\\\\\\"
+}\\">superscript</UU5.Bricks.Span></UU5.Bricks.Div><UU5.Bricks.Div><UU5.Bricks.Span style=\\"<uu5json/>{
+  \\\\\\"fontSize\\\\\\": \\\\\\"20px\\\\\\"
+}\\">20 font size</UU5.Bricks.Span></UU5.Bricks.Div><UU5.Bricks.Div style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"right\\\\\\"
+}\\">right</UU5.Bricks.Div><UU5.Bricks.Div style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\"><UuContentKit.Links.Link src=\\"6858439\\">Custom name</UuContentKit.Links.Link></UU5.Bricks.Div><UU5.Bricks.Div style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\"><UuContentKit.Links.Link src=\\"https://uuapp.plus4u.net/uu-sprintman-maing01/58b7f7df5eb4470e9c2359f4df91aae3/backlogRequest?id=6620e6ffc2a80a0035479cbb\\" target=\\"_blank\\">absolute link</UuContentKit.Links.Link></UU5.Bricks.Div><UU5.Bricks.Div style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\"><UuContentKit.Links.Link src=\\"https://uuapp.plus4u.net/uu-sprintman-maing01/58b7f7df5eb4470e9c2359f4df91aae3/backlogRequest?id=6620e6ffc2a80a0035479cbb\\" target=\\"_blank\\" fragment=\\"abc\\">fragment</UuContentKit.Links.Link></UU5.Bricks.Div><UU5.Bricks.Ul><UU5.Bricks.Li style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\">item1<UU5.Bricks.Ul><UU5.Bricks.Li style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\">item1.1</UU5.Bricks.Li></UU5.Bricks.Ul></UU5.Bricks.Li><UU5.Bricks.Li style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\">item2</UU5.Bricks.Li><UU5.Bricks.Li style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\"><UU5.RichText.Badge icon=\\"uugdsstencil-badge-check\\" state=\\"active\\"/> icon</UU5.Bricks.Li></UU5.Bricks.Ul><UU5.Bricks.Div style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\"><UU5.Bricks.Span style=\\"<uu5json/>{
+  \\\\\\"color\\\\\\": \\\\\\"#E91E63\\\\\\"
+}\\">color </UU5.Bricks.Span><UU5.Bricks.Span style=\\"<uu5json/>{
+  \\\\\\"backgroundColor\\\\\\": \\\\\\"#009688\\\\\\"
+}\\">bg</UU5.Bricks.Span> <UU5.Bricks.Span style=\\"<uu5json/>{
+  \\\\\\"color\\\\\\": \\\\\\"#E91E63\\\\\\"
+}\\"><UU5.Bricks.Span style=\\"<uu5json/>{
+  \\\\\\"backgroundColor\\\\\\": \\\\\\"#CDDC39\\\\\\"
+}\\">color + bg</UU5.Bricks.Span></UU5.Bricks.Span></UU5.Bricks.Div><UU5.Bricks.Div style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\"><UU5.Bricks.Span style=\\"<uu5json/>{
+  \\\\\\"fontFamily\\\\\\": \\\\\\"Times New Roman\\\\\\"
+}\\">Font family</UU5.Bricks.Span></UU5.Bricks.Div><UU5.Bricks.Div style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\",
+  \\\\\\"marginLeft\\\\\\": \\\\\\"8px\\\\\\"
+}\\">tab</UU5.Bricks.Div><UU5.Bricks.Div style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\"><UU5.Bricks.Code>code</UU5.Bricks.Code></UU5.Bricks.Div><UU5.Bricks.Div style=\\"<uu5json/>{
+  \\\\\\"textAlign\\\\\\": \\\\\\"left\\\\\\"
+}\\"><UU5.RichText.Badge icon=\\"end\\" state=\\"active\\"/> text <UU5.Bricks.Icon icon=\\"mdi-account\\"/></UU5.Bricks.Div>"/>`;
+
+      //@@viewOff:example
+      const LEGACY_UU5STRING_FOR_TESTING_CHARTS = `<uu5string/>
+  <UU5.SimpleChart.AreaChart series='<uu5json/>[
+  {
+    "valueKey": "value",
+    "name": "Number of visits",
+    "colorSchema": "light-blue-rich"
+  },
+  {
+    "valueKey": "Serie54629aca",
+    "name": "Test",
+    "chartType": "step"
+  }
+]' data='<uu5json/>[
+  {
+    "label1": "Jan",
+    "label2": "HHH",
+    "value": 40,
+    "Serie54629aca": 10
+  },
+  {
+    "label1": "Feb",
+    "label2": "HHH",
+    "value": 30,
+    "Serie54629aca": 20
+  },
+  {
+    "label1": "Mar",
+    "label2": "HHH",
+    "value": 20,
+    "Serie54629aca": 30
+  },
+  {
+    "label1": "Apr",
+    "label2": "HHH",
+    "value": 27,
+    "Serie54629aca": 40
+  }
+]' displayLegend="bottom-center" labelKey="label1" stacked chartType="step" displayCartesianGrid displayTooltip=false labelUnit=" A" valueUnit=" B" valueAxisWidth=100 valueRound=10 valueAxisDomain='<uu5json/>[0, 100]' groupingSeparator="." decimalSeparator="-" colorSchema="red" referenceAreas='<uu5json/>[
+  {
+    "startLabel": "Feb",
+    "endLabel": "Apr",
+    "startValue": 0,
+    "endValue": 10,
+    "colorSchema": "indigo-rich",
+    "name": "ref area"
+  }
+]' referenceLines='<uu5json/>[
+  {
+    "label": "Feb",
+    "colorSchema": "black",
+    "name": "maximum"
+  },
+  {
+    "value": 1,
+    "colorSchema": "red",
+    "name": "minimum"
+  },
+  {
+    "colorSchema": "green",
+    "name": "limit",
+    "segment": [
+      {
+        "label": "Feb",
+        "value": 40
+      },
+      {
+        "label": "Mar",
+        "value": 30
+      }
+    ]
+  }
+]' referenceDots='<uu5json/>[
+  {
+    "label": "Mar",
+    "value": 15,
+    "colorSchema": "blue-grey",
+    "name": "ref dot"
+  }
+]' />
+
+<UU5.SimpleChart.BarChart series='<uu5json/>[
+  {
+    "valueKey": "value",
+    "name": "Number of visits",
+    "colorSchema": "light-green-rich"
+  },
+  {
+    "valueKey": "Serie54629aca",
+    "name": "Test",
+    "barSize": 100
+  }
+]' data='<uu5json/>[
+  {
+    "label": "Jan",
+    "value": 40,
+    "Serie54629aca": 10
+  },
+  {
+    "label": "Feb",
+    "value": 30,
+    "Serie54629aca": 20
+  },
+  {
+    "label": "Mar",
+    "value": 20,
+    "Serie54629aca": 30
+  },
+  {
+    "label": "Apr",
+    "value": 27,
+    "Serie54629aca": 40
+  }
+]' displayLegend="bottom-center" />
+
+<UU5.SimpleChart.LineChart series='<uu5json/>[
+  {
+    "valueKey": "value",
+    "name": "Number of visits",
+    "colorSchema": "light-green-rich"
+  },
+  {
+    "valueKey": "Serie54629aca",
+    "name": "Test"
+  }
+]' data='<uu5json/>[
+  {
+    "label": "Jan",
+    "value": 40,
+    "Serie54629aca": 10
+  },
+  {
+    "label": "Feb",
+    "value": 30,
+    "Serie54629aca": 20
+  },
+  {
+    "label": "Mar",
+    "value": 20,
+    "Serie54629aca": 30
+  },
+  {
+    "label": "Apr",
+    "value": 27,
+    "Serie54629aca": 40
+  }
+]' displayLegend="middle-right" />
+
+<UU5.SimpleChart.ComposedChart series='<uu5json/>[
+  {
+    "valueKey": "value",
+    "type": "area",
+    "name": "Number of visits",
+    "colorSchema": "light-blue-rich"
+  },
+  {
+    "valueKey": "value2",
+    "type": "bar",
+    "name": "Estimated number of visits",
+    "colorSchema": "green-rich"
+  },
+  {
+    "valueKey": "value3",
+    "type": "line",
+    "name": "The same period last year",
+    "colorSchema": "red-rich"
+  }
+]' data='<uu5json/>[
+  {
+    "label": "Jan",
+    "value": 23,
+    "value2": 12,
+    "value3": 88
+  },
+  {
+    "label": "Feb",
+    "value": 56,
+    "value2": 21,
+    "value3": 51
+  },
+  {
+    "label": "Mar",
+    "value": 65,
+    "value2": 60,
+    "value3": 55
+  },
+  {
+    "label": "Apr",
+    "value": 14,
+    "value2": 18,
+    "value3": 45
+  }
+]'/>`;
+
+      //@@viewOn:example
+
+      function buildContentSizeStyle(value) {
+        return value
+          .replace(/\s+/, " ")
+          .split(" ")
+          .map((v) => {
+            const matcher = v.match(/^([a-z]+)[-]*([0-9]+)$/);
+            return [matcher[1], matcher[2]].join(": ");
+          })
+          .join("; ");
+      }
+
+      function chartsMigrateData(value, component) {
+        value.forEach((item) => {
+          for (let k in item) {
+            const value = item[k];
+            if (k !== (component.props.labelKey ?? "label") && typeof value === "string" && /^\d+[.,]?\d*$/.test(value)) item[k] = +(value.replace(",", "."));
+          }
+        });
+        return { data: value };
+      }
+
+      function chartsMigratePieData(value, component) {
+        const series = component.props.series;
+        const count = series.length;
+
+        value.forEach((item) => {
+          for (let k in item) {
+            const value = item[k];
+            if (typeof value === "string" && /^\d+[.,]?\d*$/.test(value)) item[k] = +(value.replace(",", "."));
+          }
+        });
+
+        let data = value;
+        if (count > 1) {
+          data = Array(count)
+            .fill()
+            .map((_, i) => {
+              return value
+                .filter((item) => item[series[i].labelKey] !== undefined || item[series[i].valueKey] !== undefined)
+                .map((item) => ({ ...item }));
+            });
+        }
+
+        return { data };
+      }
+
+      function chartsMigrateSeries(value, component) {
+        let componentType;
+        switch (component.uu5Tag) {
+          case "UU5.SimpleChart.AreaChart":
+            componentType = "area";
+            break;
+          case "UU5.SimpleChart.BarChart":
+            componentType = "bar";
+            break;
+          case "UU5.SimpleChart.LineChart":
+            componentType = "line";
+            break;
+          case "UU5.SimpleChart.ScatterChart":
+            componentType = "point";
+            break;
+          case "UU5.SimpleChart.ComposedChart":
+            componentType = "composed";
+            break;
+        }
+        if (!componentType) return undefined;
+
+        value.forEach((serie) => {
+          let serieType = componentType;
+
+          serie.title = serie.name;
+          delete serie.name;
+
+          serie.colorScheme =
+            GLOBAL_PROPS_CONFIG.colorSchema(serie.colorSchema)?.colorScheme ??
+            GLOBAL_PROPS_CONFIG.colorSchema(component.props.colorSchema)?.colorScheme;
+          delete serie.colorSchema;
+
+          if (componentType === "composed") {
+            serieType = serie.type;
+          }
+
+          serie[serieType] = {};
+
+          if (serieType === "area" || serieType === "line") {
+            serie.chartType
+              ? (serie[serieType].type = serie.chartType)
+              : component.props.chartType
+                ? (serie[serieType].type = component.props.chartType)
+                : (serie[serieType].type = "monotone");
+            delete serie.chartType;
+
+            if (serieType === "line") {
+              serie[serieType].point = true;
+            }
+          } else if (serieType === "bar") {
+            serie.barSize
+              ? (serie[serieType].width = serie.barSize)
+              : component.props.barSize
+                ? (serie[serieType].width = component.props.barSize)
+                : (serie[serieType].width = 40);
+            delete serie.barSize;
+          } else if (serieType === "point") {
+            serie[serieType].shape = serie.shape;
+            delete serie.shape;
+            delete serie.itemId;
+          }
+
+          if (component.props.stacked) {
+            serie[serieType].stackId = "stack01";
+          }
+
+          if (Object.keys(serie[serieType]).length === 0) {
+            serie[serieType] = true;
+          }
+        });
+        return { serieList: value };
+      }
+
+      function chartsMigratePieSeries(value, component) {
+        const serieList = value.map(({
+          name,
+          colorSchema,
+          displayLabel,
+          displayLabelLine,
+          outerRadius,
+          innerRadius,
+          ...serie
+        }, i) => {
+          const newSerie = {
+            label: (displayLabel == null && i === 0) || displayLabel ? [{
+              position: "outside",
+              type: "label"
+            }] : undefined,
+            ...(outerRadius > 100 ? {
+              outerRadius: 100,
+              innerRadius: Math.round(innerRadius * (100 / outerRadius))
+            } : { outerRadius, innerRadius }),
+            ...serie,
+          };
+
+          if (Array.isArray(colorSchema)) {
+            const isArrayOfArrays = Array.isArray(component.newProps.data[i]);
+            colorSchema.forEach((value, j) => {
+              const dataList = isArrayOfArrays ? component.newProps.data[i] : component.newProps.data;
+              if (dataList[j]) dataList[j].colorScheme = GLOBAL_PROPS_CONFIG.colorSchema(value)?.colorScheme;
+            })
+          } else {
+            newSerie.colorScheme = GLOBAL_PROPS_CONFIG.colorSchema(colorSchema)?.colorScheme ??
+              GLOBAL_PROPS_CONFIG.colorSchema(component.props.colorSchema)?.colorScheme;
+          }
+
+          return newSerie;
+        });
+
+        return { serieList };
+      }
+
+      function chartsMigrateDisplayLegend(value) {
+        if (value?.toString().startsWith("bottom")) {
+          value = true;
+        } else if (value?.toString().startsWith("top")) {
+          value = { position: "top" };
+        } else if (value == "middle-left") {
+          value = { position: "left" };
+        } else if (value == "middle-center") {
+          value = true;
+        } else if (value == "middle-right") {
+          value = { position: "right" };
+        } else {
+          value = undefined;
+        }
+
+        return { legend: value };
+      }
+
+      function chartsMigrateLabelKey(value, component) {
+        component.newProps.labelAxis ??= {};
+        value ? (component.newProps.labelAxis.dataKey = value) : (component.newProps.labelAxis.dataKey = "label");
+      }
+
+      function chartsMigrateLabelUnit(value, component) {
+        if (value) {
+          component.newProps.labelAxis ??= {};
+          component.newProps.labelAxis.unit = value;
+        }
+      }
+
+      function chartsMigrateValueUnit(value, component) {
+        if (value) {
+          component.newProps.valueAxis ??= {};
+          component.newProps.valueAxis.unit = value;
+        }
+      }
+
+      function chartsMigrateValueRound(value, component) {
+        if (value) {
+          component.newProps.valueAxis ??= {};
+          component.newProps.valueAxis.round = value;
+        }
+      }
+
+      function chartsMigrateValueAxisWidth(value, component) {
+        if (value) {
+          component.newProps.valueAxis ??= {};
+          component.newProps.valueAxis.width = value;
+        }
+      }
+
+      function chartsMigrateValueAxisDomain(value, component) {
+        if (value) {
+          component.newProps.valueAxis ??= {};
+          component.newProps.valueAxis.domain = [
+            isNaN(value[0])
+              ? value[0]
+              : component.newProps.valueAxis?.round
+                ? value[0] / component.newProps.valueAxis?.round
+                : value[0],
+            isNaN(value[1])
+              ? value[1]
+              : component.newProps.valueAxis?.round
+                ? value[1] / component.newProps.valueAxis?.round
+                : value[1],
+          ];
+        }
+      }
+
+      function chartsMigrateReferenceAreas(value, component) {
+        if (!value) return undefined;
+        value.forEach((area) => {
+          area.x1 = area.startLabel;
+          area.y1 = area.startValue;
+          area.x2 = area.endLabel;
+          area.y2 = area.endValue;
+          delete area.startLabel;
+          delete area.startValue;
+          delete area.endLabel;
+          delete area.endValue;
+
+          area.colorScheme = GLOBAL_PROPS_CONFIG.colorSchema(area.colorSchema)?.colorScheme;
+          delete area.colorSchema;
+
+          area.title = area.name;
+          delete area.name;
+
+          area.isFront = true;
+        });
+        return { areaList: value };
+      }
+
+      function chartsMigrateReferenceLines(value, component) {
+        if (!value) return undefined;
+        value.forEach((line, index) => {
+          if (line.segment) {
+            line.segment.forEach((element, index) => {
+              line["x" + (index + 1)] = element.label;
+              line["y" + (index + 1)] = element.value;
+            });
+            delete line.segment;
+          }
+
+          line.label ? (line.x = line.label) : undefined;
+          line.value ? (line.y = line.value) : undefined;
+          delete line.label;
+          delete line.value;
+
+          line.colorScheme = GLOBAL_PROPS_CONFIG.colorSchema(line.colorSchema)?.colorScheme;
+          delete line.colorSchema;
+
+          line.title = line.name;
+          delete line.name;
+
+          line.isFront = true;
+        });
+        return { lineList: value };
+      }
+
+      function chartsMigrateReferenceDots(value, component) {
+        if (!value) return undefined;
+        value.forEach((dot, index) => {
+          dot.x = dot.label;
+          dot.y = dot.value;
+          delete dot.label;
+          delete dot.value;
+
+          dot.colorScheme = GLOBAL_PROPS_CONFIG.colorSchema(dot.colorSchema)?.colorScheme;
+          delete dot.colorSchema;
+
+          dot.title = dot.name;
+          delete dot.name;
+
+          dot.isFront = true;
+        });
+        return { dotList: value };
+      }
+
+      function migrateArtifactUri() {
+        return (value, component) => {
+          return {
+            children: component.props.children.map((uu5StringObject) => {
+              const {
+                name,
+                authorized,
+                notAuthorized,
+                pending,
+                notAuthenticated,
+                profile,
+                ...props
+              } = uu5StringObject.props.toObject();
+
+              if (props.default) {
+                return uu5StringObject.children;
+              } else {
+                const newProps = {
+                  _name: (name || name === 0 ? name : undefined),
+                  type: authorized || profile
+                    ? "authorizedProfile" : notAuthorized
+                      ? "notAuthorized" : pending
+                        ? "pending" : notAuthenticated
+                          ? "notAuthenticated" : undefined,
+                }
+
+                if (authorized || profile) {
+                  newProps.artifactUri = value;
+                  newProps.profileList = profile;
+                  newProps.useCase = component.props.useCase;
+                }
+
+                return new Uu5String.Object("Uu5Bricks.Authorization.Item", newProps, { children: uu5StringObject.children });
+              }
+            }).flat(),
+          }
+        }
+      }
+
+      function migrateRoleGroupInterfaceUri() {
+        return (value, component) => {
+          if (!Array.isArray(value)) value = [value];
+
+          return {
+            children: component.props.children.map((uu5StringObject) => {
+              const {
+                name,
+                authorized,
+                notAuthorized,
+                pending,
+                notAuthenticated,
+                roleGroupInterfaceUri,
+                ...props
+              } = uu5StringObject.props.toObject();
+
+              if (props.default) {
+                return uu5StringObject.children;
+              } else {
+                const newProps = {
+                  _name: (name || name === 0 ? name : undefined),
+                  type: authorized
+                    ? "authorizedRoleGroup" : notAuthorized
+                      ? "notAuthorized" : pending
+                        ? "pending" : notAuthenticated
+                          ? "notAuthenticated" : undefined,
+                }
+
+                const propsList = [];
+
+                if (authorized) {
+                  const uriList = (typeof roleGroupInterfaceUri === "string" ? [roleGroupInterfaceUri] : roleGroupInterfaceUri) || value;
+                  const uriMap = {};
+                  uriList.forEach((uri) => {
+                    let baseUri, id;
+                    if (uri.startsWith("%BASE_URI%")) {
+                      baseUri = "%BASE_URI%";
+                      const url = new URL(uri.replace(/^\%BASE_URI\%/, "https://baseUri.com"));
+                      id = url.searchParams.get("id");
+                    } else {
+                      const url = new URL(uri);
+                      baseUri = (url.origin + url.pathname).match(/^.*\/(?:\d{17}-)?[a-f0-9]{32}/)[0];
+                      id = url.searchParams.get("id");
+                    }
+
+                    if (!id) console.error(`Migration error: Role uri in a component ${component.uu5Tag} contains unsupported code instead of id.`, uri);
+
+                    uriMap[baseUri] ||= [];
+                    uriMap[baseUri].push(id);
+                  });
+
+                  for (let baseUri in uriMap) {
+                    propsList.push({
+                      ...newProps,
+                      uuTerritoryBaseUri: baseUri,
+                      roleGroupIdList: uriMap[baseUri],
+                    });
+                  }
+                } else {
+                  propsList.push(newProps);
+                }
+
+                return propsList.map((objectProps) =>
+                  new Uu5String.Object("Uu5Bricks.Authorization.Item", objectProps, { children: uu5StringObject.children }));
+              }
+            }).flat(),
+          }
+        };
+      }
+
+      const ICON_CODE_MAP = {
+        // icon migration for Uu5RichText.Badge
+        "uugdsstencil-badge-check": "check",
+        "uugdsstencil-badge-cancel": "cancel",
+        "uugdsstencil-badge-pause": "pause",
+        "uugdsstencil-badge-exclamation": "exclamation",
+        "uugdsstencil-badge-exclamation-2": "exclamation-2",
+        "uugdsstencil-badge-exclamation-3": "exclamation-3",
+        "uugdsstencil-badge-start": "start",
+        "uugdsstencil-badge-clock": "clock",
+        "uugdsstencil-badge-play": "play",
+        "uugdsstencil-badge-end": "end",
+        "uugdsstencil-badge-info": "info",
+        "uugdsstencil-badge-flash": "flash",
+        "plus4u-task": "check",
+        "plus4u-cancel": "cancel",
+        "plus4u-pause": "pause",
+        "plus4u-mark-exclamation": "exclamation",
+        "plus4u-mark-exclamation-2": "exclamation-2",
+        "plus4u-mark-exclamation-3": "exclamation-3",
+        "plus4u-clock": "clock",
+        "plus4u-arrow-right": "play",
+        "plus4u-arrow-right-max": "end",
+        "plus4u-mark-info": "info",
+        "plus4u-flash": "flash",
+        "uubml-symbol-state-s02": "start",
+        "mdi-empty": "empty",
+      };
+
+      function uu5RichTextUu5StringMigration(value) {
+        if (value) {
+          return {
+            uu5String: migrateUu5String(value, {
+              "Uu5Bricks.Div": { uu5Tag: "div" },
+              "UU5.RichText.Badge": {
+                uu5Tag: "Uu5RichText.Badge",
+                propMap: {
+                  state: (value) => {
+                    return { state: value === "problemActive" ? "final" : value === "final" ? "problemActive" : value };
+                  },
+                  icon: (value) => ({ icon: ICON_CODE_MAP[value] ?? value }),
+                },
+              },
+              "UU5.Bricks.Code": { uu5Tag: "Uu5RichText.Code" },
+              "Uu5Elements.Icon": { uu5Tag: "Uu5RichText.Icon" },
+              "UU5.Bricks.P": { uu5Tag: "p" },
+            }),
+          };
+        }
+      }
+
+      const HTML_ELEMENT_PROP_MAP = {
+        style: (value) => {
+          if (value && typeof value === "object") return { style: value };
+          const v = value?.trim();
+          return v ? { style: Object.fromEntries(v.split(";").map((r) => r.trim().split(":").map(v => v.trim()))) } : undefined;
+        }
+      };
+
+      const CONFIG = {
+        "UU5.Bricks.Section": {
+          uu5Tag: "Uu5Bricks.Section",
+          propMap: {
+            underline: (value, { props }) => (value ? {
+              headerSeparator: true,
+              headerSeparatorColorScheme: props.colorSchema ? GLOBAL_PROPS_CONFIG.colorSchema(props.colorSchema).colorScheme : "light-blue"
+            } : undefined),
+          },
+        },
+        "UU5.RichText.Block": {
+          uu5Tag: "Uu5RichTextBricks.Block",
+          propMap: {
+            uu5string: uu5RichTextUu5StringMigration,
+            uu5String: uu5RichTextUu5StringMigration,
+          },
+        },
+        "UU5.Bricks.Button": {
+          uu5Tag: "Uu5Bricks.Link",
+          props: { type: "button" },
+          propsToDelete: ["pressed", "smoothScroll", "offset", "baseline"],
+          propMap: {
+            displayBlock: (value) => (value ? { width: "100%" } : undefined),
+            bgStyle: (value) => {
+              const sig = { filled: "highlighted", outline: "distinct", transparent: "subdued", underline: "subdued" };
+              if (sig[value]) {
+                return { significance: sig[value] };
+              }
+            },
+          },
+        },
+        "UU5.Bricks.Icon": {
+          uu5Tag: "Uu5Elements.Icon",
+        },
+        "UU5.Bricks.Div": {
+          uu5Tag: "Uu5Bricks.Div",
+        },
+        "UU5.Bricks.Span": {
+          uu5Tag: "span",
+          propMap: HTML_ELEMENT_PROP_MAP,
+        },
+        "UU5.Bricks.Ul": {
+          uu5Tag: "ul",
+          propMap: HTML_ELEMENT_PROP_MAP,
+        },
+        "UU5.Bricks.Ol": {
+          uu5Tag: "ol",
+          propMap: HTML_ELEMENT_PROP_MAP,
+        },
+        "UU5.Bricks.Li": {
+          uu5Tag: "li",
+          propMap: HTML_ELEMENT_PROP_MAP,
+        },
+        "UU5.Bricks.Lsi": {
+          uu5Tag: "Uu5Bricks.Lsi",
+          deleteEmpty: true,
+        },
+        "UU5.Bricks.Lsi.Item": {
+          uu5Tag: "Uu5Bricks.Lsi.Item",
+          deleteEmpty: true,
+        },
+        "UU5.Bricks.ScreenSize": {
+          uu5Tag: "Uu5Bricks.ContentSize",
+          propMap: {
+            children: (value, props) => {
+              let newChildren = value;
+              if (Array.isArray(value)) {
+                const starIndex = value.findIndex((v) => v.props.toObject().contentSize === "*");
+                let contentSize;
+                const priorityList = ["xs", "s", "m", "l", "xl"];
+
+                if (starIndex !== -1) {
+                  const indexes = [];
+                  value.forEach((v) => {
+                    const cSize = v.props.toObject().contentSize;
+                    if (cSize !== "*") {
+                      const arr = Array.isArray(cSize) ? cSize : [cSize];
+                      indexes.push(...arr.map((v) => priorityList.indexOf(v)));
+                    }
+                  });
+
+                  for (let i = 0; i < priorityList.length; i++) {
+                    if (!indexes.includes(i)) {
+                      contentSize = priorityList[i];
+                      break;
+                    }
+                  }
+                }
+
+                newChildren = value.map((v, i) => {
+                  let result = v;
+                  if (starIndex === i) {
+                    result = new Uu5String.Object(v.uu5Tag, {
+                      ...v.props.toObject(),
+                      contentSize: contentSize ?? "xs",
+                    }, { children: v.children });
+                  } else {
+                    const vProps = v.props.toObject();
+                    if (Array.isArray(vProps.contentSize)) {
+                      const i = Math.min(...vProps.contentSize.map((v) => priorityList.indexOf(v)));
+                      result = new Uu5String.Object(v.uu5Tag, {
+                        ...vProps,
+                        contentSize: priorityList[i],
+                      }, { children: v.children });
+                    }
+                  }
+                  return result;
+                });
+              }
+              return {
+                children: newChildren,
+              }
+            }
+          }
+        },
+        "UU5.Bricks.ScreenSize.Item": {
+          uu5Tag: "Uu5Bricks.ContentSize.Item",
+          propMap: {
+            screenSize: (value) => ({ contentSize: value }),
+          },
+        },
+        "UU5.Bricks.Link": (uu5Tag, props, opts) => {
+          const { smootScroll, offset, download, authenticate, ...linkProps } = props;
+
+          const { elementProps, componentProps } = Utils.VisualComponent.splitProps(linkProps);
+          const children = opts.children ? opts.children.filter(Boolean) : opts.children;
+
+          let result;
+          if (children?.length > 1) {
+            result = ["Uu5Bricks.Box", { significance: "subdued", ...elementProps, href: componentProps.href }, opts];
+          } else if (children?.length === 1) {
+            const child = children[0];
+            if (["Uu5ImagingBricks.Image", "Uu5Bricks.Tile", "Uu5Bricks.Box"].includes(child.uu5Tag)) {
+              result = [
+                child.uu5Tag,
+                { ...elementProps, ...child.props.toObject(), href: componentProps.href },
+                { isPairedTag: !!child.children?.length, children: child.children },
+              ];
+            }
+          }
+
+          return result || ["Uu5Bricks.Link", linkProps, opts];
+        },
+        // "UU5.Bricks.Link": { // nesmí to být v RT, v RT to převést
+        //   uu5Tag: "Uu5Bricks.Link",
+        //   propsToDelete: ["smoothScroll", "offset", "download", "authenticate"],
+        //   propMap: {
+        //     children: (value) => {
+        //       const arr = Array.isArray(value) ? value : [value];
+        //       return {
+        //         children: arr.map((v) => {
+        //           if (typeof v === "string") {
+        //             return v;
+        //           } else {
+        //             return new Uu5String.Object(v.uu5Tag, v.props.toString() + ' nestingLevel="area"', { isPairedTag: !!v.children?.length });
+        //           }
+        //         })
+        //       };
+        //     },
+        //   },
+        // },
+        "UU5.Bricks.Carousel": {
+          uu5Tag: "Uu5Bricks.Carousel",
+          propsToDelete: ["nextIcon", "prevIcon", "displayedItems", "stepByOne", "allowTags"],
+          propMap: {
+            hideControls: (value) => ({ buttons: value ? "none" : "inner" }),
+            hideIndicators: (value) => ({ stepper: value ? "none" : "inner" }),
+            activeIndex: (value) => ({ initialIndex: value }),
+            type: (value) => ({ type: value === "circular" ? "infinite" : value }),
+            interval: (value) => ({ intervalMs: value }),
+            height: (value) => ({ contentHeight: value }),
+            minHeight: (value, { props }) => (props.height ? undefined : { contentHeight: value }),
+          }
+        },
+        "UU5.Bricks.Carousel.Item": {
+          uu5Tag: "Uu5Bricks.Carousel.Item",
+        },
+        "UuContentKit.Images.Image": {
+          uu5Tag: "Uu5ImagingBricks.Image",
+          propsToDelete: ["fit", "elevation", "code"],
+          propMap: {
+            src: (value) => {
+              if (value?.match(/^[a-z]+:\/\//)) return { src: value };
+            },
+            thumbCode: (value) => (value ? { thumbnailSrc: value } : undefined),
+            shape: (value) => {
+              const result = {};
+              if (!value.startsWith("rounded")) result.borderRadius = "none";
+              else if (value === "circle") result.borderRadius = "full";
+
+              const ar = value.match(/\d+x\d+$/)?.[0]
+              if (ar) result.aspectRatio = ar;
+
+              return result;
+            },
+            originalDimensions: (value) => (value ? { fit: "contain" } : undefined),
+            fileName: (value) => (value ? { alt: value } : undefined),
+          },
+        },
+        "UuContentKit.Images.ImageGallery": {
+          uu5Tag: "Uu5ImagingBricks.Gallery",
+          propsToDelete: ["mode", "shape", "colWidth"],
+          propMap: {
+            data: (value) => {
+              return {
+                children: value.map((item) => {
+                  if (typeof item === "string") item = { src: item };
+                  return new Uu5String.Object("Uu5ImagingBricks.Gallery.Item", {
+                    src: item.src?.match(/^[a-z]+:\/\//) ? item.src : undefined,
+                    thumbnailSrc: item.thumb?.match(/^[a-z]+:\/\//) ? item.thumb : undefined,
+                  }, { isPairedTag: false });
+                })
+              }
+            }
+          },
+        },
+        "UuContentKit.Images.ImagePanel": (uu5Tag, props, opts) => {
+          const {
+            src, header, headerLevel, content, textAlignment, structure, marginTop, marginBottom,
+            buttonHref, buttonContent, buttonColorSchema, buttonBorderRadius, buttonTarget, buttonSize,
+            imageSize, imagePosition, imageAlignment, lightbox, alt,
+            ...propsToPass
+          } = props;
+
+          let margin;
+          function buildMargin(top, bottom) {
+            return [/\d$/.test(top + "") ? top + "px" : top || 0, 0, /\d$/.test(bottom + "") ? bottom + "px" : bottom || 0].join(" ");
+          }
+          if (marginTop || marginBottom) {
+            if ((marginTop && typeof marginTop === "object") || (marginBottom && typeof marginBottom === "object")) {
+              margin = {};
+              ["xs", "s", "m", "l", "xl"].forEach((size) => {
+                const top = marginTop && typeof marginTop === "object" ? marginTop?.[size] : marginTop;
+                const bottom = marginBottom && typeof marginBottom === "object" ? marginBottom?.[size] : marginBottom;
+                if (top || bottom) {
+                  margin[size] = buildMargin(top, bottom);
+                }
+              });
+            } else {
+              margin = buildMargin(marginTop, marginBottom);
+            }
+          }
+
+          let newProps = {
+            type: "columns",
+            margin,
+          };
+
+          for (let name in GLOBAL_PROPS_CONFIG) {
+            const value = propsToPass[name];
+            if (value != null && newProps[name] != null) {
+              const getProp = GLOBAL_PROPS_CONFIG[name];
+              const newProp = getProp(value, { uu5Tag, newUu5Tag: "Uu5Bricks.Layout", props: propsToPass, newProps });
+              if (newProp !== undefined) newProps = { ...newProps, ...newProp };
+            }
+          }
+
+          const { elementProps } = Utils.VisualComponent.splitProps(propsToPass);
+
+          const alignment = textAlignment === "left" ? "start" : textAlignment === "right" ? "end" : textAlignment;
+
+          const section = new Uu5String.Object(
+            "Uu5Bricks.Section",
+            {
+              header,
+              level: headerLevel,
+              headerHorizontalAlignment: alignment ?? "center",
+              horizontalAlignment: alignment ?? "center",
+              margin: "xs: 24px 0 0",
+            },
+            content || buttonHref ? {
+              children: [
+                ...(content ? [new Uu5String.Object("Uu5RichTextBricks.Block", uu5RichTextUu5StringMigration(content))] : []),
+                ...(buttonHref ? [new Uu5String.Object("Uu5Bricks.Link", {
+                  type: "button",
+                  href: buttonHref,
+                  target: buttonTarget,
+                  size: buttonSize,
+                  significance: "highlighted",
+                  ...(buttonColorSchema ? GLOBAL_PROPS_CONFIG.colorSchema(buttonColorSchema) : null),
+                  ...(buttonBorderRadius ? GLOBAL_PROPS_CONFIG.borderRadius(buttonBorderRadius) : null),
+                  margin: "xs: 24px 0 0;"
+                }, { children: buttonContent })] : [])
+              ]
+            } : undefined
+          );
+
+          const image = new Uu5String.Object(
+            "Uu5ImagingBricks.Image",
+            { src, alt, lightbox, fit: imageSize === "original" ? "cover" : imageSize, margin: "xs: 0" }
+          );
+
+          const [left, right] = structure === "text-image" || imagePosition === "right" ? [section, image] : [image, section];
+
+          return [
+            "Uu5Bricks.Layout",
+            { ...elementProps, ...newProps },
+            {
+              ...opts,
+              children: [
+                new Uu5String.Object(
+                  "Uu5Bricks.Layout.Item",
+                  { colSpan: "s: 6" },
+                  { children: [left] }
+                ),
+                new Uu5String.Object(
+                  "Uu5Bricks.Layout.Item",
+                  { colSpan: "s: 6" },
+                  { children: [right] }
+                )
+              ]
+            }
+          ];
+        },
+        "UuContentKit.Links.Link": {
+          uu5Tag: "Uu5Bricks.Link",
+          propMap: {
+            code: (value, { props }) => {
+              if (!props.src) {
+                return { href: value };
+              }
+            },
+            src: (value, { props }) => {
+              let href = value;
+              if (value.match(/^[a-z]+:\/\//) && props.fragment) {
+                const url = new URL(href);
+                url.hash = "#" + props.fragment;
+                href = url.toString();
+              }
+              return { href };
+            },
+            fragment: (value, { props }) => {
+              if (!props.src && !props.code) {
+                return { href: "#" + value };
+              }
+            },
+            type: (value) => ({ type: value === "touchIcon" ? "touchLink" : value }),
+          },
+        },
+        // "UuContentKit.Links.FileLink": {
+        //   uu5Tag: "UuEditableBinaryContent.File.Link",
+        //   propMap: {
+        //     // TODO
+        //   },
+        // },
+        // "Plus4U5.Bricks.BusinessCard": {
+        //   uu5Tag: "UuPlus4UPeople.PersonalCard.BusinessCard",
+        //   propMap: {
+        //     // TODO
+        //   },
+        // },
+        "UuContentKit.Images.ImageCarousel": {
+          uu5Tag: "Uu5ImagingBricks.Carousel",
+          propsToDelete: ["width", "height", "authenticate", "nextIcon", "prevIcon", "displayedItems", "stepByOne"],
+          propMap: {
+            data: (value, { props }) => {
+              return {
+                children: value.map((item) => {
+                  if (typeof item === "string") item = { src: item };
+                  return new Uu5String.Object("Uu5ImagingBricks.Carousel.Item", {
+                    src: item.src?.match(/^[a-z]+:\/\//) ? item.src : undefined,
+                    thumbnailSrc: item.thumb?.match(/^[a-z]+:\/\//) ? item.thumb : undefined,
+                    alt: item.alt,
+                    fit: props.fit,
+                  }, { isPairedTag: false });
+                })
+              }
+            },
+            hideControls: (value) => (value ? { buttons: "none" } : undefined),
+            hideIndicators: (value) => (value ? { stepper: "none" } : undefined),
+            activeIndex: (value) => ({ initialIndex: value }),
+            type: (value) => ({ type: value === "circular" ? "infinite" : value }),
+            interval: (value) => ({ intervalMs: value }),
+            height: (value) => ({ contentHeight: value }),
+          },
+        },
+        "UuContentKit.Images.ImageColumn": {
+          uu5Tag: "Uu5ImagingBricks.Column",
+          propMap: {
+            data: (value) => {
+              return {
+                children: value.map((item) => {
+                  if (typeof item === "string") item = { src: item };
+                  return new Uu5String.Object("Uu5ImagingBricks.Column.Item", {
+                    src: item.src?.match(/^[a-z]+:\/\//) ? item.src : undefined,
+                    thumbnailSrc: item.thumb?.match(/^[a-z]+:\/\//) ? item.thumb : undefined,
+                  }, { isPairedTag: false });
+                })
+              }
+            },
+            maxWidth: (value) => ({ maxWidth: typeof value === "string" && /^\d+$/.test(value) ? +value : value }),
+            minWidth: (value) => ({ minWidth: typeof value === "string" && /^\d+$/.test(value) ? +value : value }),
+          },
+        },
+        "UuContentKit.Images.ImageRow": {
+          uu5Tag: "Uu5ImagingBricks.Row",
+          propMap: {
+            data: (value) => {
+              return {
+                children: value.map((item) => {
+                  if (typeof item === "string") item = { src: item };
+                  return new Uu5String.Object("Uu5ImagingBricks.Row.Item", {
+                    src: item.src?.match(/^[a-z]+:\/\//) ? item.src : undefined,
+                    thumbnailSrc: item.thumb?.match(/^[a-z]+:\/\//) ? item.thumb : undefined,
+                  }, { isPairedTag: false });
+                })
+              }
+            },
+            maxHeight: (value) => ({ maxHeight: typeof value === "string" && /^\d+$/.test(value) ? +value : value }),
+            minHeight: (value) => ({ minHeight: typeof value === "string" && /^\d+$/.test(value) ? +value : value }),
+          },
+        },
+        "UuContentKit.Grids.InfoCarousel": {
+          uu5Tag: "Uu5Bricks.InfoCarousel",
+          propsToDelete: ["prevIcon", "nextIcon", "elevation", "borderRadius", "opacity", "hideNumbers"],
+          propMap: {
+            interval: (intervalMs) => ({ intervalMs }),
+            type: (value) => ({ type: value === "circular" ? "infinite" : value }),
+          },
+        },
+        "UuContentKit.Grids.InfoCarousel.Item": {
+          uu5Tag: "Uu5Bricks.InfoCarousel.Item",
+          propMap: {
+            code: (value, { props }) => (props.src ? undefined : { src: value }),
+          },
+        },
+        "UU5.Bricks.QRCode": {
+          uu5Tag: "Uu5Bricks.QRCode",
+          propMap: {
+            size: (width) => ({ width }),
+          },
+        },
+        "UuContentKit.Bricks.BlockInfo": {
+          uu5Tag: "Uu5Bricks.InfoBlock",
+          props: { margin: "c" },
+          propMap: {
+            icon: (value, { props }) => props.iconContent != null && value != null ? undefined : { icon: value },
+            iconContent: (value) => (value ? { iconText: value } : undefined),
+          },
+        },
+        "UuContentKit.Bricks.BlockSuccess": {
+          uu5Tag: "Uu5Bricks.InfoBlock",
+          props: { icon: "uugds-check-circle-solid", colorScheme: "positive", margin: "c" },
+          propMap: {
+            icon: (value, { props }) => props.iconContent != null && value != null ? undefined : { icon: value },
+            iconContent: (value) => (value ? { iconText: value, icon: undefined } : undefined),
+          },
+        },
+        "UuContentKit.Bricks.BlockWarning": {
+          uu5Tag: "Uu5Bricks.InfoBlock",
+          props: { icon: "uugds-alert-solid", colorScheme: "warning", margin: "c" },
+          propMap: {
+            icon: (value, { props }) => props.iconContent != null && value != null ? undefined : { icon: value },
+            iconContent: (value) => (value ? { iconText: value, icon: undefined } : undefined),
+          },
+        },
+        "UuContentKit.Bricks.BlockDanger": {
+          uu5Tag: "Uu5Bricks.InfoBlock",
+          props: { icon: "uugds-alert-circle-solid", colorScheme: "negative", margin: "c" },
+          propMap: {
+            icon: (value, { props }) => props.iconContent != null && value != null ? undefined : { icon: value },
+            iconContent: (value) => (value ? { iconText: value, icon: undefined } : undefined),
+          },
+        },
+        "UuContentKit.Bricks.BlockDefault": {
+          uu5Tag: "Uu5Bricks.InfoBlock",
+          props: { colorScheme: "neutral", margin: "c" },
+          propMap: {
+            icon: (value, { props }) => props.iconContent != null && value != null ? undefined : { icon: value },
+            iconContent: (value) => (value ? { iconText: value } : undefined),
+          },
+        },
+        "UuContentKit.Bricks.BlockHelp": {
+          uu5Tag: "Uu5Bricks.InfoBlock",
+          props: { icon: "uugds-help-circle-solid", colorScheme: "neutral", margin: "c" },
+          propMap: {
+            icon: (value, { props }) => props.iconContent != null && value != null ? undefined : { icon: value },
+            iconContent: (value) => (value ? { iconText: value, icon: undefined } : undefined),
+          },
+        },
+        "UuContentKit.Multimedia.Youtube": {
+          uu5Tag: "Uu5Bricks.Video",
+          propsToDelete: ["disableInfo", "disableRelatedVideos"],
+          propMap: {
+            autoplay: (value) => ({ autoPlay: value }),
+            disableControls: (value) => value ? { displayControls: !value } : undefined,
+            disableFullscreen: (value) => value ? { displayFullScreen: !value } : undefined,
+            size: (value) => ({ size: value === "xl" ? "l" : value }),
+          },
+        },
+        "UuContentKit.Multimedia.Vimeo": {
+          uu5Tag: "Uu5Bricks.Video",
+          propsToDelete: ["disableAutopause", "colorControls", "disableInfo"],
+          propMap: {
+            autoplay: (value) => ({ autoPlay: value }),
+            disableControls: (value) => value ? { displayControls: !value } : undefined,
+            size: (value) => ({ size: value === "xl" ? "l" : value }),
+            startAt: (value) => ({
+              startAt: value.match(/^(\d+h)?(\d+m)?(\d+s)?$/)?.slice(1).reduce((total, entry, i) => {
+                if (entry) total += parseInt(entry) * Math.pow(60, 2 - i);
+                return total;
+              }, 0)
+            }),
+            background: (value) => value ? {
+              displayControls: false,
+              autoPlay: true,
+              muted: true,
+              loop: true
+            } : undefined,
+          },
+        },
+        "UuContentKit.Diagrams.VerticalTimeline": {
+          uu5Tag: "Uu5Bricks.VerticalTimeline",
+          propsToDelete: ["itemElevation", "itemBgStyle", "iconBgStyle"],
+          propMap: {
+            disableAnimate: (value) => value ? { animation: !value } : undefined,
+          },
+        },
+        "UuContentKit.Diagrams.VerticalTimeline.Item": {
+          uu5Tag: "Uu5Bricks.VerticalTimeline.Item",
+          propsToDelete: ["elevation", "iconBgStyle"],
+        },
+        "UU5.Bricks.Loading": {
+          uu5Tag: "Uu5Bricks.Pending",
+          propMap: {
+            inline: (value) => (value ? { nestingLevel: "inline" } : undefined),
+          },
+        },
+        "UU5.Bricks.Row": (uu5Tag, props, opts) => {
+          const { header, level, underline, colorSchema, contentEditable, display: _, ...propsToPass } = props;
+
+          return header ? [
+            "Uu5Bricks.Section",
+            {
+              header,
+              ...(underline ? {
+                headerSeparator: true,
+                headerSeparatorColorScheme: colorSchema ? GLOBAL_PROPS_CONFIG.colorSchema(colorSchema).colorScheme : "light-blue"
+              } : undefined),
+              level: typeof level === "string" ? +level : level,
+            },
+            {
+              ...opts,
+              children: [
+                new Uu5String.Object(
+                  "Uu5Bricks.Layout",
+                  { ...propsToPass, type: "columns" },
+                  { children: opts.children }
+                )
+              ],
+            }
+          ] : opts.children?.length && opts.children.filter(Boolean)[0].uu5Tag === "Uu5Bricks.Layout.Item" ? [
+            "Uu5Bricks.Layout",
+            { ...propsToPass, type: "columns" },
+            opts,
+          ] : ["Uu5Bricks.Div", propsToPass, opts];
+        },
+        "UU5.Bricks.Column": {
+          uu5Tag: "Uu5Bricks.Layout.Item",
+          propsToDelete: ["level", "underline", "colorSchema"],
+          propMap: {
+            colWidth: (value) => (value ? { colSpan: buildContentSizeStyle(value) } : undefined),
+            header: (value, { props }) => {
+              if (value) {
+                return {
+                  children: [
+                    new Uu5String.Object(
+                      "Uu5Bricks.Section",
+                      {
+                        header: value,
+                        ...(props.underline ? {
+                          headerSeparator: true,
+                          headerSeparatorColorScheme: props.colorSchema ? GLOBAL_PROPS_CONFIG.colorSchema(props.colorSchema).colorScheme : "light-blue"
+                        } : undefined),
+                        level: typeof props.level === "string" ? +props.level : props.level,
+                      },
+                      { children: props.children }
+                    )
+                  ]
+                }
+              }
+            },
+          },
+        },
+        "UU5.Bricks.Tabs": {
+          uu5Tag: "Uu5Bricks.Tabs",
+          propsToDelete: [
+            "type",
+            "stacked",
+            "fade",
+            "allowTags",
+            "lineProps",
+            "elevation",
+            "elevationHover",
+            "borderRadius",
+            "mountTabContent",
+            "contentColorSchema",
+          ],
+          propMap: {
+            activeName: (value) => (value ? { initialActiveCode: value } : undefined),
+            initialActiveName: (value) => (value ? { initialActiveCode: value } : undefined),
+            underline: (value) => (value === false ? { displayBottomLine: value } : undefined),
+            headerColorSchema: (value) => (value === false ? { colorScheme: value } : undefined),
+          },
+        },
+        "UU5.Bricks.Tabs.Item": {
+          uu5Tag: "Uu5Bricks.Tabs.Item",
+          propMap: {
+            header: (value) => (value ? { label: value } : undefined),
+            name: (value) => (value ? { code: value } : undefined),
+          },
+        },
+        "UU5.Bricks.Accordion": {
+          uu5Tag: "Uu5Bricks.Accordion",
+          propsToDelete: ["iconExpanded", "iconCollapsed", "size", "iconAlign", "openClick", "mountPanelContent"],
+          propMap: {
+            children: (value) => {
+              return {
+                children: value?.map((obj) => {
+                  return new Uu5String.Object(
+                    "Uu5Bricks.Accordion.Item",
+                    obj.props.toString(),
+                    { children: obj.children }
+                  );
+                }),
+              }
+            },
+          },
+        },
+        "UU5.Bricks.Panel": {
+          uu5Tag: "Uu5Bricks.Panel",
+          propsToDelete: [
+            "alwaysExpanded",
+            "iconExpanded",
+            "iconCollapsed",
+            "size",
+            "iconAlign",
+            "openClick",
+            "bgStyleHeader",
+            "bgStyleContent",
+            "colorSchemaContent",
+            "disableHeaderClick",
+            "mountContent",
+          ],
+          propMap: {
+            expanded: (initialOpen) => (initialOpen ? { initialOpen } : undefined),
+            colorSchemaHeader: (value) => {
+              return value ? {
+                colorScheme: GLOBAL_PROPS_CONFIG.colorSchema(value).colorScheme,
+                significance: "common"
+              } : undefined;
+            }
+          },
+        },
+        "UU5.Bricks.Card": {
+          uu5Tag: "Uu5Bricks.Tile",
+          propsToDelete: ["inline", "minWidth", "noSpaces"],
+          propMap: {
+            colorSchema: (value) => {
+              return { ...GLOBAL_PROPS_CONFIG.colorSchema(value), significance: value ? "highlighted" : undefined };
+            }
+          }
+        },
+        "UU5.Bricks.Well": {
+          uu5Tag: "Uu5Bricks.Box",
+        },
+        "UU5.Bricks.Authenticated": {
+          uu5Tag: "Uu5Bricks.Authentication",
+          propsToDelete: ["authenticated", "notAuthenticated", "pending"],
+          propMap: {
+            children: (value, { props }) => {
+              return {
+                children: [
+                  new Uu5String.Object(
+                    "Uu5Bricks.Authentication.Item",
+                    { type: props.authenticated ? "authenticated" : props.notAuthenticated ? "notAuthenticated" : "pending" },
+                    { children: value },
+                  ),
+                ],
+              };
+            },
+          },
+        },
+        "Plus4U5.App.ArtifactAuthorized": {
+          uu5Tag: "Uu5Bricks.Authorization",
+          propsToDelete: ["children"],
+          propMap: {
+            artifactUri: migrateArtifactUri(),
+          },
+        },
+        "Plus4U5.App.RoleGroupAuthorized": {
+          uu5Tag: "Uu5Bricks.Authorization",
+          propsToDelete: ["children"],
+          propMap: {
+            roleGroupInterfaceUri: migrateRoleGroupInterfaceUri(),
+          },
+        },
+        "Plus4U5.App.Authorized": {
+          uu5Tag: "Uu5Bricks.Authorization",
+          propsToDelete: ["children"],
+          propMap: {
+            artifactUri: migrateArtifactUri(),
+            roleGroupInterfaceUri: migrateRoleGroupInterfaceUri(),
+          },
+        },
+        "UU5.SimpleChart.AreaChart": {
+          uu5Tag: "Uu5ChartsBricks.XyChart",
+          propsToDelete: [
+            "stacked",
+            "chartType",
+            "gradient",
+            "isAnimationActive",
+            "responsive",
+            "colorSchema",
+            "onClick",
+          ],
+          propMap: {
+            series: (value, component) => chartsMigrateSeries(value, component),
+            displayLegend: (value) => chartsMigrateDisplayLegend(value),
+            labelKey: (value, component) => chartsMigrateLabelKey(value, component),
+            labelUnit: (value, component) => chartsMigrateLabelUnit(value, component),
+            valueUnit: (value, component) => chartsMigrateValueUnit(value, component),
+            valueRound: (value, component) => chartsMigrateValueRound(value, component),
+            valueAxisWidth: (value, component) => chartsMigrateValueAxisWidth(value, component),
+            valueAxisDomain: (value, component) => chartsMigrateValueAxisDomain(value, component),
+            displayTooltip: (value) => {
+              return { tooltip: value };
+            },
+            groupingSeparator: (value) => {
+              return { numberGroupingSeparator: value };
+            },
+            decimalSeparator: (value) => {
+              return { numberDecimalSeparator: value };
+            },
+            referenceAreas: (value, component) => chartsMigrateReferenceAreas(value, component),
+            referenceLines: (value, component) => chartsMigrateReferenceLines(value, component),
+            referenceDots: (value, component) => chartsMigrateReferenceDots(value, component),
+          },
+        },
+        "UU5.SimpleChart.BarChart": {
+          uu5Tag: "Uu5ChartsBricks.XyChart",
+          propsToDelete: [
+            "stacked",
+            "barSize",
+            "gradient",
+            "isAnimationActive",
+            "responsive",
+            "colorSchema",
+            "onClick",
+          ],
+          propMap: {
+            series: (value, component) => chartsMigrateSeries(value, component),
+            displayLegend: (value) => chartsMigrateDisplayLegend(value),
+            labelKey: (value, component) => chartsMigrateLabelKey(value, component),
+            labelUnit: (value, component) => chartsMigrateLabelUnit(value, component),
+            valueUnit: (value, component) => chartsMigrateValueUnit(value, component),
+            valueRound: (value, component) => chartsMigrateValueRound(value, component),
+            valueAxisWidth: (value, component) => chartsMigrateValueAxisWidth(value, component),
+            valueAxisDomain: (value, component) => chartsMigrateValueAxisDomain(value, component),
+            displayTooltip: (value) => {
+              return { tooltip: value };
+            },
+            groupingSeparator: (value) => {
+              return { numberGroupingSeparator: value };
+            },
+            decimalSeparator: (value) => {
+              return { numberDecimalSeparator: value };
+            },
+            referenceAreas: (value, component) => chartsMigrateReferenceAreas(value, component),
+            referenceLines: (value, component) => chartsMigrateReferenceLines(value, component),
+            referenceDots: (value, component) => chartsMigrateReferenceDots(value, component),
+          },
+        },
+        "UU5.SimpleChart.LineChart": {
+          uu5Tag: "Uu5ChartsBricks.XyChart",
+          propsToDelete: [
+            "stacked",
+            "chartType",
+            "gradient",
+            "isAnimationActive",
+            "responsive",
+            "colorSchema",
+            "onClick",
+          ],
+          propMap: {
+            data: chartsMigrateData,
+            series: (value, component) => chartsMigrateSeries(value, component),
+            displayLegend: (value) => chartsMigrateDisplayLegend(value),
+            labelKey: (value, component) => chartsMigrateLabelKey(value, component),
+            labelUnit: (value, component) => chartsMigrateLabelUnit(value, component),
+            valueUnit: (value, component) => chartsMigrateValueUnit(value, component),
+            valueRound: (value, component) => chartsMigrateValueRound(value, component),
+            valueAxisWidth: (value, component) => chartsMigrateValueAxisWidth(value, component),
+            valueAxisDomain: (value, component) => chartsMigrateValueAxisDomain(value, component),
+            displayTooltip: (value) => {
+              return { tooltip: value };
+            },
+            groupingSeparator: (value) => {
+              return { numberGroupingSeparator: value };
+            },
+            decimalSeparator: (value) => {
+              return { numberDecimalSeparator: value };
+            },
+            referenceAreas: (value, component) => chartsMigrateReferenceAreas(value, component),
+            referenceLines: (value, component) => chartsMigrateReferenceLines(value, component),
+            referenceDots: (value, component) => chartsMigrateReferenceDots(value, component),
+          },
+        },
+        // TODO not easy to transform 2D array data to simple one
+        // "UU5.SimpleChart.ScatterChart": {
+        //   uu5Tag: "Uu5ChartsBricks.XyChart",
+        //   propsToDelete: [
+        //     "gradient",
+        //     "isAnimationActive",
+        //     "responsive",
+        //     "colorSchema",
+        //     "onClick",
+        //   ],
+        //   propMap: {
+        //     data: chartsMigrateData,
+        //     series: (value, component) => chartsMigrateSeries(value, component),
+        //     displayLegend: (value) => chartsMigrateDisplayLegend(value),
+        //     labelKey: (value, component) => chartsMigrateLabelKey(value, component),
+        //     labelUnit: (value, component) => chartsMigrateLabelUnit(value, component),
+        //     valueKey: () => "TODO",
+        //     sizeKey: () => "TODO",
+        //     sizeUnit: () => "TODO",
+        //     shape: () => "TODO",
+        //     sizeRange: () => "TODO",
+        //     valueUnit: (value, component) => chartsMigrateValueUnit(value, component),
+        //     valueRound: (value, component) => chartsMigrateValueRound(value, component),
+        //     valueAxisWidth: (value, component) => chartsMigrateValueAxisWidth(value, component),
+        //     valueAxisDomain: (value, component) => chartsMigrateValueAxisDomain(value, component),
+        //     displayTooltip: (value) => {
+        //       return { tooltip: value };
+        //     },
+        //     groupingSeparator: (value) => {
+        //       return { numberGroupingSeparator: value };
+        //     },
+        //     decimalSeparator: (value) => {
+        //       return { numberDecimalSeparator: value };
+        //     },
+        //     referenceAreas: (value, component) => chartsMigrateReferenceAreas(value, component),
+        //     referenceLines: (value, component) => chartsMigrateReferenceLines(value, component),
+        //     referenceDots: (value, component) => chartsMigrateReferenceDots(value, component),
+        //   },
+        // },
+        "UU5.SimpleChart.ComposedChart": {
+          uu5Tag: "Uu5ChartsBricks.XyChart",
+          propsToDelete: [
+            "stacked",
+            "chartType",
+            "barSize",
+            "gradient",
+            "isAnimationActive",
+            "responsive",
+            "colorSchema",
+            "onClick",
+          ],
+          propMap: {
+            series: (value, component) => chartsMigrateSeries(value, component),
+            displayLegend: (value) => chartsMigrateDisplayLegend(value),
+            labelKey: (value, component) => chartsMigrateLabelKey(value, component),
+            labelUnit: (value, component) => chartsMigrateLabelUnit(value, component),
+            valueUnit: (value, component) => chartsMigrateValueUnit(value, component),
+            valueRound: (value, component) => chartsMigrateValueRound(value, component),
+            valueAxisWidth: (value, component) => chartsMigrateValueAxisWidth(value, component),
+            valueAxisDomain: (value, component) => chartsMigrateValueAxisDomain(value, component),
+            displayTooltip: (value) => {
+              return { tooltip: value };
+            },
+            groupingSeparator: (value) => {
+              return { numberGroupingSeparator: value };
+            },
+            decimalSeparator: (value) => {
+              return { numberDecimalSeparator: value };
+            },
+            referenceAreas: (value, component) => chartsMigrateReferenceAreas(value, component),
+            referenceLines: (value, component) => chartsMigrateReferenceLines(value, component),
+            referenceDots: (value, component) => chartsMigrateReferenceDots(value, component),
+          },
+        },
+        "UU5.SimpleChart.PieChart": {
+          uu5Tag: "Uu5ChartsBricks.PieChart",
+          propsToDelete: [
+            "colorSchema",
+            "displayLabel",
+            "displayLabelLine",
+            "isAnimationActive",
+            "responsive",
+            "outerRadius",
+            "onClick",
+          ],
+          props: {
+            legend: true,
+          },
+          propMap: {
+            data: chartsMigratePieData,
+            children: (value, component) => {
+              if (!component.props.data && Array.isArray(value) && value.length) {
+                if (typeof value[0] === "string") {
+                  let data;
+                  try {
+                    data = JSON.parse(value[0]);
+                  } catch (e) {
+                    // in children there are no data
+                    return;
+                  }
+                  return chartsMigratePieData(data, component);
+                }
+              }
+            },
+            series: chartsMigratePieSeries,
+            displayLegend: chartsMigrateDisplayLegend,
+            labelKey: chartsMigrateLabelKey,
+            labelUnit: chartsMigrateLabelUnit,
+            valueUnit: chartsMigrateValueUnit,
+            valueRound: chartsMigrateValueRound,
+            displayTooltip: (value) => (value === false ? { tooltip: value } : undefined),
+            groupingSeparator: (value) => ({ numberGroupingSeparator: value }),
+            decimalSeparator: (value) => ({ numberDecimalSeparator: value }),
+          },
+        },
+      };
+
+      /* Config of global props */
+      const GLOBAL_PROPS_CONFIG = {
+        noIndex: (value) => (value ? { fullTextSearchPriority: 0 } : undefined),
+        colorSchema: (value) => {
+          if (value) {
+            const matcher = value.match(/^(.*)-rich$/);
+            const color = matcher ? matcher[1] : value;
+
+            const colorMap = {
+              info: "important",
+              success: "positive",
+              danger: "negative",
+              indigo: "dark-blue",
+              teal: "dark-green",
+              lime: "yellow",
+              amber: "yellow",
+              "deep-orange": "orange",
+              "deep-purple": "dark-purple",
+              "blue-grey": "steel",
+            };
+
+            const result = {
+              colorScheme: colorMap[color] || (PropTypes.COLOR_SCHEME_LIST.includes(color) ? color : undefined),
+            };
+            if (matcher) result.significance = "highlighted";
+
+            return result;
+          }
+        },
+        bgStyle: (value) => {
+          const sig = { filled: undefined, outline: "distinct", transparent: "subdued", underline: "subdued" };
+          if (sig[value]) {
+            return { significance: sig[value] };
+          }
+        },
+        borderRadius: (value) => {
+          value = value == null || value === "" ? undefined : parseInt(value);
+          if (value != null) {
+            let borderRadius;
+            if (value === 0) borderRadius = "none";
+            else if (value > 0 && value <= 4) borderRadius = "elementary";
+            else if (value > 4 && value <= 8) borderRadius = "moderate";
+            else if (value > 8 && value <= 12) borderRadius = "expressive";
+            else borderRadius = "full";
+            return { borderRadius };
+          }
+        },
+        elevation: (value) => {
+          value = value == null || value === "" ? undefined : parseInt(value);
+          if (value > 0) {
+            let effect;
+            if (value === 1 || value === 2) effect = "ground";
+            else effect = "upper";
+            return { effect };
+          }
+        },
+        elevationHover: () => undefined,
+        contentEditable: () => undefined,
+      };
+
+      /* Migration functions */
+      function isEmptyChildren(children) {
+        let result = true;
+
+        if (Array.isArray(children)) {
+          for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            if (child != null && (typeof child !== "string" || !/^\s*$/.test(child))) {
+              result = false;
+              break;
+            }
+          }
+        }
+
+        return result;
+      }
+
+      function migrateComponent(uu5Tag, { ...props }, opts, compMap) {
+        let newUu5Tag, newProps, newChildren;
+        const comp = compMap[uu5Tag];
+
+        if (typeof comp === "function") {
+          return comp(uu5Tag, props, opts, compMap);
+        } else {
+          if (comp) {
+            if (comp.deleteEmpty && isEmptyChildren(opts.children)) {
+              return null;
+            } else {
+              newUu5Tag = comp.uu5Tag;
+
+              newProps = { ...comp.props };
+              const propsToDelete = comp.propsToDelete ?? [];
+
+              if (opts.children || props.content) {
+                let children = (typeof props.content === "string" && props.content.startsWith("<uu5string") ? Uu5String.parse(props.content) : props.content) || opts.children;
+                delete props.content;
+
+                if (Array.isArray(children)) {
+                  if (children.length > 0) {
+                    props.children = children.filter(
+                      (child) => child && (typeof child !== "string" || !child.match(/^\s+$/)),
+                    );
+                  }
+                } else {
+                  props.children = children;
+                }
+              }
+
+              const propsKeys = Object.keys(props);
+              let sortedProps = propsKeys;
+
+              if (comp.propMap) {
+                const newPropsKeys = Object.keys(comp.propMap);
+
+                // Sort the array based on the index of each element in arrayDefinition
+                sortedProps = propsKeys.sort((a, b) => {
+                  const indexA = newPropsKeys.indexOf(a);
+                  const indexB = newPropsKeys.indexOf(b);
+                  return indexA - indexB;
+                });
+              }
+
+              sortedProps.forEach((name) => {
+                if (!propsToDelete.includes(name)) {
+                  const value = props[name];
+                  const getProp = comp.propMap?.[name] || GLOBAL_PROPS_CONFIG[name];
+                  if (getProp) {
+                    const newProp = getProp(value, { uu5Tag, newUu5Tag, props, newProps });
+                    if (newProp !== undefined) newProps = { ...newProps, ...newProp };
+                  } else {
+                    newProps[name] = value;
+                  }
+                }
+              });
+            }
+          }
+
+          if (newProps) {
+            newChildren = newProps.children;
+            delete newProps.children;
+          } else {
+            newChildren = opts.children;
+          }
+
+          return [
+            newUu5Tag ?? uu5Tag,
+            newProps ?? props,
+            { ...opts, children: newChildren, isPairedTag: newChildren === undefined ? false : opts.isPairedTag },
+          ];
+        }
+      }
+
+      function migrateUu5String(uu5string, config) {
+        const uu5String = Uu5String.parse(uu5string.startsWith("<uu5string") ? uu5string : "<uu5string/>" + uu5string, {
+          buildItemFn: function buildItemFn(uu5Tag, propsString, opts) {
+            if (uu5Tag) {
+              let propsWithParsedJsons = {};
+              if (propsString) {
+                let propsRecursivelyConverted = new Uu5String.Props(propsString, { buildItemFn }).toObject({
+                  preserveValueTypes: true,
+                });
+                for (let k in propsRecursivelyConverted) {
+                  let value = propsRecursivelyConverted[k];
+                  let match = typeof value === "string" && value.match(/^<uu5json\s*\/>/);
+                  propsWithParsedJsons[k] = match ? JSON.parse(value.slice(match[0].length)) : value;
+                }
+              }
+              const result = migrateComponent(uu5Tag, propsWithParsedJsons, opts, config);
+              return result ? Uu5String.Object.create(...result) : null;
+            } else if (typeof opts?.children === "string" && /^\s*$/.test(opts.children)) {
+              return null;
+            } else {
+              return Uu5String.Object.create(uu5Tag, propsString, opts);
+            }
+          },
+        });
+
+        const newUu5string = "<uu5string/>\n" + uu5String.join("");
+        return newUu5string;
+      }
+
+      /* Reusable components */
+      const [Uu5StringInputContext, useUu5StringInput] = Utils.Context.create({});
+      const [Uu5StringOutputContext, useUu5StringOutput] = Utils.Context.create({});
+
+      function Uu5StringInputProvider({ children, initialValue }) {
+        const [value, setValue] = useState(initialValue);
+
+        const ctxValue = useMemo(() => [value, (e) => setValue(e.data.value)], [value]);
+
+        return <Uu5StringInputContext.Provider value={ctxValue}>{children}</Uu5StringInputContext.Provider>;
+      }
+
+      function Uu5StringOutputProvider({ children, config }) {
+        const [value, setValue] = useState();
+
+        const ctxValue = useMemo(() => [value, (input) => setValue(migrateUu5String(input, config)), (e) => setValue(e.data.value)], [value]);
+
+        return <Uu5StringOutputContext.Provider value={ctxValue}>{children}</Uu5StringOutputContext.Provider>;
+      }
+
+      function ContentView({ value }) {
+        return (
+          <Uu5Elements.ScrollableBox
+            className={Config.Css.css({ border: "1px solid rgba(33, 33, 33, 0.24)", padding: 8 })}
+            maxHeight="100%"
+          >
+            <Content>{value ? "<uu5string/>" + value.replace(/^<uu5string\s*\/>/, "") : null}</Content>
+          </Uu5Elements.ScrollableBox>
+        );
+      }
+
+      function Uu5CodeKitInput(props) {
+        const { ref, height } = useElementSize();
+
+        const [value, setValue] = useState(props.value);
+        const [rows, setRows] = useState();
+
+        useUpdateLayoutEffect(() => {
+          setRows(Math.max(10, Math.floor((height - 30) / 14.96)));
+        }, [height]);
+
+        return (
+          <Uu5CodeKit.Uu5String.Input
+            format="pretty"
+            rows={rows}
+            {...props}
+            value={props.onChange ? props.value : value}
+            onChange={(e) => props.onChange ? props.onChange(e) : setValue(e.data.value)}
+            className={Config.Css.css({ height: "100%!important" })}
+            elementRef={ref}
+          />
+        );
+      }
+
+      function Uu5StringInput({ readOnly }) {
+        const [value, onBlur] = useUu5StringInput();
+
+        return <Uu5CodeKitInput value={value} onBlur={onBlur} readOnly={readOnly} />;
+      }
+
+      function Uu5StringInputContent(props) {
+        const [value] = useUu5StringInput();
+
+        return <ContentView value={value} />;
+      }
+
+      function Uu5StringOutput(props) {
+        const [value, _, onChange] = useUu5StringOutput();
+
+        return <Uu5CodeKitInput value={value} onChange={onChange} />;
+      }
+
+      function Uu5StringOutputContent(props) {
+        const [value] = useUu5StringOutput();
+
+        return <ContentView value={value} />;
+      }
+
+      function Uu5StringConvertButton({ onClick, children, ...props }) {
+        const [value] = useUu5StringInput();
+        const [, build] = useUu5StringOutput();
+
+        return (
+          <Uu5Elements.Button
+            colorScheme="primary"
+            significance="highlighted"
+            className={Config.Css.css({ margin: "16px 0 32px" })}
+            {...props}
+            onClick={(e) => {
+              onClick?.(e);
+              build(value);
+            }}
+          >
+            {children ?? "Convert"}
+          </Uu5Elements.Button>
+        );
+      }
+
+      /* Demo components */
+      function Uu5StringTabs({ readOnly, displayInput = true, displayOutput }) {
+        const [input] = useUu5StringInput();
+        const [output] = useUu5StringOutput();
+
+        const tabs = [];
+        if (displayInput)
+          tabs.push(
+            { code: "inputCode", label: "Input code" },
+            {
+              code: "inputView",
+              label: "Input view",
+            },
+          );
+        if (displayOutput)
+          tabs.push(
+            { code: "outputCode", label: "Output code" },
+            {
+              code: "outputView",
+              label: "Output view",
+            },
+          );
+
+        const [code, setCode] = useState(displayOutput && output ? "outputView" : input ? "inputView" : "inputCode");
+
+        let result = null;
+        switch (code) {
+          case "inputCode":
+            result = <Uu5StringInput readOnly={readOnly} />;
+            break;
+          case "inputView":
+            result = <Uu5StringInputContent />;
+            break;
+          case "outputCode":
+            result = <Uu5StringOutput />;
+            break;
+          case "outputView":
+            result = <Uu5StringOutputContent />;
+            break;
+        }
+
+        const actionList = displayInput
+          ? [
+            {
+              component: Uu5StringConvertButton,
+              colorScheme: "primary",
+              significance: "highlighted",
+            },
+          ]
+          : undefined;
+
+        return (
+          <>
+            <Uu5Elements.Tabs
+              itemList={tabs}
+              activeCode={code}
+              onChange={(e) => setCode(e.data.activeCode)}
+              type="line"
+              actionList={actionList}
+            />
+            {result}
+          </>
+        );
+      }
+
+      const MAX_WIDTH = 1000;
+
+      function Uu5StringMigrationView(props) {
+        const [output] = useUu5StringOutput();
+        const { ref, width } = useElementSize();
+
+        const isWide = width > MAX_WIDTH;
+
+        let result;
+        if (width != null) {
+          if (output) {
+            result = (
+              <>
+                <Uu5Elements.Grid templateRows="auto 1fr" className={Config.Css.css({ height: "100%" })}>
+                  <Uu5StringTabs displayOutput={!isWide} />
+                </Uu5Elements.Grid>
+                {isWide && (
+                  <Uu5Elements.Grid templateRows="auto 1fr" className={Config.Css.css({ height: "100%" })}>
+                    <Uu5StringTabs displayInput={false} displayOutput />
+                  </Uu5Elements.Grid>
+                )}
+              </>
+            );
+          } else {
+            if (isWide) {
+              result = (
+                <>
+                  <Uu5Elements.Tabs
+                    itemList={[{ code: "input", label: "Input" }]}
+                    actionList={[
+                      {
+                        component: Uu5StringConvertButton,
+                        colorScheme: "primary",
+                        significance: "highlighted",
+                      },
+                    ]}
+                    activeCode="input"
+                    type="line"
+                    className={Config.Css.css({ gridColumn: "span 2" })}
+                  />
+                  <Uu5StringInput />
+                  <Uu5StringInputContent />
+                </>
+              );
+            } else {
+              result = <Uu5StringTabs />;
+            }
+          }
+        }
+
+        return (
+          <Uu5Elements.Grid
+            templateColumns={isWide ? "1fr 1fr" : "1fr"}
+            templateRows={!output ? "auto 1fr" : undefined}
+            elementRef={ref}
+            className={Config.Css.css({ height: "100%" })}
+          >
+            {result}
+          </Uu5Elements.Grid>
+        );
+      }
+
+      function Uu5StringMigration({ initialValue = LEGACY_UU5STRING, config = CONFIG }) {
+        return (
+          <Uu5StringInputProvider initialValue={initialValue}>
+            <Uu5StringOutputProvider config={config}>
+              <Uu5StringMigrationView />
+            </Uu5StringOutputProvider>
+          </Uu5StringInputProvider>
+        );
+      }
+
+      function Page() {
+        return (
+          <SessionProvider authenticationService={AuthenticationService}>
+            <Authenticated>
+              <Uu5StringMigration />
+            </Authenticated>
+          </SessionProvider>
+        );
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

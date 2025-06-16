@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Performance GPT</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, Content, useEffect, useRef } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      function getEntryMetrics(entry) {
+        return {
+          // DNS lookup
+          dns: entry.domainLookupEnd - entry.domainLookupStart,
+          // TCP handshake
+          tcp: entry.connectEnd - entry.connectStart,
+          // TLS negotiation time
+          tls: entry.requestStart - entry.secureConnectionStart,
+          // Time To First Byte
+          ttfb: entry.responseStart - entry.requestStart,
+          // total page loaded
+          duration: entry.duration,
+          responseStatus: entry.responseStatus,
+        };
+      }
+
+      // Function to get network performance metrics
+      const getNetworkMetrics = () => {
+        const entry = performance.getEntriesByType("navigation")[0];
+        // console.log("navigation", entry);
+
+        return {
+          ...getEntryMetrics(entry),
+          // DOM content loaded
+          dcl: entry.domContentLoadedEventEnd,
+          connection: Object.fromEntries(["downlink", "effectiveType", "rtt"].map((k) => [k, navigator.connection[k]])),
+        };
+      };
+
+      // Function to get rendering and page load metrics
+      const getRenderMetrics = () => {
+        const paintEntries = performance.getEntriesByType("paint");
+        const lcpEntry = performance.getEntriesByType("largest-contentful-paint")[0];
+
+        return {
+          // first paint
+          fp: paintEntries.find(entry => entry.name === "first-paint")?.startTime,
+          // first contentful paint
+          fcp: paintEntries.find(entry => entry.name === "first-contentful-paint")?.startTime,
+          // largest contentful paint
+          lcp: lcpEntry?.startTime,
+        };
+      };
+
+      function getResourceEntry(entry) {
+        // console.log("resource", entry);
+        return {
+          src: entry.name,
+          ...getEntryMetrics(entry),
+        };
+      }
+
+      const getResourcesMetrics = () => {
+        const entries = performance.getEntriesByType("resource");
+
+        return entries.map(getResourceEntry);
+      };
+
+      // Function to get custom metrics
+      new PerformanceObserver((list) => {
+        list.getEntries().forEach((entry) => {
+          sendTelemetry("telemetry/measure", {
+            name: entry.name,
+            duration: entry.duration,
+            startTime: entry.startTime,
+          });
+        });
+      }).observe({ type: "measure" });
+
+      const SomeComponent = () => {
+        useEffect(() => {
+          performance.mark("start-someComponent-render");
+          // Simulate component work
+          setTimeout(() => {
+            performance.mark("end-someComponent-render");
+            performance.measure("someComponent-render", "start-someComponent-render", "end-someComponent-render");
+            const measure = performance.getEntriesByName("someComponent-render")[0];
+            console.log("SomeComponent render time:", measure.duration);
+          }, 500);
+        }, []);
+
+        return <div>Rendered Component</div>;
+      };
+
+      // TODO add it to ErrorBoundary
+      // componentDidCatch(error, info) {
+      //   // Send error telemetry to server
+      //   navigator.sendBeacon("/error-logging", JSON.stringify({ error, info }));
+      // }
+
+      // Utility function to send telemetry data to server
+      const sendTelemetry = (endpoint, data) => {
+        console.log(endpoint, data);
+        // navigator.sendBeacon(endpoint, JSON.stringify(data));
+      };
+
+      // Function to get JavaScript errors
+
+      window.onerror = function (message, source, lineno, colno, error) {
+        sendTelemetry("/telemetry/errors", { message, source, lineno, colno, error });
+      };
+
+      window.addEventListener("unhandledrejection", function (event) {
+        sendTelemetry("/telemetry/rejections", { message: event.reason.message, stack: event.reason.stack });
+      });
+
+      function measureFID() {
+        const observer = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          const firstInput = entries[0];
+          if (firstInput) {
+            const fid = firstInput.processingStart - firstInput.startTime;
+            sendTelemetry("/telemetry/fid", { fid });
+            observer.disconnect(); // Stop observing after the first input
+          }
+        });
+
+        // Observe first input events (clicks, key presses, etc.)
+        observer.observe({ type: "first-input" });
+      }
+
+      measureFID();
+
+      function measureTTI() {
+        let firstContentfulPaintTime = null;
+        let lastLongTaskEndTime = null;
+        let tti = null;
+
+        // Measure First Contentful Paint (FCP)
+        new PerformanceObserver((entryList) => {
+          const entries = entryList.getEntriesByName("first-contentful-paint");
+          if (entries.length > 0) {
+            firstContentfulPaintTime = entries[0].startTime;
+          }
+        }).observe({ type: "paint", buffered: true });
+
+        // Measure Long Tasks (tasks that block the main thread for more than 50ms)
+        new PerformanceObserver((entryList) => {
+          const entries = entryList.getEntries();
+          entries.forEach((entry) => {
+            const end = entry.startTime + entry.duration;
+            lastLongTaskEndTime = end;
+          });
+        }).observe({ entryTypes: ["longtask"] });
+
+        // Calculate TTI when no long tasks occur for a certain period after FCP
+        const calculateTTI = () => {
+          if (firstContentfulPaintTime && lastLongTaskEndTime) {
+            const ttiCandidate = Math.max(firstContentfulPaintTime, lastLongTaskEndTime);
+            const now = performance.now();
+            // If no long tasks for 5 seconds after the last long task, consider TTI reached
+            if (now - lastLongTaskEndTime > 5000) {
+              tti = ttiCandidate;
+              sendTelemetry("/telemetry/tti", { tti });
+            } else {
+              // Check again after a short delay
+              setTimeout(calculateTTI, 1000);
+            }
+          }
+        };
+
+        // Start checking for TTI 1 second after FCP
+        setTimeout(calculateTTI, 1000);
+      }
+
+      measureTTI();
+
+      let cumulativeLayoutShiftScore = 0;
+
+      function measureCLS() {
+        // Create a PerformanceObserver to track layout shifts
+        const observer = new PerformanceObserver((entryList) => {
+          const entries = entryList.getEntries();
+
+          // Use reduce to accumulate the layout shift values
+          cumulativeLayoutShiftScore += entries.reduce((total, entry) => {
+            // Only count layout shifts that are not caused by user input
+            return !entry.hadRecentInput ? total + entry.value : total;
+          }, 0);
+        });
+
+        // Observe layout shift entries
+        observer.observe({ type: "layout-shift", buffered: true });
+      }
+
+      measureCLS();
+
+      function getInitialMetrics() {
+        // Capture network metrics after page load
+        const network = getNetworkMetrics();
+
+        // Capture rendering and paint metrics
+        const render = getRenderMetrics();
+
+        // Capture resources metrics after page load
+        const resources = getResourcesMetrics();
+
+        return { network, render, resources };
+      }
+
+      sendTelemetry("telemetry/uve", getInitialMetrics());
+
+      function Page() {
+        const [uu5String, setUu5String] = useState();
+
+        return (
+          <div>
+            <Uu5Elements.Button onClick={() => {
+              sendTelemetry("telemetry/cls", { cls: cumulativeLayoutShiftScore });
+            }}>
+              Simulate unload
+            </Uu5Elements.Button>
+            <Uu5Elements.Button onClick={() => {
+              setUu5String((curr) => (curr || "<uu5string/>") + "<Uu5Bricks.Section header=\"Section\"><Uu5Dev.LoremIpsum /></Uu5Bricks.Section>")
+            }}>
+              Add Section
+            </Uu5Elements.Button>
+            <SomeComponent />
+            <Content>{uu5String}</Content>
+          </div>
+        )
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

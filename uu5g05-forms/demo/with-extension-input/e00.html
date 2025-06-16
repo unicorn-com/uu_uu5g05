@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <h4>message && feedback</h4>
+              <Uu5Forms.Text feedback="error" />
+              <Uu5Forms.Text feedback="warning" />
+              <Uu5Forms.Text feedback="success" />
+
+              <h4>iconLeft</h4>
+              <Uu5Forms.Text iconLeft="uugds-search" />
+              <Uu5Forms.Text iconLeft="uugds-search" onIconLeftClick={(e) => console.log("click", e)} />
+              <Uu5Forms.Text iconLeft="uugds-search" feedback="error" />
+
+              <h4>iconRight</h4>
+              <Uu5Forms.Text iconRight="uugds-search" />
+              <Uu5Forms.Text iconRight="uugds-search" onIconRightClick={(e) => console.log("click", e)} />
+              <Uu5Forms.Text iconRight="uugds-search" feedback="error" />
+
+              <h4>iconRightList</h4>
+              <Uu5Forms.Text
+                iconRightList={[
+                  { icon: "uugds-search" },
+                  { icon: "uugds-check", onClick: (e) => console.log("click", e) },
+                ]}
+              />
+
+              <h4>prefix</h4>
+              <Uu5Forms.Text prefix="$" />
+              <Uu5Forms.Text prefix="$" feedback="error" />
+
+              <h4>suffix</h4>
+              <Uu5Forms.Text suffix="Kč" />
+              <Uu5Forms.Text suffix="Kč" feedback="error" />
+
+              <h4>pending</h4>
+              <Uu5Forms.Text pending size="xxs" />
+              <Uu5Forms.Text pending size="xs" />
+              <Uu5Forms.Text pending size="s" />
+              <Uu5Forms.Text pending />
+              <Uu5Forms.Text pending size="l" />
+              <Uu5Forms.Text pending size="xl" />
+              <Uu5Forms.Text
+                pending
+                iconLeft="uugds-search"
+                prefix="$"
+                suffix="Kč"
+                iconRight="uugds-search"
+                feedback="error"
+              />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            "uu5g05": "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js"
+          }
+        })
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import { withControlledInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: 16,
+      });
+
+      const YearRangeInput = withControlledInput(Uu5Forms.YearRange.Input);
+
+      function Page() {
+        return (
+          <div className={columnsCss}>
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>autoFocus</h4>
+              <YearRangeInput autoFocus />
+
+              <h4>id & name </h4>
+              <YearRangeInput id="id" name="name" />
+
+              <h4>readOnly</h4>
+              <YearRangeInput readOnly value="2022" />
+
+              <h4>disabled</h4>
+              <YearRangeInput disabled value="2022" />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>size</h4>
+              <YearRangeInput size="xxs" />
+              <YearRangeInput size="xs" />
+              <YearRangeInput size="s" />
+              <YearRangeInput size="m" />
+              <YearRangeInput size="l" />
+              <YearRangeInput size="xl" />
+
+              <h4>borderRadius</h4>
+              <YearRangeInput borderRadius="none" />
+              <YearRangeInput borderRadius="elementary" />
+              <YearRangeInput borderRadius="moderate" />
+              <YearRangeInput borderRadius="expressive" />
+              <YearRangeInput borderRadius="full" />
+
+              <h4>width</h4>
+              <YearRangeInput width={300} />
+              <YearRangeInput width="50%" />
+              <YearRangeInput width="14em" />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>required</h4>
+              <YearRangeInput required />
+              <YearRangeInput required value="2021" />
+
+              <h4>onFocus & onBlur (in console)</h4>
+              <YearRangeInput
+                onFocus={(e) => console.log("onFocus", e)}
+                onBlur={(e) => console.log("onBlur", e)}
+              />
+              {/*@@viewOff:example*/}
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

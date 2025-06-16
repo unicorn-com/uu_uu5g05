@@ -1,0 +1,91 @@
+{
+  "collapse": "Sbalit",
+  "expand": "Rozbalit",
+  "moreInfo": "Nápověda",
+  "showMore": "Zobrazit více",
+  "showLess": "Zobrazit méně",
+  "cancel": "Zrušit",
+  "AlertBus": {
+    "closeAll": "Zavřít vše"
+  },
+  "Alerts": {
+    "applicationNeedsReloadMessage": "Některé funkčnosti aplikace byly aktualizovány. Pro správně fungování je potřeba přenačíst aplikaci.",
+    "applicationNeedsReloadReload": "Přenačíst"
+  },
+  "ModalBus": {
+    "modalList": "Seznam oken"
+  },
+  "RestoreButton": {
+    "confirmMessage": "Dojde k zavření jednoho nebo několika oken. Pokračovat?",
+    "confirm": "Zavřít okna"
+  },
+  "Pagination": {
+    "search": "Zadejte číslo stránky",
+    "pageOf": "Strana %d z %d"
+  },
+  "PlaceholderBox": {
+    "items": "Žádné položky k zobrazení",
+    "document": "Tento dokument je prázdný",
+    "documents": "Žádné dokumenty k zobrazení",
+    "folder": "Složka je prázdná",
+    "users": "Nejsou přiřazeni žádní uživatelé",
+    "search": "Žádné výsledky k zobrazení",
+    "permission": "Nemáte oprávnění pro zobrazení tohoto obsahu",
+    "account": "Prosím, nejdříve se přihlaste",
+    "forbidden": "K tomuto obsahu nemáte přístup",
+    "cart": "Váš košík je prázdný",
+    "basket": "Váš košík je prázdný",
+    "product": "Žádné produkty k zobrazení",
+    "message": "Žádné zprávy k zobrazení",
+    "ticket": "Žádné tickety k zobrazení",
+    "sprint": "Žádné sprinty k zobrazení",
+    "request": "Žádné požadavky k zobrazení",
+    "activities": "Žádné aktivity k zobrazení",
+    "images": "Žádné obrázky k zobrazení",
+    "error": "Vypadá to, že se něco pokazilo",
+    "offline": "Zdá se, že jste offline",
+    "delete": "Opravdu to chcete smazat?",
+    "timer": "Obsah se připravuje",
+    "role": "Není přiřazena žádná role",
+    "security": "Stránka je zabezpečena",
+    "document-check": "Stránka je ověřena",
+    "kid": "Není připřazen žádný dětský účet",
+    "user": "Není přiřazen žádný účet",
+    "sync": "Probíhá synchronizace",
+    "favorites": "Žádné oblíbené položky",
+    "notification": "Žádná nová oznámení",
+    "payment-card": "Žádná dostupná platební metoda"
+  },
+  "useComponentPaste": {
+    "pasteAs": "Vložit jako",
+    "pasteHere": "Vložte sem"
+  },
+  "verticalCalendar": {
+    "today": "Dnes",
+    "yesterday": "Včera",
+    "last7Days": "Posledních 7 dní",
+    "last30Days": "Posledních 30 dní",
+    "thisMonth": "Aktuální měsíc",
+    "previousMonth": "Minulý měsíc"
+  },
+  "IconPalette": {
+    "noIcons": "Žádné ikony k zobrazení"
+  },
+  "ColorPalette": {
+    "noShades": "Tato barva nemá žádné odstíny.",
+    "shade": "Odstín",
+    "selectSchemaShade": "Odstíny se zobrazí po vybrání barvy.",
+    "selectSchemaOpacity": "Výběr krytí se zobrazí po vybrání barvy.",
+    "opacity": "Krytí"
+  },
+  "Calendar": {
+    "selectWeek": "Vybrat týden",
+    "selectMonth": "Vybrat měsíc"
+  },
+  "SpeechButton": {
+    "label": "Převést řeč na text",
+    "error": {
+      "not-allowed": "Nahrávání řeči není v tomto prohlížeči povoleno"
+    }
+  }
+}

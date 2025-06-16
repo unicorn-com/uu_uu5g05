@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script>
+      Uu5Loader.config({
+        imports: {
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+
+          uu_plus4u5g02: `https://cdn.plus4u.net/uu-plus4u5g02/1.0.0/uu_plus4u5g02.min.js`,
+          "uu_plus4u5g02-app": `https://cdn.plus4u.net/uu-plus4u5g02/1.0.0/uu_plus4u5g02-app.min.js`,
+          "uu_plus4u5g02-elements": `https://cdn.plus4u.net/uu-plus4u5g02/1.0.0/uu_plus4u5g02-elements.min.js`,
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      const Calls = {
+        async search(search) {
+          const dtoOut = await Plus4U5.Utils.AppClient.get(
+            "https://uuapp.plus4u.net/uu-plus4upeople-maing01/56ac93ddb0034de8b8e4f4b829ff7d0f/people/findPerson",
+            { private: false, name: search }
+          );
+          return dtoOut.data;
+        },
+      };
+
+      const isMobile = window?.screen?.availWidth <= 767;
+
+      function FormContainer({ layout, children }) {
+        const gridLayoutArray = layout.trim().split(/\s*\n\s*|\s*,\s*/);
+        children = Array.isArray(children) ? children : [children];
+
+        return (
+          <div className={Config.Css.css({
+            display: "grid",
+            gridTemplateAreas: isMobile ? undefined : gridLayoutArray.map((row) => `"${row}"`).join("\n"),
+            gridTemplateColumns: `repeat(${isMobile ? 1 : Math.max(...gridLayoutArray.map((row) => row.split(/\s+/).length))}, 1fr)`,
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            rowGap: 8,
+            columnGap: 16,
+          })}>
+            {isMobile ? children : children.map((child) => Utils.Element.clone(child, { style: { gridArea: child.props.name, ...child.props.style } }))}
+          </div>
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          const itemList = [
+            { value: "created", children: "Created" },
+            { value: "initial", children: "Initial" },
+            { value: "active", children: "Active" },
+            { value: "final", children: "Final" },
+            { value: "alternative", children: "Alternative" },
+            { value: "problem", children: "Problem" },
+            { value: "passive", children: "Passive" },
+            { value: "failed", children: "Failed" },
+            { value: "cancelled", children: "Cancelled" },
+          ];
+
+          return (
+            <Plus4U5.SpaProvider>
+              {/*@@viewOn:example*/}
+              <Uu5Forms.Form
+                gridLayout={{
+                  xs: "text, password, textArea, link, email, number, date, time, dateTime, week, month, switchSelect, select, textSelect, textSelectAsync, file, checkbox, checkboxes, radios, controls",
+                  s: "text number, password date, textArea time, textArea dateTime, link week, email month, switchSelect checkbox, select checkboxes, textSelect checkboxes, textSelectAsync radios, file radios, controls controls"
+                }}
+                autoComplete={false}
+                onSubmit={(e) => {
+                  alert("Submitted with values:\n" + JSON.stringify(e.data.value, null, 2));
+                }}
+              >
+                <Uu5Forms.FormText name="text" label="Text" />
+                <Uu5Forms.FormPassword name="password" label="Password" />
+                <Uu5Forms.FormTextArea name="textArea" label="TextArea" />
+                <Uu5Forms.FormLink name="link" label="Link" />
+                <Uu5Forms.FormEmail name="email" label="Email" />
+                <Uu5Forms.FormNumber name="number" label="Number" />
+
+                <Uu5Forms.FormDate name="date" label="Date" />
+                <Uu5Forms.FormTime name="time" label="Time" />
+                <Uu5Forms.FormDateTime name="dateTime" label="DateTime" />
+                <Uu5Forms.FormWeek name="week" label="Week" />
+                <Uu5Forms.FormMonth name="month" label="Month" />
+
+                <Uu5Forms.FormSwitchSelect
+                  name="switchSelect"
+                  label="SwitchSelect"
+                  itemList={itemList.slice(0, 4)}
+                  initialValue="created"
+                />
+                <Uu5Forms.FormSelect name="select" label="Select" itemList={itemList} />
+                <Uu5Forms.FormTextSelect name="textSelect" label="TextSelect" itemList={itemList} />
+                <Uu5Forms.FormTextSelectAsync name="textSelectAsync" label="TextSelectAsync" onSearch={async (e) => {
+                  const data = await Calls.search(e.data.value);
+                  return data.itemList.map(({ uuIdentity, name }) => ({
+                    value: uuIdentity,
+                    name,
+                    text: [name, uuIdentity].join(" "),
+                    children: (
+                      <>
+                        <Plus4U5Elements.PersonPhoto uuIdentity={uuIdentity} size="xs" />
+                        &nbsp;{name} ({uuIdentity})
+                      </>
+                    ),
+                  }));
+                }} />
+
+                <Uu5Forms.FormFile name="file" label="File" />
+
+                <Uu5Forms.FormCheckbox name="checkbox" label="Checkbox" style={{ marginTop: 36 }} />
+                <Uu5Forms.FormCheckboxes
+                  name="checkboxes"
+                  label="Checkboxes"
+                  itemList={itemList.slice(1, 4).map((it) => ({ ...it, label: it.children }))}
+                />
+                <Uu5Forms.FormRadios
+                  name="radios"
+                  label="Radios"
+                  itemList={itemList.slice(1, 4).map((it) => ({ ...it, label: it.children }))}
+                />
+
+                <div className={Config.Css.css({
+                  gridArea: "controls",
+                  justifySelf: "end",
+                  "& > button + button": {
+                    marginLeft: 8,
+                  }
+                })}>
+                  <Uu5Forms.CancelButton />
+                  <Uu5Forms.ResetButton />
+                  <Uu5Forms.SubmitButton />
+                </div>
+              </Uu5Forms.Form>
+              {/*@@viewOff:example*/}
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        useRoute,
+        RouteProvider,
+        useState,
+        useEffect,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const HomeRoute = createVisualComponent({
+        render() {
+          const [route, setRoute] = useRoute();
+
+          return (
+            <div>
+              <Uu5Elements.Text category="story" segment="heading" type="h2">
+                Home
+              </Uu5Elements.Text>
+              route: {JSON.stringify(route)}
+              <br />
+              <br />
+              <Uu5Elements.Link onClick={() => setRoute("route-scroll.html", { id: 1 })}>
+                About uuApp 1
+              </Uu5Elements.Link>
+              <br />
+              <Uu5Elements.Link onClick={() => setRoute("route-scroll.html", { id: 2 })}>
+                About uuApp 2
+              </Uu5Elements.Link>
+              <ExtraContent delay={0} />
+            </div>
+          );
+        },
+      });
+
+      const AboutRoute = createComponent({
+        render() {
+          const [route, setRoute] = useRoute();
+
+          return (
+            <div>
+              <Uu5Elements.Text category="story" segment="heading" type="h2">
+                About {route.params?.id} ({route.uu5Route})
+              </Uu5Elements.Text>
+              route: {JSON.stringify(route)}
+              <br />
+              <br />
+              <Uu5Elements.Link onClick={() => setRoute("home")}>Home</Uu5Elements.Link> (content without delay)
+              <ExtraContent />
+            </div>
+          );
+        },
+      });
+
+      const ErrorRoute = createVisualComponent({
+        render() {
+          const [route, setRoute] = useRoute();
+
+          return (
+            <div>
+              <Uu5Elements.Text category="story" segment="heading" type="h2">
+                Error
+              </Uu5Elements.Text>
+              route: {JSON.stringify(route)}
+              <br />
+              <br />
+              <Uu5Elements.Link onClick={() => setRoute("home")}>Home</Uu5Elements.Link>
+              <br />
+              <Uu5Elements.Link onClick={() => setRoute("route-scroll.html")}>About uuApp</Uu5Elements.Link>
+              <ExtraContent />
+            </div>
+          );
+        },
+      });
+
+      const CustomRouter = createComponent({
+        render() {
+          const [route] = useRoute();
+
+          let result;
+          switch (route.uu5Route) {
+            case "home":
+              result = <HomeRoute />;
+              break;
+            case "route-scroll.html":
+            case "about":
+              result = <AboutRoute key={JSON.stringify(route.params || null)} />;
+              break;
+            default:
+              result = <ErrorRoute />;
+          }
+
+          return result;
+        },
+      });
+      //@@viewOff:example
+
+      const ExtraContent = createComponent({
+        render(props) {
+          const [route, setRoute] = useRoute();
+          const [show, setShow] = useState(props.delay <= 0);
+          useEffect(() => {
+            if (!show) {
+              let timeout = setTimeout(() => setShow(true), props.delay ?? Math.random() * 3000);
+              return () => clearTimeout(timeout);
+            }
+          }, []);
+
+          return !show ? (
+            <Uu5Elements.Pending />
+          ) : (
+            <div>
+              <Uu5Elements.Link href="#chapter3b">Scroll to Chapter 3b</Uu5Elements.Link>
+              <br />
+              <Uu5Elements.Link onClick={() => setRoute("route-scroll.html", { id: 3 }, "chapter3")}>
+                About uuApp 3 - Chapter 3
+              </Uu5Elements.Link>
+              <LoremIpsum paragraphCount={10} />
+
+              <Uu5Elements.Block id="chapter3" header="Chapter 3">
+                <Uu5Elements.Link onClick={() => setRoute("route-scroll.html", { id: 3 })}>
+                  About uuApp 3
+                </Uu5Elements.Link>
+                <LoremIpsum paragraphCount={5} />
+              </Uu5Elements.Block>
+
+              <Uu5Elements.Block id="chapter3b" header="Chapter 3b">
+                <LoremIpsum paragraphCount={5} />
+              </Uu5Elements.Block>
+
+              <Uu5Elements.Link onClick={() => setRoute("route-scroll.html", { id: 4 })}>
+                About uuApp 4
+              </Uu5Elements.Link>
+              <LoremIpsum paragraphCount={10} />
+              <Uu5Elements.Link onClick={() => setRoute("route-scroll.html", { id: 5 })}>
+                About uuApp 5
+              </Uu5Elements.Link>
+              <LoremIpsum paragraphCount={10} />
+            </div>
+          );
+        },
+      });
+
+      const Demo = createComponent({
+        render() {
+          return (
+            // let the initial route restore on its own, e.g. if we got here by going Back from different site
+            <RouteProvider initialRoute={history.state ? undefined : { uu5Route: "route-scroll.html" }}>
+              <h4>Scrolls to remembered scroll position when going Back, even if route loads data</h4>
+              <CustomRouter />
+            </RouteProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

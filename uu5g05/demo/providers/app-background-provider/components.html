@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Components</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, AppBackgroundProvider, Fragment, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const SIGNIFICANCE_LIST = ["common", "highlighted", "distinct", "subdued"];
+      const COLOR_SCHEME_LIST = ["building", "primary", "secondary", "positive", "warning", "negative"];
+
+      const onClick = () => alert("click");
+
+      // TODO Stepper, Svg, SwitchSelectVertical, Tabs, Tag, Text, Toggle, TouchLink
+      function BasicComponents({ colorScheme }) {
+        return (
+          <div>
+            {SIGNIFICANCE_LIST.slice(0, 2).map((s) => (
+              <Uu5Elements.Badge key={"badge-" + s} colorScheme={colorScheme} significance={s}>{s}</Uu5Elements.Badge>
+            ))}
+
+            <Uu5Elements.Breadcrumbs
+              itemList={[{ children: "One" }, { children: "Two", href: "https://www.plus4u.net/" }]}
+            />
+
+            <Uu5Elements.Button colorScheme={colorScheme} icon="uugds-check">
+              Button
+              &nbsp;
+              <Uu5Elements.Badge icon="uugds-check">A</Uu5Elements.Badge>
+              &nbsp;
+              <Uu5Elements.Badge colorScheme={colorScheme} icon="uugds-check">B</Uu5Elements.Badge>
+            </Uu5Elements.Button>
+
+            <Uu5Elements.Calendar
+              value={new Date(new Date().getTime() + 24 * 3600 * 1000).toISOString().replace(/T.*$/, "")}
+            />
+
+            <Uu5Elements.ColorPalette />
+
+            <Uu5Elements.Dropdown colorScheme={colorScheme} label="Dropdown" itemList={[
+              {
+                children: "Create",
+                icon: "uugds-plus",
+                itemList: [
+                  { children: "Create Document", icon: "uugds-plus", onClick, },
+                  { children: "Create Sheet", icon: "uugds-plus", onClick },
+                ],
+              },
+              { divider: true },
+              { children: "Reload" },
+            ]} />
+
+            <Uu5Elements.InfoItem icon="uugds-check" title="Title" subtitle="Subtitle" colorScheme={colorScheme} />
+
+            <Uu5Elements.Input />
+
+            <Uu5Elements.LanguageSelector colorScheme={colorScheme} />
+
+            <Uu5Elements.Line colorScheme={colorScheme} />
+
+            <Uu5Elements.Link href="#" colorScheme={colorScheme}>Link</Uu5Elements.Link>
+
+            <Uu5Elements.ListItem
+              icon="uugds-dnd"
+              actionList={[{ icon: "uugds-plus", children: "Create" }]}
+              colorScheme={colorScheme}
+            >
+              List Item
+            </Uu5Elements.ListItem>
+
+            <Uu5Elements.MenuItem actionList={[{ icon: "uugds-copy" }]} colorScheme={colorScheme}>
+              Menu Item
+            </Uu5Elements.MenuItem>
+
+            <Uu5Elements.Pagination count={4} colorScheme={colorScheme} />
+
+            <Uu5Elements.Pending onCancel={onClick} colorScheme={colorScheme} />
+            <Uu5Elements.Pending type="horizontal" onCancel={onClick} colorScheme={colorScheme} />
+
+            <Uu5Elements.PlaceholderBox code="items" colorScheme={colorScheme} />
+
+            <Uu5Elements.Progress
+              value={30}
+              onCancel={onClick}
+              text={30}
+              suffix="%"
+              colorScheme={colorScheme}
+            />
+            <Uu5Elements.Progress
+              value={30}
+              type="horizontal"
+              onCancel={onClick}
+              text={30}
+              suffix="%"
+              colorScheme={colorScheme}
+            />
+
+            <Uu5Elements.Skeleton height={36} width={80} />
+          </div>
+        )
+      }
+
+      // TODO Dialog, HighlightedBox, Modal, Panel, Popover, ScrollableBox, Tile, Tooltip
+      function WrapperComponents({ colorScheme }) {
+        return (
+          <>
+            <Uu5Elements.Block header="Block" headerType="title">
+              <Uu5Elements.Grid templateColumns={{ xs: "1fr", s: "repeat(3, 1fr)" }}>
+                {SIGNIFICANCE_LIST.map((s) => (
+                  <Fragment key={s}>
+                    {["none", "content", "full"].map((card) => (
+                      <Uu5Elements.Block
+                        key={card}
+                        card={card}
+                        colorScheme={colorScheme}
+                        significance={s}
+                        header={s + " " + card}
+                        actionList={[{ icon: "uugds-pencil", onClick }]}
+                      >
+                        <LoremIpsum />
+                      </Uu5Elements.Block>
+                    ))}
+                  </Fragment>
+                ))}
+              </Uu5Elements.Grid>
+            </Uu5Elements.Block>
+
+            <Uu5Elements.Block header="Box" headerType="title">
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(360px, 1fr))">
+                {SIGNIFICANCE_LIST.map((s) => (
+                  <Uu5Elements.Box
+                    key={s}
+                    colorScheme={colorScheme}
+                    significance={s}
+                    shape="background"
+                    className={Config.Css.css({ padding: 8 })}
+                  >
+                    <Uu5Elements.Text colorScheme="building">{s}</Uu5Elements.Text>
+                    <LoremIpsum />
+                  </Uu5Elements.Box>
+                ))}
+              </Uu5Elements.Grid>
+            </Uu5Elements.Block>
+
+            <Uu5Elements.Block header="Carousel" headerType="title">
+              <Uu5Elements.Carousel colorScheme={colorScheme}>
+                <LoremIpsum />
+                <LoremIpsum />
+              </Uu5Elements.Carousel>
+            </Uu5Elements.Block>
+          </>
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          const [darkMode, setDarkMode] = useState(false);
+          const [colorScheme, setColorScheme] = useState();
+
+          return (
+            <div className={Config.Css.css({
+              padding: "16px 32px",
+              backgroundColor: darkMode ? Uu5Elements.UuGds.ColorPalette.getValue(["building", "dark", "mainLighter"]) : undefined,
+            })}>
+              <AppBackgroundProvider background={darkMode ? "dark" : "light"}>
+                <Uu5Elements.Toggle
+                  value={!darkMode}
+                  onChange={() => setDarkMode(!darkMode)}
+                  iconOff="uugdsstencil-weather-moon"
+                  iconOn="uugdsstencil-weather-sun"
+                />
+                &nbsp;
+                <Uu5Forms.TextSelect.Input
+                  placeholder="Color scheme"
+                  itemList={COLOR_SCHEME_LIST.map((value) => ({ value }))}
+                  value={colorScheme}
+                  onChange={(e) => setColorScheme(e.data.value)}
+                />
+
+                <br />
+                <BasicComponents colorScheme={colorScheme} />
+
+                <WrapperComponents colorScheme={colorScheme} />
+              </AppBackgroundProvider>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

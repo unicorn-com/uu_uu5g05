@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      const AREA_LIST = [
+        { value: "menu", children: "Menu" },
+        { value: "header", children: "Header" },
+        { value: "sideBar", children: "Side bar" },
+        { value: "content", children: "Content" },
+        { value: "footer", children: "Footer" },
+        { value: "ads", children: "Ads" },
+      ];
+
+      const ITEM_LIST = [
+        "row1column1",
+        "row1column2",
+        "row1column3",
+        "row2column1",
+        "row2column2",
+        "row2column3",
+        "row3column1",
+        "row3column2",
+        "row3column3",
+      ];
+
+      function getLabel(item) {
+        let rowNumber = item[3];
+        let columnNumber = item[10];
+        return rowNumber + " row, " + columnNumber + " column";
+      }
+
+      /*@@viewOn:example*/
+      const Area = createVisualComponent({
+        render(props) {
+          return (
+            <Uu5Elements.Grid rowGap={20} columnGap={20} templateColumns="1fr 1fr 1fr">
+              {ITEM_LIST.map((item) => (
+                <Uu5Forms.FormSelect key={item} name={item} label={getLabel(item)} itemList={AREA_LIST} required />
+              ))}
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+
+      const _FormArea = Uu5Forms.withSubformItem(Area);
+
+      const FormArea = createVisualComponent({
+        uu5Tag: "Uu5Demo.FormArea",
+        render(props) {
+          function formatValue(value) {
+            // value = "menu menu menu, sideBar content content, footer footer footer"
+            let result = {};
+            if (value) {
+              let rowList = value.split(", ");
+              let dataList = rowList.map((row, i) => {
+                let rowNumber = i + 1;
+                let columnList = row.split(" ");
+                for (let j = 0; j < columnList.length; j++) {
+                  let columnNumber = j + 1;
+                  let key = "row" + rowNumber + "column" + columnNumber;
+                  result[key] = columnList[j];
+                }
+              });
+            }
+            // result = { row1column1: "...", row1column2: "...", row1column3: "...", ... }
+            return result;
+          }
+
+          function parseValue(valueMap) {
+            // valueMap = { row1column1: "...", row1column2: "...", row1column3: "...", ... }
+            let result;
+            if (valueMap) {
+              let maxRow = 0;
+              let maxColumn = 0;
+
+              for (let key in valueMap) {
+                let rowMatch = key.match(/row(\d+)column(\d+)/);
+                if (rowMatch) {
+                  let row = parseInt(rowMatch[1]);
+                  let column = parseInt(rowMatch[2]);
+                  if (row > maxRow) maxRow = row;
+                  if (column > maxColumn) maxColumn = column;
+                }
+              }
+
+              let rowList = [];
+              for (let i = 1; i <= maxRow; i++) {
+                let row = [];
+                for (let j = 1; j <= maxColumn; j++) {
+                  row.push(valueMap[`row${i}column${j}`]);
+                }
+                rowList.push(row.join(" "));
+              }
+
+              result = rowList.join(", ");
+            }
+            // result = "menu menu menu, sideBar content content, footer footer footer"
+            return result;
+          }
+
+          return <_FormArea {...props} parseValue={parseValue} formatValue={formatValue} />;
+        },
+      });
+      /*@@viewOff:example*/
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Uu5Forms.Form onSubmit={(e) => alert(JSON.stringify(e.data.value, null, 2))}>
+                <Uu5Elements.Text
+                  category="interface"
+                  segment="title"
+                  type="major"
+                  className={Config.Css.css({ display: "flex", width: "100%", marginBottom: 20 })}
+                >
+                  Page layout
+                </Uu5Elements.Text>
+                {/*@@viewOn:example*/}
+
+                <FormArea name="area" initialValue="menu menu menu, sideBar content content, footer footer footer" />
+                {/*@@viewOff:example*/}
+                <div
+                  className={Config.Css.css({
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "flex-end",
+                    marginTop: 24,
+                  })}
+                >
+                  <Uu5Forms.SubmitButton />
+                </div>
+              </Uu5Forms.Form>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

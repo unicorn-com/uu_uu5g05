@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 08</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const TABS = {
+        overview: {
+          label: "Overview",
+          children: (
+            <>
+              <h3>Overview</h3>
+              <LoremIpsum paragraphCount={3} />
+            </>
+          )
+        },
+        history: {
+          label: "History",
+          children: (
+            <>
+              <h3>History</h3>
+              <LoremIpsum paragraphCount={3} />
+            </>
+          )
+        },
+        solvers: {
+          label: "Solvers",
+          children: (
+            <>
+              <h3>Solvers</h3>
+              <LoremIpsum paragraphCount={3} />
+            </>
+          )
+        }
+      };
+
+      const TabBlock = createVisualComponent({
+        uu5Tag: Config.TAG + "TabBlock",
+
+        render(props) {
+          const { itemMap, ...restProps } = props;
+
+          const tabCodeList = Object.keys(itemMap);
+          const [tab, setTab] = useState(tabCodeList[0]);
+
+          const headingContent = (
+            <Uu5Elements.Tabs
+              activeCode={tab}
+              onChange={(e) => setTab(e.data.activeCode)}
+              type="line"
+              itemList={tabCodeList.map((code) => {
+                const { children: _, ...tabProps } = itemMap[code];
+                return { code, ...tabProps };
+              })}
+              className={Config.Css.css({ marginBlockStart: -16 })}
+            />
+          );
+
+          const childrenContent = itemMap[tab].children;
+
+          /*@@viewOn:example*/
+          return (
+            <Uu5Elements.Block {...restProps}>
+              {({ style }) => (
+                <>
+                  {headingContent}
+
+                  <Uu5Elements.ScrollableBox
+                    height="100%"
+                    className={Config.Css.css({ ...style, flex: 1, minHeight: 0 })}
+                  >
+                    {childrenContent}
+                  </Uu5Elements.ScrollableBox>
+                </>
+              )}
+            </Uu5Elements.Block>
+          );
+          /*@@viewOff:example*/
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Elements.Grid templateColumns="repeat(auto-fit, minmax(280px, 1fr))">
+              <TabBlock header="Tabs" headerType="title" card="full" itemMap={TABS} />
+              <TabBlock header="Tabs & height" headerType="title" card="full" itemMap={TABS} height={400} />
+              <TabBlock header="Tabs & maxHeight" headerType="title" card="full" itemMap={TABS} maxHeight={400} />
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

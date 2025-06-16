@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const onClick = (...args) => console.log("onClick", ...args);
+
+      const CustomComponent = createVisualComponent({
+        render(props) {
+          return (
+            <div className={Config.Css.css({ display: "flex", flexDirection: "column" })}>
+              <Uu5Elements.Button {...props} className={Config.Css.css({ margin: 5 })} />
+            </div>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          /*@@viewOn:example*/
+          const itemList = [
+            {
+              children: "Create",
+              icon: "uugds-plus",
+              itemList: [
+                { children: "Create Document", icon: "uugds-plus", onClick },
+                { children: "Create Sheet", icon: "uugds-plus", onClick },
+              ],
+            },
+            {
+              children: "Update",
+              icon: "uugds-reload",
+              itemList: [
+                { children: "Update Document", icon: "uugds-reload", onClick },
+                { children: "Update Sheet", icon: "uugds-reload", onClick },
+              ],
+            },
+            { divider: true },
+            { children: "Reload" },
+          ];
+
+          /*@@viewOff:example*/
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>label & itemList</h4>
+              <Uu5Elements.Dropdown label="itemList" itemList={itemList} />
+
+              <h4>itemList & openSubmenuAction="click"</h4>
+              <Uu5Elements.Dropdown label="itemList" itemList={itemList} openSubmenuAction="click"/>
+
+              <h4>children</h4>
+              <Uu5Elements.Dropdown label="children">
+                custom children
+                <br />
+                can use whole area
+              </Uu5Elements.Dropdown>
+
+              <h4>openPosition</h4>
+              <Uu5Elements.Dropdown label="right-bottom" openPosition="right-bottom" itemList={itemList} />
+              <Uu5Elements.Dropdown label="top-left" openPosition="top-left" itemList={itemList} />
+              <Uu5Elements.Dropdown label="bottom-left" openPosition="bottom-left" itemList={itemList} />
+
+              <h4>iconOpen & iconClosed</h4>
+              <Uu5Elements.Dropdown
+                label="chevron"
+                iconOpen="uugds-chevron-up"
+                iconClosed="uugds-chevron-down"
+                itemList={itemList}
+              />
+
+              <h4>closeOnScroll</h4>
+              <Uu5Elements.Dropdown label="chevron" closeOnScroll itemList={itemList} />
+
+              <h4>width</h4>
+              <Uu5Elements.Dropdown label="width" itemList={itemList} width={200} />
+
+              <h4>width & labelAlignment=stretch</h4>
+              <Uu5Elements.Dropdown label="width" itemList={itemList} width={200} labelAlignment="stretch" />
+
+              <h4>size = null</h4>
+              <Uu5Elements.Dropdown label="size=null" itemList={itemList} size={null} />
+
+              <h4>compactSubmenu</h4>
+              <Uu5Elements.Dropdown label="compactSubmenu" itemList={itemList} compactSubmenu />
+
+              <h4>itemList & component</h4>
+              <Uu5Elements.Dropdown
+                label="itemList"
+                itemList={[
+                  ...itemList,
+                  {
+                    component: CustomComponent,
+                    children: "Delete",
+                    icon: "uugds-delete",
+                    onClick,
+                    width: 200,
+                    colorScheme: "red",
+                    tooltip: "Tooltip",
+                  },
+                ]}
+              />
+
+              <h4>onClick (console)</h4>
+              <Uu5Elements.Dropdown label="onClick" itemList={itemList} onClick={(e) => onClick("on Dropdown", e)} />
+
+              <h4>onLabelClick (console)</h4>
+              <Uu5Elements.Dropdown
+                label="onClick"
+                itemList={itemList}
+                onLabelClick={(e) => onClick("on Dropdown label", e)}
+              />
+
+              <h4>pressed & onLabelClick</h4>
+              <Uu5Elements.Dropdown
+                pressed
+                label="pressed"
+                itemList={itemList}
+                onLabelClick={(e) => onClick("on Dropdown label", e)}
+              />
+              {/*@@viewOff:example*/}
+              <br />
+              <br />
+              <LoremIpsum paragraphCount={15} />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

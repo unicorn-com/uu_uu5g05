@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="renderHere">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      function Section({ header, children, columns }) {
+        const styles = {};
+        if (columns) {
+          styles.display = "grid";
+          styles.justifyContent = "flex-start";
+          styles.gridTemplateColumns = `repeat(${columns}, auto)`;
+        } else {
+          styles.display = "flex";
+        }
+
+        const content = <div className={Config.Css.css({ ...styles, gap: 8 })}>{children}</div>;
+
+        return header ? (
+          <Uu5Elements.Block header={header} headerType="heading" level={5} collapsible={false}>
+            {content}
+          </Uu5Elements.Block>
+        ) : (
+          content
+        );
+      }
+
+      let handleClick;
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <Section header="default">
+                <Uu5Elements.RichIcon />
+              </Section>
+
+              <Section header="icon">
+                <Uu5Elements.RichIcon icon="uugds-favorites" />
+                <Uu5Elements.RichIcon icon="uugdsstencil-chart-line-chart-up" />
+                <Uu5Elements.RichIcon icon="uubmlstencil-uumyterritory-uuterritory" />
+                <Uu5Elements.RichIcon icon="uubmlstencil-uuapplogstore-uu-app-log-store" />
+              </Section>
+
+              <Section header="svg icon">
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" />
+                <Uu5Elements.RichIcon
+                  icon="https://cdn.plus4u.net/uu-gds-svgg01/1.0.0/assets/illustrations/svg/message.svg"
+                />
+              </Section>
+
+              <Section header="text/number">
+                <Uu5Elements.RichIcon text="IT" />
+                <Uu5Elements.RichIcon text={1} />
+                <Uu5Elements.RichIcon text="USO" />
+              </Section>
+
+              <Section header="imageSrc">
+                <Uu5Elements.RichIcon imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png" />
+              </Section>
+
+              <Section header="cssBackground & cssColor">
+                <Uu5Elements.RichIcon
+                  icon="uugds-favorites"
+                  cssBackground="linear-gradient(45deg, #0839A6 0%, #009FE3 100%)"
+                  cssColor="#ef6c00"
+                />
+                <Uu5Elements.RichIcon
+                  icon="uugdssvg-svg-message"
+                  cssBackground="linear-gradient(45deg, #0839A6 0%, #009FE3 100%)"
+                  colorScheme="orange"
+                />
+                <Uu5Elements.RichIcon
+                  text="IT"
+                  cssBackground="linear-gradient(45deg, #0839A6 0%, #009FE3 100%)"
+                  cssColor="#ef6c00"
+                />
+                <Uu5Elements.RichIcon
+                  cssBackground="linear-gradient(45deg, #0839A6 0%, #009FE3 100%)"
+                  imageSrc="https://cdn.plus4u.net/uu-gds-svgg01/1.0.0/assets/illustrations/svg/message.svg"
+                />
+              </Section>
+
+              <Section header="effect: ground & upper">
+                <Uu5Elements.RichIcon effect="ground" onClick={() => console.log("ground")} />
+                <Uu5Elements.RichIcon
+                  imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                  effect="upper"
+                  onClick={() => console.log("upper")}
+                />
+              </Section>
+
+              <Section header="significance & colorScheme" columns={3}>
+                {["common", "highlighted", "subdued"].map((significance) => (
+                  <Fragment key={significance}>
+                    <Uu5Elements.RichIcon icon="uugds-favorites" significance={significance} colorScheme="primary" />
+                    <Uu5Elements.RichIcon icon="uugdssvg-svg-message" significance={significance}
+                                          colorScheme="primary" />
+                    <Uu5Elements.RichIcon text="IT" significance={significance} colorScheme="primary" />
+                  </Fragment>
+                ))}
+              </Section>
+
+              <Section header="size (xxs - 3xl)" columns={8}>
+                <Uu5Elements.RichIcon icon="uugds-favorites" size="xxs" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" size="xs" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" size="s" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" size="m" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" size="l" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" size="xl" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" size="xxl" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" size="3xl" />
+
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" size="xxs" />
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" size="xs" />
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" size="s" />
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" size="m" />
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" size="l" />
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" size="xl" />
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" size="xxl" />
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" size="3xl" />
+
+                <Uu5Elements.RichIcon text="IT" size="xxs" />
+                <Uu5Elements.RichIcon text="IT" size="xs" />
+                <Uu5Elements.RichIcon text="IT" size="s" />
+                <Uu5Elements.RichIcon text="IT" size="m" />
+                <Uu5Elements.RichIcon text="IT" size="l" />
+                <Uu5Elements.RichIcon text="IT" size="xl" />
+                <Uu5Elements.RichIcon text="IT" size="xxl" />
+                <Uu5Elements.RichIcon text="IT" size="3xl" />
+              </Section>
+
+              <Section header="height">
+                <Uu5Elements.RichIcon icon="uugds-favorites" height={120} />
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" height={120} />
+                <Uu5Elements.RichIcon text="IT" height={120} />
+              </Section>
+
+              <Section header="borderRadius">
+                <Uu5Elements.RichIcon icon="uugds-favorites" borderRadius="none" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" borderRadius="elementary" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" borderRadius="moderate" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" borderRadius="expressive" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" borderRadius="full" />
+              </Section>
+
+              <Section header="onClick">
+                <Uu5Elements.RichIcon icon="uugds-favorites" onClick={handleClick = (e) => {
+                  console.log("onClick", e);
+                  if (e.ctrlKey || e.metaKey) {
+                    alert("ctrl/command click");
+                  } else if (e.button === 1) {
+                    alert("wheel click");
+                  } else {
+                    alert("click");
+                  }
+                }} />
+                <Uu5Elements.RichIcon icon="uugdssvg-svg-message" onClick={handleClick} />
+                <Uu5Elements.RichIcon text="IT" onClick={handleClick} />
+                <Uu5Elements.RichIcon
+                  imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                  onClick={handleClick}
+                />
+              </Section>
+
+              <Section header="iconAnimation">
+              <Uu5Elements.RichIcon iconAnimation="rotate" />
+              <Uu5Elements.RichIcon icon="uugdssvg-svg-message" iconAnimation="rotate" />
+              </Section>
+
+              <Section header="href">
+                <Uu5Elements.RichIcon icon="uugds-favorites" href="https://www.plus4u.net/" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" href="https://www.plus4u.net/" target="_blank" />
+              </Section>
+
+              <Section header="tooltip">
+                <Uu5Elements.RichIcon icon="uugds-favorites" tooltip="Tooltip string" />
+                <Uu5Elements.RichIcon icon="uugds-favorites" tooltip={{ cs: "titulek", en: "tooltip" }} />
+              </Section>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("renderHere"));
+    </script>
+  </body>
+</html>

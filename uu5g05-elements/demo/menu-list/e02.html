@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const onClick = (...args) => console.log("onClick", ...args);
+
+      const Page = createComponent({
+        render() {
+          /*@@viewOn:example*/
+          const itemList = [
+            {
+              children: "Create",
+              icon: "uugds-plus",
+              itemList: [
+                {
+                  children: "Document",
+                  icon: "uugds-plus",
+                  onClick,
+                  itemList: [
+                    { children: "DOC", icon: "uugds-plus", onClick },
+                    { children: "PDF", icon: "uugds-plus", onClick },
+                    { children: "TXT", icon: "uugds-plus", onClick },
+                  ],
+                },
+                { children: "Form", icon: "uugds-plus", onClick },
+                { children: "Table", icon: "uugds-plus", onClick },
+                { children: "Chart", icon: "uugds-plus", onClick },
+                {
+                  children: "Picture",
+                  icon: "uugds-plus",
+                  onClick,
+                  itemList: [
+                    { children: "PNG", icon: "uugds-plus", onClick },
+                    { children: "JPG", icon: "uugds-plus", onClick },
+                  ],
+                },
+              ],
+            },
+            {
+              children: "Update",
+              icon: "uugds-reload",
+              active: true,
+              itemList: [
+                {
+                  children: "Document",
+                  icon: "uugds-reload",
+                  onClick,
+                  itemList: [
+                    { children: "DOC", icon: "uugds-plus", onClick },
+                    { children: "PDF", icon: "uugds-plus", onClick },
+                    { children: "TXT", icon: "uugds-plus", onClick },
+                  ],
+                },
+                { children: "Form", icon: "uugds-reload", onClick },
+                { children: "Table", icon: "uugds-reload", onClick },
+                { children: "Chart", icon: "uugds-reload", onClick },
+                { children: "Picture", icon: "uugds-reload", onClick },
+              ],
+            },
+          ];
+          /*@@viewOff:example*/
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>itemList & heading</h4>
+              <Uu5Elements.MenuList
+                itemList={[
+                  { heading: true, children: "header" },
+                  ...itemList,
+                  { divider: true },
+                  { children: "Reload" },
+                ]}
+              />
+
+              <h4>itemList & heading & collapsible</h4>
+              <Uu5Elements.MenuList
+                itemList={[
+                  { heading: true, children: "header" },
+                  ...itemList,
+                  {
+                    heading: true,
+                    children: "Settings",
+                    collapsible: true,
+                    icon: "uugds-settings",
+                    itemList: [
+                      { children: "Color", onClick },
+                      {
+                        children: "Size",
+                        itemList: [
+                          { children: "s", onClick },
+                          { children: "m", iconRight: "uugds-check", onClick },
+                          { children: "l", onClick },
+                        ],
+                      },
+                      { children: "Font", onClick },
+                    ],
+                  },
+                  { divider: true },
+                  { children: "Reload" },
+                ]}
+              />
+
+              <h4>itemList & heading & collapsible & collapsibleColorScheme & actionList</h4>
+              <Uu5Elements.MenuList
+                itemList={[
+                  { heading: true, children: "header" },
+                  ...itemList,
+                  {
+                    heading: true,
+                    children: "Settings",
+                    collapsible: true,
+                    icon: "uugds-settings",
+                    itemList: [
+                      { children: "Color", onClick },
+                      {
+                        children: "Size",
+                        itemList: [
+                          { children: "s", onClick },
+                          { children: "m", iconRight: "uugds-check", onClick },
+                          { children: "l", onClick },
+                        ],
+                      },
+                      { children: "Font", onClick },
+                    ],
+                  },
+                  {
+                    heading: true,
+                    children: "Other options",
+                    collapsible: true,
+                    collapsibleColorScheme: "green",
+                    itemList: [
+                      { children: "Languages", onClick },
+                      { children: "Notification", onClick },
+                    ],
+                    actionList: [
+                      {
+                        children: "Sort",
+                        itemList: [
+                          { children: "A - Z", icon: "uugds-down", iconRight: "uugds-check", onClick },
+                          { children: "Z - A", icon: "uugds-down", onClick },
+                        ],
+                      },
+                      { children: "Create", icon: "uugds-plus", onClick },
+                      {
+                        children: "Edit",
+                        icon: "uugds-pencil",
+                        onClick,
+                      },
+                    ],
+                  },
+                  { divider: true },
+                  { children: "Reload" },
+                ]}
+              />
+
+              <h4>collapsibleIconVisibility=onHover</h4>
+              <Uu5Elements.MenuList
+                collapsibleIconVisibility="onHover"
+                itemList={[
+                  { heading: true, children: "header" },
+                  ...itemList,
+                  {
+                    heading: true,
+                    children: "Settings",
+                    collapsible: true,
+                    icon: "uugds-settings",
+                    itemList: [
+                      { children: "Color", onClick },
+                      {
+                        children: "Size",
+                        itemList: [
+                          { children: "s", onClick },
+                          { children: "m", iconRight: "uugds-check", onClick },
+                          { children: "l", onClick },
+                        ],
+                      },
+                      { children: "Font", onClick },
+                    ],
+                  },
+                  {
+                    heading: true,
+                    children: "Other options",
+                    collapsible: true,
+                    collapsibleColorScheme: "green",
+                    itemList: [
+                      { children: "Languages", onClick },
+                      { children: "Notification", onClick },
+                    ],
+                    actionList: [
+                      {
+                        children: "Sort",
+                        itemList: [
+                          { children: "A - Z", icon: "uugds-down", iconRight: "uugds-check", onClick },
+                          { children: "Z - A", icon: "uugds-down", onClick },
+                        ],
+                      },
+                      { children: "Create", icon: "uugds-plus", onClick },
+                      {
+                        children: "Edit",
+                        icon: "uugds-pencil",
+                        onClick,
+                      },
+                    ],
+                  },
+                ]}
+              />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

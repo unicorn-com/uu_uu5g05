@@ -1,0 +1,206 @@
+{
+  "general": {
+    "required": "Dieses Feld ist erforderlich.",
+    "default": "Standard",
+    "unverified": "Unverifiziert"
+  },
+  "EditModal": {
+    "header": "${name}-Bearbeitung",
+    "confirm": "Speichern",
+    "cancel": "Abbrechen",
+    "addItemButton": "Element hinzufügen",
+    "insertBefore": "Vorher einfügen",
+    "insertAfter": "Nachher einfügen",
+    "moveToPosition": "An Position verschieben",
+    "duplicate": "Komponente duplizieren",
+    "delete": "Löschen",
+    "preview": "Vorschau"
+  },
+  "ItemPositionModal": {
+    "header": "Element an Position verschieben",
+    "cancel": "Abbrechen",
+    "confirm": "OK"
+  },
+  "ItemRemovalDialog": {
+    "header": "Elemententfernung",
+    "info": "Sie sind dabei, eine potenziell zerstörerische Aktion auszuführen. Sind Sie sicher, dass Sie fortfahren möchten?",
+    "cancel": "Abbrechen",
+    "confirm": "Entfernen"
+  },
+  "templates": {
+    "general": "Allgemein",
+    "visual": "Visuell",
+    "system": "System",
+    "authorization": "Autorisierung"
+  },
+  "FormDisabled": {
+    "label": "Interaktion mit der Komponente",
+    "allow": "Erlauben",
+    "disable": "Deaktivieren"
+  },
+  "FormHidden": {
+    "label": "Auf dem Bildschirm",
+    "show": "Anzeigen",
+    "hide": "Ausblenden"
+  },
+  "FormNoPrint": {
+    "label": "Komponente drucken",
+    "show": "Anzeigen",
+    "hide": "Ausblenden"
+  },
+  "FormIdentificationType": {
+    "label": "Visuelle Identifikation außerhalb des App-Kontexts",
+    "show": "Anzeigen",
+    "hide": "Ausblenden",
+    "info": "Jede Organisationseinheit hat ihre eigene visuelle Identifikation. Organisationseinheiten dienen als Ursprung, von dem jede Komponente stammen muss. Wenn die Komponente außerhalb ihres Ursprungs platziert wird, zeigt sie die visuelle Identifikation des Ursprungs an – einen farbigen Streifen und ein quadratisches Symbol, das links in der Kopfzeile angezeigt wird. Über das Symbol kann auf die lokale Navigation des Ursprungs zugegriffen werden."
+  },
+  "FormBaseUri": {
+    "label": "Basis-URI der App",
+    "message": "URL der App, aus der Kontext, Daten und visuelle Identifikation geladen werden."
+  },
+  "FormUu5Id": {
+    "label": "Benutzereinstellungs-ID",
+    "message": "Eindeutige Identifikation zum Speichern und Laden von Einstellungen für diese Komponente."
+  },
+  "FormDisableUserPreference": {
+    "label": "Standardwerte laden von",
+    "userPreference": "Benutzereinstellung",
+    "component": "Komponente"
+  },
+  "FormOid": {
+    "label": "Objekt-ID",
+    "message": "Identifikation eines bestimmten Objekts, das die Komponente anzeigen soll."
+  },
+  "FormBid": {
+    "label": "Branch-ID",
+    "message": "Identifikation eines bestimmten Branches aus uuBranchKit."
+  },
+  "FormRts": {
+    "label": "Daten für ein bestimmtes Datum anzeigen"
+  },
+  "FormClassName": {
+    "label": "CSS-Klassen",
+    "message": "Trennen Sie die Namen mit einem Leerzeichen."
+  },
+  "FormStyle": {
+    "label": "CSS-Stile",
+    "message": "Schreiben Sie zwischen die Klammern. Jeder Stil in eine einzelne Zeile mit einem Semikolon am Ende.",
+    "error": "Der einzige gültige Selektor ist die Komponente."
+  },
+  "FormAspectRatio": {
+    "label": "Seitenverhältnis"
+  },
+  "FormBorderRadius": {
+    "label": "Eckenradius"
+  },
+  "FormCard": {
+    "label": "Komponente als Karte anzeigen",
+    "none": "Deaktivieren",
+    "content": "Nur Inhalt",
+    "full": "Aktivieren"
+  },
+  "FormColorScheme": {
+    "label": "Farbschema",
+    "default": "Standard"
+  },
+  "FormFullTextSearchPriority": {
+    "label": "Priorität der Volltextsuche",
+    "message": "Festlegen der bevorzugten Komponentensuche. Auto bedeutet undefinierte Priorität der Komponente. 0 bedeutet, dass die Komponente und ihre Kinder nicht von der Volltextsuche indiziert werden. 1 bedeutet die niedrigste Priorität, und 5 bedeutet die höchste Priorität."
+  },
+  "FormHeight": {
+    "label": "Höhe"
+  },
+  "FormId": {
+    "label": "ID"
+  },
+  "FormNestingLevel": {
+    "label": "Verschachtelungsebene"
+  },
+  "FormSignificance": {
+    "label": "Bedeutung"
+  },
+  "FormSize": {
+    "label": "Größe"
+  },
+  "FormWidth": {
+    "label": "Breite"
+  },
+  "FormMargin": {
+    "label": "Abstand"
+  },
+  "FormSpaces": {
+    "simple": "Einfach",
+    "advanced": "Erweitert",
+    "info": "Abstände sind automatisch responsiv und verwenden Werte aus der uuGDS-adaptiven Abstands-Palette.",
+    "infoForMargin": "Die Randwerte werden an die Verschachtelungsebene der Komponente angepasst. Wenn die Verschachtelungsebene auf 'Bereich' oder 'Bereichsammlung' gesetzt ist, werden die für ${horizontal} definierten Werte nicht an die Komponente übergeben. Wenn die Verschachtelungsebene auf 'inline' gesetzt ist, werden die für ${vertical} definierten Werte nicht an die Komponente übergeben.",
+    "infoForHorizontalMargin": "der horizontale Rand",
+    "infoForVerticalMargin": "der vertikale Rand",
+    "infoForHorizontalOuter": "der äußere horizontale Abstand",
+    "infoForVerticalOuter": "der äußere vertikale Abstand",
+    "outerVertical": "Äußerer vertikaler",
+    "outerHorizontal": "Äußerer horizontaler",
+    "outerTop": "Äußere obere",
+    "outerBottom": "Äußere untere",
+    "outerLeft": "Äußere linke",
+    "outerRight": "Äußere rechte",
+    "innerVertical": "Innerer vertikaler",
+    "innerHorizontal": "Innerer horizontaler",
+    "innerTop": "Innere obere",
+    "innerBottom": "Innere untere",
+    "innerLeft": "Innere linke",
+    "innerRight": "Innere rechte",
+    "outerSpacing": "Äußerer Abstand",
+    "innerSpacing": "Innerer Abstand",
+    "setSidesSeparately": "Seiten separat einstellen",
+    "component": "Komponente",
+    "margin": "Rand",
+    "padding": "Innenabstand",
+    "inherited": "Geerbt",
+    "dialogHeader": "Zu einfachen Abstandseinstellungen wechseln?",
+    "dialogInfo": "Alle gesetzten Werte werden zurückgesetzt.",
+    "dialogCancel": "Abbrechen",
+    "dialogConfirm": "Einfache Einstellungen"
+  },
+  "screenSizeDevice": {
+    "xs": "Mobil",
+    "s": "Tablet Hochformat",
+    "m": "Tablet Querformat",
+    "l": "Desktop",
+    "xl": "Großer Desktop"
+  },
+  "FormUnit": {
+    "error": "Der Wert ist ungültig. Überprüfen Sie die Einheiten."
+  },
+  "FormLink": {
+    "href": {
+      "label": "Link"
+    },
+    "labelLink": {
+      "label": "Text"
+    },
+    "target": {
+      "label": "Öffnen in",
+      "blank": "Neuer Tab",
+      "self": "Aktueller Tab",
+      "auto": "Auto"
+    }
+  },
+  "FormAuthorization": {
+    "type": "Autorisierungstyp",
+    "typeMsg": "Es wird nur der ausgewählte Autorisierungstyp angewendet.",
+    "none": "Keine",
+    "noneMsg": "Jeder kann diese Komponente sehen",
+    "profiles": "Artefaktprofil",
+    "roles": "Rolle oder Gruppe",
+    "artifactUri": "Artefakt-URI",
+    "artifactUriMsg": "Um 'Erlaubte Profile' oder 'Use Case' auszuwählen, muss 'Artefakt-URI' ausgefüllt sein.",
+    "uuTerritoryBaseUri": "Territorium-URI",
+    "uuTerritoryBaseUriError": "Dies ist keine gültige URI.",
+    "roleGroupIdList": "Rollen mit expliziten Rechten",
+    "roleGroupIdListMsg": "Territorium-URI muss zuerst ausgefüllt sein",
+    "useCase": "Use Case",
+    "useCaseMsg": "Ein Benutzer ist autorisiert, wenn er in mindestens einem Profil beschäftigt ist, das den Use Case ausführen kann.",
+    "profileList": "Erlaubte Profile",
+    "profileListError": "Profile konnten nicht aus der angegebenen Artefakt-URI geladen werden. Sie können aus dem Standardprofilset auswählen oder einen benutzerdefinierten Profilnamen eingeben."
+  }
+}

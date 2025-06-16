@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Environment, useState, useDataObject, useRef } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      function Search(props) {
+        const { value: propsValue, onChange } = props;
+
+        const [value, setValue] = useState(propsValue);
+
+        return (
+          <Uu5Forms.Text.Input
+            {...props}
+            value={value}
+            onChange={(e) => {
+              typeof onChange === "function" && onChange(e);
+              setValue(e.data.value);
+            }}
+          />
+        );
+      }
+
+      const { uubmlicon, uugdssvg, ...iconLibraryMap } = Environment._constants.iconLibraryMap;
+      const iconsCache = {};
+
+      async function loadIcons({ library }) {
+        if (!iconsCache[library]) {
+          const data = await fetch(iconLibraryMap[library]).then(response => response.text());
+          iconsCache[library] = [
+            ...new Set(data.match(new RegExp(`\.${library}-[a-zA-Z_-]+:`, "g")).map(
+              n => n.replace(/^\./, "").replace(/\:$/, "").replace(/^-/, "")
+            ))
+          ];
+
+          if (library === "uubml") {
+            iconsCache[library] = [
+              ...iconsCache[library],
+              ...new Set(data.match(/\[class\*=(uubml[A-Za-z0-9_-]+)\]/g).map(
+                n => {
+                  const code = n.match(/uubml[A-Za-z0-9_-]+/)[0];
+                  return /-$/.test(code) ? null : code;
+                }
+              ).filter(c => c))
+            ];
+          }
+        }
+        return iconsCache[library];
+      }
+
+      const IconList = createComponent({
+        render({ library, search }) {
+          const { state, data } = useDataObject({
+            handlerMap: { load: loadIcons },
+            initialDtoIn: { library }
+          });
+
+          let child;
+          switch (state) {
+            case "pendingNoData":
+              child = "Loading...";
+              break;
+            case "errorNoData":
+              child = "Error was occured.";
+              break;
+            default:
+              const regexp = new RegExp(search);
+              const result = search ? data.filter(v => regexp.test(v)) : data;
+
+              child = (
+                <div className={Config.Css.css({
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(50px, 1fr))",
+                  gap: 4,
+                  justifyItems: "center",
+                  fontSize: 32,
+                  alignItems: "center",
+                })}>
+                  {result.map(v => (
+                    <Uu5Elements.Icon
+                      key={v}
+                      icon={v}
+                      tooltip={v}
+                      className={Config.Css.css({ cursor: "pointer" })}
+                      onClick={() => Utils.Clipboard.write(v)}
+                    />
+                  ))}
+                </div>
+              );
+
+          }
+
+          return (
+            <div className={Config.Css.css({ marginTop: 16 })}>
+              {child}
+            </div>
+          );
+        }
+      });
+
+      const Icons = createComponent({
+        render() {
+          const [library, setLibrary] = useState("uugds");
+          const [value, setValue] = useState("");
+
+          const handleChangeRef = useRef(Utils.Function.debounce((e) => setValue(e.target.value), 500));
+
+          return (
+            <div>
+              <Uu5Elements.Dropdown
+                label={library}
+                itemList={Object.keys(iconLibraryMap).filter(v => v !== library && iconLibraryMap[v].indexOf("%s") === -1).map(
+                  v => ({ children: v, onClick: () => setLibrary(v) })
+                )}
+                className={Config.Css.css({ marginRight: 8 })}
+              />
+              <Search placeholder="Search icon" onChange={handleChangeRef.current} />
+              <IconList key={library} library={library} search={value} />
+            </div>
+          );
+        }
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Icons />
+          );
+        }
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

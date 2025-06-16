@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent } from "uu5g05";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:imports
+      import { useSelection, SelectionProvider } from "uu5g05";
+      //@@viewOff:imports
+
+      const Selection = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "Selection",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const { value, count } = useSelection();
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <>
+              Variant {value} (out of {count} variants).
+            </>
+          );
+          //@@viewOff:render
+        },
+      });
+
+      const Page = createVisualComponent({
+        render(props) {
+          return (
+            <main>
+              {/*@@viewOn:example*/}
+              <h4>value & count</h4>
+              <SelectionProvider value={2} count={3}>
+                <Selection />
+              </SelectionProvider>
+              {/*@@viewOff:example*/}
+            </main>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

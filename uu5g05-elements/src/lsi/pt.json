@@ -1,0 +1,84 @@
+{
+  "collapse": "Colapsar",
+  "expand": "Expandir",
+  "moreInfo": "Mais informações",
+  "showMore": "Mostrar mais",
+  "showLess": "Mostrar menos",
+  "cancel": "Cancelar",
+  "ModalBus": {
+    "modalList": "Lista modal"
+  },
+  "RestoreButton": {
+    "confirmMessage": "Uma ou mais janelas modais serão fechadas. Continuar?",
+    "confirm": "Fechar janelas"
+  },
+  "Pagination": {
+    "search": "Escrever o número da página",
+    "pageOf": "Página %d de %d"
+  },
+  "PlaceholderBox": {
+    "items": "Não existem itens aqui",
+    "document": "Este documento está vazio",
+    "documents": "Não há documentos aqui",
+    "folder": "Esta pasta está vazia",
+    "users": "Não existem utilizadores atribuídos",
+    "search": "Nenhum resultado de pesquisa",
+    "permission": "Não está autorizado a visualizar este conteúdo",
+    "account": "Por favor, inicie sessão primeiro",
+    "forbidden": "Não é possível aceder a este",
+    "cart": "O carrinho está vazio",
+    "basket": "O seu cesto está vazio",
+    "product": "Não existem produtos aqui",
+    "message": "Não há mensagens aqui",
+    "ticket": "Não há tickets aqui",
+    "sprint": "Aqui não há sprints",
+    "request": "Não há pedidos aqui",
+    "activities": "Não há actividades aqui",
+    "images": "Não existem imagens aqui",
+    "error": "Oops, algo correu mal",
+    "offline": "Parece que está offline",
+    "delete": "Quer mesmo apagar isto?",
+    "timer": "O conteúdo está a ser preparado",
+    "role": "Não há nenhuma função atribuída",
+    "security": "A página está protegida",
+    "document-check": "A página foi verificada",
+    "kid": "Não há nenhuma conta de criança atribuída",
+    "user": "Não existe nenhuma conta atribuída",
+    "sync": "Sincronizar",
+    "favorites": "Não há favoritos",
+    "notification": "Sem novas notificações",
+    "payment-card": "Nenhum método de pagamento disponível"
+  },
+  "useComponentPaste": {
+    "pasteAs": "Colar como",
+    "pasteHere": "Colar aqui"
+  },
+  "verticalCalendar": {
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "last7Days": "Últimos 7 dias",
+    "last30Days": "Últimos 30 dias",
+    "thisMonth": "Este mês",
+    "previousMonth": "Mês anterior"
+  },
+  "IconPalette": {
+    "noIcons": "No icons found"
+  },
+  "ColorPalette": {
+    "noShades": "Tons não disponíveis para esta cor.",
+    "shade": "Sombra",
+    "selectSchemaShade": "Seleccione a cor para ver os tons.",
+    "selectSchemaOpacity": "Escolha a cor para ver o seletor de opacidade.",
+    "opacity": "Opacidade"
+  },
+  "Calendar": {
+    "selectWeek": "Selecionar a semana",
+    "selectMonth": "Selecionar o mês"
+  },
+  "SpeechButton": {
+    "label": "Converter fala em texto",
+    "error": {
+      "not-allowed": "A gravação de um discurso não é permitida neste navegador"
+    }
+  }
+}

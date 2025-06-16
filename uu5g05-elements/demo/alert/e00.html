@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useState, Fragment, useLsi } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const Alert = createVisualComponent({
+        render({ buttonContent, header, onClose, ...alertProps }) {
+          const [open, setOpen] = useState(false);
+          let headerLsi = useLsi(header);
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button onClick={() => setOpen(true)}>{buttonContent || headerLsi}</Uu5Elements.Button>&nbsp;
+              {open && (
+                <Uu5Elements.Alert {...alertProps} header={header} onClose={(e) => {
+                  if (typeof onClose === "function") onClose(e);
+                  setOpen(false);
+                }} />
+              )}
+            </Fragment>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Uu5Elements.AlertBus>
+                {/*@@viewOn:example*/}
+                <h4>header</h4>
+                <Alert header="Header" />
+                <Alert header={{ en: "Lsi header", cs: "Lsi nadpis" }} />
+                <Alert header={<LoremIpsum avgSentences={1} />} buttonContent="Component header" />
+
+                <h4>message</h4>
+                <Alert
+                  header="Message"
+                  message="Lorem ipsum dolor sit amet consectetur adipiscing elit. Ex sapien vitae pellentesque sem placerat in id. Pretium tellus duis convallis tempus leo eu aenean."
+                />
+                <Alert
+                  header="Lsi message"
+                  message={{
+                    en: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Ex sapien vitae pellentesque sem placerat in id. Pretium tellus duis convallis tempus leo eu aenean.",
+                    cs: "Oprávněné aniž i odstoupil o snadno osoby vede grafikou osobami úmyslu 60 % poskytovat, dělí způsobem, § 36 veletrhu pověřit spravují zřejmém, k před platbě.",
+                  }}
+                />
+                <Alert header="Component message" message={<LoremIpsum avgSentences={2} />} />
+                <Alert header="Children message">
+                  <LoremIpsum avgSentences={2} />
+                </Alert>
+
+                <h4>priority</h4>
+                <Alert header="Error" message={<LoremIpsum avgSentences={2} />} priority="error" />
+                <Alert header="Warning" message={<LoremIpsum avgSentences={2} />} priority="warning" />
+                <Alert header="Success" message={<LoremIpsum avgSentences={2} />} priority="success" />
+                <Alert header="Info" message={<LoremIpsum avgSentences={2} />} priority="info" />
+
+                <h4>icon</h4>
+                <Alert header="Icon" message={<LoremIpsum avgSentences={2} />} icon="uugds-check" />
+                <Alert header="Icon" message={<LoremIpsum avgSentences={2} />} icon="uugds-check" priority="error" />
+
+                <h4>duration</h4>
+                <Alert header="Duration 2000ms" message={<LoremIpsum avgSentences={2} />} durationMs={2000} />
+
+                <h4>onClose (in console)</h4>
+                <Alert
+                  header="onClose"
+                  message={<LoremIpsum avgSentences={2} />}
+                  onClose={(event) => console.log("onClose", event)}
+                />
+
+                <h4>significance</h4>
+                <Alert
+                  header="Common"
+                  message={<LoremIpsum avgSentences={2} />}
+                  significance="common"
+                />
+                <Alert
+                  header="Highlighted"
+                  message={<LoremIpsum avgSentences={2} />}
+                  significance="highlighted"
+                />
+                <Alert
+                  header="Subdued"
+                  message={<LoremIpsum avgSentences={2} />}
+                  significance="subdued"
+                />
+
+                <h4>controlList & controlPosition</h4>
+                <Alert
+                  header="Error"
+                  message={<LoremIpsum avgSentences={2} />}
+                  priority="error"
+                  controlPosition="bottom"
+                  controlList={[
+                    {
+                      children: "FLS issue",
+                      onClick: () => alert("Send FLS issue"),
+                      colorScheme: "negative",
+                      significance: "distinct"
+                    },
+                    {
+                      element: (
+                        <Uu5Elements.Button
+                          colorScheme="negative"
+                          significance="highlighted"
+                          onClick={() => alert("Show details")}
+                        >
+                          Show details
+                        </Uu5Elements.Button>
+                      ),
+                    }
+                  ]}
+                />
+                {/*@@viewOff:example*/}
+              </Uu5Elements.AlertBus>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 07</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      /*@@viewOn:example*/
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Uu5Elements.Block
+                header="Block"
+                info={[
+                  {
+                    label: "Help",
+                    children: (
+                      <Uu5Elements.Grid rowGap={Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "d"])}>
+                        <Uu5Elements.Text
+                          colorScheme="building"
+                          category="interface"
+                          segment="content"
+                          type="large"
+                          bold
+                        >
+                          Component name
+                        </Uu5Elements.Text>
+                        <Uu5Elements.Text colorScheme="building" category="interface" segment="content" type="medium">
+                          Component description.
+                        </Uu5Elements.Text>
+                        <Uu5Elements.Button>Documentation</Uu5Elements.Button>
+                        <Uu5Elements.Line significance="subdued" />
+                        <div className={Config.Css.css({ textAlign: "center" })}>
+                          <Uu5Elements.Text
+                            colorScheme="building"
+                            significance="subdued"
+                            category="expose"
+                            segment="default"
+                            type="hero"
+                          >
+                            {({ style }) => (
+                              <Uu5Elements.Icon icon="uugds-check" className={Config.Css.css(style)} />
+                            )}
+                          </Uu5Elements.Text>
+                          <Uu5Elements.Text
+                            colorScheme="building"
+                            significance="subdued"
+                            category="interface"
+                            segment="content"
+                            type="large"
+                            className={Config.Css.css({
+                              display: "block",
+                              marginTop: Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "b"]),
+                            })}
+                          >
+                            uu5 (g05) v1.0.0
+                          </Uu5Elements.Text>
+                        </div>
+                        <Uu5Elements.Button>About the library</Uu5Elements.Button>
+                      </Uu5Elements.Grid>
+                    ),
+                    icon: "uugdsstencil-alert-help",
+                  },
+                  {
+                    label: "Context",
+                    children: (
+                      <Uu5Elements.Grid
+                        templateColumns="1fr"
+                        rowGap={Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "d"])}
+                      >
+                        <Uu5Elements.Button>Show all information</Uu5Elements.Button>
+                        <Uu5Elements.Line significance="subdued" />
+                        <Uu5Elements.Button>Permission settings</Uu5Elements.Button>
+                        <Uu5Elements.Button>Application control panel</Uu5Elements.Button>
+                      </Uu5Elements.Grid>
+                    ),
+                    icon: "uugdsstencil-uiaction-dots-vertical-circle",
+                  },
+                ]}
+              >
+                <LoremIpsum />
+              </Uu5Elements.Block>
+            </div>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

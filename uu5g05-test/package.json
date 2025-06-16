@@ -1,0 +1,50 @@
+{
+  "name": "uu5g05-test",
+  "version": "1.40.1",
+  "description": "The library contains tools for testing of a components.",
+  "license": "License Commercial",
+  "namespace": "Uu5Test",
+  "spec": "nodejs-lib; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
+  "dependencies": {
+    "@testing-library/dom": "9.3.4",
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "14.3.1",
+    "@testing-library/user-event": "14.6.1",
+    "fake-indexeddb": "6.0.0",
+    "jest-localstorage-mock": "2.4.26",
+    "node-fetch": "2.6.7",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-test-renderer": "18.3.1"
+  },
+  "devDependencies": {
+    "eslint-plugin-jest-dom": "5.5.0",
+    "eslint-plugin-testing-library": "6.5.0",
+    "nyc": "15.1.0",
+    "uu_appg01_devkit": "^6.6.0",
+    "uu5devkitg01-plugin": "^1.5.1"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "clean": "uu_appg01_devkit clean",
+    "test": "uu_appg01_devkit testBrowser",
+    "build": "uu_appg01_devkit build",
+    "package": "uu_appg01_devkit package",
+    "start": "uu_appg01_devkit start",
+    "prettify": "uu_appg01_devkit prettify",
+    "vulnerabilityScan": "uu_appg01_devkit vulnerabilityScan",
+    "uuAppDevKitUpgrade": "uu_appg01_devkit uuAppDevKitUpgrade",
+    "uu5Generate": "uu5devkitg01-plugin generate"
+  },
+  "main": "src/index.js",
+  "files": [
+    "src",
+    "dist*",
+    "test/setup"
+  ],
+  "prettier": {
+    "printWidth": 120
+  }
+}

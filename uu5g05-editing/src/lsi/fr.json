@@ -1,0 +1,206 @@
+{
+  "general": {
+    "required": "Le champ est requis.",
+    "default": "Par défaut",
+    "unverified": "Non vérifié"
+  },
+  "EditModal": {
+    "header": "Édition de ${name}",
+    "confirm": "Sauvegarder",
+    "cancel": "Annuler",
+    "addItemButton": "Ajouter un élément",
+    "insertBefore": "Insérer avant",
+    "insertAfter": "Insérer après",
+    "moveToPosition": "Déplacer à la position",
+    "duplicate": "Dupliquer le composant",
+    "delete": "Supprimer",
+    "preview": "Aperçu"
+  },
+  "ItemPositionModal": {
+    "header": "Déplacer l'élément à la position",
+    "cancel": "Annuler",
+    "confirm": "OK"
+  },
+  "ItemRemovalDialog": {
+    "header": "Suppression d'élément",
+    "info": "Vous êtes sur le point d'effectuer une action potentiellement destructive. Êtes-vous sûr de vouloir continuer ?",
+    "cancel": "Annuler",
+    "confirm": "Supprimer"
+  },
+  "templates": {
+    "general": "Général",
+    "visual": "Visuel",
+    "system": "Système",
+    "authorization": "Autorisation"
+  },
+  "FormDisabled": {
+    "label": "Interaction avec le composant",
+    "allow": "Autoriser",
+    "disable": "Désactiver"
+  },
+  "FormHidden": {
+    "label": "À l'écran",
+    "show": "Afficher",
+    "hide": "Masquer"
+  },
+  "FormNoPrint": {
+    "label": "Impression du composant",
+    "show": "Afficher",
+    "hide": "Masquer"
+  },
+  "FormIdentificationType": {
+    "label": "Identification visuelle en dehors du contexte de l'application",
+    "show": "Afficher",
+    "hide": "Masquer",
+    "info": "Chaque unité organisationnelle a son identification visuelle. Les unités organisationnelles servent d'origine, d'où chaque composant doit provenir. Lorsqu'un composant est placé en dehors de son origine, il affiche l'identification visuelle de l'origine - une bande colorée et une icône carrée affichée à gauche dans l'en-tête. L'icône permet d'accéder à la navigation locale de son origine."
+  },
+  "FormBaseUri": {
+    "label": "URI de base de l'application",
+    "message": "URL de l'application à partir de laquelle charger le contexte, les données et l'identification visuelle."
+  },
+  "FormUu5Id": {
+    "label": "ID de préférence utilisateur",
+    "message": "Identification unique pour stocker et charger les préférences de ce composant."
+  },
+  "FormDisableUserPreference": {
+    "label": "Paramètres par défaut chargés depuis",
+    "userPreference": "Préférence utilisateur",
+    "component": "Composant"
+  },
+  "FormOid": {
+    "label": "ID d'objet",
+    "message": "Identification d'un objet spécifique que le composant doit afficher."
+  },
+  "FormBid": {
+    "label": "ID de branche",
+    "message": "Identification d'une branche spécifique du uuBranchKit."
+  },
+  "FormRts": {
+    "label": "Afficher les données pour une date spécifique"
+  },
+  "FormClassName": {
+    "label": "Classes CSS",
+    "message": "Séparez les noms par un espace."
+  },
+  "FormStyle": {
+    "label": "Styles CSS",
+    "message": "Écrivez entre les crochets. Chaque style sur une ligne distincte terminée par un point-virgule.",
+    "error": "Le seul sélecteur valide est le composant."
+  },
+  "FormAspectRatio": {
+    "label": "Ratio d'aspect"
+  },
+  "FormBorderRadius": {
+    "label": "Rayon de bordure"
+  },
+  "FormCard": {
+    "label": "Afficher le composant sous forme de carte",
+    "none": "Désactiver",
+    "content": "Contenu uniquement",
+    "full": "Activer"
+  },
+  "FormColorScheme": {
+    "label": "Schéma de couleurs",
+    "default": "Par défaut"
+  },
+  "FormFullTextSearchPriority": {
+    "label": "Priorité de recherche plein texte",
+    "message": "Définir la recherche de composants préférée. Auto signifie que la priorité du composant n'est pas définie. 0 signifie que le composant et ses enfants ne seront pas indexés par la recherche fullTextSearch. 1 signifie la priorité la plus basse et 5 la plus haute priorité."
+  },
+  "FormHeight": {
+    "label": "Hauteur"
+  },
+  "FormId": {
+    "label": "ID"
+  },
+  "FormNestingLevel": {
+    "label": "Niveau d'imbrication"
+  },
+  "FormSignificance": {
+    "label": "Signification"
+  },
+  "FormSize": {
+    "label": "Taille"
+  },
+  "FormWidth": {
+    "label": "Largeur"
+  },
+  "FormMargin": {
+    "label": "Marge"
+  },
+  "FormSpaces": {
+    "simple": "Simple",
+    "advanced": "Avancé",
+    "info": "Les espacements sont automatiquement réactifs en utilisant les valeurs de la palette d'espacement adaptatif uuGDS.",
+    "infoForMargin": "Les valeurs de marge sont ajustées en fonction du niveau de nesting du composant. Si le niveau de nesting est défini sur 'area' ou 'areaCollection', les valeurs définies pour ${horizontal} ne seront pas transmises au composant. Si le niveau de nesting est défini sur 'inline', les valeurs définies pour ${vertical} ne seront pas transmises au composant.",
+    "infoForHorizontalMargin": "la marge horizontale",
+    "infoForVerticalMargin": "la marge verticale",
+    "infoForHorizontalOuter": "l'espacement extérieur horizontal",
+    "infoForVerticalOuter": "l'espacement extérieur vertical",
+    "outerVertical": "Vertical extérieur",
+    "outerHorizontal": "Horizontal extérieur",
+    "outerTop": "Haut extérieur",
+    "outerBottom": "Bas extérieur",
+    "outerLeft": "Gauche extérieur",
+    "outerRight": "Droite extérieur",
+    "innerVertical": "Vertical intérieur",
+    "innerHorizontal": "Horizontal intérieur",
+    "innerTop": "Haut intérieur",
+    "innerBottom": "Bas intérieur",
+    "innerLeft": "Gauche intérieur",
+    "innerRight": "Droite intérieur",
+    "outerSpacing": "Espacement extérieur",
+    "innerSpacing": "Espacement intérieur",
+    "setSidesSeparately": "Définir les côtés séparément",
+    "component": "composant",
+    "margin": "Marge",
+    "padding": "Padding",
+    "inherited": "Hérité",
+    "dialogHeader": "Passer aux paramètres d'espacement simples ?",
+    "dialogInfo": "Toutes les valeurs définies seront réinitialisées.",
+    "dialogCancel": "Annuler",
+    "dialogConfirm": "Paramètres simples"
+  },
+  "screenSizeDevice": {
+    "xs": "Mobile",
+    "s": "Tablette portrait",
+    "m": "Tablette paysage",
+    "l": "Bureau",
+    "xl": "Grand bureau"
+  },
+  "FormUnit": {
+    "error": "La valeur n'est pas valide. Vérifiez les unités."
+  },
+  "FormLink": {
+    "href": {
+      "label": "Lien"
+    },
+    "labelLink": {
+      "label": "Texte"
+    },
+    "target": {
+      "label": "Ouvrir dans",
+      "blank": "Nouvel onglet",
+      "self": "Onglet actuel",
+      "auto": "Automatique"
+    }
+  },
+  "FormAuthorization": {
+    "type": "Type d'autorisation",
+    "typeMsg": "Seul le type d'autorisation sélectionné est appliqué.",
+    "none": "Aucun",
+    "noneMsg": "Tout le monde peut voir cette composante",
+    "profiles": "Profil de l'artefact",
+    "roles": "Rôle ou groupe",
+    "artifactUri": "URI de l'artefact",
+    "artifactUriMsg": "Pour sélectionner 'Profils autorisés' ou 'Cas d'utilisation', il est nécessaire de remplir 'URI de l'artefact'.",
+    "uuTerritoryBaseUri": "URI du territoire",
+    "uuTerritoryBaseUriError": "Ce n'est pas une URI valide.",
+    "roleGroupIdList": "Rôles avec droits explicites",
+    "roleGroupIdListMsg": "L'URI du territoire' doit être remplie en premier",
+    "useCase": "Cas d'utilisation",
+    "useCaseMsg": "Un utilisateur est autorisé s'il est occupé dans au moins un profil que le cas d'utilisation peut exécuter.",
+    "profileList": "Profils autorisés",
+    "profileListError": "Échec du chargement des profils à partir de l'URI de l'artefact donné. Vous pouvez sélectionner dans l'ensemble de profils par défaut ou entrer un nom de profil personnalisé."
+  }
+}

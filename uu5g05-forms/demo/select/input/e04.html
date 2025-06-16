@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 04</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <script>
+    const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+    if (ip) {
+      Uu5Loader.config({
+        imports: {
+          uu5g05: "http://" + ip + ":54321/uu5g05.js",
+          "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+          "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+          "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+          uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+        },
+      });
+    }
+  </script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  import { Utils, useState } from "uu5g05";
+  import { Select } from "uu5g05-forms";
+  import { Text, Grid } from "uu5g05-elements";
+  import { Config } from "uu5g05-dev";
+
+  function withControlledInput(Input) {
+    return (props) => {
+      const { value: propsValue, onChange, onValidationStart, onValidationEnd } = props;
+
+      const [value, setValue] = useState(propsValue);
+      const [errorList, setErrorList] = useState(null);
+      const [pending, setPending] = useState();
+
+      return (
+        <div>
+          <Input
+            {...props}
+            value={value}
+            onChange={(e) => {
+              typeof onChange === "function" && onChange(e);
+              setValue(e.data.value);
+            }}
+            onValidationStart={(e) => {
+              typeof onValidationStart === "function" && onValidationStart(e);
+              setPending(true);
+            }}
+            onValidationEnd={(e) => {
+              typeof onValidationEnd === "function" && onValidationEnd(e);
+              setErrorList(e.data.errorList.length ? e.data.errorList : null);
+              setPending(false);
+            }}
+            width="100%"
+          />
+          {errorList && (
+            <div>
+              <Text colorScheme="negative">
+                {errorList.map(({ code }) => code).join(" ")}
+              </Text>
+            </div>
+          )}
+          {pending && <div>Pending...</div>}
+        </div>
+      );
+    };
+  }
+
+  const SelectInput = withControlledInput(Select.Input);
+
+  {/*@@viewOn:example*/}
+  function Page() {
+    const itemList = [
+      { value: undefined },
+      { value: "item1", children: "Item 1" },
+      { children: "Item 2", itemList: [
+          { value: "item2.1", children: "Item 2.1" },
+          { children: "Item 2.2", itemList: [
+              { value: "item2.2.1", children: "Item 2.2.1" },
+              { value: "item2.2.2", children: "Item 2.2.2" },
+              { children: "Item 2.2.3", itemList: [
+                  { children: "Item 2.2.3.1", itemList: [
+                      { value: "item2.2.3.1.1", children: "Item 2.2.3.1.1" }
+                    ] },
+                  { value: "item2.2.3.2", children: "Item 2.2.3.2" },
+                ] },
+            ] },
+          { value: "item2.3", children: "Item 2.3" },
+        ] },
+      { value: "item3", children: "Item 3" },
+      { children: "Item 4", itemList: [
+          { value: "item4.1", children: "Item 4.1" },
+          { value: "item4.2", children: "Item 4.2" },
+        ] },
+      { value: "item5", children: "Item 5" },
+    ];
+
+    return (
+      <div>
+        <h4>Single select</h4>
+        <SelectInput
+          itemList={itemList}
+          placeholder="Choose category"
+          onChange={(e) => {
+            console.log("onChange", e);
+          }}
+        />
+        <h4>Multiple select – Tags</h4>
+        <SelectInput
+          itemList={itemList}
+          placeholder="Choose category"
+          onChange={(e) => {
+            console.log("onChange", e);
+          }}
+          multiple
+        />
+        <h4>Multiple select – displayCheckboxes and itemList with multiple=false</h4>
+        <SelectInput
+          itemList={itemList.map((item, i) => {
+            if (i === 2) return { multiple: false, ...item };
+            return item;
+          })}
+          placeholder="Choose category"
+          onChange={(e) => {
+            console.log("onChange", e);
+          }}
+          multiple
+          displayCheckboxes
+        />
+        <h4>Multiple select – List items</h4>
+        <SelectInput
+          itemList={itemList}
+          placeholder="Choose category"
+          onChange={(e) => {
+            console.log("onChange", e);
+          }}
+          multiple
+          displayTags={false}
+        >
+          <Select.Field />
+          <Select.SelectedOptions />
+        </SelectInput>
+        <h4>Multiple select – Options outside</h4>
+        <SelectInput
+          itemList={itemList}
+          placeholder="Choose category"
+          onChange={(e) => {
+            console.log("onChange", e);
+          }}
+          multiple
+          displayOptions={false}
+          displayTags={false}
+        >
+          <Select.Field />
+          <Select.Options />
+        </SelectInput>
+      </div>
+    );
+    {/*@@viewOff:example*/}
+  }
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

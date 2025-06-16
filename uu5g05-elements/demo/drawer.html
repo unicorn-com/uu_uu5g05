@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uu5Elements.Drawer Demo</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    section {
+      /* height: 100vh;
+      min-height: 100vh; */
+      display: flex;
+      flex-direction: column;
+      /* position: relative; */
+    }
+
+    section>header {
+      padding: 8px;
+      background-color: lightskyblue;
+
+      /* for testing sticky header - uncomment the offsetTop prop too */
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    section>main {
+      flex: 1;
+      min-height: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="renderHere"></div>
+
+  <script type="text/babel">
+    import { Utils, Lsi, createComponent, useState } from "uu5g05";
+    import Uu5Elements from "uu5g05-elements";
+    import { LoremIpsum } from "uu5g05-dev";
+
+    const CONTENTS = [
+      <LoremIpsum paragraphCount={15} />,
+      <>
+        <Uu5Elements.HighlightedBox>Information Box</Uu5Elements.HighlightedBox>
+        <Uu5Elements.HighlightedBox colorScheme="warning">Warning Box</Uu5Elements.HighlightedBox>
+        <Uu5Elements.HighlightedBox colorScheme="positive">Positive Box</Uu5Elements.HighlightedBox>
+        <Uu5Elements.HighlightedBox colorScheme="negative">Negative Box</Uu5Elements.HighlightedBox>
+      </>,
+    ];
+
+    const TABS = [
+      { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      { icon: "mdi-border-style", children: <Lsi lsi={{ en: "Highlighted Boxes" }} />, iconNotification: true /*, iconRight: "mdi-message-reply"*/ },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> }, 
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum" }} /> },
+      // { icon: "uugds-pencil", children: <Lsi lsi={{ en: "Lorem Ipsum X" }} /> },
+    ];
+
+    const Modal = createComponent({
+      render({ leftType }) {
+        const [open, setOpen] = useState(false);
+        const [selectedItem, setSelectedItem] = useState(0);
+
+        return (
+          //@@viewOn:example
+          <div>
+            <Uu5Elements.Button onClick={() => setOpen(true)}>Modal with Drawer ({typeof leftType === "object" ? "responsive" : leftType})</Uu5Elements.Button>
+
+            <Uu5Elements.Modal
+              header={`Modal with Drawer`}
+              // footer={<Uu5Elements.Button children="Button" />}
+              open={open}
+              onClose={() => setOpen(false)}
+              width={900}
+              left={(
+                <Uu5Elements.MenuList
+                  itemBorderRadius="moderate"
+                  itemList={TABS.map((tab, i) => ({ ...tab, onClick: () => setSelectedItem(i), focused: selectedItem === i }))}
+                />
+              )}
+              leftType={leftType}
+            >
+              {CONTENTS[selectedItem]}
+            </Uu5Elements.Modal>
+          </div>
+          //@@viewOff:example
+        );
+      },
+    });
+
+    const Page = createComponent({
+      render() {
+        const [menuOpen, setMenuOpen] = useState(false);
+        const [selectedItem, setSelectedItem] = useState(0);
+
+        const responsiveMenuType = { xs: "elevated", s: "collapsible", l: "flat" };
+        const menuTypeList = ["flat", "elevated", "collapsible", "collapsed", "expanded", undefined];
+        const [menuType, setMenuType] = useState(2);
+
+        const [fromRight, setFromRight] = useState(false);
+
+        return (
+          <section>
+            <header>
+              <Uu5Elements.Button
+                icon={menuOpen ? "uugds-close" : "uugds-menu"}
+                significance="highlighted"
+                onClick={() => setMenuOpen((prev) => !prev)}
+              />
+              <Uu5Elements.Button
+                children={`Type: ${menuTypeList[menuType] ?? "responsive"}`}
+                significance="subdued"
+                onClick={() => setMenuType((prev) => prev < menuTypeList.length - 1 ? prev + 1 : 0)}
+              />
+              {/*<Uu5Elements.Button
+                children={`From: ${fromRight ? "right" : "left"}`}
+                significance="subdued"
+                onClick={() => setFromRight((prev) => !prev)}
+              />*/}
+            </header>
+            <main>
+              <Uu5Elements.Drawer
+                type={menuTypeList[menuType] ?? responsiveMenuType}
+                // position={fromRight ? "right" : "left"}
+                // height="100%"
+                offsetTop={52}
+                // fullHeight={false}
+                // spacing="tight"
+                // widthCollapsed={52}
+                open={menuOpen}
+                onChange={(event) => {
+                  typeof event.data.open === "boolean" && setMenuOpen(event.data.open);
+                  event.data.type && setMenuType(menuTypeList.indexOf(event.data.type));
+                }}
+                content={({ open, type }) => {
+                  return (
+                    <Uu5Elements.MenuList
+                      itemBorderRadius="moderate"
+                      itemList={TABS.map((tab, i) => ({
+                        ...tab,
+                        children:
+                          type === "collapsible" ? (open ? tab.children : undefined) :
+                          type === "collapsed" ? undefined : tab.children,
+                        onClick: () => {
+                          setSelectedItem(i);
+                          menuType === "elevated" && setMenuOpen(false);
+                        },
+                        focused: selectedItem === i,
+                      }))}
+                    />
+                  );
+                }}
+              >
+                <div style={{ padding: 24 }}>
+                  {CONTENTS[selectedItem]}
+                  <Modal leftType={menuTypeList[menuType] ?? responsiveMenuType} />
+                </div>
+              </Uu5Elements.Drawer>
+              {false && <LoremIpsum paragraphCount={15} />}
+            </main>
+          </section>
+        );
+      },
+    });
+
+    Utils.Dom.render(<Page />, document.getElementById("renderHere"));
+  </script>
+</body>
+
+</html>

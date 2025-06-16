@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo list</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+
+    <script>
+      var uu5DemoDependencies = {
+        uu_plus4u5g02: "1.x",
+        "uu_plus4u5g02-elements": "1.x",
+        "uu_plus4u5g02-app": "1.x",
+        uu5dndg01: "1.x",
+        uu5g04: "1.x",
+        "uu5richtextg01-elements": "2.x",
+      };
+    </script>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 0 2px 2px;
+      }
+    </style>
+  </head>
+
+  <body style="height: auto">
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import "uu5g04";
+      import {
+        createComponent,
+        Utils,
+        useState,
+        useRef,
+        Lsi,
+        createVisualComponent,
+        useDataList,
+        ToolbarProvider,
+        useEffect,
+        Content,
+        useSession,
+        useStickyTop,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, times } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import Plus4U5App from "uu_plus4u5g02-app";
+      import Uu5DnD from "uu5dndg01";
+      import Uu5RichTextElements from "uu5richtextg01-elements";
+
+      function Authenticated({ children }) {
+        const { state } = useSession();
+
+        let result;
+        switch (state) {
+          case "notAuthenticated":
+            result = <Plus4U5Elements.Unauthenticated />;
+            break;
+          case "authenticated":
+            result = children;
+            break;
+          case "pending":
+            break;
+        }
+
+        return result;
+      }
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const { value: propsValue, onChange, onBlur, onEnter, elementAttrs } = props;
+
+          const [value, setValue] = useState(propsValue);
+
+          return (
+            <Input
+              {...props}
+              value={value}
+              onChange={(e) => {
+                typeof onChange === "function" && onChange(e);
+                setValue(e.data.value);
+              }}
+              onBlur={typeof onBlur === "function" ? (e) => {
+                onBlur(new Utils.Event({ ...e.data, value }, e));
+              } : undefined}
+              elementAttrs={{
+                ...elementAttrs,
+                onKeyDownCapture: (e) => {
+                  elementAttrs?.onKeyDown?.(e);
+                  if (e.key === "Enter") {
+                    onEnter?.(new Utils.Event({ value }, e));
+                  }
+                }
+              }}
+            />
+          );
+        };
+      }
+
+      /*@@viewOn:example*/
+      const ScrollableBoxWithItemGaps = createComponent({
+        uu5Tag: Config.Tag + "ScrollableBoxWithItemGaps",
+        render(props) {
+          const gap = Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "b"]);
+
+          return (
+            <Uu5Elements.ScrollableBox
+              {...props}
+              className={Utils.Css.joinClassName(
+                Config.Css.css({ display: "flex", flexDirection: "column", gap }),
+                props.className
+              )}
+            />
+          );
+        },
+      });
+
+      const InlineEditor = withControlledInput(Uu5RichTextElements.InlineEditor.Input);
+
+      const Input = (props) => {
+        const { ref, style, metrics, visibilityMatches } = useStickyTop("always", true);
+        return (
+          <div ref={ref} className={Config.Css.css({
+            ...style,
+            paddingBlock: 4,
+            backgroundColor: "white",
+            "&:after": metrics.offsetToStickyBoundary < 0 ? {
+              boxShadow: "rgba(33, 33, 33, 0.4) 1px 2px 10px 0px",
+              clipPath: "inset(0px 0px -10px)",
+              backgroundColor: "rgb(255, 255, 255)",
+              content: '""',
+              display: "block",
+              position: "absolute",
+              inset: 0,
+              zIndex: -1,
+              pointerEvents: "none",
+            } : undefined,
+            zIndex: 909,
+          })}>
+            <InlineEditor {...props} />
+          </div>
+        )
+      };
+
+      const RichText = createVisualComponent({
+        render({ value, isEditing, ...restProps }) {
+          return isEditing ? (
+            <InlineEditor
+              {...restProps}
+              autoFocus
+              value={value}
+              external
+              significance="subdued"
+              className={Config.Css.css({
+                overflow: "hidden",
+                borderRadius: 6
+              })} // to remove boxShadow of input in focus state
+            />
+          ) : (
+            <div className={Config.Css.css({ padding: 9 })}>
+              <Content>{value}</Content>
+            </div>
+          )
+        }
+      });
+
+      const ListItem = createVisualComponent({
+        render(props) {
+          const {
+            onUpdate,
+            data,
+            elementAttrs,
+            colorScheme = "grey",
+            significance = "distinct",
+            className,
+            ...itemProps
+          } = props;
+          const [isEditing, setIsEditing] = useState(false);
+
+          return (
+            <Uu5Elements.ListItem
+              {...itemProps}
+              significance={significance}
+              colorScheme={colorScheme}
+              elementAttrs={{ ...elementAttrs, onDoubleClick: onUpdate ? () => setIsEditing(true) : undefined }}
+              className={isEditing ? Utils.Css.joinClassName(className, Config.Css.css({ boxShadow: "rgba(33, 150, 243, 0.4) 0px 0px 0px 2px" })) : className}
+            >
+              {onUpdate ? (
+                <RichText
+                  isEditing={isEditing}
+                  value={data.value}
+                  onBlur={(e) => {
+                    setIsEditing(false);
+                    data.value !== e.data.value && onUpdate(e);
+                  }}
+                  onEnter={(e) => {
+                    if ((e.ctrlKey || e.metaKey) && data.value !== e.data.value) {
+                      setIsEditing(false);
+                      e.stopPropagation();
+                      onUpdate(e);
+                    }
+                  }}
+                />
+              ) : (
+                <div>
+                  <Uu5Elements.Text
+                    category="interface"
+                    segment="content"
+                    type="small"
+                    colorScheme="building"
+                    significance="subdued"
+                  >
+                    Archived: <Uu5Elements.DateTime value={data.ts} />
+                  </Uu5Elements.Text>
+                  <br />
+                  <Content>{data.value}</Content>
+                </div>
+              )}
+            </Uu5Elements.ListItem>
+          );
+        }
+      });
+
+      const DraggableListItem = Uu5DnD.withDraggable(ListItem, { sourceRefProp: "iconDragRef" });
+      const DraggableList = Uu5DnD.withDroppableItemList(ScrollableBoxWithItemGaps, DraggableListItem);
+
+      const ConfirmButton = createVisualComponent({
+        uu5Tag: Config.TAG + "ConfirmButton",
+
+        render(props) {
+          const { onClick, children, icon, elementRef, ...restProps } = props;
+
+          const [confirm, setConfirm] = useState(false);
+          const ref = useRef();
+
+          useEffect(() => {
+            if (confirm) {
+              const timeout = setTimeout(() => setConfirm(false), 2000);
+              return () => clearTimeout(timeout);
+            }
+          }, [confirm]);
+
+          const buttonProps = { icon, children };
+
+          if (confirm) {
+            buttonProps.colorScheme = restProps.colorScheme;
+
+            if (children) {
+              buttonProps.width = ref.current.getBoundingClientRect().width;
+              buttonProps.children = <Lsi lsi={{ cs: "Opravdu?", en: "Sure?" }} />;
+            } else {
+              buttonProps.icon = "uugds-check";
+            }
+          }
+
+          return (
+            <Uu5Elements.Button
+              {...restProps}
+              elementRef={Utils.Component.combineRefs(elementRef, ref)}
+              onClick={(e) => {
+                if (confirm) {
+                  onClick(e);
+                  setConfirm(false);
+                } else {
+                  setConfirm(true);
+                }
+              }}
+              {...buttonProps}
+            />
+          )
+        }
+      });
+
+      const ErrorButton = createVisualComponent({
+        uu5Tag: Config.TAG + "ErrorButton",
+
+        render(props) {
+          const {
+            onClick,
+            icon = "uugds-alert-circle-solid",
+            elementRef,
+            error,
+            ...restProps
+          } = props;
+
+          const [tooltipSettings, setTooltipSettings] = useState(null);
+          const ref = useRef();
+
+          return (
+            <>
+              <Uu5Elements.Button
+                {...restProps}
+                icon={icon}
+                colorScheme="negative"
+                elementRef={Utils.Component.combineRefs(elementRef, ref)}
+                onClick={(e) => {
+                  onClick?.(e);
+                  setTooltipSettings({ element: ref.current });
+                }}
+              />
+              {tooltipSettings && (
+                <Uu5Elements.Tooltip
+                  {...tooltipSettings}
+                  delayMs={null}
+                  onClose={() => setTooltipSettings(null)}
+                >
+                  {error.message}
+                </Uu5Elements.Tooltip>
+              )}
+            </>
+          )
+        }
+      });
+
+      const url = new URL(window.location !== window.parent.location ? window.parent.location.href : "https://uuapp.plus4u.net/uu-managementkit-maing02/f91215cbb1c3f25893e3c949215a152f/document?oid=658163027efafa0035293f7d&pageOid=658163037efafa0035293f8b");
+      const oid = url.searchParams.get("oid");
+      const baseUri = url.origin + url.pathname.split("/").splice(0, 4).join("/");
+
+      const iFrameUrl = new URL(window.frameElement ? window.frameElement.src : location.href);
+
+      const Calls = {
+        async _get(baseUri, oid, fileOid) {
+          const data = await Plus4U5.Utils.AppClient.get(Plus4U5.Utils.Uri.join(baseUri, "ebc/file/getDataByOid"), {
+            oid,
+            uuEbcData: { fileOid }
+          });
+          const json = await data.data.text();
+          return JSON.parse(json);
+        },
+        async _set(baseUri, oid, fileOid, value) {
+          const file = new File([JSON.stringify(value)], "todo-list.json", { type: "application/json" });
+          await Plus4U5.Utils.AppClient.post(Plus4U5.Utils.Uri.join(baseUri, "ebc/file/updateDataByOid"), {
+            oid,
+            "uuEbcData.data": file,
+            uuEbcData: { fileOid },
+          });
+        },
+
+        listToDo({ baseUri, oid, fileOid }) {
+          return Calls._get(baseUri, oid, fileOid);
+        },
+        async updateToDo({ baseUri, oid, fileOid }, dtoIn) {
+          const { itemList } = await Calls._get(baseUri, oid, fileOid);
+
+          const currItemMap = Object.fromEntries(itemList.map((item, i) => [item.id, { ...item, _index: i }]));
+
+          const newItemList = dtoIn.itemList.map((newItem, i) => {
+            const oldItem = currItemMap[newItem.id];
+
+            if (i !== oldItem._index) {
+              if (oldItem.sys?.rev !== undefined && oldItem.sys?.rev !== newItem.sys?.rev) {
+                throw new Error("Your version is not up to date. Reload the ToDo list before changes.")
+              } else {
+                newItem = {
+                  ...newItem,
+                  sys: { ...newItem.sys, mts: new Date().toISOString(), rev: (oldItem.sys?.rev ?? 1) + 1 },
+                }
+              }
+            }
+
+            return newItem;
+          });
+
+          await Calls._set(baseUri, oid, fileOid, { itemList: newItemList });
+          return newItemList;
+        },
+        async createToDoItem({ baseUri, oid, fileOid }, dtoIn) {
+          const { itemList } = await Calls._get(baseUri, oid, fileOid);
+          const item = {
+            id: Utils.String.generateId(),
+            ...dtoIn,
+            sys: dtoIn.sys
+              ? { ...dtoIn.sys, mts: new Date().toISOString(), rev: dtoIn.sys.rev + 1 }
+              : { cts: new Date().toISOString(), rev: 1 },
+          };
+          const newData = { itemList: [item, ...itemList] };
+          await Calls._set(baseUri, oid, fileOid, newData);
+          return item;
+        },
+        async updateToDoItem({ baseUri, oid, fileOid }, dtoIn, rev) {
+          const { itemList } = await Calls._get(baseUri, oid, fileOid);
+          const i = itemList.findIndex(({ id }) => id === dtoIn.id);
+          const currItem = itemList[i];
+
+          if (currItem.sys?.rev !== undefined && currItem.sys.rev !== rev) {
+            throw new Error("Your version is not up to date. Reload the ToDo list before changes.")
+          }
+
+          const item = {
+            ...currItem,
+            ...dtoIn,
+            sys: { ...currItem.sys, mts: new Date().toISOString(), rev: (rev ?? 1) + 1 }
+          };
+          itemList[i] = item;
+
+          await Calls._set(baseUri, oid, fileOid, { itemList });
+          return item;
+        },
+        async deleteToDoItem({ baseUri, oid, fileOid }, dtoIn, rev) {
+          const { itemList } = await Calls._get(baseUri, oid, fileOid);
+          const i = itemList.findIndex(({ id }) => id === dtoIn.id);
+          if (i >= 0) {
+            const currItem = itemList[i];
+
+            if (currItem.sys?.rev !== undefined && currItem.sys.rev !== rev) {
+              throw new Error("Your version is not up to date. Reload the ToDo list before changes.")
+            }
+
+            itemList.splice(i, 1);
+            await Calls._set(baseUri, oid, fileOid, { itemList });
+          }
+          return null;
+        }
+      };
+
+      const ToDoListProvider = createComponent({
+        render({ children, baseUri, oid, fileOid, skipInitialLoad = false }) {
+          const dtoList = useDataList({
+            skipInitialLoad,
+            handlerMap: {
+              load: async (dtoIn) => {
+                return await Calls.listToDo({ baseUri, oid, fileOid }, dtoIn);
+              },
+              create: async (dtoIn) => {
+                dtoList.handlerMap.setData([dtoIn, ...dtoList.data]);
+                const newItem = await Calls.createToDoItem({ baseUri, oid, fileOid }, dtoIn);
+                dtoList.handlerMap.setData([newItem, ...dtoList.data]);
+                return null;
+              },
+              update: (itemList) => {
+                dtoList.handlerMap.setData(itemList);
+                return Calls.updateToDo({ baseUri, oid, fileOid }, { itemList: itemList.map(({ data }) => data) });
+              },
+            },
+            itemHandlerMap: {
+              update: (dtoIn, rev) => Calls.updateToDoItem({ baseUri, oid, fileOid }, dtoIn, rev),
+              delete: (dtoIn, rev) => Calls.deleteToDoItem({ baseUri, oid, fileOid }, dtoIn, rev),
+            }
+          });
+
+          return children({
+            ...dtoList,
+            onCreate: fileOid ? (dtoIn) => Calls.createToDoItem({ baseUri, oid, fileOid }, dtoIn) : undefined
+          });
+        }
+      });
+
+      const ToDoListView = createComponent({
+        render(props) {
+          const { data: propsData, handlerMap, onArchive } = props;
+
+          const focusRef = useRef(false);
+
+          const itemList = [];
+          propsData.forEach((item) => {
+            const { data, state, handlerMap, pendingData, errorData, disabled } = item;
+
+            if (!(pendingData?.operation === "delete")) {
+              let value = data.value;
+              const stateData = pendingData || errorData;
+              if (stateData?.operation === "update") value = stateData.dtoIn.value;
+
+              const actionList = [
+                {
+                  icon: "uugds-close",
+                  onClick: async () => {
+                    handlerMap.setData({ ...item, disabled: true });
+                    await onArchive?.(data);
+                    handlerMap.delete(undefined, data.sys?.rev);
+                  },
+                  colorScheme: "negative",
+                  component: ConfirmButton,
+                }
+              ];
+
+              if (errorData) actionList.unshift({ error: errorData.error, component: ErrorButton });
+
+              itemList.push({
+                key: data.id ?? "empty",
+                icon: "uugds-dnd",
+                data: { ...data, value },
+                colorScheme: state.startsWith("error") ? "negative" : undefined,
+                significance: state.startsWith("error") ? "common" : undefined,
+                disabled: disabled || state.startsWith("pending") || !data.id,
+                onUpdate: (e) => handlerMap.update({ value: e.data.value }, data.sys?.rev),
+                actionList,
+              });
+            }
+          });
+
+          return (
+            <>
+              <div
+                {...{
+                  tabIndex: 0,
+                  onFocus: () => focusRef.current = true,
+                  onBlur: () => focusRef.current = false
+                }}
+              >
+                <Input
+                  key={propsData.length}
+                  onBlur={(e) => e.data.value && handlerMap.create({ value: e.data.value })}
+                  onEnter={(e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.data.value) {
+                      e.stopPropagation();
+                      handlerMap.create({ value: e.data.value });
+                    }
+                  }}
+                  autoFocus={focusRef.current}
+                  external
+                  placeholder="Write a task..."
+                />
+                <DraggableList
+                  itemList={itemList}
+                  onItemListChange={(e) => {
+                    handlerMap.update(e.data.itemList);
+                  }}
+                  dropPreview="line"
+                />
+              </div>
+            </>
+          );
+        },
+      });
+
+      const ToDoListArchive = createComponent({
+        render(props) {
+          const { data, onRestore } = props;
+
+          const itemList = [];
+          data.forEach((item) => {
+            const {
+              data,
+              state,
+              handlerMap,
+              pendingData,
+              errorData,
+              disabled,
+            } = item;
+
+            if (!(pendingData?.operation === "delete")) {
+              let value = data.value;
+              const stateData = pendingData || errorData;
+              if (stateData?.operation === "update") value = stateData.dtoIn.value;
+
+              const actionList = [
+                {
+                  icon: "uugdsstencil-time-arrow-history",
+                  onClick: async () => {
+                    handlerMap.setData({ ...item, disabled: true });
+                    const { ts, ...itemData } = data;
+                    await onRestore(itemData);
+                    handlerMap.delete(undefined, itemData.sys?.rev);
+                  },
+                  colorScheme: "positive",
+                  component: ConfirmButton,
+                  tooltip: "Restore",
+                },
+                {
+                  icon: "uugds-delete",
+                  onClick: () => handlerMap.delete(undefined, data.sys?.rev),
+                  colorScheme: "negative",
+                  component: ConfirmButton,
+                }
+              ];
+
+              if (errorData) actionList.unshift({ error: errorData.error, component: ErrorButton });
+
+              itemList.push({
+                key: data.id ?? "empty",
+                data,
+                colorScheme: state.startsWith("error") ? "negative" : undefined,
+                significance: state.startsWith("error") ? "common" : undefined,
+                disabled: disabled || state.startsWith("pending") || !data.id,
+                actionList,
+              });
+            }
+          });
+
+          return (
+            <ScrollableBoxWithItemGaps>
+              {itemList.map((item) => <ListItem {...item} />)}
+            </ScrollableBoxWithItemGaps>
+          );
+        },
+      });
+
+      const ToDoList = createVisualComponent({
+        render(props) {
+          const { baseUri, oid, fileOid, readOnly, currentDtoList, archiveDtoList, ...viewProps } = props;
+
+          useEffect(() => {
+            if (readOnly) archiveDtoList.handlerMap.load();
+            else if (!currentDtoList.state.startsWith("pending")) currentDtoList.handlerMap.load();
+          }, [readOnly]);
+
+          const dtoList = readOnly ? archiveDtoList : currentDtoList;
+
+          let result;
+          if (dtoList.state === "pendingNoData" || dtoList.state === "readyNoData")
+            result = (
+              <Uu5Elements.Grid rowGap={4}>
+                {times(5, (i) => (
+                  <Uu5Elements.Skeleton key={i} size="l" borderRadius="moderate" height={53} />
+                ))}
+              </Uu5Elements.Grid>
+            );
+          else if (dtoList.state === "errorNoData") result = "Error";
+          else {
+            if (readOnly) {
+              result =
+                <ToDoListArchive {...viewProps} {...dtoList} onRestore={currentDtoList.handlerMap.create} />;
+            } else {
+              result = (
+                <ToDoListView
+                  {...viewProps}
+                  {...dtoList}
+                  onArchive={(data) => {
+                    archiveDtoList.onCreate?.({
+                      ...data,
+                      ts: new Date().toISOString()
+                    })
+                  }}
+                />
+              );
+            }
+          }
+          return result;
+        }
+      });
+
+      const ToDoListSection = createVisualComponent({
+        render(props) {
+          const { baseUri, oid, fileOid, archiveFileOid, ...viewProps } = props;
+
+          const [key, setKey] = useState(0);
+          const [tab, setTab] = useState("current");
+
+          const actionList = [{ icon: "uugds-reload", onClick: () => setKey(key + 1), tooltip: "Reload" }];
+          if (archiveFileOid) {
+            actionList.push(tab === "current"
+              ? { icon: "uugdsstencil-time-arrow-history", onClick: () => setTab("archive"), tooltip: "Archive" }
+              : { icon: "uugdsstencil-time-clock", onClick: () => setTab("current"), tooltip: "Active" });
+          }
+
+          return (
+            <>
+              <Plus4U5App.PositionBar actionList={actionList}>
+                ToDo list
+              </Plus4U5App.PositionBar>
+              <ToDoListProvider baseUri={baseUri} oid={oid} fileOid={fileOid}>
+                {(currentDtoList) => (
+                  <ToDoListProvider baseUri={baseUri} oid={oid} fileOid={archiveFileOid} skipInitialLoad>
+                    {(archiveDtoList) => (
+                      <ToDoList
+                        {...viewProps}
+                        key={key}
+                        baseUri={baseUri}
+                        oid={oid}
+                        fileOid={fileOid}
+                        readOnly={tab !== "current"}
+                        currentDtoList={currentDtoList}
+                        archiveDtoList={archiveDtoList}
+                      />
+                    )}
+                  </ToDoListProvider>
+                )}
+              </ToDoListProvider>
+            </>
+          );
+        }
+      });
+
+      /*@@viewOff:example*/
+
+      function Page() {
+        return (
+          <Plus4U5.SpaProvider>
+            <ToolbarProvider>
+              <Authenticated>
+                <ToDoListSection
+                  baseUri={baseUri}
+                  oid={oid}
+                  fileOid={iFrameUrl.searchParams.get("fileOid")}
+                  archiveFileOid={iFrameUrl.searchParams.get("archiveFileOid")}
+                />
+              </Authenticated>
+            </ToolbarProvider>
+          </Plus4U5.SpaProvider>
+        )
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 08</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        useDataList,
+        createComponent,
+        createVisualComponent,
+        SessionProvider,
+        useSession,
+        useState,
+        useRef,
+        useMemo,
+        useCallback,
+        useEffect,
+        Environment,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { AuthenticationService } from "uu_appg01_oidc";
+      import Plus4U5 from "uu_plus4u5g02";
+      import { Config, wait } from "uu5g05-dev";
+
+      /*@@viewOn:example*/
+      const Calls = {
+        // ...
+        load(dtoIn) {
+          const commandUri = Calls.getCommandUri("website/metadata/list", Environment.plus4UGoBaseUri);
+          const clientOptions = {
+            enableStreamApi: true,
+            transformResponse: false,
+            headers: { authorization: null },
+          };
+          return Calls.call("post", commandUri, dtoIn, clientOptions);
+        },
+      };
+      /*@@viewOff:example*/
+
+      Calls.call = async (method, uri, dtoIn, clientOptions) => {
+        const response = await Plus4U5.Utils.AppClient[method](uri, dtoIn, clientOptions);
+        return response.data;
+      };
+
+      Calls.getCommandUri = (useCase, baseUri) => {
+        return (
+          (!baseUri.endsWith("/") ? baseUri + "/" : baseUri) + (useCase.startsWith("/") ? useCase.slice(1) : useCase)
+        );
+      };
+
+      const RichLinkView = createVisualComponent({
+        render(props) {
+          const { data } = props;
+          return (
+            <Uu5Elements.InfoItem
+              title={<Uu5Elements.Link href={data.url}>{data.title}</Uu5Elements.Link>}
+              subtitle={data.description}
+              imageSrc={data.image}
+              size="xl"
+            />
+          );
+        },
+      });
+
+      /*@@viewOn:example*/
+      const RichLinkList = createVisualComponent({
+        render(props) {
+          const { urlList } = props;
+          const dataListResult = useDataList(
+            {
+              initialDtoIn: { urlList },
+              handlerMap: {
+                load: Calls.load,
+              },
+            },
+            [urlList]
+          );
+          const { state, data, errorData, pendingData, handlerMap } = dataListResult;
+          useEffect(() => {
+            console.log(dataListResult);
+          });
+
+          return (
+            <div>
+              {errorData ? (
+                "Error: " + errorData.error
+              ) : state === "pendingNoData" ? (
+                <Uu5Elements.Pending />
+              ) : (
+                data.map((it, i) => (
+                  <div key={i}>
+                    <h4>{urlList[i]}</h4>
+                    {it ? <RichLinkView data={it.data} /> : <Uu5Elements.Pending />}
+                  </div>
+                ))
+              )}
+            </div>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      const Example = createVisualComponent({
+        render() {
+          const [key, setKey] = useState(0);
+          const urlList = useMemo(() => {
+            let key = Math.random()
+              .toString(36)
+              .replace(/[^0-9]/g, "");
+            return [
+              "https://docs.plus4u.net/uaf/uuapp/uu5/?cb=" + key,
+              "https://chargeup.cz/?cb=" + key,
+              "https://app.requestly.io/delay/3000/https://unicorn.com/?cb=" + key,
+            ];
+          }, [key]);
+
+          return (
+            <div>
+              <ul>
+                <li>
+                  If backend streams items in dtoOut.itemList, useDataList processes them as soon as they're received.
+                </li>
+                <li>
+                  Getting metadata for Unicorn is delayed on backend by 3s so it should be shown later than the other
+                  links.
+                </li>
+                <li>
+                  See website/metadata/list in Network panel in Developer tools to see JSON stream (each item is on
+                  separate line).
+                </li>
+              </ul>
+              <Uu5Elements.Button onClick={() => setKey((k) => k + 1)}>Reload URL metadata</Uu5Elements.Button>
+              <RichLinkList urlList={urlList} />
+            </div>
+          );
+        },
+      });
+
+      const AuthenticatedDemo = createComponent({
+        render() {
+          let { identity } = useSession();
+          return identity ? (
+            <Example />
+          ) : identity === null ? (
+            <Uu5Elements.Button onClick={() => login()} children="Log in" />
+          ) : null;
+        },
+      });
+
+      const Page = createVisualComponent({
+        render() {
+          return (
+            <SessionProvider authenticationService={AuthenticationService}>
+              <AuthenticatedDemo />
+            </SessionProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

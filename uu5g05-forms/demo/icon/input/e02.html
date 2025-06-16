@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, createHoc } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import { withControlledInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      //@@viewOn:example
+      const SVG_ICON_CATEGORY_LIST = [
+        {
+          name: "uugdssvg",
+          label: "Svg icons",
+          itemList: [
+            "uugdssvg-svg-account", "uugdssvg-svg-activities", "uugdssvg-svg-ai", "uugdssvg-svg-audio", "uugdssvg-svg-basket", "uugdssvg-svg-bell", "uugdssvg-svg-book", "uugdssvg-svg-calendar", "uugdssvg-svg-cart", "uugdssvg-svg-chart", "uugdssvg-svg-course", "uugdssvg-svg-delete", "uugdssvg-svg-document-check", "uugdssvg-svg-document", "uugdssvg-svg-documents", "uugdssvg-svg-drag-and-drop", "uugdssvg-svg-error", "uugdssvg-svg-exit", "uugdssvg-svg-favorites", "uugdssvg-svg-female-user", "uugdssvg-svg-folder", "uugdssvg-svg-forbidden", "uugdssvg-svg-gift", "uugdssvg-svg-graduation-hat", "uugdssvg-svg-headphones", "uugdssvg-svg-images", "uugdssvg-svg-items", "uugdssvg-svg-kid", "uugdssvg-svg-lightbulb", "uugdssvg-svg-location", "uugdssvg-svg-lock", "uugdssvg-svg-message", "uugdssvg-svg-money", "uugdssvg-svg-notification", "uugdssvg-svg-offline", "uugdssvg-svg-payment-card", "uugdssvg-svg-product", "uugdssvg-svg-request", "uugdssvg-svg-role", "uugdssvg-svg-sand-clock", "uugdssvg-svg-save-template", "uugdssvg-svg-search", "uugdssvg-svg-security", "uugdssvg-svg-smile-happy", "uugdssvg-svg-smile-sad", "uugdssvg-svg-sprint", "uugdssvg-svg-stop", "uugdssvg-svg-study-materials", "uugdssvg-svg-sync", "uugdssvg-svg-tag", "uugdssvg-svg-ticket", "uugdssvg-svg-timer", "uugdssvg-svg-upload", "uugdssvg-svg-user", "uugdssvg-svg-users", "uugdssvg-svg-video-error", "uugdssvg-svg-video"
+          ].map((value, i) => ({
+            value,
+            component: Uu5Elements.RichIcon,
+            componentProps: {
+              borderRadius: "none",
+              icon: value,
+              significance: "subdued",
+              colorScheme: "building",
+              style: { marginLeft: -6, marginRight: -6 } // for same width of input after choosing some icon
+            },
+            // TODO fill per each icon for better searching
+            // name: "",
+            // keywordList: ["", ...],
+          })),
+        },
+      ];
+
+      const SvgIcon = createHoc({
+        //@@viewOn:statics
+        uu5Tag: "Uu5Forms.SvgIcon",
+        //@@viewOff:statics
+
+        component: Uu5Forms.Icon,
+
+        //@@viewOn:getProps
+        getProps(props) {
+          return {
+            ...props,
+            className: Utils.Css.joinClassName(props.className, Config.Css.css({ display: "inline-grid" })),
+            categoryList: SVG_ICON_CATEGORY_LIST,
+          }
+        },
+        //@@viewOff:getProps
+      });
+
+      SvgIcon.Input = createHoc({
+        //@@viewOn:statics
+        uu5Tag: "Uu5Forms.SvgIcon.Input",
+        //@@viewOff:statics
+
+        component: Uu5Forms.Icon.Input,
+
+        //@@viewOn:getProps
+        getProps(props) {
+          return {
+            ...props,
+            categoryList: SVG_ICON_CATEGORY_LIST,
+          }
+        },
+        //@@viewOff:getProps
+      });
+
+      const FormSvgIcon = createHoc({
+        //@@viewOn:statics
+        uu5Tag: "Uu5Forms.FormSvgIcon",
+        //@@viewOff:statics
+
+        component: Uu5Forms.FormIcon,
+
+        //@@viewOn:getProps
+        getProps(props) {
+          return {
+            ...props,
+            className: Utils.Css.joinClassName(props.className, Config.Css.css({ display: "inline-grid" })),
+            categoryList: SVG_ICON_CATEGORY_LIST,
+          }
+        },
+        //@@viewOff:getProps
+      });
+
+      const SvgIconInputControlled = withControlledInput(SvgIcon.Input);
+      const SvgIconControlled = withControlledInput(SvgIcon);
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>Input</h4>
+            <SvgIconInputControlled />
+
+            <h4>Form input</h4>
+            <SvgIconControlled label="Svg icon" />
+
+            <h4>Form item</h4>
+            <Uu5Forms.Form
+              gridLayout="icon, submit"
+              onSubmit={(e) => console.log("onSubmit", e.data.value)}
+            >
+              <FormSvgIcon name="icon" />
+              <Uu5Forms.SubmitButton className={Config.Css.css({ justifySelf: "start" })} />
+            </Uu5Forms.Form>
+          </div>
+        );
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

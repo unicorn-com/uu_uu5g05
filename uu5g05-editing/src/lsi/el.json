@@ -1,0 +1,68 @@
+{
+  "EditModal": {
+    "header": "${name} επεξεργασία",
+    "confirm": "Αποθήκευση",
+    "cancel": "Ακύρωση",
+    "addItemButton": "Προσθήκη αντικειμένου",
+    "insertBefore": "Εισαγωγή Πριν",
+    "insertAfter": "Εισαγωγή μετά",
+    "moveToPosition": "Μετακίνηση στη θέση",
+    "duplicate": "Διπλό συστατικό",
+    "delete": "Διαγραφή",
+    "preview": "Προεπισκόπηση"
+  },
+  "ItemPositionModal": {
+    "header": "Μετακίνηση στοιχείου στη θέση",
+    "cancel": "Ακύρωση",
+    "confirm": "OK"
+  },
+  "ItemRemovalDialog": {
+    "header": "Αφαίρεση αντικειμένου",
+    "info": "Ετοιμάζεστε να κάνετε μια δυνητικά καταστροφική ενέργεια. Είστε σίγουροι ότι θέλετε να προχωρήσετε;",
+    "cancel": "Ακύρωση",
+    "confirm": "Αφαιρέστε το"
+  },
+  "templates": {
+    "general": "Γενικά",
+    "visual": "Οπτική"
+  },
+  "FormStyle": {
+    "label": "Στυλ CSS"
+  },
+  "FormAspectRatio": {
+    "label": "Αναλογία διαστάσεων"
+  },
+  "FormBorderRadius": {
+    "label": "Ακτίνα συνόρων"
+  },
+  "FormCard": {
+    "label": "Κάρτα"
+  },
+  "FormColorScheme": {
+    "label": "Σχέδιο χρωμάτων"
+  },
+  "FormFullTextSearchPriority": {
+    "label": "Προτεραιότητα αναζήτησης πλήρους κειμένου"
+  },
+  "FormHeight": {
+    "label": "Ύψος"
+  },
+  "FormId": {
+    "label": "ID"
+  },
+  "FormNestingLevel": {
+    "label": "Επίπεδο φωλεοποίησης"
+  },
+  "FormSignificance": {
+    "label": "Σημασία"
+  },
+  "FormSize": {
+    "label": "Μέγεθος"
+  },
+  "FormWidth": {
+    "label": "Πλάτος"
+  },
+  "FormMargin": {
+    "label": "Περιθώριο"
+  }
+}

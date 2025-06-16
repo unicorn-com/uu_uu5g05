@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      window.uu5Environment = {
+        // uu5g05_plus4UGoBaseUri: "https://uuapp-dev.plus4u.net/uu-plus4ugo-maing01/cf7745aa904b4e5197387d60c7386580/",
+      };
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+
+      h5 {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const Page = createComponent({
+        render() {
+          const imageSrc = "https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png";
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>href</h4>
+              <Uu5Elements.RichLink href="https://unicorn.com" />
+
+              <h4>target</h4>
+              <div
+                className={Config.Css.css({
+                  display: "grid",
+                  gridTemplateRows: "auto auto",
+                  gridAutoFlow: "column",
+                  gridAutoColumns: "min-content",
+                  gap: 8,
+                })}
+              >
+                <h5>_self</h5>
+                <Uu5Elements.RichLink href="https://id-guard.net" target="_self" />
+                <h5>_blank</h5>
+                <Uu5Elements.RichLink href="https://id-guard.net" target="_blank" />
+              </div>
+
+              <h4>title</h4>
+              <Uu5Elements.RichLink href="https://unicorn.com" title="Custom title" />
+
+              <h4>description</h4>
+              <Uu5Elements.RichLink
+                href="https://unicorn.com"
+                description={<LoremIpsum paragraphCount={1} />}
+                aspectRatio="2x3"
+                size="m"
+              />
+
+              <h4>imageSrc</h4>
+              <Uu5Elements.RichLink href="https://unicorn.com" imageSrc="https://unicorn.com/unicorn-logo.png" />
+
+              <h4>aspectRatio & size</h4>
+              {["2x3", "4x3", "3x2", "16x9", "3x4", "1x1"].map((aspectRatio) => (
+                <div key={aspectRatio} className={Config.Css.css({ marginTop: "8px" })}>
+                  <h5>{aspectRatio}</h5>
+                  {["xs", "s", "m", "l"].map((size) => (
+                    <div key={size} className={Config.Css.css({ display: "inline-block", marginRight: "8px" })}>
+                      <h5>{size}</h5>
+                      <Uu5Elements.RichLink href="https://chargeup.cz" size={size} aspectRatio={aspectRatio} />
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+              <h4>borderRadius</h4>
+              {["none", "elementary", "moderate", "expressive"].map((borderRadius) => (
+                <div key={borderRadius} className={Config.Css.css({ display: "inline-block", marginRight: "8px" })}>
+                  <h5>{borderRadius}</h5>
+                  <Uu5Elements.RichLink href="https://chargeup.cz" borderRadius={borderRadius} />
+                </div>
+              ))}
+
+              <h4>tooltip</h4>
+              <Uu5Elements.RichLink href="https://unicorn.com" tooltip={{ cs: "titulek", en: "tooltip" }} />
+
+              <h4>load error</h4>
+              <div>
+                {["xs", "s", "m", "l"].map((size) => (
+                  <div key={size} className={Config.Css.css({ display: "inline-block", marginRight: "8px" })}>
+                    <h5>{size}</h5>
+                    <Uu5Elements.RichLink href="https://unicorn-bad-url.com" size={size} />
+                  </div>
+                ))}
+              </div>
+              <div>
+                {["xs", "s", "m", "l"].map((size) => (
+                  <div key={size} className={Config.Css.css({ display: "inline-block", marginRight: "8px" })}>
+                    <h5>{size}</h5>
+                    <Uu5Elements.RichLink href="https://unicorn-bad-url.com" size={size} aspectRatio="2x3" />
+                  </div>
+                ))}
+              </div>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

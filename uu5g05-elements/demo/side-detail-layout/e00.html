@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        useRef,
+        createVisualComponent,
+        useState,
+        useLayoutEffect,
+        useElementSize,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, times, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const List = createVisualComponent({
+        uu5Tag: Config.TAG + "List",
+
+        render(props) {
+          const { itemList, detailData, onDetailOpen, elementRef, ...restProps } = props;
+
+          // dynamic getting top height - only for route
+          const ref = useRef();
+          const [top, setTop] = useState(0);
+
+          useLayoutEffect(() => {
+            setTop(ref.current.getBoundingClientRect().top);
+          }, []);
+
+          return (
+            <Uu5Elements.Block
+              {...restProps}
+              header="List"
+              headerType="title"
+              card="full"
+              significance="subdued"
+              shape="background"
+              elementRef={Utils.Component.combineRefs(elementRef, ref)}
+              height={`calc(100vh - ${top}px)`} // height for the rest of the window
+            >
+              <Uu5Elements.MenuList
+                itemList={itemList.map((i) => ({
+                  children: i,
+                  onClick: () => detailData?.oid === i ? onDetailOpen(null) : onDetailOpen({ oid: i }),
+                  colorScheme: detailData?.oid === i ? "primary" : undefined,
+                  significance: "distinct",
+                }))}
+              />
+            </Uu5Elements.Block>
+          )
+        },
+      });
+
+      const Detail = createVisualComponent({
+        uu5Tag: Config.TAG + "Detail",
+
+        render(props) {
+          const { data, onClose, displayAsModal, open, ...restProps } = props;
+          const { oid } = data;
+
+          const header = `Detail route ${oid}`;
+          const body = <LoremIpsum paragraphCount={20} />;
+
+          if (displayAsModal) {
+            return oid != null ? (
+              <Uu5Elements.Modal {...restProps} header={header} open={open} onClose={onClose}>
+                {body}
+              </Uu5Elements.Modal>
+            ) : null
+          } else {
+            return (
+              <Uu5Elements.Block
+                header={header}
+                headerType="title"
+                height="100%"
+                card="full"
+                significance="subdued"
+                shape="background"
+                actionList={[{ icon: "uugds-close", onClick: onClose }]}
+                {...restProps}
+              >
+                {body}
+              </Uu5Elements.Block>
+            );
+          }
+        },
+      });
+
+      const Component = createVisualComponent({
+        uu5Tag: Config.TAG + "Component",
+
+        render(props) {
+          return (
+            <Uu5Elements.SideDetailLayout
+              // detail={<Detail />} // props are automatically added
+              detail={({ data, onClose, open, displayAsModal }) => (
+                <Detail data={data} onClose={onClose} open={open} displayAsModal={displayAsModal} />
+              )}
+            >
+              {/* <List itemList={times(48, (v) => v + 1)} /> // props are automatically added */}
+              {({ detailData, onDetailOpen }) => (
+                <List itemList={times(48, (v) => v + 1)} detailData={detailData} onDetailOpen={onDetailOpen} />
+              )}
+            </Uu5Elements.SideDetailLayout>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const Page = createVisualComponent({
+        render(props) {
+          return (
+            <Component />
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

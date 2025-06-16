@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, useRef, useEffect } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: 32,
+      });
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const { value: propsValue, onChange } = props;
+
+          const [value, setValue] = useState(propsValue);
+
+          return (
+            <div>
+              <Input
+                {...props}
+                value={value}
+                onChange={(e) => {
+                  typeof onChange === "function" && onChange(e);
+                  setValue(e.data.value);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const TextSelect = withControlledInput(Uu5Forms.TextSelect);
+
+      function Page() {
+        const itemList = [
+          { value: undefined },
+          { value: "Cairo Foster" },
+          { value: "Emerson Chambers" },
+          { value: "Orson Mercado" },
+          { value: "Tad Horne" },
+          { value: "Fletcher Franco" },
+          { value: "Lionel Hobbs" },
+          { value: "Orlando Malone" },
+          { value: "Barrett Rice" },
+          { value: "Micah Matthews" },
+          { value: "Zahir Forbes" },
+        ];
+
+        return (
+          <div className={columnsCss}>
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>iconLeft & onIconLeftClick</h4>
+              <TextSelect label="iconLeft" iconLeft="uugds-search" itemList={itemList} />
+              <TextSelect
+                label="onIconLeftClick"
+                iconLeft="uugds-search"
+                itemList={itemList}
+                onIconLeftClick={(e) => {
+                  console.log("onIconLeftClick", e);
+                  alert("onIconLeftClick - event in console");
+                }}
+              />
+
+              <h4>prefix & suffix</h4>
+              <TextSelect label="prefix" prefix="Mr." itemList={itemList} />
+              <TextSelect label="suffix" suffix="PhD." itemList={itemList} />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>feedback & onFeedbackClick</h4>
+              <TextSelect
+                label="onFeedbackClick"
+                feedback="error"
+                itemList={itemList}
+                onFeedbackClick={(e) => {
+                  console.log("onFeedbackClick", e);
+                  alert("onFeedbackClick - event in console");
+                }}
+              />
+
+              <h4>iconLeft & prefix & suffix & iconRight & feedback</h4>
+              <TextSelect
+                label="All in one"
+                iconLeft="uugds-account"
+                prefix="Mr."
+                suffix="PhD."
+                iconRight="uugds-chevron-down"
+                feedback="warning"
+                placeholder="Text"
+                itemList={itemList}
+              />
+
+              <h4>pending</h4>
+              <TextSelect label="pending" value={itemList[0].value} pending itemList={itemList} />
+              {/*@@viewOff:example*/}
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

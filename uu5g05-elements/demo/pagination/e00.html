@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useState } from "uu5g05";
+      import { Config } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+
+      {
+        /*@@viewOn:example*/
+      }
+      function withControlledInput(Component) {
+        return (props) => {
+          const [index, setIndex] = useState(0);
+          return <Component index={index} onChange={(e) => setIndex(e.data.index)} {...props} />;
+        };
+      }
+
+      const Pagination = withControlledInput(Uu5Elements.Pagination);
+      {
+        /*@@viewOff:example*/
+      }
+
+      const Page = createVisualComponent({
+        render() {
+          const [index, setIndex] = useState(0);
+          return (
+            <div
+              className={Config.Css.css({
+                display: "grid",
+                gridTemplateColumns: "repeat(1fr, 1fr))",
+                gap: 8,
+              })}
+            >
+              {/*@@viewOn:example*/}
+              <h4>index & onChange (in console)</h4>
+              <Pagination
+                index={index}
+                onChange={({ data }) => {
+                  console.log("onChange", data);
+                  setIndex(data.index);
+                }}
+                count={30}
+              />
+
+              <h4>type="pages"</h4>
+              <Pagination type="pages" count={4} />
+              <Pagination type="pages" count={30} />
+              <Pagination type="pages" count={1000} />
+
+              <h4>type="compact"</h4>
+              <Pagination type="compact" count={4} />
+              <Pagination type="compact" count={30} />
+              <Pagination type="compact" count={1000} />
+
+              <h4>size="s", "m", "l", "xl"</h4>
+              <Pagination count={1000} size="s" />
+              <Pagination count={1000} size="m" />
+              <Pagination count={1000} size="l" />
+              <Pagination count={1000} size="xl" />
+
+              <h4>type="compact", size="s", "m", "l", "xl"</h4>
+              <Pagination type="compact" count={1000} size="s" />
+              <Pagination type="compact" count={1000} size="m" />
+              <Pagination type="compact" count={1000} size="l" />
+              <Pagination type="compact" count={1000} size="xl" />
+
+              <h4>disabled</h4>
+              <Pagination count={200} disabled />
+
+              <h4>type="compact", disabled</h4>
+              <Pagination type="compact" count={4} disabled />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

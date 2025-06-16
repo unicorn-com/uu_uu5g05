@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <script>
+    const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+    if (ip) {
+      Uu5Loader.config({
+        imports: {
+          "uu5g05": "http://" + ip + ":54321/uu5g05.js",
+          "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+          "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+          "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js"
+        }
+      })
+    }
+  </script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="uu5">Loading...</div>
+
+  <script type="text/babel">
+    import { createComponent, Utils, useState } from "uu5g05";
+    import Uu5Elements from "uu5g05-elements";
+    import Uu5Forms from "uu5g05-forms";
+    import { Config, wait } from "uu5g05-dev";
+    import { UuDate } from "uu_i18ng01";
+
+    const Calls = {
+      async getItemAvailability() {
+        // could check on backend; for demo we'll simply wait and return a value
+        await wait();
+        return { maxAvailable: 5 };
+      },
+    };
+
+    const Page = createComponent({
+      render() {
+        let deliveryDateMin = new UuDate();
+        deliveryDateMin.setDay(deliveryDateMin.getDay() + 3, 0, 0, 0, 0);
+
+        const inputMap = {
+          sex: {
+            component: Uu5Forms.FormRadios,
+            props: {
+              // name: "sex",
+              itemList: [
+                { value: "man", label:{ en: "For Man", cs: "Muž" } },
+                { value: "woman", label: { en: "For Woman", cs: "Žena" } }
+              ],
+              label: { en: "Gender", cs: "Pohlaví" },
+              layout: "vertical",
+              reguired: true,
+            },
+          },
+          size: {
+            component: Uu5Forms.FormSwitchSelect,
+            props: {
+              // name: "size",
+              itemList: [{ value: "S" }, { value: "M" }, { value: "L" }, { value: "XL" }, { value: "XXL" }],
+              label: { en: "Size", cs: "Velikost" },
+              layout: "vertical",
+              reguired: true,
+            },
+          },
+          count: {
+            component: Uu5Forms.FormNumber,
+            props: {
+              // name: "count",
+              label: { en: "Item count", cs: "Množství" },
+              layout: "vertical",
+              required: true,
+              min: 1,
+              initialValue: 1,
+              message: {
+                en: "Item count is limited by current stock reserve.",
+                cs: "Množství je limitováno aktuální skladovou zásobou.",
+              },
+              onValidate: async (e) => {
+                const { value } = e.data;
+                const { maxAvailable } = await Calls.getItemAvailability();
+                if (value > maxAvailable) {
+                  return {
+                    messageParams: [maxAvailable],
+                    message: {
+                      en: "Unfortunately, only %d items are currently available.",
+                      cs: "Je nám líto, momentálně je k dispozici pouze %d kusů.",
+                    },
+                  };
+                }
+              }
+            },
+          },
+          destination: {
+            component: Uu5Forms.FormSelect,
+            props: {
+              // name: "destination",
+              itemList: [
+                { value: "prague", children: "Prague" },
+                { value: "plzen", children: "Plzeň" },
+                { value: "hk", children: "Hradec Králové" },
+                { value: "brno", children: "Brno" },
+                { value: "bratislava", children: "Bratislava" },
+                { value: "kosice", children: "Košice" },
+                { value: "kyiv", children: "Kyiv" },
+                { value: "ternopil", children: "Ternopil" },
+              ],
+              label: { en: "Destination", cs: "Pobočka" },
+              layout: "vertical",
+              initialValue: "prague",
+            },
+          },
+          deliveryDate: {
+            component: Uu5Forms.FormDate,
+            props: {
+              // name: "deliveryDate",
+              label: { en: "Preferred delivery date", cs: "Preferované datum doručení" },
+              layout: "vertical",
+              min: deliveryDateMin.toIsoString(),
+            },
+          },
+          name: {
+            component: Uu5Forms.FormText,
+            props: {
+              // name: "name",
+              label: { en: "Name", cs: "Jméno" },
+              layout: "vertical",
+              placeholder: { en: "Name and surname", cs: "Jméno a příjmení" },
+              required: true,
+            },
+          },
+          phone: {
+            component: Uu5Forms.FormText,
+            props: {
+              // name: "phone",
+              label: { en: "Phone", cs: "Telefon" },
+              layout: "vertical",
+              iconLeft: "uugds-phone",
+              prefix: "+420",
+              type: "tel",
+              required: true,
+            },
+          },
+          email: {
+            component: Uu5Forms.FormEmail,
+            props: {
+              // name: "email",
+              label: { en: "E-mail", cs: "E-mail" },
+              layout: "vertical",
+              required: true,
+            },
+          },
+          desc: {
+            component: Uu5Forms.FormTextArea,
+            props: {
+              // name: "desc",
+              label: { en: "Notes", cs: "Poznámka" },
+              layout: "vertical",
+            },
+          },
+          conditions: {
+            component: Uu5Forms.FormCheckbox,
+            props: {
+              // name: "conditions",
+              label: {
+                en: <>I agree to <Uu5Elements.Link>Terms and conditions</Uu5Elements.Link></>,
+                cs: <>Souhlasím s <Uu5Elements.Link>Obchodními podmínkami</Uu5Elements.Link></>,
+              },
+              layout: "vertical",
+              required: true,
+            },
+          },
+          submit: {
+            component: () => (<div><Uu5Forms.SubmitButton /></div>),
+          },
+        };
+
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <Uu5Forms.Form
+              gridLayout={`
+                sex name,
+                size phone,
+                count email,
+                destination desc,
+                deliveryDate desc,
+                conditions .
+              `}
+              inputMap={inputMap}
+              onSubmit={(e) => {
+                alert("Submitted with values:\n" + JSON.stringify(e.data.value, null, 2));
+              }}
+            />
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      },
+    });
+
+    Utils.Dom.render(<Page />, document.getElementById("uu5"));
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kick Off 2022</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, PropTypes, createVisualComponent, createHoc } from "uu5g05";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+
+      function Page() {
+        return (
+          <div style={{ width: 920, margin: "0 auto" }}>
+            <Uu5Forms.Form
+              onSubmit={(e) => {
+                alert("Submitted with values:\n" + JSON.stringify(e.data.value, null, 2));
+              }}
+            >
+              <Uu5Elements.Block
+                card="content"
+                header="Buy a T-shirt"
+                headerType="heading"
+                info={"Buy a Red Monster T-shirt in a limited edition and win one of interesting presents."}
+                footer={
+                  <div className={Config.Css.css({ display: "flex", gap: 8, justifyContent: "flex-end" })}>
+                    <Uu5Forms.ResetButton />
+                    <Uu5Forms.SubmitButton>Buy</Uu5Forms.SubmitButton>
+                  </div>
+                }
+              >
+                <div className={Config.Css.css({
+                  display: "grid",
+                  rowGap: 8,
+                  columnGap: 32,
+                  gridAutoFlow: "column",
+                  gridTemplateRows: "repeat(4, auto)",
+                })}>
+                  <div>
+                    <Uu5Forms.Radios
+                      name="sex"
+                      label="Gender"
+                      itemList={[{ value: "man", label: "For Man" }, { value: "woman", label: "For Woman" }]}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Uu5Forms.SwitchSelect
+                      name="size"
+                      label="Size"
+                      value="M"
+                      itemList={[{ value: "S" }, { value: "M" }, { value: "L" }, { value: "XL" }, { value: "XXL" }]}
+                    />
+                  </div>
+
+                  <div>
+                    <Uu5Forms.FormNumber
+                      name="count"
+                      label="Item count"
+                      required
+                      min={1}
+                      initialValue={1}
+                      message="Item count is limited by current stock reserve."
+                    />
+                  </div>
+
+                  <div style={{ alignSelf: "self-end" }}>
+                    <Uu5Forms.Checkbox required name="conditions" label={<>I agree to <Uu5Elements.Link>Terms and
+                      conditions</Uu5Elements.Link></>} />
+                  </div>
+
+                  <div>
+                    <Uu5Forms.FormText name="deliveryName" label="Name" required />
+                  </div>
+                  <div>
+                    <Uu5Forms.FormText name="deliveryPhone" label="Phone" iconLeft="uugds-phone" prefix="+420" type="tel"
+                                       required />
+                  </div>
+                  <div>
+                    <Uu5Forms.FormTextArea name="deliveryAddress" label="Address" required rows={3} />
+                  </div>
+
+                  <div>
+                    <Uu5Forms.FormDateTime
+                      name="deliveryDate"
+                      label="Preferred delivery date"
+                    />
+                  </div>
+                </div>
+              </Uu5Elements.Block>
+            </Uu5Forms.Form>
+
+            <br /><br />
+            <br /><br />
+            <br /><br />
+            <br /><br />
+            <br /><br />
+            <br /><br />
+            <br /><br />
+
+            <Uu5Elements.Tabs
+              itemList={[
+                {
+                  label: "Uu5Elements",
+                  icon: "uugds-info",
+                  children: (
+                    <div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)" }}>
+                        <div>
+                          <h4>Badge</h4>
+                          <Uu5Elements.Badge size="m" colorScheme="active" />&nbsp;
+                          <Uu5Elements.Badge size="m" colorScheme="active" icon="uugds-play-circle" />&nbsp;
+                          <Uu5Elements.Badge size="m" colorScheme="active">Active</Uu5Elements.Badge>&nbsp;
+                          <Uu5Elements.Badge size="m" colorScheme="active" icon="uugds-play-circle">Active</Uu5Elements.Badge>
+                          <br /><br />
+                          <Uu5Elements.Badge size="m" colorScheme="active" borderRadius="full" />&nbsp;
+                          <Uu5Elements.Badge size="m" colorScheme="active" icon="uugds-play-circle" borderRadius="full" />&nbsp;
+                          <Uu5Elements.Badge size="m" colorScheme="active"
+                                             borderRadius="expressive">Active</Uu5Elements.Badge>&nbsp;
+                          <Uu5Elements.Badge size="m" colorScheme="active" icon="uugds-play-circle"
+                                             borderRadius="expressive">Active</Uu5Elements.Badge>
+                        </div>
+
+                        <div>
+                          <h4>InfoItem</h4>
+                          <Uu5Elements.InfoItem
+                            title="John Doe"
+                            subtitle="Developer"
+                          />
+                          &nbsp;&nbsp;&nbsp;
+                          <Uu5Elements.InfoItem
+                            iconText="JD"
+                            title="John Doe"
+                            subtitle="Developer"
+                          />
+                          &nbsp;&nbsp;&nbsp;
+                          <Uu5Elements.InfoItem
+                            imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png"
+                            title="John Doe"
+                            subtitle="Developer"
+                          />
+                        </div>
+
+                        <div>
+                          <h4>SwitchSelectVertical</h4>
+                          <Uu5Elements.SwitchSelectVertical {...{
+                            height: 100,
+                            width: 200,
+                            itemList: ["Initial", "Active", "Final", "Alternative", "Problem", "Passive", "Failed", "Cancelled"].map(
+                              name => ({
+                                value: name,
+                                onClick: (e) => console.log("onClick", name, e),
+                                children: (
+                                  <>
+                                    <Uu5Elements.Badge
+                                      size="l"
+                                      className={Config.Css.css({ marginRight: 8 })}
+                                      colorScheme={name.toLowerCase()}
+                                      icon="uugds-play-circle"
+                                    />
+                                    {name}
+                                  </>
+                                )
+                              })
+                            ),
+                          }} />
+                        </div>
+
+                        <div>
+                          <h4>TouchLink</h4>
+                          <Uu5Elements.TouchLink state="active" icon="uubml-artifact" tooltip="active" notification={5} />
+                          &nbsp;&nbsp;&nbsp;
+                          <Uu5Elements.TouchLink icon="uu5-uu5" colorScheme="blue" significance="highlighted">
+                            uu5 Club
+                          </Uu5Elements.TouchLink>
+                          <Uu5Elements.TouchLink imageSrc="https://cdn.plus4u.net/uu-plus4u5g01/4.0.0/assets/img/anonymous.png" borderRadius="full" notification={5} state="active">
+                            John Doe
+                          </Uu5Elements.TouchLink>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4>HighlightedBox</h4>
+                        <Uu5Elements.HighlightedBox onClose={() => alert("close")}>
+                          <LoremIpsum avgSentences={1} />
+                        </Uu5Elements.HighlightedBox>
+                        <br />
+                        <Uu5Elements.HighlightedBox
+                          colorScheme="negative"
+                          controlPosition="right"
+                          controlList={[
+                            { children: "Dismiss", significance: "distinct" },
+                            { children: "Confirm", significance: "highlighted" },
+                          ]}
+                        >
+                          <LoremIpsum avgSentences={1} />
+                        </Uu5Elements.HighlightedBox>
+                        <br />
+                        <Uu5Elements.HighlightedBox
+                          colorScheme="warning"
+                          controlPosition="bottom"
+                          controlList={[
+                            { children: "Dismiss", significance: "distinct" },
+                            { children: "Confirm", significance: "highlighted" },
+                          ]}
+                          significance="subdued"
+                        >
+                          <LoremIpsum />
+                        </Uu5Elements.HighlightedBox>
+                      </div>
+                    </div>
+                  )
+                },
+                {
+                  label: "Uu5Forms",
+                  icon: "uugds-comment-text",
+                  children: "History content",
+                }
+              ]}
+            />
+          </div>
+        )
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

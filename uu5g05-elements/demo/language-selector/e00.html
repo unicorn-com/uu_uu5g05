@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useLanguage } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const Page = createComponent({
+        render() {
+          let [language] = useLanguage();
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <Uu5Elements.LanguageSelector />
+
+              <h4>languageList</h4>
+              <Uu5Elements.LanguageSelector
+                languageList={[
+                  "en", "sk", "uk", "nl", "de", "pl", "fr", "it", "es", "ru", "en-gb", "en-us",
+
+                  // custom language: Chinese
+                  { code: "zh", name: "中文" }
+                ]}
+              />
+
+              <h4>labelType</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fit, minmax(160px, 1fr))">
+                <Uu5Elements.Grid.Item>
+                  <h5>code (default)</h5>
+                  <Uu5Elements.LanguageSelector labelType="code" />
+                </Uu5Elements.Grid.Item>
+                <Uu5Elements.Grid.Item>
+                  <h5>name</h5>
+                  <Uu5Elements.LanguageSelector labelType="name" />
+                </Uu5Elements.Grid.Item>
+                <Uu5Elements.Grid.Item>
+                  <h5>flag</h5>
+                  <Uu5Elements.LanguageSelector labelType="flag" />
+                </Uu5Elements.Grid.Item>
+                <Uu5Elements.Grid.Item>
+                  <h5>flag-code</h5>
+                  <Uu5Elements.LanguageSelector labelType="flag-code" />
+                </Uu5Elements.Grid.Item>
+                <Uu5Elements.Grid.Item>
+                  <h5>flag-name</h5>
+                  <Uu5Elements.LanguageSelector labelType="flag-name" />
+                </Uu5Elements.Grid.Item>
+              </Uu5Elements.Grid>
+
+              <h4>itemType</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fit, minmax(160px, 1fr))">
+                <Uu5Elements.Grid.Item>
+                  <h5>name</h5>
+                  <Uu5Elements.LanguageSelector itemType="name" />
+                </Uu5Elements.Grid.Item>
+                <Uu5Elements.Grid.Item>
+                  <h5>name-code (default)</h5>
+                  <Uu5Elements.LanguageSelector itemType="name-code" />
+                </Uu5Elements.Grid.Item>
+                <Uu5Elements.Grid.Item>
+                  <h5>flag-name</h5>
+                  <Uu5Elements.LanguageSelector itemType="flag-name" />
+                </Uu5Elements.Grid.Item>
+                <Uu5Elements.Grid.Item>
+                  <h5>flag-name-code</h5>
+                  <Uu5Elements.LanguageSelector itemType="flag-name-code" />
+                </Uu5Elements.Grid.Item>
+              </Uu5Elements.Grid>
+              {/*@@viewOff:example*/}
+              <p>
+                Current language: <b>{language}</b>
+              </p>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+{
+  "Print": {
+    "notReadyAlert": "Page contains content that has not been yet loaded. Check the whole page and make sure that all content is loaded and start the print again."
+  }
+}

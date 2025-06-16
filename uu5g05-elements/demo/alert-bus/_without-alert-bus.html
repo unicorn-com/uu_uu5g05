@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const Page = createComponent({
+        render() {
+          const { addAlert } = Uu5Elements.useAlertBus();
+          const [shown, setShown] = useState(false);
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>controlled Uu5Elements.Alert outside of AlertBus</h4>
+              <Uu5Elements.Button onClick={() => setShown(v => !v)}>Toggle alert</Uu5Elements.Button>
+              {shown ? <Uu5Elements.Alert header="Header" onClose={() => setShown(false)}>
+                Some content...
+              </Uu5Elements.Alert> : null}
+              
+              <h4>header</h4>
+              <Uu5Elements.Button onClick={() => addAlert({ header: "Header" })}>Header</Uu5Elements.Button>&nbsp;
+              <Uu5Elements.Button onClick={() => addAlert({ header: { en: "Lsi header", cs: "Lsi nadpis" } })}>
+                Lsi header
+              </Uu5Elements.Button>
+              <h4>message</h4>
+              <Uu5Elements.Button
+                onClick={() => addAlert({ header: "Message", message: <LoremIpsum avgSentences={2} /> })}
+              >
+                Message
+              </Uu5Elements.Button>
+              &nbsp;
+              <Uu5Elements.Button
+                onClick={() =>
+                  addAlert({
+                    header: "Lsi message",
+                    message: {
+                      en: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Ex sapien vitae pellentesque sem placerat in id. Pretium tellus duis convallis tempus leo eu aenean.",
+                      cs: "Oprávněné aniž i odstoupil o snadno osoby vede grafikou osobami úmyslu 60 % poskytovat, dělí způsobem, § 36 veletrhu pověřit spravují zřejmém, k před platbě.",
+                    },
+                  })
+                }
+              >
+                Lsi message
+              </Uu5Elements.Button>
+              <h4>priority</h4>
+              <Uu5Elements.Button
+                onClick={() =>
+                  addAlert({ header: "Error", message: <LoremIpsum avgSentences={2} />, priority: "error" })
+                }
+              >
+                Error
+              </Uu5Elements.Button>
+              &nbsp;
+              <Uu5Elements.Button
+                onClick={() =>
+                  addAlert({ header: "Warning", message: <LoremIpsum avgSentences={2} />, priority: "warning" })
+                }
+              >
+                Warning
+              </Uu5Elements.Button>
+              &nbsp;
+              <Uu5Elements.Button
+                onClick={() =>
+                  addAlert({ header: "Success", message: <LoremIpsum avgSentences={2} />, priority: "success" })
+                }
+              >
+                Success
+              </Uu5Elements.Button>
+              &nbsp;
+              <Uu5Elements.Button
+                onClick={() => addAlert({ header: "Info", message: <LoremIpsum avgSentences={2} />, priority: "info" })}
+              >
+                Info
+              </Uu5Elements.Button>
+              <h4>duration</h4>
+              <Uu5Elements.Button
+                onClick={() =>
+                  addAlert({
+                    header: "Error 2000ms",
+                    message: <LoremIpsum avgSentences={2} />,
+                    priority: "error",
+                    durationMs: 2000,
+                  })
+                }
+              >
+                Error 2000ms
+              </Uu5Elements.Button>
+              &nbsp;
+              <Uu5Elements.Button
+                onClick={() =>
+                  addAlert({
+                    header: "Warning 3000ms",
+                    message: <LoremIpsum avgSentences={2} />,
+                    priority: "warning",
+                    durationMs: 3000,
+                  })
+                }
+              >
+                Warning 3000ms
+              </Uu5Elements.Button>
+              &nbsp;
+              <Uu5Elements.Button
+                onClick={() =>
+                  addAlert({
+                    header: "Success 1000ms",
+                    message: <LoremIpsum avgSentences={2} />,
+                    priority: "success",
+                    durationMs: 1000,
+                  })
+                }
+              >
+                Success 1000ms
+              </Uu5Elements.Button>
+              &nbsp;
+              <Uu5Elements.Button
+                onClick={() =>
+                  addAlert({
+                    header: "Info 4000ms",
+                    message: <LoremIpsum avgSentences={2} />,
+                    priority: "info",
+                    durationMs: 4000,
+                  })
+                }
+              >
+                Info 4000ms
+              </Uu5Elements.Button>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

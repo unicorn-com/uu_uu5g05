@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        useState,
+        useRef,
+        useLayoutEffect,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum, times } from "uu5g05-dev";
+
+      function LocalList({ itemList }) {
+        return (
+          <Uu5Elements.Block
+            header="Local list"
+            headerType="title"
+            card="full"
+            significance="subdued"
+            shape="background"
+          >
+            {() => (
+              <Uu5Elements.SideDetailLayout detail={<Detail />}>
+                <List
+                  itemList={itemList}
+                  height={500}
+                  header={null}
+                />
+              </Uu5Elements.SideDetailLayout>
+            )}
+          </Uu5Elements.Block>
+        );
+      }
+
+      //@@viewOn:example
+      const List = createVisualComponent({
+        uu5Tag: Config.TAG + "List",
+
+        render(props) {
+          const { itemList, detailData, onDetailOpen, elementRef, ...restProps } = props;
+
+          // dynamic getting top height - only for route
+          const ref = useRef();
+          const [top, setTop] = useState(0);
+
+          useLayoutEffect(() => {
+            setTop(ref.current.getBoundingClientRect().top);
+          }, []);
+
+          return (
+            <Uu5Elements.Block
+              height={`calc(100vh - ${top}px)`} // height for the rest of the window
+              header="List"
+              headerType="title"
+              card="full"
+              significance="subdued"
+              shape="background"
+              elementRef={Utils.Component.combineRefs(elementRef, ref)}
+              {...restProps}
+            >
+              <Uu5Elements.MenuList
+                itemList={itemList.map((i) => ({
+                  children: i,
+                  onClick: () => detailData?.oid === i ? onDetailOpen(null) : onDetailOpen({ oid: i }),
+                  colorScheme: detailData?.oid === i ? "primary" : undefined,
+                  significance: "distinct",
+                }))}
+              />
+            </Uu5Elements.Block>
+          )
+        },
+      });
+
+      const Detail = createVisualComponent({
+        uu5Tag: Config.TAG + "Detail",
+
+        render(props) {
+          const { data, onClose, displayAsModal, open, ...restProps } = props;
+          const { oid } = data;
+
+          const header = `Detail route ${oid}`;
+          const body = <LoremIpsum paragraphCount={20} />;
+
+          if (displayAsModal) {
+            return (
+              <Uu5Elements.Modal {...restProps} header={header} open={open} onClose={onClose}>
+                {body}
+              </Uu5Elements.Modal>
+            );
+          } else {
+            return (
+              <Uu5Elements.Block
+                header={header}
+                headerType="title"
+                height="100%"
+                card="full"
+                significance="subdued"
+                shape="background"
+                actionList={[{ icon: "uugds-close", onClick: onClose }]}
+                {...restProps}
+              >
+                {body}
+              </Uu5Elements.Block>
+            );
+          }
+        },
+      });
+
+      function GlobalList({ itemList }) {
+        const [data, setData] = useState();
+
+        return (
+          <>
+            <List itemList={itemList} detailData={data} onDetailOpen={setData} height="auto" />
+            <Uu5Elements.SideDetailLayout.Detail data={data} onClose={() => setData(null)}>
+              <Detail />
+            </Uu5Elements.SideDetailLayout.Detail>
+          </>
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Elements.SideDetailLayout.Provider>
+              <Uu5Elements.ScrollableBox height="100vh">
+                <GlobalList itemList={times(5, (v) => v + 1)} />
+                <br />
+                <br />
+                <GlobalList itemList={times(5, (v) => v + 11)} />
+                <br />
+                <br />
+                <LocalList itemList={times(5, (v) => v + 21)} />
+              </Uu5Elements.ScrollableBox>
+            </Uu5Elements.SideDetailLayout.Provider>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+
+</html>

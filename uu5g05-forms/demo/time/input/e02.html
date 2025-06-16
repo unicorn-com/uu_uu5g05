@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { UuDateTime } from "uu_i18ng01";
+      import { withControlledInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      window.UuDateTime = UuDateTime;
+
+      const TimeInput = withControlledInput(Uu5Forms.Time.Input);
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>Default</h4>
+            <TimeInput onChange={(e) => console.log("onChange", e.data.value)} />
+
+            <h4>date (summer/winter time change) - Europe/Prague time zone</h4>
+            <TimeInput
+              date="2023-03-26"
+              onChange={(e) => console.log("onChange", e.data.value)}
+              timeZone="Europe/Prague" // not necessary to set
+            />
+            &nbsp;date="2023-03-26" change to summer time
+            <br/>
+            <TimeInput
+              date="2023-10-29"
+              onChange={(e) => console.log("onChange", e.data.value)}
+              timeZone="Europe/Prague"  // not necessary to set
+            />
+            &nbsp;date="2023-10-29" change to winter time
+
+            <h4>value - Europe/Prague time zone</h4>
+            <TimeInput
+              value="2023-10-28T23:00:00.000Z"
+              date="2023-03-26"
+              onChange={(e) => console.log("onChange", e.data.value)}
+              timeZone="Europe/Prague" // not necessary to set
+            />
+            &nbsp;date="2023-03-26" change to summer time
+            <br/>
+            <TimeInput
+              value="2023-10-28T23:00:00.000Z"
+              date="2023-10-29"
+              onChange={(e) => console.log("onChange", e.data.value)}
+              timeZone="Europe/Prague" // not necessary to set
+            />
+            &nbsp;date="2023-10-29" change to winter time
+
+            <h4>summerTimeTemplate & winterTimeTemplate</h4>
+            <TimeInput
+              value="2023-10-28T23:00:00.000Z"
+              date="2023-10-29"
+              summerTimeTemplate={(v) => v + "A"}
+              winterTimeTemplate={(v) => v + "B"}
+              onChange={(e) => console.log("onChange", e.data.value)}
+              timeZone="Europe/Prague" // not necessary to set
+            />
+            &nbsp;A|B
+
+            <br/>
+
+            <TimeInput
+              value="2023-10-28T23:00:00.000Z"
+              date="2023-10-29"
+              summerTimeTemplate={null}
+              winterTimeTemplate={(v) => "*" + v}
+              onChange={(e) => console.log("onChange", e.data.value)}
+              timeZone="Europe/Prague" // not necessary to set
+            />
+            &nbsp;*
+
+            <h4>summerTimeSuffix & winterTimeSuffix</h4>
+            <div style={{ display: "flex", gap: 2, alignItems: "center" }}>
+              <TimeInput
+                value="2023-10-28T23:00:00.000Z"
+                date="2023-10-29"
+                summerTimeSuffix={
+                  <Uu5Elements.Badge colorScheme="orange">
+                    CET
+                  </Uu5Elements.Badge>
+                }
+                winterTimeSuffix={
+                  <Uu5Elements.Badge colorScheme="orange">
+                    CEST
+                  </Uu5Elements.Badge>
+                }
+                onChange={(e) => console.log("onChange", e.data.value)}
+                timeZone="Europe/Prague" // not necessary to set
+              />
+              <div style={{ display: "flex", gap: 2, alignItems: "center" }}>
+                <Uu5Elements.Badge colorScheme="orange">
+                  CET
+                </Uu5Elements.Badge>
+                {"|"}
+                <Uu5Elements.Badge colorScheme="orange">
+                  CEST
+                </Uu5Elements.Badge>
+              </div>
+            </div>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Row & Column</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config, ContentResizer } from "uu5g05-dev";
+
+      function Tile({ index, ...propsToPass }) {
+        return (
+          <Uu5Elements.Tile header={"Tile" + (index == null ? "" : " " + (index + 1))} headerColorScheme="primary" {...propsToPass}>
+            <div>Lorem Ipsum...</div>
+            {!!(index != null && index % 2) && <div>Lorem Ipsum...</div>}
+          </Uu5Elements.Tile>
+        )
+      }
+
+      // to uu5g05-bricks-support
+      function parseScreenSize(text) {
+        let result = text;
+
+        if (typeof text === "string") {
+          result = Object.fromEntries(text
+            .replace(/;$/, "")
+            .split(";")
+            .map(screenSizeDef =>
+              screenSizeDef.split(":").map(v => {
+                v = v.trim();
+                const num = +v;
+                if (!isNaN(num)) v = num;
+                return v;
+              })
+            )
+          )
+        }
+
+        return result;
+      }
+
+      function Row({ columnGap = 8, rowGap = 8, ...propsToPass }) {
+        return (
+          <Uu5Elements.Grid
+            {...propsToPass}
+            columnGap={parseScreenSize(columnGap)}
+            rowGap={parseScreenSize(rowGap)}
+            templateColumns="repeat(12, 1fr)"
+          />
+        )
+      }
+
+      function Column({ children, colWidth, ...propsToPass }) {
+        return (
+          <Uu5Elements.Grid.Item {...propsToPass} colSpan={parseScreenSize(colWidth)}>
+            {Array.isArray(children) ? children : ({ style }) => Utils.Element.clone(children, { className: Utils.Css.joinClassName(children.props.className, Config.Css.css(style)) })}
+          </Uu5Elements.Grid.Item>
+        )
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <ContentResizer>
+              <h3>Row & Column (xs: 12; s: 6; m: 4; l: 3; xl: 2)</h3>
+              <Row>
+                <Column colWidth="xs: 12; s: 6; m: 4; l: 3; xl: 2">
+                  <Tile index={0} />
+                </Column>
+                <Column colWidth="xs: 12; s: 6; m: 4; l: 3; xl: 2">
+                  <Tile index={1} />
+                </Column>
+                <Column colWidth="xs: 12; s: 6; m: 4; l: 3; xl: 2">
+                  <Tile index={2} />
+                </Column>
+                <Column colWidth="xs: 12; s: 6; m: 4; l: 3; xl: 2">
+                  <Tile index={3} />
+                </Column>
+                <Column colWidth="xs: 12; s: 6; m: 4; l: 3; xl: 2">
+                  <Tile index={4} />
+                </Column>
+                <Column colWidth="xs: 12; s: 6; m: 4; l: 3; xl: 2">
+                  <Tile index={5} />
+                </Column>
+              </Row>
+            </ContentResizer>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+
+    </script>
+  </body>
+
+</html>

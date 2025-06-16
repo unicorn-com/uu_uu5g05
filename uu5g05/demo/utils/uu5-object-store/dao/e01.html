@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script
+      src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5codekitg01/2.x/assets/example-config.js"
+      crossorigin
+    ></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+      body:has(.uu-app-devkit-demo-middleware-controls) {
+        padding-top: 48px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        Environment,
+        useDataList,
+        createComponent,
+        createVisualComponent,
+        SessionProvider,
+        useSession,
+        useState,
+        useMemo,
+        useEffect,
+        useDataObject,
+        usePreviousValue,
+        Content,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import Uu5CodeKit from "uu5codekitg01";
+
+      /*@@viewOn:example*/
+      class LocalDataBackupDao extends Utils.Uu5ObjectStore.Dao {
+        static SCHEMA_VERSION = 1;
+
+        constructor() {
+          super("UuEcc.Section", { schemaVersion: LocalDataBackupDao.SCHEMA_VERSION });
+        }
+
+        createSchema() {
+          this._createUniqueIndex({ documentOid: 1, sectionOid: 1 });
+        }
+
+        async findByDocumentOidAndSectionOid(documentOid, sectionOid) {
+          return await this._findOne({ documentOid, sectionOid });
+        }
+
+        async createOrUpdateByDocumentOidAndSectionOid(documentOid, sectionOid, uuObject) {
+          return await this._runInTransaction(async function () {
+            let result;
+            let existingItem = await this.findByDocumentOidAndSectionOid(documentOid, sectionOid);
+            if (existingItem) result = await this.update({ ...existingItem, ...uuObject })
+            else result = await this.create({ documentOid, sectionOid, ...uuObject });
+            return result;
+          });
+        }
+
+        async deleteByDocumentOidAndSectionOid(documentOid, sectionOid) {
+          return await this._deleteOne({ documentOid, sectionOid });
+        }
+      }
+
+      const localDataBackupDao = new LocalDataBackupDao();
+
+      /*@@viewOff:example*/
+
+      const serverUu5String = `<uu5string/>
+<Uu5Bricks.Block header="Latin lesson" card="full">
+  <Uu5Dev.LoremIpsum />
+</Uu5Bricks.Block>`;
+
+      const Calls = {
+        section: {
+          load: async (dtoIn) => {
+            return {
+              uu5String: serverUu5String,
+              sys: { cts: "2024-10-03T12:00:00.000Z", mts: "2024-10-03T12:00:00.000Z", rev: 0 },
+            };
+          },
+          save: async (dtoIn) => {
+            throw new Error("Saving data failed.");
+          },
+        },
+      };
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const {
+            value: propsValue,
+            onChange,
+            onValidationStart,
+            onValidationEnd,
+            feedback,
+            message,
+            messageParams,
+          } = props;
+
+          const [value, setValue] = useState(propsValue);
+          const [errorList, setErrorList] = useState(null);
+          const [pending, setPending] = useState();
+
+          return (
+            <div>
+              <Input
+                {...props}
+                value={value}
+                feedback={errorList?.[0].feedback || feedback}
+                message={errorList?.[0].message || message}
+                messageParams={errorList?.[0].messageParams || messageParams}
+                pending={pending}
+                onChange={(e) => {
+                  typeof onChange === "function" && onChange(e);
+                  setValue(e.data.value);
+                }}
+                onValidationStart={(e) => {
+                  typeof onValidationStart === "function" && onValidationStart(e);
+                  setPending(true);
+                }}
+                onValidationEnd={(e) => {
+                  typeof onValidationEnd === "function" && onValidationEnd(e);
+                  setErrorList(e.data.errorList.length ? e.data.errorList : null);
+                  setPending(false);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const ControlledUu5String = withControlledInput(Uu5CodeKit.Uu5String);
+
+      const DemoSection = createVisualComponent({
+        render(props) {
+          const { documentOid, sectionOid } = props;
+
+          const { data, state, errorData, handlerMap } = useDataObject(
+            {
+              handlerMap: {
+                load: async () => Calls.section.load({ documentOid, sectionOid }),
+              },
+            },
+            [documentOid, sectionOid],
+          );
+
+          /*@@viewOn:example*/
+          const {
+            data: localData,
+            state: localDataState,
+            handlerMap: localDataHandlerMap,
+          } = useDataObject(
+            {
+              handlerMap: {
+                load: async () => {
+                  return await localDataBackupDao.findByDocumentOidAndSectionOid(documentOid, sectionOid);
+                },
+                save: async ({ uu5String }) => {
+                  return await localDataBackupDao.createOrUpdateByDocumentOidAndSectionOid(documentOid, sectionOid, {
+                    documentOid,
+                    sectionOid,
+                    uu5String,
+                  });
+                },
+                delete: async () => {
+                  await localDataBackupDao.deleteByDocumentOidAndSectionOid(documentOid, sectionOid);
+                  return null;
+                },
+              },
+            },
+            [documentOid, sectionOid],
+          );
+
+          const isLocalDataNewer =
+            localData &&
+            state !== "pendingNoData" &&
+            (!data || localData.sys.mts.getTime() > new Date(data.sys.mts).getTime());
+          /*@@viewOff:example*/
+
+          const [feedbackData, setFeedbackData] = useState();
+
+          useEffect(() => {
+            if (isLocalDataNewer) {
+              setFeedbackData({
+                feedback: "warning",
+                message: "Showing local data backup because it is newer than server-side data.",
+              });
+            }
+          }, [isLocalDataNewer]);
+
+          async function handleSave(uu5String) {
+            try {
+              await handlerMap.save({ uu5String });
+            } catch (e) {
+              await localDataHandlerMap.save({ uu5String });
+              setFeedbackData({
+                feedback: "error",
+                message: "Saving data failed. Try again or reload the page, data was stored locally for now.",
+              });
+              return;
+            }
+            localDataHandlerMap.delete();
+          }
+
+          const isLoaded = state !== "pendingNoData" && localDataState !== "pendingNoData";
+          const prevIsLoaded = usePreviousValue(isLoaded, false);
+          let [inputValue, setInputValue] = useState(null);
+          if (isLoaded && !prevIsLoaded && inputValue === null) {
+            inputValue = (isLocalDataNewer ? localData?.uu5String : data?.uu5String) ?? undefined;
+            setInputValue(inputValue);
+          }
+
+          return (
+            <div>
+              <Uu5Elements.Block header="Section uu5String" headerType="title">
+                {state === "pendingNoData" || localDataState === "pendingNoData" ? (
+                  <Uu5Elements.Pending />
+                ) : (
+                  <Uu5Elements.Grid>
+                    <ControlledUu5String
+                      name="uu5String"
+                      maxRows={10}
+                      value={inputValue}
+                      onChange={(e) => {
+                        setFeedbackData(undefined);
+                        setInputValue(e.data.value);
+                      }}
+                      feedback={feedbackData?.feedback}
+                      message={feedbackData?.message}
+                    />
+
+                    <Uu5Elements.Grid justifyContent="end" templateColumns="repeat(3, auto)" columnGap={8}>
+                      <Uu5Elements.Button onClick={() => location.reload()}>Reload</Uu5Elements.Button>
+                      <Uu5Elements.Button
+                        onClick={async () => {
+                          await localDataHandlerMap.delete();
+                          location.reload();
+                        }}
+                        disabled={!localDataHandlerMap.delete}
+                      >
+                        Clear local data & reload
+                      </Uu5Elements.Button>
+                      <Uu5Elements.Button
+                        onClick={() => handleSave(inputValue)}
+                        disabled={data?.uu5String === inputValue}
+                        colorScheme="primary"
+                        significance="highlighted"
+                      >
+                        Save
+                      </Uu5Elements.Button>
+                    </Uu5Elements.Grid>
+                  </Uu5Elements.Grid>
+                )}
+              </Uu5Elements.Block>
+            </div>
+          );
+        },
+      });
+
+      const Page = createVisualComponent({
+        render() {
+          return <DemoSection documentOid="66470a1b297272003520719e" sectionOid="aabb0a1b297272003520eeff" />;
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

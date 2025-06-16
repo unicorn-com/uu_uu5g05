@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Component Props</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import Uu5, { Utils, createVisualComponent, useState, } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+
+      const visualComponentProps = Object.keys(createVisualComponent.defaultProps);
+      const shapeProps = ["background", "significance", "colorScheme"];
+
+      const { type: _, ...inputDefaultProps } = Uu5Elements.Input.defaultProps;
+      const inputProps = Object.keys(inputDefaultProps).filter(p => !visualComponentProps.includes(p) && !shapeProps.includes(p));
+
+      const basicPropsConfig = {
+        visualComponent: { name: "Visual Component's props", props: visualComponentProps },
+        shape: { name: "Shape's props", props: shapeProps },
+        input: {
+          name: "Input's props", props: [
+            ...inputProps,
+            "onValidate", "onValidationStart", "onValidationEnd", "validateOnChange", "validationMap"
+          ]
+        },
+        formInput: {
+          name: "FormInput's props", props: [
+            "layout", "label", "info", "message", "messageParams", "feedback", "inputRef", "inputAttrs"
+          ]
+        },
+        inputExtension: {
+          name: "Input extension's props", props: [
+            "iconLeft", "onIconLeftClick", "iconRight", "onIconRightClick",
+            "prefix", "suffix", "feedback", "onFeedbackClick", "pending"
+          ]
+        },
+      };
+      const shapeDefaultProps = ["background", "significance", "colorScheme"];
+
+      function ComponentProps({ name, Component }) {
+        const defaultProps = Object.keys(Component.defaultProps || {});
+
+        const basicProps = [].concat(...Object.values(basicPropsConfig).map(cfg => cfg.props));
+        const props = defaultProps.filter(prop => basicProps.indexOf(prop) === -1);
+
+        const basicToRender = {};
+        for (let key in basicPropsConfig) {
+          const propList = basicPropsConfig[key].props.filter(prop => defaultProps.indexOf(prop) > -1);
+          if (propList.length) {
+            basicToRender[key] = { name: basicPropsConfig[key].name, props: propList };
+          }
+        }
+
+        return /^[A-Z]/.test(name) ? (
+          <div>
+            <h4 id={name}>{name} ({Component.uu5ComponentType})</h4>
+            <ul>
+              {Object.values(basicToRender).map(({ name, props }) => (
+                <li key={name}>
+                  {name} (<code>{props.join(", ")}</code>)
+                </li>
+              ))}
+
+              {props.map(prop => (
+                <li key={prop}>{prop}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null;
+      }
+
+      function PropsSection({ header, data }) {
+        const [sorter, setSorter] = useState(false);
+
+        function sortFn(nameA, nameB) {
+          if (data[nameA].length < data[nameB].length) return 1;
+          if (data[nameA].length > data[nameB].length) return -1;
+          if (nameA > nameB) return 1;
+          if (nameA < nameB) return -1;
+          return 0;
+        }
+
+        return (
+          <section>
+            <h4>
+              {header} <Uu5Elements.Button onClick={() => setSorter(!sorter)}>{sorter ? "By alphabet"
+              : "By length"}</Uu5Elements.Button>
+            </h4>
+            <ul>
+              {Object.keys(data).sort(sorter ? sortFn : undefined).map(prop => (
+                <li key={prop}>
+                  {prop} ({
+                  data[prop].map(name => <Uu5Elements.Link key={name} href={"#" + name}>{name}</Uu5Elements.Link>)
+                    .reduce((prev, curr) => [prev, ', ', curr])
+                })
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      function AllProps({ library }) {
+        const props = {};
+        const propName = "Component's props";
+
+        for (let name in library) {
+          if (library[name] && !/^_/.test(name)) {
+            for (let prop in library[name].defaultProps) {
+              let key = propName;
+
+              for (let k in basicPropsConfig) {
+                if (basicPropsConfig[k].props.indexOf(prop) > -1) {
+                  key = k;
+                }
+              }
+
+              props[key] = props[key] || {};
+              props[key][prop] = props[key][prop] || [];
+              props[key][prop].push(name);
+            }
+          }
+        }
+
+        return [...Object.keys(basicPropsConfig), propName].map(k => {
+          if (props[k]) {
+            const header = basicPropsConfig[k] ? basicPropsConfig[k].name : k;
+
+            return (
+              <PropsSection key={header} header={header} data={props[k]} />
+            )
+          }
+        });
+      }
+
+      const LIBRARY_MAP = {
+        Uu5,
+        Uu5Elements,
+        Uu5Forms: {
+          TextInput: Uu5Forms.Text.Input,
+          PasswordInput: Uu5Forms.Password.Input,
+          TextAreaInput: Uu5Forms.TextArea.Input,
+          NumberInput: Uu5Forms.Number.Input,
+          DateInput: Uu5Forms.Date.Input,
+          TimeInput: Uu5Forms.Time.Input,
+          DateTimeInput: Uu5Forms.DateTime.Input,
+          SelectInput: Uu5Forms.Select.Input,
+          SwitchSelectInput: Uu5Forms.SwitchSelect.Input,
+          TextSelectInput: Uu5Forms.TextSelect?.Input,
+          CheckboxInput: Uu5Forms.Checkbox?.Input,
+          CheckboxesInput: Uu5Forms.Checkboxes?.Input,
+          RadiosInput: Uu5Forms.Radios?.Input,
+          FileInput: Uu5Forms.File?.Input,
+          LinkInput: Uu5Forms.Link?.Input,
+          EmailInput: Uu5Forms.Email?.Input,
+          MonthInput: Uu5Forms.Month?.Input,
+          WeekInput: Uu5Forms.Week?.Input,
+          ...Uu5Forms
+        },
+      }
+
+      function Page() {
+        const [library, setLibrary] = useState("Uu5Elements");
+
+        return (
+          <div>
+            <div>
+              {Object.keys(LIBRARY_MAP).map((name) => (
+                <Uu5Elements.Button
+                  key={name}
+                  onClick={() => setLibrary(name)}
+                  colorScheme={library === name ? "primary" : undefined}
+                  significance={library === name ? "highlighted" : "subdued"}
+                  borderRadius="none"
+                >
+                  {name}
+                </Uu5Elements.Button>
+              ))}
+              <Uu5Elements.Line significance="highlighted" colorScheme="primary" />
+            </div>
+            <div>
+              <h2>All Props</h2>
+              <AllProps library={LIBRARY_MAP[library]} />
+            </div>
+
+            <div>
+              <h2>{library} Props</h2>
+              {Object.keys(LIBRARY_MAP[library])
+                .filter(name => LIBRARY_MAP[library][name])
+                .sort().map(name => !/^_/.test(name) && (
+                  <ComponentProps key={name} name={name} Component={LIBRARY_MAP[library][name]} />
+                ))}
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

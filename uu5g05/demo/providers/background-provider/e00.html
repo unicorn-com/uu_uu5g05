@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, BackgroundProvider, PropTypes, useBackground, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const DemoContent = createComponent({
+        render(props) {
+          const background = useBackground();
+          return (
+            <div>
+              <Uu5Elements.Text colorScheme={props.colorScheme}>Text on {background} bg</Uu5Elements.Text>{" "}
+              <Uu5Elements.Button colorScheme={props.colorScheme}>button</Uu5Elements.Button>
+            </div>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <h4>background</h4>
+              <div
+                className={Config.Css.css({
+                  display: "grid",
+                  gridTemplateColumns: "128px 1fr",
+                  placeItems: "center stretch",
+                })}
+              >
+                <i>colorScheme</i>
+                <div
+                  className={Config.Css.css({
+                    display: "grid",
+                    gridTemplateColumns: "repeat(4, 1fr)",
+                    placeItems: "center",
+                  })}
+                >
+                  <b>light</b>
+                  <b>soft</b>
+                  <b>full</b>
+                  <b>dark</b>
+                </div>
+
+                {PropTypes.COLOR_SCHEME_LIST.map((colorScheme) => {
+                  return (
+                    <Fragment key={colorScheme}>
+                      <b>{colorScheme}</b>
+                      <div className={Config.Css.css({ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" })}>
+                        {/*@@viewOn:example*/}
+                        <div style={{ backgroundColor: "#ffffff", padding: 8 }}>
+                          <BackgroundProvider background="light">
+                            <DemoContent colorScheme={colorScheme} />
+                          </BackgroundProvider>
+                        </div>
+
+                        <div style={{ backgroundColor: "#dbeefd", padding: 8 }}>
+                          <BackgroundProvider background="soft">
+                            <DemoContent colorScheme={colorScheme} />
+                          </BackgroundProvider>
+                        </div>
+
+                        <div style={{ backgroundColor: "#2196f3", padding: 8 }}>
+                          <BackgroundProvider background="full">
+                            <DemoContent colorScheme={colorScheme} />
+                          </BackgroundProvider>
+                        </div>
+
+                        <div style={{ backgroundColor: "#000000", padding: 8 }}>
+                          <BackgroundProvider background="dark">
+                            <DemoContent colorScheme={colorScheme} />
+                          </BackgroundProvider>
+                        </div>
+                        {/*@@viewOff:example*/}
+                      </div>
+                    </Fragment>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

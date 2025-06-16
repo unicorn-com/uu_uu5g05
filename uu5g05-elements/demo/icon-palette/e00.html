@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import { _IconPalette, Badge } from "uu5g05-elements";
+
+      const BADGE_LIST = [
+        { value: "mdi-blank-empty", component: Badge, componentProps: { size: "l", icon: "empty", colorScheme: "system" } },
+        { value: "mdi-blank-initial", component: Badge, componentProps: { size: "l", icon: "empty", colorScheme: "initial" } },
+        { value: "mdi-blank-active", component: Badge, componentProps: { size: "l", icon: "empty", colorScheme: "active" } },
+        { value: "mdi-blank-alternativeActive", component: Badge, componentProps: { size: "l", icon: "empty", colorScheme: "alternative-active" } },
+        { value: "mdi-blank-final", component: Badge, componentProps: { size: "l", icon: "empty", colorScheme: "final" } },
+        { value: "mdi-blank-passive", component: Badge, componentProps: { size: "l", icon: "empty", colorScheme: "passive" } },
+        { value: "mdi-blank-alternativeFinal", component: Badge, componentProps: { size: "l", icon: "empty", colorScheme: "alternative-final" } },
+        { value: "mdi-blank-problemActive", component: Badge, componentProps: { size: "l", icon: "empty", colorScheme: "problem" } },
+        { value: "system-check", component: Badge, componentProps: { size: "l", icon: "plus4u-task", colorScheme: "system" } },
+        { value: "system-close", component: Badge, componentProps: { size: "l", icon: "plus4u-cancel", colorScheme: "system" } },
+        { value: "pause", component: Badge, componentProps: { size: "l", icon: "plus4u-pause", colorScheme: "system" } },
+        { value: "exclamation", component: Badge, componentProps: { size: "l", icon: "plus4u-mark-exclamation", colorScheme: "system" } },
+        { value: "system-exclamation-2", component: Badge, componentProps: { size: "l", icon: "plus4u-mark-exclamation-2", colorScheme: "system" } },
+        { value: "exclamation-3", component: Badge, componentProps: { size: "l", icon: "plus4u-mark-exclamation-3", colorScheme: "system" } },
+        { value: "start", component: Badge, componentProps: { size: "l", icon: "uubml-symbol-state-s02", colorScheme: "initial" } },
+        { value: "clock", component: Badge, componentProps: { size: "l", icon: "plus4u-clock", colorScheme: "initial" } },
+        { value: "play", component: Badge, componentProps: { size: "l", icon: "plus4u-arrow-right", colorScheme: "active" } },
+        { value: "end", component: Badge, componentProps: { size: "l", icon: "plus4u-arrow-right-max", colorScheme: "active" } },
+        { value: "active-check", component: Badge, componentProps: { size: "l", icon: "plus4u-task", colorScheme: "active" } },
+        { value: "info", component: Badge, componentProps: { size: "l", icon: "plus4u-mark-info", colorScheme: "active" } },
+        { value: "flash", component: Badge, componentProps: { size: "l", icon: "plus4u-flash", colorScheme: "alternative-active" } },
+        { value: "exclamation-2", component: Badge, componentProps: { size: "l", icon: "plus4u-mark-exclamation-2", colorScheme: "alternative-active" } },
+        { value: "final-exclamation-3", component: Badge, componentProps: { size: "l", icon: "plus4u-mark-exclamation-3", colorScheme: "final" } },
+        { value: "passive-pause", component: Badge, componentProps: { size: "l", icon: "plus4u-pause", colorScheme: "passive" } },
+        { value: "close", component: Badge, componentProps: { size: "l", icon: "plus4u-cancel", colorScheme: "alternative-final" } },
+        { value: "check", component: Badge, componentProps: { size: "l", icon: "plus4u-task", colorScheme: "problem" } },
+        { value: "cancelled-close", component: Badge, componentProps: { size: "l", icon: "plus4u-cancel", colorScheme: "cancelled" } },
+      ];
+
+      const iconList = [
+        "uugds-left", "uugds-right", "uugds-up", "uugds-down", "uugds-circle-solid", "uugds-alert-circle", "mdi-account-plus",
+        "mdi-alarm-snooze",
+      ];
+
+      function withControlledInput(Component) {
+        return (props) => {
+          const { value: propsSelectedIcon, onSelect } = props;
+
+          const [value, setValue] = useState(propsSelectedIcon);
+
+          return (
+            <div>
+              <Component
+                {...props}
+                value={value}
+                onSelect={(e) => {
+                  typeof onSelect === "function" && onSelect(e);
+                  setValue(e.data.value);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const IconPalette = withControlledInput(_IconPalette);
+
+      function Page() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <IconPalette />
+              <h4>itemList (array of mdi icons)</h4>
+              <IconPalette itemList={iconList} />
+              <h4>itemList (array of objects)</h4>
+              <IconPalette itemList={BADGE_LIST}/>
+              <h4>value = "uugds-left"</h4>
+              <IconPalette itemList={iconList} value="uugds-left"/>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+      };
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

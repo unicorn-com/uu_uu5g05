@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+
+      {/*@@viewOn:example*/
+      }
+      const badgeList = [
+        {
+          value: "final",
+          component: Uu5Elements.Badge,
+          componentProps: { icon: "uugdsstencil-badge-check", colorScheme: "final", significance: "highlighted", size: "l" }
+        },
+        {
+          value: "cancel",
+          component: Uu5Elements.Badge,
+          componentProps: {
+            icon: "uugdsstencil-badge-cancel",
+            colorScheme: "cancelled",
+            significance: "highlighted",
+            size: "l"
+          }
+        },
+        {
+          value: "exclamation",
+          component: Uu5Elements.Badge,
+          componentProps: {
+            icon: "uugdsstencil-badge-exclamation",
+            colorScheme: "alternative",
+            significance: "highlighted",
+            size: "l"
+          }
+        },
+      ];
+      const iconList = [
+        "uugds-chevron-left", "uugds-chevron-right", "uugds-chevron-up", "uugds-chevron-down",
+        "uugds-circle-solid", "uugds-alert-circle", "mdi-account-plus", "mdi-alarm-snooze"
+      ];
+      const iconCategory = { name: "icon", label: "Icon list", itemList: iconList };
+      const badgeCategory = { name: "badge", label: "Badge list", itemList: badgeList };
+
+      {/*@@viewOff:example*/
+      }
+
+      function withControlledInput(Component) {
+        return (props) => {
+          const [selectedIcon, setSelectedIcon] = useState(props.value);
+
+          return (
+            <Component
+              style={{ width: 300, height: 500 }}
+              {...props}
+              value={selectedIcon}
+              onSelect={(e) => {
+                console.log(e.data.value);
+                typeof props.onSelect === "function" && props.onSelect(e);
+                setSelectedIcon(e.data.value);
+              }}
+            />
+          );
+        };
+      }
+
+      const Icon = { Picker: withControlledInput(Uu5Forms.Icon.Picker) };
+
+      function Page() {
+        return (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))" }}>
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>default</h4>
+                <Icon.Picker />
+                {/*@@viewOff:example*/}
+              </div>
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>onSelect</h4>
+                <Icon.Picker onSelect={(e) => console.log(e.data.value)} />
+                {/*@@viewOff:example*/}
+              </div>
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>categoryList=["uugds", "uubml", "mdi", "all"] &amp; initialCategory="uubml-uu5"</h4>
+                <Icon.Picker categoryList={["uugds", "uubml", "mdi", "all"]} initialCategory="uubml-uu5" />
+                {/*@@viewOff:example*/}
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))" }}>
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>categoryList (list of stencil subset)</h4>
+                <Icon.Picker categoryList={["uugds-arrow", "mdi"]} />
+                {/*@@viewOff:example*/}
+              </div>
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>categoryList (list of custom string)</h4>
+                <Icon.Picker categoryList={[iconCategory]} />
+                {/*@@viewOff:example*/}
+              </div>
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>categoryList (list of objects)</h4>
+                <Icon.Picker categoryList={[badgeCategory]} />
+                {/*@@viewOff:example*/}
+              </div>
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>categoryList (list of strings and objects)</h4>
+                <Icon.Picker categoryList={["mdi", iconCategory, badgeCategory]} />
+                {/*@@viewOff:example*/}
+              </div>
+            </div>
+          </>
+        );
+      };
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createComponent,
+        createVisualComponent,
+        Fragment,
+        useState,
+        useEffect,
+        useRoute,
+        useRouteLeave,
+        RouteProvider,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const RouteAbout = createComponent({
+        render() {
+          return (
+            <div>
+              <div className={Config.Css.css`margin: 16px 0;`}>
+                <Uu5Elements.Link href="contactUs">Contact us</Uu5Elements.Link>
+              </div>
+              <LoremIpsum />
+            </div>
+          );
+        },
+      });
+
+      const RouteContactUs = createVisualComponent({
+        render(props) {
+          let [formVisible, setFormVisible] = useState(false);
+
+          return (
+            <div>
+              <div className={Config.Css.css`margin: 16px 0;`}>
+                <Uu5Elements.Link href="about">About</Uu5Elements.Link>
+              </div>
+
+              <Uu5Elements.Block card="content">
+                Feel free to{" "}
+                <Uu5Elements.Button onClick={() => setFormVisible((v) => !v)}>Contact us</Uu5Elements.Button>
+                {formVisible ? <ContactForm /> : null}
+              </Uu5Elements.Block>
+            </div>
+          );
+        },
+      });
+
+      //@@viewOn:example
+      const ContactForm = createVisualComponent({
+        render(props) {
+          let { prevent, allow, nextRoute, refuse } = useRouteLeave(); // initially prevented; will become allowed on unmount
+
+          const attrs = Utils.VisualComponent.getAttrs(props, Config.Css.css`margin: 16px 0;`);
+          return (
+            <form {...attrs}>
+              <Uu5Elements.Input type="textarea" placeholder="Try to leave this route - dialog will be shown" width="320px" />
+
+              <PreventRouteLeaveDialog open={!!nextRoute} allow={allow} refuse={refuse} />
+            </form>
+          );
+        },
+      });
+
+      const PreventRouteLeaveDialog = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "PreventRouteLeaveDialog",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          let { allow, refuse, ...restProps } = props;
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <Uu5Elements.Dialog
+              header="Do you want to leave this page?"
+              icon="uugds-alert-circle"
+              actionDirection="horizontal"
+              actionList={[
+                { children: "Stay", onClick: () => refuse() },
+                { children: "Leave", onClick: () => allow(), colorScheme: "negative", significance: "highlighted" },
+              ]}
+              {...restProps}
+              onClose={() => refuse()}
+            >
+              Changes you made may not be saved.
+            </Uu5Elements.Dialog>
+          );
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      const DemoRouter = createComponent({
+        render() {
+          let [route, setRoute] = useRoute();
+          return route.uu5Route === "about" ? <RouteAbout /> : <RouteContactUs />;
+        },
+      });
+
+      const Demo = createComponent({
+        render() {
+          return (
+            <RouteProvider>
+              <DemoRouter />
+            </RouteProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

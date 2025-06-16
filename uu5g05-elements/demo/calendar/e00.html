@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script
+      src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js"
+      crossorigin
+    ></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        createVisualComponent,
+        Utils,
+        useState,
+        useUserPreferences,
+        useScreenSize,
+        UserPreferencesProvider,
+      } from "uu5g05";
+      import { UuDate } from "uu_i18ng01";
+      import Uu5Elements from "uu5g05-elements";
+      import { Checkbox } from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      function withControlledInput(Calendar) {
+        return (props) => {
+          const { value: propsValue, onSelect } = props;
+          const [value, setValue] = useState(propsValue);
+          const [screenSize] = useScreenSize();
+          const isSmallScreenSize = ["xs"].indexOf(screenSize) > -1 ? true : false;
+
+          return (
+            <div
+              className={Config.Css.css({
+                border: "1px dashed lightgray",
+                borderRadius: "5px",
+                width: isSmallScreenSize ? "auto" : "fit-content",
+              })}
+            >
+              <Calendar
+                {...props}
+                value={value}
+                onSelect={(e) => {
+                  typeof onSelect === "function" && onSelect(e);
+                  setValue(e.data.value);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const Calendar = withControlledInput(Uu5Elements.Calendar);
+
+      const Page = createVisualComponent({
+        render() {
+          const selectedSingleDate = new UuDate().shiftDay(2).toIsoString();
+          const selectedRangeDate = [new UuDate().shiftDay(2).toIsoString(), new UuDate().shiftDay(9).toIsoString()];
+          const limits = [new UuDate().shiftYear(-1).toIsoString(), new UuDate().shiftYear(1).toIsoString()];
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>selectionMode (onSelect - in console)</h4>
+              <div
+                className={Config.Css.css({
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                })}
+              >
+                <div>
+                  <p>selectionMode="single" & value="{selectedRangeDate[0]}"</p>
+                  <Calendar
+                    value={selectedRangeDate[0]}
+                    selectionMode="single"
+                    onSelect={({ data }) => console.log(data.value)}
+                  />
+                </div>
+                <div>
+                  <p>
+                    selectionMode="range" & value=["{selectedRangeDate[0]}", "{selectedRangeDate[1]}"]
+                  </p>
+                  <Calendar
+                    value={[selectedRangeDate[0], selectedRangeDate[1]]}
+                    selectionMode="range"
+                    onSelect={({ data }) => console.log(data.value)}
+                  />
+                </div>
+                <div>
+                  <p>selectionMode="week" & displayWeekNumbers=true</p>
+                  <Calendar
+                    selectionMode="week"
+                    displayWeekNumbers
+                    onSelect={({ data }) => console.log(data.value)}
+                  />
+                </div>
+                <div>
+                  <p>selectionMode="weekRange" & displayWeekNumbers=true</p>
+                  <Calendar
+                    selectionMode="weekRange"
+                    displayWeekNumbers
+                    onSelect={({ data }) => console.log(data.value)}
+                  />
+                </div>
+              </div>
+
+              <h4>
+                min="{limits[0]}", max="{limits[1]}", step=2
+              </h4>
+              <Calendar min={limits[0]} max={limits[1]} step={2} onSelect={({ data }) => console.log(data.value)} />
+
+              <h4>displayWeekNumbers=true</h4>
+              <Calendar displayWeekNumbers={true} onSelect={({ data }) => console.log(data.value)} />
+
+              <h4>user preferences</h4>
+              <div className={Config.Css.css({ display: "grid", gridTemplateColumns: "repeat(2, auto)" })}>
+                <div>
+                  <p>timeZone="America/Anchorage"</p>
+                  <UserPreferencesProvider timeZone="America/Anchorage">
+                    <Calendar />
+                  </UserPreferencesProvider>
+                </div>
+                <div>
+                  <p>weekStartDay=3</p>
+                  <UserPreferencesProvider weekStartDay={3}>
+                    <Calendar />
+                  </UserPreferencesProvider>
+                </div>
+              </div>
+
+              <h4>dateMap (colorScheme & significance)</h4>
+              <Calendar
+                value="2023-06-13"
+                dateMap={{
+                  "2023-06-02": { colorScheme: "red", significance: "highlighted" },
+                  "2023-06-03": { colorScheme: "red" },
+                  "2023-06-04": { colorScheme: "red" },
+                  "2023-06-05": { colorScheme: "red" },
+                  "2023-06-06": { colorScheme: "red", significance: "highlighted" },
+                }}
+                selectionMode="single"
+              />
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

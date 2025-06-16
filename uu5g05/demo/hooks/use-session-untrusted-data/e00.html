@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="renderHere"></div>
+
+    <script type="text/babel">
+      import {
+        createComponent,
+        Utils,
+        Lsi,
+        Environment,
+        SessionProvider,
+        useSession,
+        useSessionUntrustedData,
+        useEffect,
+        useUpdateEffect,
+        useDataObject,
+        useState,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config, wait } from "uu5g05-dev";
+      import { AuthenticationService } from "uu_appg01_oidc";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5App from "uu_plus4u5g02-app";
+
+      const MAX_AUTHENTICATION_AGE = 60;
+      const REQUIRED_ACR_VALUES = ["high", "veryHigh"];
+
+      const MOCK_ENDPOINT = "https://mock.example.com/asdfqwer";
+
+      let globalMfaMaxAge;
+      let globalMfaAcr;
+
+      const Calls = {
+        async call(method, uri, dtoIn, opts) {
+          const response = await Plus4U5.Utils.AppClient[method](uri, dtoIn, opts);
+          return response.data;
+        },
+
+        async load(dtoIn) {
+          return Calls.call("get", MOCK_ENDPOINT, dtoIn);
+        },
+      };
+
+      // fix uu_appg01_core <= 5.20.1 regarding trust verification (otherwise there would be loop due to our mocking logic)
+      const { UntrustedCredentials, Session } = Uu5Loader.get("uu_appg01_core").Authentication;
+      Session.prototype.assertTrustiness = function (constraints = {}) {
+        let mla = constraints.minAuthenticationLevelOfAssurance;
+        if (mla != undefined && mla != null && mla > this.getAuthenticationLevelOfAssurance()) {
+          throw new UntrustedCredentials(this, "Minimum login level of assurance not met.");
+        }
+        let maxAge = constraints.maxAuthenticationAge;
+        if (maxAge != undefined && maxAge != null) {
+          let epochAuthTime = this.getAuthenticationTime().getTime() / 1000;
+          let epochCurTime = Date.now() / 1000; // bug here: `Date.now / 1000` missing parentheses
+          if (epochAuthTime + maxAge < epochCurTime) {
+            throw new UntrustedCredentials(this, "User re-authentication required.");
+          }
+        }
+      };
+
+      // mocking - simulate access policy error (if current session doesn't match REQUIRED_ACR_VALUES or MAX_AUTHENTICATION_AGE
+      // then MOCK_ENDPOINT will return access policy error, otherwise it returns data)
+      const origFetch = fetch;
+      window.fetch = function (...args) {
+        if (typeof args[0] === "string" && args[0].startsWith(MOCK_ENDPOINT)) {
+          let response;
+          let oidcSession = AuthenticationService.getCurrentSession();
+          let curAge = (Date.now() - oidcSession.getAuthenticationTime().getTime()) / 1000;
+          if (
+            (globalMfaAcr && !REQUIRED_ACR_VALUES.includes(oidcSession?.getAttribute?.("acr"))) ||
+            (globalMfaMaxAge && curAge > MAX_AUTHENTICATION_AGE)
+          ) {
+            let dtoOut = {
+              uuAppErrorMap: {
+                "uu-app-oidc/verifyAccessPolicy/untrustedSession": {
+                  type: "error",
+                  code: "uu-app-oidc/verifyAccessPolicy/untrustedSession",
+                  message: "Session is not trusted as it does not meet expected criteria.",
+                  paramMap: {
+                    maxAuthenticationAge: globalMfaMaxAge ? MAX_AUTHENTICATION_AGE : undefined,
+                    supportedAcrValues: globalMfaAcr ? REQUIRED_ACR_VALUES : undefined,
+                  },
+                },
+              },
+            };
+            response = new Response(JSON.stringify(dtoOut), {
+              status: 401,
+              headers: { "Content-Type": "application/json;charset=utf-8" },
+            });
+          } else {
+            let dtoOut = { mockData: { foo: "bar" }, uuAppErrorMap: {} };
+            response = new Response(JSON.stringify(dtoOut), {
+              status: 200,
+              headers: { "Content-Type": "application/json;charset=utf-8" },
+            });
+          }
+          return Promise.resolve(response);
+        }
+        return origFetch.apply(this, arguments);
+      };
+      // end mocking
+
+      const ControlPanel = createComponent({
+        render() {
+          const [checkMaxAge, setCheckMaxAge] = useState(false);
+          const [checkAcr, setCheckAcr] = useState(true);
+          globalMfaMaxAge = checkMaxAge;
+          globalMfaAcr = checkAcr;
+
+          const { session } = useSession();
+          const [currentAgeLimited, setCurrentAgeLimited] = useState();
+          useEffect(() => {
+            let interval = setInterval(() => {
+              const curAge = session ? (Date.now() - session.getAuthenticationTime().getTime()) / 1000 : undefined;
+              setCurrentAgeLimited(curAge);
+              if (curAge == null || curAge > MAX_AUTHENTICATION_AGE) clearInterval(interval);
+            }, 1000);
+            return () => clearInterval(interval);
+          }, [session]);
+
+          return (
+            <Uu5Elements.Block header="Control panel" headerType="title" card="full">
+              <Uu5Elements.Grid className={Config.Css.css({ marginBlock: 16 })}>
+                <Uu5Forms.Checkbox
+                  label={`Require maxAge: ${MAX_AUTHENTICATION_AGE}s`}
+                  value={checkMaxAge}
+                  onChange={(e) => setCheckMaxAge(e.data.value)}
+                />
+                <Uu5Forms.Checkbox
+                  label={`Require one of acrValues: ${REQUIRED_ACR_VALUES}`}
+                  value={checkAcr}
+                  onChange={(e) => setCheckAcr(e.data.value)}
+                />
+
+                <div>
+                  Current session age:{" "}
+                  {currentAgeLimited == null ? (
+                    <Uu5Elements.Pending nestingLevel="inline" />
+                  ) : currentAgeLimited > MAX_AUTHENTICATION_AGE ? (
+                    "exceeded " + MAX_AUTHENTICATION_AGE + "s"
+                  ) : (
+                    <Uu5Elements.Progress
+                      text={Math.round(currentAgeLimited) + "s"}
+                      value={(100 * Math.round(currentAgeLimited)) / MAX_AUTHENTICATION_AGE}
+                    />
+                  )}
+                </div>
+                <div>Current session acr: {session?.getAttribute("acr")}</div>
+              </Uu5Elements.Grid>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const ComponentWithDataLoad = createComponent({
+        render() {
+          const { data, state, errorData, handlerMap } = useDataObject({
+            handlerMap: {
+              load: Calls.load,
+            },
+          });
+
+          return (
+            <Uu5Elements.Block header="Component with high assurance" headerType="title" card="full">
+              {errorData ? (
+                <Uu5Elements.HighlightedBox colorScheme="negative">
+                  An error happenned when loading the data.
+                </Uu5Elements.HighlightedBox>
+              ) : (
+                <>
+                  Loaded data: <pre>{JSON.stringify(data, undefined, 2)}</pre>
+                </>
+              )}
+
+              <Uu5Elements.Button onClick={() => handlerMap.load()}>
+                Reload data <i>(and wait a bit)</i>
+              </Uu5Elements.Button>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      /*@@viewOn:example*/
+      const Example = createComponent({
+        render(props) {
+          const { untrustedData, resetUntrustedData } = useSessionUntrustedData();
+
+          return (
+            <Uu5Elements.Block {...props} header="untrustedData" headerType="title" card="full">
+              <pre>{JSON.stringify(untrustedData)}</pre>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      const AuthenticatedExample = createComponent({
+        render(props) {
+          const { state, login } = useSession();
+          return state === "authenticated" ? (
+            <Uu5Elements.Grid className={Config.Css.css({ padding: "16px 32px" })} templateColumns="50% 50%">
+              <ControlPanel />
+              <ComponentWithDataLoad />
+              <Example className={Config.Css.css({ gridColumn: "1 / span 2" })} />
+            </Uu5Elements.Grid>
+          ) : state === "notAuthenticated" ? (
+            <Uu5Elements.Button onClick={() => login()}>Log in</Uu5Elements.Button>
+          ) : (
+            <Uu5Elements.Pending />
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Plus4U5.SpaProvider initialLanguageList={["cs", "en"]}>
+              <Plus4U5App.Spa>
+                <AuthenticatedExample />
+              </Plus4U5App.Spa>
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("renderHere"));
+    </script>
+  </body>
+</html>

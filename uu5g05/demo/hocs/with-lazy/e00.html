@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:imports
+      import { withLazy } from "uu5g05";
+      //@@viewOff:imports
+
+      let Components;
+      {
+        //@@viewOn:example
+        // console-list.js
+        const ConsoleList = createVisualComponent({
+          render(props) {
+            const attrs = Utils.VisualComponent.getAttrs(props);
+            return <div {...attrs}>Console list</div>;
+          },
+        });
+
+        // console-administration.js
+        const ConsoleAdministration = createVisualComponent({
+          render(props) {
+            const attrs = Utils.VisualComponent.getAttrs(props);
+            return <div {...attrs}>Console administration</div>;
+          },
+        });
+        //@@viewOff:example
+
+        Components = { ConsoleList, ConsoleAdministration };
+      }
+
+      /*
+      //@@viewOn:example
+      // elsewhere in library / application
+      const ConsoleList = withLazy(() => import("./console-list.js"));
+      const ConsoleAdministration = withLazy(() => import("./console-administration.js"), <Uu5Elements.Pending />);
+      //@@viewOff:example
+      */
+
+      // NOTE For demo purposes we'll mock importing.
+      const ConsoleList = withLazy(() => _import("./console-list.js"));
+      const ConsoleAdministration = withLazy(() => _import("./console-administration.js"), <Uu5Elements.Pending />);
+      async function _import(path) {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        if (path === "./console-list.js") return { default: Components.ConsoleList };
+        return { default: Components.ConsoleAdministration };
+      }
+
+      //@@viewOn:example
+      const Demo = createVisualComponent({
+        render() {
+          return (
+            <Uu5Elements.Tabs
+              itemList={[
+                { label: "Info", children: "Click on tabs to show lazy-loaded components." },
+                { label: "Console list (default fallback)", children: <ConsoleList /> },
+                { label: "Console administration (custom fallback)", children: <ConsoleAdministration /> },
+              ]}
+            />
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

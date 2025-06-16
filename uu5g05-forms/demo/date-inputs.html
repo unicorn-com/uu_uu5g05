@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, UserPreferencesProvider } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { wait, Config } from "uu5g05-dev";
+      import { withControlledInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+
+      const Css = {
+        main: () =>
+          Config.Css.css({
+            display: "grid",
+            gridTemplateColumns: "0.7fr 1fr 1fr",
+            gap: "15px",
+            marginTop: 40,
+          }),
+      };
+      const Time = withControlledInput(Uu5Forms.Time.Input);
+      const DateTime = withControlledInput(Uu5Forms.DateTime.Input);
+
+      const Date = withControlledInput(Uu5Forms.Date.Input);
+      const DateRange = withControlledInput(Uu5Forms.DateRange.Input);
+
+      const Week = withControlledInput(Uu5Forms.Week.Input);
+      const WeekRange = withControlledInput(Uu5Forms.WeekRange.Input);
+
+      const Month = withControlledInput(Uu5Forms.Month.Input);
+      const MonthRange = withControlledInput(Uu5Forms.MonthRange.Input);
+
+      const Year = withControlledInput(Uu5Forms.Year.Input);
+      const YearRange = withControlledInput(Uu5Forms.YearRange.Input);
+
+      const Quarter = withControlledInput(Uu5Forms.Quarter.Input);
+      const QuarterRange = withControlledInput(Uu5Forms.QuarterRange.Input);
+
+      function Page() {
+        return (
+          <div>
+            <div className={Css.main()}>
+              {/**/}
+              <div>
+                <Uu5Elements.LanguageSelector />
+              </div>
+              <div></div>
+              <div></div>
+
+              <div>
+                <h4>Time</h4>
+                <Time
+                  value="10:30"
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>DateTime</h4>
+                <DateTime
+                  value="2024-12-08T18:00:00.000Z"
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+              <div></div>
+
+              <div>
+                <h4>Date</h4>
+                <Date
+                  label="Label"
+                  value="2021-11-30"
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>DateRange</h4>
+                <DateRange
+                  value={["2021-08-10", "2021-08-30"]}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>DateRange</h4>
+                <DateRange
+                  value={["2021-08-10", "2024-11-30"]}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>Week</h4>
+                <Week
+                  value="2021-W50"
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>WeekRange</h4>
+                <WeekRange
+                  value={["2024-W50", "2024-W52"]}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>WeekRange</h4>
+                <WeekRange
+                  value={["2024-W50", "2027-W52"]}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>Month</h4>
+                <Month
+                  value="2021-12"
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>MonthRange</h4>
+                <MonthRange
+                  value={["2021-07", "2021-12"]}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>MonthRange</h4>
+                <MonthRange
+                  value={["2021-12", "2025-12"]}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>Year</h4>
+                <Year
+                  value="2021"
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>YearRange</h4>
+                <YearRange
+                  value={["2021", "2021"]}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>YearRange</h4>
+                <YearRange
+                  value={["2021", "2027"]}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>Quarter</h4>
+                <Quarter
+                  value="2021-Q2"
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>QuarterRange</h4>
+                <QuarterRange
+                  value={["2021-Q2", "2025-Q4"]}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+
+              <div>
+                <h4>QuarterRange</h4>
+                <QuarterRange
+                  value={["2021-Q2", "2024-Q1"]}
+                  onChange={(e) => {
+                    console.log("onChange", e);
+                    // TODO save value to state
+                  }}
+                />
+              </div>
+              {/**/}
+            </div>
+
+            <br />
+            <br />
+            <br />
+            <br />
+
+            <div>
+              <h4>Date</h4>
+              <Date
+                size="xxs"
+                label="Label"
+                value="2021-11-30"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Date
+                size="xs"
+                label="Label"
+                value="2021-11-30"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Date
+                size="s"
+                label="Label"
+                value="2021-11-30"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Date
+                size="m"
+                label="Label"
+                value="2021-11-30"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Date
+                size="l"
+                label="Label"
+                value="2021-11-30"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Date
+                size="xl"
+                label="Label"
+                value="2021-11-30"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <h4>DateRange</h4>
+              <DateRange
+                size="xxs"
+                value={["2021-08-10", "2024-11-30"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <DateRange
+                size="xs"
+                value={["2021-08-10", "2024-11-30"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <DateRange
+                size="s"
+                value={["2021-08-10", "2024-11-30"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <DateRange
+                size="m"
+                value={["2021-08-10", "2024-11-30"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <DateRange
+                size="l"
+                value={["2021-08-10", "2024-11-30"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <DateRange
+                size="xl"
+                value={["2021-08-10", "2024-11-30"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <h4>Week</h4>
+              <Week
+                size="xxs"
+                value="2021-W50"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Week
+                size="xs"
+                value="2021-W50"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Week
+                size="s"
+                value="2021-W50"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Week
+                size="m"
+                value="2021-W50"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Week
+                size="l"
+                value="2021-W50"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Week
+                size="xl"
+                value="2021-W50"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <h4>WeekRange</h4>
+              <WeekRange
+                size="xxs"
+                value={["2024-W50", "2027-W52"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <WeekRange
+                size="xs"
+                value={["2024-W50", "2027-W52"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <WeekRange
+                size="s"
+                value={["2024-W50", "2027-W52"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <WeekRange
+                size="m"
+                value={["2024-W50", "2027-W52"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <WeekRange
+                size="l"
+                value={["2024-W50", "2027-W52"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <WeekRange
+                size="xl"
+                value={["2024-W50", "2027-W52"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <h4>Month</h4>
+              <Month
+                size="xxs"
+                value="2021-12"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Month
+                size="xs"
+                value="2021-12"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Month
+                size="s"
+                value="2021-12"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Month
+                size="m"
+                value="2021-12"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Month
+                size="l"
+                value="2021-12"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Month
+                size="xl"
+                value="2021-12"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <h4>MonthRange</h4>
+              <MonthRange
+                size="xxs"
+                value={["2021-12", "2025-12"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <MonthRange
+                size="xs"
+                value={["2021-12", "2025-12"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <MonthRange
+                size="s"
+                value={["2021-12", "2025-12"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <MonthRange
+                size="m"
+                value={["2021-12", "2025-12"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <MonthRange
+                size="l"
+                value={["2021-12", "2025-12"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <MonthRange
+                size="xl"
+                value={["2021-12", "2025-12"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <h4>Year</h4>
+              <Year
+                size="xxs"
+                value="2021"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Year
+                size="xs"
+                value="2021"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Year
+                size="s"
+                value="2021"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Year
+                size="m"
+                value="2021"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Year
+                size="l"
+                value="2021"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Year
+                size="xl"
+                value="2021"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <h4>YearRange</h4>
+              <YearRange
+                size="xxs"
+                value={["2021", "2027"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <YearRange
+                size="xs"
+                value={["2021", "2027"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <YearRange
+                size="s"
+                value={["2021", "2027"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <YearRange
+                size="m"
+                value={["2021", "2027"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <YearRange
+                size="l"
+                value={["2021", "2027"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <YearRange
+                size="xl"
+                value={["2021", "2027"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <h4>Quarter</h4>
+              <Quarter
+                size="xxs"
+                value="2021-Q2"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Quarter
+                size="xs"
+                value="2021-Q2"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Quarter
+                size="s"
+                value="2021-Q2"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Quarter
+                size="m"
+                value="2021-Q2"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Quarter
+                size="l"
+                value="2021-Q2"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <Quarter
+                size="xl"
+                value="2021-Q2"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <h4>QuarterRange</h4>
+              <QuarterRange
+                size="xxs"
+                value={["2021-Q2", "2025-Q4"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <QuarterRange
+                size="xs"
+                value={["2021-Q2", "2025-Q4"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <QuarterRange
+                size="s"
+                value={["2021-Q2", "2025-Q4"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <QuarterRange
+                size="m"
+                value={["2021-Q2", "2025-Q4"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <QuarterRange
+                size="l"
+                value={["2021-Q2", "2025-Q4"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+              <QuarterRange
+                size="xl"
+                value={["2021-Q2", "2025-Q4"]}
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

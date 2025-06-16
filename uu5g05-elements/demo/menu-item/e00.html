@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 00</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  import { createComponent, Utils } from "uu5g05";
+  import Uu5Elements from "uu5g05-elements";
+  import { Config } from "uu5g05-dev";
+
+  const UuGds = Uu5Elements.UuGds;
+
+  const Page = createComponent({
+    render() {
+      return (
+        <div>
+          {/*@@viewOn:example*/}
+          <h4>default</h4>
+          <Uu5Elements.MenuItem>Menu Item</Uu5Elements.MenuItem>
+
+          <h4>icon & iconNotification</h4>
+          <Uu5Elements.MenuItem icon="uugds-check">Menu Item</Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem icon="uugds-check" colorScheme="primary">Menu Item</Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem icon="uugds-check" colorScheme="primary" significance="distinct">Menu Item</Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem icon="uugds-check" iconNotification>iconNotification</Uu5Elements.MenuItem>
+
+          <h4>iconRight</h4>
+          <Uu5Elements.MenuItem iconRight="uugds-check">Menu Item</Uu5Elements.MenuItem>
+
+          <h4>contentRight</h4>
+            <Uu5Elements.MenuItem
+              contentRight={
+                <Uu5Elements.Text
+                  category="interface"
+                  segment="content"
+                  type="small"
+                  colorScheme="building"
+                  significance="subdued"
+                >
+                  Ctrl + Z
+                </Uu5Elements.Text>
+              }
+            >
+              Menu Item
+          </Uu5Elements.MenuItem>
+
+          <h4>size</h4>
+          <Uu5Elements.MenuItem size="xxs" icon="uugds-check">xxs</Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem size="xs" icon="uugds-check">xs</Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem size="s" icon="uugds-check">s</Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem size="m" icon="uugds-check">m</Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem size="l" icon="uugds-check">l</Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem size="xl" icon="uugds-check">xl</Uu5Elements.MenuItem>
+
+          <h4>borderRadius & distinct & primary</h4>
+          <Uu5Elements.MenuItem
+            borderRadius="none"
+            colorScheme="primary"
+            significance="distinct"
+            onClick={() => alert("click")}
+          >
+            none
+          </Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem
+            borderRadius="elementary"
+            colorScheme="primary"
+            significance="distinct"
+            onClick={() => alert("click")}
+          >
+            elementary
+          </Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem
+            borderRadius="moderate"
+            colorScheme="primary"
+            significance="distinct"
+            onClick={() => alert("click")}
+          >
+            moderate
+          </Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem
+            borderRadius="expressive"
+            colorScheme="primary"
+            significance="distinct"
+            onClick={() => alert("click")}
+          >
+            expressive
+          </Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem
+            borderRadius="full"
+            colorScheme="primary"
+            significance="distinct"
+            onClick={() => alert("click")}
+          >
+            full
+          </Uu5Elements.MenuItem>
+
+          <h4>onClick</h4>
+          <Uu5Elements.MenuItem
+            onClick={(e) => {
+              console.log("onClick", e);
+              if (e.ctrlKey || e.metaKey) {
+                alert("ctrl/command click");
+              } else if (e.button === 1) {
+                alert("wheel click");
+              } else {
+                alert("click");
+              }
+            }}
+          >
+            onClick
+          </Uu5Elements.MenuItem>
+
+          <h4>iconAnimation & iconRightAnimation</h4>
+          <Uu5Elements.MenuItem icon="uugds-reload" iconAnimation="rotate">Menu Item</Uu5Elements.MenuItem>
+          <Uu5Elements.MenuItem iconRight="uugds-reload" iconRightAnimation="rotate">Menu Item</Uu5Elements.MenuItem>
+
+          <h4>hoverable</h4>
+          <Uu5Elements.MenuItem hoverable>Hovered Item</Uu5Elements.MenuItem>
+
+          <h4>focused</h4>
+          <Uu5Elements.MenuItem focused>Focused Item</Uu5Elements.MenuItem>
+
+          <h4>heading</h4>
+          <Uu5Elements.MenuItem heading>Header Item</Uu5Elements.MenuItem>
+
+          <h4>actionList</h4>
+          <Uu5Elements.MenuItem
+            actionList={[
+              { children: "Copy item", icon: "uugds-copy" },
+              { children: "Edit", icon: "uugds-pencil", itemList: [{ children: "style" }, { children: "text" }] },
+              { children: "Delete", icon: "uugds-delete" },
+            ]}
+          >
+            Menu Item
+          </Uu5Elements.MenuItem>
+
+          <h4>itemList</h4>
+          <Uu5Elements.MenuItem
+            itemList={[
+              { children: "Copy item", icon: "uugds-copy" },
+              { children: "Edit", icon: "uugds-pencil", itemList: [{ children: "style" }, { children: "text" }] },
+              { children: "Delete", icon: "uugds-delete" },
+            ]}
+          >
+            Menu Item
+          </Uu5Elements.MenuItem>
+
+          <h4>onLabelClick</h4>
+          <Uu5Elements.MenuItem
+            onLabelClick={(e) => {
+              console.log("onLabelClick", e);
+              if (e.ctrlKey || e.metaKey) {
+                alert("ctrl/command label click");
+              } else if (e.button === 1) {
+                alert("wheel label click");
+              } else {
+                alert("label click");
+              }
+            }}
+            itemList={[
+              { children: "Copy item", icon: "uugds-copy" },
+              { children: "Edit", icon: "uugds-pencil", itemList: [{ children: "style" }, { children: "text" }] },
+              { children: "Delete", icon: "uugds-delete" },
+            ]}
+          >
+            onLabelClick
+          </Uu5Elements.MenuItem>
+          {/*@@viewOff:example*/}
+        </div>
+      );
+    },
+  });
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

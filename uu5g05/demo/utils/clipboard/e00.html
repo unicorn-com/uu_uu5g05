@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useCallback, useState, Content } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const Demo = createComponent({
+        render() {
+          let [pastedData, setPastedData] = useState();
+
+          /*@@viewOn:example*/
+          let copyText = function () {
+            let nowIso = new Date().toISOString();
+            let now = nowIso.replace("T", " ");
+            Utils.Clipboard.write({
+              text: `Current time: ${now}`,
+              html: `Current time: <b>${now}</b>`,
+              json: { time: now },
+              uu5String: `<Uu5Demo.Component id="abc" />`,
+              uu5Component: [
+                {
+                  icon: "uugds-copy",
+                  name: "Copy",
+                  desc: "Standard copy of the Component.",
+                  data: {
+                    uu5Tag: "Uu5Demo.Component",
+                    props: { id: "abc" },
+                  },
+                },
+                {
+                  icon: "uugds-copy",
+                  name: "New",
+                  desc: "New instance of the Component.",
+                  data: {
+                    uu5Tag: "Uu5Demo.Component",
+                    props: { id: "${idHex32}" },
+                  },
+                },
+                {
+                  icon: "uugds-copy",
+                  name: "Link",
+                  desc: "Link to the Component.",
+                  data: {
+                    uu5Tag: "Uu5Demo.Component",
+                    props: { id: "abc", nestingLevel: "inline" },
+                  },
+                }
+              ],
+            });
+          };
+          let copyImage = function () {
+            // prettier-ignore
+            let imageBlob = new Blob([Uint8Array.from(atob("iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAAAAAB3tzPbAAACOUlEQVR4Ae3aCQrrIBRG4e5/Tz+CBAlIkIAECUjoSt48z/GZeAvnrMCvc6/38XzxAAAAYC4AAAAAAAAAAAAAAAAAAAAAAAAAAAAMCAAAAAAAAAAAAAAAAPsagz4V4rq/FmCLTj/k4vYqgCN5/TKfjlcAJKff5pJ5QPH6Y77YBiz6a4thQJ30D03VKmB3+qfcbhOwO+l+waP/+VsEBgDV6USumgNMOtVkDbDoZIstQNHpiimA1+m8JUBSQ8kO4HBqyB1mAElNJTMAr6a8FcCmxjYjgKjGohGAU2POBmBXc7sJwKrmVhOAqOaiCUBQc8EEQO0JwPMB4ADASwhAe3yR8VPiP3/M8XOaPzQd/lLyp56xSuvnUGK0yHC313idCw6umNov+bhm5aK7fdWAZQ/WbdoXnlg5Y+mvfe2SxVdWj20FAAAAAAAAAAAAwFQAAJSS0hwmfVMIc0qlmAfsOQWvP+RDyrtNQM1L0D8WllxNAWqOXifzMVcbgG3xaswv22jAFp3a6zFteYw8fQ9DM6Amr275VG8GlFmdm8uNgDzpgqZ8EyB7XZTPNwDKpAubysWAOuvi5nolYHW6PLdeBjiCbikc1wCK0025cgUg68Zyf0DUrcXegKibi30Bq25v7QnYNKCtH+BwGpA7ugFmDWnuBSgaVOkECBpU6AOoGlbtAlg1rLULIGhYoQvAaViuC0AD6wE4Xh1QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADA194CuqC6onikxXwAAAAASUVORK5CYII=").split("").map(it => it.charCodeAt(0)))], { type: "image/png" });
+            Utils.Clipboard.write({ image: imageBlob });
+          };
+          let onPaste = function (event) {
+            let text = Utils.Clipboard.read(event, "text");
+            let html = Utils.Clipboard.read(event, "html");
+            let json = Utils.Clipboard.read(event, "json");
+            let uu5String = Utils.Clipboard.read(event, "uu5String");
+            let uu5Component = Utils.Clipboard.read(event, "uu5Component");
+
+            let image = Utils.Clipboard.read(event, "image");
+            setPastedData({ text, html, json, uu5String, image, uu5Component });
+          };
+          /*@@viewOff:example*/
+
+          return (
+            <div>
+              <Uu5Elements.Button onClick={copyText}>Copy text, html, JSON, uu5String, uu5Component</Uu5Elements.Button>
+              <Uu5Elements.Button onClick={copyImage}>Copy image</Uu5Elements.Button>
+
+              <p
+                tabIndex="0"
+                onPaste={onPaste}
+                style={{ minHeight: 40, backgroundColor: "#eee", lineHeight: "normal" }}
+              >
+                Click & paste here
+              </p>
+
+              {pastedData ? (
+                <table>
+                  <tbody>
+                  <tr>
+                    <td>text</td>
+                    <td>{pastedData.text || ""}</td>
+                  </tr>
+                  <tr>
+                    <td>json</td>
+                    <td>{pastedData.json ? <pre>{JSON.stringify(pastedData.json, null, 2)}</pre> : ""}</td>
+                  </tr>
+                  <tr>
+                    <td>html</td>
+                    <td>
+                      <span dangerouslySetInnerHTML={{ __html: pastedData.html || "" }} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>uu5String</td>
+                    <td>
+                      <Content>{`<uu5string/>${pastedData.uu5String}`}</Content>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>uu5Component</td>
+                    <td>
+                      {pastedData.uu5Component ? <pre>{JSON.stringify(pastedData.uu5Component, null, 2)}</pre> : ""}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>image</td>
+                    <td>{pastedData.image ? <img src={URL.createObjectURL(pastedData.image)} /> : null}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              ) : null}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

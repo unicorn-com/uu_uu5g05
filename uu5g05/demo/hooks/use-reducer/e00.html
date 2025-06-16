@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      //@@viewOn:imports
+      import { createVisualComponent, useReducer, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      //@@viewOff:imports
+
+      //@@viewOn:example
+      // initial state for our reducer
+      const initialItems = [
+        {
+          id: 1,
+          name: "Blue Submarine",
+          colorScheme: "primary",
+          rating: 1,
+        },
+        {
+          id: 2,
+          name: "Green Submarine",
+          colorScheme: "positive",
+          rating: 2,
+        },
+        {
+          id: 3,
+          name: "Orange Submarine",
+          colorScheme: "warning",
+          rating: 3,
+        },
+        {
+          id: 4,
+          name: "Red Submarine",
+          colorScheme: "negative",
+          rating: 4,
+        },
+      ];
+
+      // reducer contains reusable business logic without side effects
+      // it is easy to test and reuse reducers among multiple components
+      function reducer(items, action) {
+        const payload = action.payload;
+
+        switch (action.type) {
+          case "remove":
+            // immutable remove of item from array
+            return items.filter((item) => item.id !== payload.id);
+          case "setRating":
+            // immutable update of item in array
+            return items.map((item) => {
+              if (item.id === payload.id) {
+                return { ...item, rating: payload.rating };
+              } else {
+                return item;
+              }
+            });
+          case "reset":
+            return payload.items;
+          default:
+            return items;
+        }
+      }
+
+      const ItemList = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "ItemList",
+        //@@viewOff:statics
+
+        render(props) {
+          //@@viewOn:private
+          const [items, dispatch] = useReducer(reducer, initialItems);
+
+          function handleResetClick() {
+            dispatch({
+              type: "reset",
+              payload: { items: initialItems },
+            });
+          }
+
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <Uu5Elements.Block
+              header={
+                <Uu5Elements.Text category="story" segment="heading" type="h2">
+                  Submarines
+                </Uu5Elements.Text>
+              }
+            >
+              {items.map((item) => (
+                <ItemDetail key={item.id} item={item} dispatch={dispatch} />
+              ))}
+              <Uu5Elements.Button onClick={handleResetClick} colorScheme="negative">Reset</Uu5Elements.Button>
+
+              <div>{`Total count: ${items.length}`}</div>
+            </Uu5Elements.Block>
+          );
+          //@@viewOff:render
+        },
+      });
+
+      const ItemDetail = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "ItemDetail",
+        //@@viewOff:statics
+
+        render(props) {
+          //@@viewOn:private
+          const { item, dispatch } = props;
+
+          function handleRemoveClick() {
+            dispatch({
+              type: "remove",
+              payload: { id: item.id },
+            });
+          }
+
+          function handleRatingClick(rating) {
+            dispatch({
+              type: "setRating",
+              payload: { id: item.id, rating },
+            });
+          }
+
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <Uu5Elements.Box
+              className={Config.Css.css`margin: 8px 0;`}
+              colorScheme={item.colorScheme}
+              significance="distinct"
+            >
+              <div>{item.name}</div>
+              <Rating value={item.rating} onClick={handleRatingClick} />{" "}
+              <Uu5Elements.Button size="xs" colorScheme="negative" onClick={handleRemoveClick}>
+                Remove
+              </Uu5Elements.Button>
+            </Uu5Elements.Box>
+          );
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      const Rating = createVisualComponent({
+        render(props) {
+          const { value, onClick } = props;
+          const attrs = Utils.VisualComponent.getAttrs(props);
+          return (
+            <span {...attrs}>
+              Rating {Math.round(10 * value) / 10}/5{" "}
+              <Uu5Elements.Button icon="uugds-plus" size="xs" disabled={value > 4} onClick={() => onClick(value + 1)} />
+              <Uu5Elements.Button icon="uugds-minus" size="xs" disabled={value < 1} onClick={() => onClick(value - 1)} />
+            </span>
+          );
+        },
+      });
+
+      function Demo() {
+        return <ItemList />;
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

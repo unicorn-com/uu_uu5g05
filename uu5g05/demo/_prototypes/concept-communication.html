@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js"></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, usePreviousValue } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      function useValue(value, onChange) {
+        let [v, setV] = useState(value);
+
+        function setValue(newValue) {
+          if (typeof onChange === "function") {
+            onChange(newValue);
+          } else {
+            setV(newValue);
+          }
+        }
+
+        if (typeof onChange === "function" && v !== value) setV(value);
+
+        return [v, setValue];
+      }
+
+      function useControlledValue(value, onChange) {
+        let [v, setV] = useValue(value, onChange);
+
+        const prevValue = usePreviousValue(value);
+
+        if (prevValue !== value && v !== value) setV(value);
+
+        return [v, setV];
+      }
+
+      //@@viewOff:example
+
+      function Comp1({ num }) {
+        const [value, setValue] = useValue(num);
+
+        return (
+          <div>
+            <h3>initialValue</h3>
+            {value}<br />
+            <Uu5Elements.Button onClick={() => setValue(value + 1)}>
+              Increase value IFC
+            </Uu5Elements.Button>
+          </div>
+        )
+      }
+
+      function Comp21({ num, onChange }) {
+        const [value, setValue] = useValue(num, onChange);
+
+        return (
+          <div>
+            <h3>value + onChange</h3>
+            {value}<br />
+            <Uu5Elements.Button onClick={() => setValue(value + 1)}>
+              Increase value IFC
+            </Uu5Elements.Button>
+          </div>
+        )
+      }
+
+      function Comp2({ num }) {
+        const [value, setValue] = useState(num);
+
+        return (
+          <Comp21 num={value} onChange={(newValue) => setValue(newValue)} />
+        )
+      }
+
+      function Comp3({ num }) {
+        const [value, setValue] = useControlledValue(num);
+
+        return (
+          <div>
+            <h3>Controlled value</h3>
+            If parent is changed, the value is always used.<br />
+            {value}<br />
+            <Uu5Elements.Button onClick={() => setValue(value + 1)}>
+              Increase value IFC
+            </Uu5Elements.Button>
+          </div>
+        )
+      }
+
+      function Page2() {
+        const [counter, setCounter] = useState(0);
+        const [_, reload] = useState();
+
+        return (
+          <div>
+            <h3>Parent value</h3>
+            {counter} <br />
+            <Uu5Elements.Button onClick={() => setCounter(counter + 1)}>
+              Increase value in parent
+            </Uu5Elements.Button>
+            <Uu5Elements.Button onClick={() => reload(Math.random())}>
+              Reload
+            </Uu5Elements.Button>
+
+            <div style={{ padding: "8px 16px" }}>
+              <Comp1 num={counter} />
+              <Comp2 num={counter} />
+              <Comp3 num={counter} />
+            </div>
+          </div>
+        )
+      }
+
+      Utils.Dom.render(<Page2 />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

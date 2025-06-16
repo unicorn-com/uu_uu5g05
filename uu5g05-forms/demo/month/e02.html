@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 02</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState, useRef, useEffect } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: 16,
+      });
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const {
+            value: propsValue,
+            onChange,
+            onValidationStart,
+            onValidationEnd,
+            feedback,
+            message,
+            messageParams,
+          } = props;
+
+          const [value, setValue] = useState(propsValue);
+          const [errorList, setErrorList] = useState(null);
+          const [pending, setPending] = useState();
+
+          return (
+            <div>
+              <Input
+                {...props}
+                value={value}
+                feedback={errorList?.[0].feedback || feedback}
+                message={errorList?.[0].message || message}
+                messageParams={errorList?.[0].messageParams || messageParams}
+                pending={pending}
+                onChange={(e) => {
+                  typeof onChange === "function" && onChange(e);
+                  setValue(e.data.value);
+                }}
+                onValidationStart={(e) => {
+                  typeof onValidationStart === "function" && onValidationStart(e);
+                  setPending(true);
+                }}
+                onValidationEnd={(e) => {
+                  typeof onValidationEnd === "function" && onValidationEnd(e);
+                  setErrorList(e.data.errorList.length ? e.data.errorList : null);
+                  setPending(false);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const Month = withControlledInput(Uu5Forms.Month);
+
+      function Page() {
+        const inputRef = useRef();
+
+        useEffect(() => {
+          console.log("inputRef.current", inputRef.current);
+        }, []);
+
+        return (
+          <div className={columnsCss}>
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>label & info</h4>
+              <Month label="Label" info="Some information about the input." />
+              <Month
+                label="Label lsi"
+                info={{
+                  en: "Some information about the input.",
+                  cs: "Nějaké informace o inputu.",
+                }}
+              />
+
+              <h4>layout</h4>
+              <Month label="Label vertical" layout="vertical" />
+              <Month label="Label 1:1" layout="1:1" />
+              <Month label="Label 1:2" layout="1:2" />
+              <Month label="Label 2:3" layout="2:3" />
+
+              <h4>inputRef (in console)</h4>
+              <Month label="Label" inputRef={inputRef} />
+
+              <h4>inputAttrs: onKeyDown, onKeyUp (in console)</h4>
+              <Month
+                label="Label"
+                placeholder="Write and see console"
+                inputAttrs={{
+                  onKeyDown: (e) => console.log("onKeyDown", e),
+                  onKeyUp: (e) => console.log("onKeyUp", e),
+                }}
+              />
+
+              {/*@@viewOff:example*/}
+            </div>
+
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>message & messageParams</h4>
+              <Month label="Message" message="Info message is displayed always if there is no validation error." />
+              <Month
+                label="Message lsi"
+                message={{
+                  en: "Info message is displayed always if the %s is valid.",
+                  cs: "Info je zobrazeno vždy, když je %s validní.",
+                }}
+                messageParams={["input"]}
+              />
+
+              <h4>feedback</h4>
+              <Month label="Feedback" feedback="error" message="Error message" />
+              <Month label="Feedback" feedback="warning" message="Warning message" />
+              <Month label="Feedback" feedback="success" message="Success message" />
+              {/*@@viewOff:example*/}
+            </div>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

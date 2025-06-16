@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      Uu5Loader.config({
+        imports: {
+          // uu_plus4u5g01 dependency
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+
+          // uuEcc dependency
+          "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+          uu5g04: "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04.min.js",
+          "uu5g04-bricks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-bricks.min.js",
+          "uu5g04-forms": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-forms.min.js",
+          "uu5g04-hooks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-hooks.min.js",
+          "uu5g04-block-layout": "https://cdn.plus4u.net/uu-uu5g04/1.40.3/uu5g04-block-layout.min.js",
+
+          "uu5editingg01-elements": "https://cdn.plus4u.net/uu-uu5editingg01/1.0.0/uu5editingg01-elements.min.js",
+          uu5richtextg01: "https://cdn.plus4u.net/uu-uu5richtextg01/1.0.0/uu5richtextg01.min.js",
+          immutable: "https://cdn.plus4u.net/libs/immutable/3.8.2/immutable.min.js",
+          uu5tilesg02: "https://cdn.plus4u.net/uu-uu5tilesg02/1.10.1/uu5tilesg02.min.js",
+          uu5codekitg01: "https://cdn.plus4u.net/uu-uu5codekitg01/1.0.0/uu5codekitg01.min.js",
+          "uu_applibraryregistryg01-bricks":
+            "https://cdn.plus4u.net/uu-applibraryregistryg01/1.1.0/uu_applibraryregistryg01-bricks.min.js",
+
+          uu_editablecomponentcontentg03:
+            "https://cdn.plus4u.net/uu-editablecomponentcontentg03/2.0.0/uu_editablecomponentcontentg03.min.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5EditingElements from "uu5editingg01-elements";
+      import Uu5Dev from "uu5g05-dev";
+      import Uu5BricksSupport from "uu5g05-bricks-support";
+      import UuEcc from "uu_editablecomponentcontentg03";
+      import { Uu5String } from "uu5stringg01";
+
+      Utils.Language.setLanguage("en");
+
+      // EditModal should be loaded lazy (e.g. using withLazy HoC)
+      const EditModal = createComponent({
+        render(props) {
+          const tabList = [
+            {
+              template: "visual",
+              propInputMap: {
+                colorScheme: {
+                  props: {
+                    valueList: ["building", "meaning", "basic"],
+                  },
+                },
+              },
+            },
+            {
+              label: { en: "Header" },
+              layout: {
+                xs: `header, headerType, level, headerSeparator`,
+                m: `header header header,
+              headerType level level,
+              headerSeparator headerSeparator headerSeparator`,
+              },
+              columns: { m: "repeat(3, 1fr)" },
+            },
+            {
+              label: { en: "Content" },
+              layout: {
+                xs: `info, collapsible`,
+                m: `info info info,
+              collapsible . .`,
+              },
+              columns: { m: "repeat(3, 1fr)" },
+            },
+            {
+              label: { en: "Footer" },
+              layout: { xs: `footer, footerSeparator` },
+            },
+          ];
+
+          const propInputMap = {
+            info: {
+              component: Uu5Forms.FormTextArea,
+              props: {
+                label: { en: "Info" },
+                info: {
+                  en: "Description of the component, that can be displayed via the info icon in the top right corner.",
+                },
+                autoResize: true,
+              },
+            },
+            header: {
+              component: Uu5Forms.FormText,
+              props: {
+                label: { en: "Header Content" },
+                required: true,
+              },
+            },
+            headerType: {
+              component: Uu5Forms.FormSwitchSelect,
+              props: {
+                label: { en: "Header Type" },
+                itemList: [
+                  { value: "title", children: "Title" },
+                  { value: "heading", children: "Heading" },
+                ],
+              },
+            },
+            level: {
+              component: Uu5Forms.FormSwitchSelect,
+              props: ({ componentProps }) => ({
+                label: { en: "Header Level" },
+                itemList: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
+                disabled: componentProps.nestingLevel !== "area",
+              }),
+            },
+            headerSeparator: {
+              component: Uu5Forms.FormCheckbox,
+              props: {
+                label: { en: "Show header separator" },
+                info: { en: "Separator between header and content." },
+              },
+            },
+            footer: {
+              component: Uu5Forms.FormText,
+              props: ({ componentProps }) => ({
+                label: { en: "Footer Content" },
+                disabled: !componentProps.footerSeparator,
+              }),
+            },
+            footerSeparator: {
+              component: Uu5Forms.FormCheckbox,
+              props: {
+                label: { en: "Show footer separator" },
+                info: { en: "Separator between content and footer." },
+              },
+            },
+            collapsible: {
+              component: Uu5Forms.FormCheckbox,
+              props: {
+                label: { en: "Collapsible" },
+              },
+            },
+          };
+
+          return (
+            <Uu5Editing.EditModal
+              uu5Tag={props.componentType.uu5Tag}
+              props={props.componentProps}
+              onSave={props.onSave}
+              onClose={props.onClose}
+              open
+              tabList={tabList}
+              propInputMap={propInputMap}
+              width={900}
+            />
+          );
+        },
+      });
+
+      //@@viewOn:example
+      // EditModal should be loaded lazy
+      const Block = Uu5BricksSupport.withEditModal(Uu5Elements.Block, EditModal);
+      //@@viewOff:example
+
+      Block.uu5Tag = "Uu5Demo.Block";
+      Utils.LibraryRegistry.registerComponent(Block);
+
+      function EccSection({ uu5String }) {
+        const [editable, setEditable] = useState(true);
+        const [data, setData] = useState(Uu5String.toChildren(uu5String));
+
+        return (
+          <>
+            <div style={{ textAlign: "right" }}>
+              <Uu5Elements.Button
+                colorScheme={editable ? "positive" : undefined}
+                onClick={() => setEditable(!editable)}
+              >
+                {editable ? "Stop editing" : "Edit"}
+              </Uu5Elements.Button>
+            </div>
+            <UuEcc.Section
+              editable={editable}
+              data={{
+                // uuEcc added props.editMode = {} if whole page is editable and props.editMode.edit = true if the component is in editing
+                content: editable
+                  ? data.map((v) => {
+                      if (v && typeof v === "object") {
+                        v = { ...v };
+                        v.props = { ...v.props };
+                      }
+                      return v;
+                    })
+                  : data,
+                sys: {
+                  rev: 0,
+                },
+              }}
+              onEditReady={() => null}
+              onUpdate={({ content }) => setData(content)}
+              onLock={() => null}
+            />
+          </>
+        );
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <EccSection
+              uu5String={`<uu5string />
+                <Uu5Demo.Block header="Block" headerType="heading" level=4 card="full">
+                  <Uu5Dev.LoremIpsum paragraphCount=2 />
+                </Uu5Demo.Block>
+              `}
+            />
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

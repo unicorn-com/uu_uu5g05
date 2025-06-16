@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1">
+  <title>useDynamicLibraryComponent Demo</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <script>
+    Uu5Loader.config({
+      imports: {
+        // mandatory for legacy components (uu5g04)
+        "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+      }
+    })
+  </script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  import React from "react";
+  import { createComponent, createVisualComponent, useDynamicLibraryComponent, DynamicLibraryComponent, Utils, useState, useEffect } from "uu5g05";
+  import { Config } from "uu5g05-dev";
+
+  Utils.Language.setLanguage("en-us");
+  function useIsOnline() {
+    let [online, setOnline] = useState(() => navigator.onLine);
+    useEffect(() => {
+      setOnline(navigator.onLine);
+      let fn1 = () => setOnline(true);
+      let fn2 = () => setOnline(false);
+      window.addEventListener("online", fn1);
+      window.addEventListener("offline", fn2);
+      return () => {
+        window.removeEventListener("online", fn1);
+        window.removeEventListener("offline", fn2);
+      };
+    }, []);
+    return online;
+  }
+
+  const STATICS = {
+    uu5Tag: Config.TAG + "TestComponent",
+    nestingLevel: Utils.NestingLevel.buildList("box", "inline")
+  };
+  const TestComponent = createVisualComponent({
+    render(props) {
+      const attrs = Utils.VisualComponent.getAttrs(props, Config.Css.css`padding: 8px;`);
+      const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, STATICS);
+      return currentNestingLevel ? (
+        <div {...attrs}>
+          {STATICS.displayName} with props: <br/>
+          <pre>{JSON.stringify(props, null, 2)}</pre>
+        </div>
+      ) : null;
+    }
+  });
+
+  // mock library registry for Uu5Demo namespace and make the library available to Uu5Loader loader
+  let uu5g05DemoExports = { TestComponent };
+  let origGetLibrary = Utils.LibraryRegistry.getLibrary;
+  Utils.LibraryRegistry.getLibrary = async (code) => {
+    if (code !== "Uu5Demo") return origGetLibrary(code);
+    return {
+      name: "uu5g05-demo",
+      code: "Uu5Demo",
+      source: "http://example.com/uu5g05-demo.js",
+      dependencyMap: {},
+    }
+  };
+  Uu5Loader.config({
+    imports: {
+      "uu5g05-demo": "http://example.com/uu5g05-demo.js",
+    }
+  });
+  let origImport = Utils.Uu5Loader.import;
+  Utils.Uu5Loader.import = async (name) => {
+    if (name === "uu5g05-demo") return uu5g05DemoExports;
+    return origImport(name);
+  };
+
+  const Example = createVisualComponent({
+    render(props) {
+      let [showOfflineComponent, setShowOfflineComponent] = useState(false);
+      let isOnline = useIsOnline();
+
+      return (
+        <div>
+          {/*@@viewOn:example*/}
+          <DynamicLibraryComponent
+            uu5Tag="Uu5Demo.TestComponent"
+            id="testComponent1"
+            className={Config.Css.css`background-color: #BDBDBD;`}
+            foo="bar"
+          />
+          <DynamicLibraryComponent
+            uu5Tag="Uu5Demo.TestComponent"
+            id="testComponent2"
+            props={{ className: Config.Css.css`background-color: #66BB6A;`, foo: "bar", uu5Tag: "Value in prop 'uu5Tag'" }}
+          />
+
+          <DynamicLibraryComponent
+            uu5Tag="Uu5Demo.MissingComponent"
+            // props are not passed if component is missing (with the exception of nesting level)
+            className={Config.Css.css`background-color: blue;`}
+            foo="bar"
+          />
+          <br/>
+          <DynamicLibraryComponent
+            uu5Tag="Uu5Demo.MissingComponentInline"
+            // props are not passed if component is missing (with the exception of nesting level)
+            nestingLevel="inline"
+            className={Config.Css.css`background-color: blue;`}
+            foo="bar"
+          />
+          {/*@@viewOff:example*/}
+
+          <br/>
+          Set browser to offline mode and click:
+          <button disabled={isOnline} onClick={() => setShowOfflineComponent(Math.random())}>
+            Render NonExisting.Component
+          </button>
+          {showOfflineComponent ? (
+            <DynamicLibraryComponent uu5Tag="NonExisting.Component" />
+          ) : null}
+
+          <div>
+            <DynamicLibraryComponent uu5Tag="UU5.Bricks.Button" onClick={() => alert("onClick")}>
+              UU5.Bricks.Button
+            </DynamicLibraryComponent>
+          </div>
+        </div>
+      );
+    }
+  });
+
+  const Page = createComponent({
+    render() {
+      return (
+        <Example />
+      );
+    }
+  });
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

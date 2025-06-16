@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script>
+      Uu5Loader.config({
+        imports: {
+          "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+          uu5g04: "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04.min.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+      /* styles outside of @layer have bigger priority (even if specificity looks weaker) */
+      /*
+      body {
+        background: green;
+      }
+      @layer test {
+        html body {
+          background-color: red;
+        }
+      }
+      @layer test2 {
+        body {
+          background-color: pink;
+        }
+      }
+      /**/
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li>This page contains <code>.uu5-style</code> element.</li>
+      <li>
+        Page styles should therefore default to browser ones and only <code>.uu5-style</code> element should contain UU5
+        styles (CSS reset, etc.).
+      </li>
+    </ul>
+    <p>Static paragraph with disabled span: <span disabled>this is disabled</span></p>
+
+    <div id="uu5" class="uu5-style"></div>
+
+    <p>Other static content. Another <code>.uu5-style</code> element:</p>
+
+    <div id="uu5-el2" class="uu5-style"></div>
+
+    <p>Other static content.</p>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState, DynamicLibraryComponent } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+      import "uu5g04";
+
+      const Page = createComponent({
+        render(props) {
+          const { header } = props;
+          const [open, setOpen] = useState(false);
+          return (
+            <Uu5Elements.Block card="full" header={header} headerType="title">
+              <p>
+                Static paragraph with disabled span: <span disabled>this is disabled</span>
+              </p>
+              <Uu5Elements.Button onClick={() => setOpen(true)}>Open modal</Uu5Elements.Button>{" "}
+              <Uu5Elements.Dropdown
+                label="Dropdown (popover test)"
+                itemList={[{ children: "Item 1", icon: "uugds-check" }]}
+              />{" "}
+              <DynamicLibraryComponent uu5Tag="UU5.Bricks.Button">UU5.Bricks.Button</DynamicLibraryComponent>
+
+              <Uu5Elements.Modal open={open} onClose={() => setOpen(false)} header="Test header">
+                <p>The font should be uu5 font.</p>
+                <LoremIpsum />
+              </Uu5Elements.Modal>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page header="This is inside .uu5-style element" />, document.getElementById("uu5"));
+      Utils.Dom.render(<Page header="This is inside another .uu5-style element" />, document.getElementById("uu5-el2"));
+    </script>
+  </body>
+</html>

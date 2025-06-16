@@ -1,0 +1,58 @@
+{
+  "name": "uu5g05-forms",
+  "version": "1.40.1",
+  "description": "The library contains basic inputs and form which are connected to uuGds.",
+  "license": "License Commercial",
+  "namespace": "Uu5Forms",
+  "spec": "uu5-lib; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
+  "dependencies": {
+    "uu_i18ng01": "^1.7.0",
+    "uu5g05": "^1.0.0",
+    "uu5g05-elements": "^1.0.0"
+  },
+  "uuBuildSettings": {
+    "externals": {}
+  },
+  "devDependencies": {
+    "@emotion/jest": "11.9.1",
+    "uu_appg01_devkit": "^6.6.0",
+    "uu5devkitg01-plugin": "^1.5.1",
+    "uu5g05-test": "*"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "clean": "uu_appg01_devkit clean",
+    "test": "uu_appg01_devkit test",
+    "build": "uu_appg01_devkit build",
+    "package": "uu_appg01_devkit package",
+    "start": "uu_appg01_devkit start",
+    "prettify": "uu_appg01_devkit prettify",
+    "vulnerabilityScan": "uu_appg01_devkit vulnerabilityScan",
+    "uuAppDevKitUpgrade": "uu_appg01_devkit uuAppDevKitUpgrade",
+    "uu5Generate": "uu5devkitg01-plugin generate",
+    "uu5LsiExport": "uu5devkitg01-plugin lsiExport",
+    "uu5LsiImport": "uu5devkitg01-plugin lsiImport",
+    "uu5DocUpdateExamples": "uu5devkitg01-plugin docUpdateExamples"
+  },
+  "main": "src/index.js",
+  "files": [
+    "dist",
+    "dist-node"
+  ],
+  "prettier": {
+    "printWidth": 120
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^(uu5g05-elements-gds)$": "<rootDir>/../uu5g05-elements/src/gds.js",
+      "^(uu5g05-forms)$": "<rootDir>/src/index.js",
+      "^(uu_appg01_oidc)$": "$1/dist/$1.js"
+    },
+    "transformIgnorePatterns": [
+      "^(?!.*/node_modules/uu_appg01).*/node_modules/",
+      "uu5g05-test"
+    ]
+  }
+}

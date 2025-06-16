@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import {
+        createComponent,
+        createVisualComponent,
+        Utils,
+        useState,
+        useRef,
+        useEffect,
+        Content,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      const LinkModal = createVisualComponent({
+        render(props) {
+          const { modalProps, ...linkProps } = props;
+          const [open, setOpen] = useState(false);
+
+          return (
+            <>
+              <Uu5Elements.Link {...linkProps} onClick={() => setOpen(true)} />
+              <Uu5Elements.Modal {...modalProps} open={open} onClose={() => setOpen(false)} />
+            </>
+          )
+        }
+      });
+
+      //@@viewOn:example
+      const Component = createVisualComponent({
+        uu5Tag: "Uu5Demo.Component",
+        nestingLevel: "area",
+
+        render(props) {
+          const { nestingLevel: _, ...restProps } = props;
+          const { id, children } = restProps;
+
+          const nestingLevel = Utils.NestingLevel.getNestingLevel(props, Component);
+
+          const header = `Component ${id}`;
+          const actionList = [{
+            icon: "uugds-copy",
+            onClick: () => {
+              Utils.Clipboard.write({
+                text: "Some text...",
+                html: `<i>Some text...</i>`,
+                uu5Component: [
+                  {
+                    name: "Standard copy",
+                    desc: "Standard copy of the Component.",
+                    data: {
+                      uu5Tag: "Uu5Demo.Component",
+                      props: { id },
+                    },
+                  },
+                  {
+                    name: "New component",
+                    desc: "New instance of the Component.",
+                    data: {
+                      uu5Tag: "Uu5Demo.Component",
+                      props: { id: "${idHex32}" },
+                    },
+                  },
+                  {
+                    name: "Link",
+                    desc: "Link to the Component.",
+                    data: {
+                      uu5Tag: "Uu5Demo.Component",
+                      props: { id, nestingLevel: "inline" },
+                      // could be also children: "Some text or component"
+                      children: ["Inline component ", "<i>cursive</i>"],
+                    },
+                  }
+                ],
+              })
+            }
+          }];
+          const content = <Uu5Elements.Text>{children || <i>Some text...</i>}</Uu5Elements.Text>;
+
+          if (nestingLevel) {
+            return (
+              <Uu5Elements.Block id={id} header={header} headerType="heading" card="full" actionList={actionList}>
+                {content}
+              </Uu5Elements.Block>
+            )
+          } else {
+            return (
+              <LinkModal modalProps={{ header, children: content }}>
+                {header}
+              </LinkModal>
+            )
+          }
+        }
+      });
+
+      const TextAreaPaste = createVisualComponent({
+        render(props) {
+          const { data, dialog, handlePaste } = Uu5Elements.useComponentPaste();
+          const inputRef = useRef();
+          const [selection, setSelection] = useState(null);
+
+          useEffect(() => {
+            if (data?.uu5String) {
+              inputRef.current.selectionStart = selection.start;
+              inputRef.current.selectionEnd = selection.end;
+              inputRef.current.setRangeText(data.uu5String);
+              inputRef.current.focus();
+              inputRef.current.selectionStart = selection.start + data.uu5String.length;
+              setSelection(null);
+            }
+          }, [data?.uu5String]);
+
+
+          return (
+            <>
+              <textarea {...{
+                placeholder: "Click and paste",
+                ref: inputRef,
+                onPaste: (e) => {
+                  setSelection({ start: inputRef.current.selectionStart, end: inputRef.current.selectionEnd });
+                  handlePaste(e);
+                },
+                style: { width: "100%" },
+                rows: 10,
+              }} />
+              {dialog}
+            </>
+          )
+        }
+      });
+
+      const ButtonPaste = createVisualComponent({
+        render(props) {
+          const { data, dialog, handlePaste } = Uu5Elements.useComponentPaste();
+          const [itemList, setItemList] = useState([]);
+
+          useEffect(() => {
+            if (data) {
+              setItemList((items) => [...items, data]);
+            }
+          }, [data]);
+
+          // real component render by Uu5.Content component as uu5string
+          return (
+            <>
+              <Uu5Elements.Button onClick={() => handlePaste()}>Paste</Uu5Elements.Button>
+              <div className={Config.Css.css({
+                display: "grid",
+                gridTemplateColumns: "100%",
+                gap: 8,
+                margin: "8px 0",
+              })}>
+                {itemList.map((item, i) => (
+                  <Uu5Elements.Box key={i} style={{ padding: 8 }}>
+                    {item.uu5String || item.text}
+                    {item.uu5String ? (
+                      <>
+                        <br />
+                        <Content>{"<uu5string/>" + item.uu5String}</Content>
+                      </>
+                    ) : null}
+                  </Uu5Elements.Box>
+                ))}
+              </div>
+              {dialog}
+            </>
+          )
+        }
+      });
+      //@@viewOff:example
+
+      Utils.LibraryRegistry.registerComponent(Component);
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Component id="123" />
+
+              <h4>uu5String</h4>
+              <TextAreaPaste />
+
+              <h4>Paste by button</h4>
+              <ButtonPaste />
+
+              <h4>Text</h4>
+              <textarea style={{ width: "100%" }} rows={10} />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

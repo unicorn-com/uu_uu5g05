@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { UuDate, UuDateTime } from "uu_i18ng01";
+
+      window.UuDate = UuDate;
+      window.UuDateTime = UuDateTime;
+
+      function withControlledInput(Component, defaultProps) {
+        return (props) => {
+          const [value, setValue] = useState(props.value ?? defaultProps?.value);
+          return (
+            <Component
+              {...defaultProps}
+              {...props}
+              value={value}
+              onChange={(e) => {
+                props.onChange?.(e);
+                setValue(e.data ? e.data.value : e.target.value);
+              }}
+            />
+          );
+        }
+      }
+
+      const NativeInput = withControlledInput("input", { type: "time", value: "" });
+      const ControlledTimeInput = withControlledInput(Uu5Forms._NativeTimeInput);
+
+      const Page = createComponent({
+        render() {
+          const min = "08:00";
+          const max = "17:00";
+          const today = new UuDate().toIsoString();
+          const springDay = "2023-03-26";
+          const autumnDay = "2023-10-29";
+
+          return (
+            <main>
+              <Uu5Elements.LanguageSelector />
+
+              <Uu5Elements.Grid templateColumns="repeat(auto-fit, minmax(320px, 1fr))">
+                <div>
+                  <h3>HTML input</h3>
+                  <NativeInput
+                    onChange={(e) => {
+                      console.log("onChange native", e.target.value);
+                    }}
+                  />
+
+                  <h4>min="{min}" & max="{max}"</h4>
+                  <NativeInput
+                    min={min}
+                    max={max}
+                    onChange={(e) => {
+                      console.log("onChange native", e.target.value);
+                    }}
+                  />
+
+                  <h4>step</h4>
+                  <Uu5Elements.Grid templateColumns="auto 1fr" justifyItems="start">
+                    <NativeInput
+                      step={1}
+                      onChange={(e) => {
+                        console.log("onChange native", e.target.value);
+                      }}
+                    />
+                    <span>1 (1s)</span>
+
+                    <NativeInput
+                      step={10}
+                      onChange={(e) => {
+                        console.log("onChange native", e.target.value);
+                      }}
+                    />
+                    <span>10 (10s)</span>
+
+                    <NativeInput
+                      step={15 * 60}
+                      onChange={(e) => {
+                        console.log("onChange native", e.target.value);
+                      }}
+                    />
+                    <span>{15 * 60} (15min)</span>
+
+                    <NativeInput
+                      step={60 * 60}
+                      onChange={(e) => {
+                        console.log("onChange native", e.target.value);
+                      }}
+                    />
+                    <span>{60 * 60} (1h)</span>
+                  </Uu5Elements.Grid>
+                </div>
+
+                <div>
+                  <h3>Time input</h3>
+                  <ControlledTimeInput
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  <h4>min="{min}" & max="{max}"</h4>
+                  <ControlledTimeInput
+                    min={min}
+                    max={max}
+                    onChange={(e) => {
+                      console.log("onChange", e.data);
+                    }}
+                  />
+
+                  <h4>step</h4>
+                  <Uu5Elements.Grid templateColumns="auto 1fr" justifyItems="start">
+                    <ControlledTimeInput
+                      step={1}
+                      onChange={(e) => {
+                        console.log("onChange", e.data);
+                      }}
+                    />
+                    <span>step=1 (1s)</span>
+
+                    <ControlledTimeInput
+                      step={10}
+                      onChange={(e) => {
+                        console.log("onChange", e.data);
+                      }}
+                    />
+                    <span>10 (10s)</span>
+
+                    <ControlledTimeInput
+                      step={15 * 60}
+                      onChange={(e) => {
+                        console.log("onChange", e.data);
+                      }}
+                    />
+                    <span>{15 * 60} (15min)</span>
+
+                    <ControlledTimeInput
+                      step={60 * 60}
+                      onChange={(e) => {
+                        console.log("onChange", e.data);
+                      }}
+                    />
+                    <span>{60 * 60} (1h)</span>
+                  </Uu5Elements.Grid>
+
+                  <h4>format</h4>
+                  <ControlledTimeInput
+                    format="HH:mm"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  <br />
+                  <br />
+
+                  <ControlledTimeInput
+                    format="HH:mm:ss"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  <br />
+                  <br />
+
+                  <ControlledTimeInput
+                    format="h:mm aa"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  <br />
+                  <br />
+
+                  <ControlledTimeInput
+                    format="hh:mm:ss aa"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+                </div>
+
+                <Uu5Elements.Grid.Item colSpan={2}>
+                  <h3>TimeInput with date</h3>
+                  <ControlledTimeInput
+                    date={today}
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={springDay}
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={autumnDay}
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  <h4>min="{min}" & max="{max}"</h4>
+                  <ControlledTimeInput
+                    date={today}
+                    min={min}
+                    max={max}
+                    onChange={(e) => {
+                      console.log("onChange", e.data);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={springDay}
+                    min={min}
+                    max={max}
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={autumnDay}
+                    min={min}
+                    max={max}
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  <h4>step</h4>
+                  <Uu5Elements.Grid templateColumns="auto 1fr" justifyItems="start">
+                    <div>
+                      <ControlledTimeInput
+                        date={today}
+                        step={1}
+                        onChange={(e) => {
+                          console.log("onChange", e.data);
+                        }}
+                      />
+
+                      &nbsp;&nbsp;
+
+                      <ControlledTimeInput
+                        date={springDay}
+                        step={1}
+                        onChange={(e) => {
+                          console.log("onChange", e.data.value);
+                        }}
+                      />
+
+                      &nbsp;&nbsp;
+
+                      <ControlledTimeInput
+                        date={autumnDay}
+                        step={1}
+                        onChange={(e) => {
+                          console.log("onChange", e.data.value);
+                        }}
+                      />
+                    </div>
+                    <span>1 (1s)</span>
+
+                    <div>
+                      <ControlledTimeInput
+                        date={today}
+                        step={10}
+                        onChange={(e) => {
+                          console.log("onChange", e.data);
+                        }}
+                      />
+
+                      &nbsp;&nbsp;
+
+                      <ControlledTimeInput
+                        date={springDay}
+                        step={10}
+                        onChange={(e) => {
+                          console.log("onChange", e.data.value);
+                        }}
+                      />
+
+                      &nbsp;&nbsp;
+
+                      <ControlledTimeInput
+                        date={autumnDay}
+                        step={10}
+                        onChange={(e) => {
+                          console.log("onChange", e.data.value);
+                        }}
+                      />
+                    </div>
+                    <span>10 (10s)</span>
+
+                    <div>
+                      <ControlledTimeInput
+                        date={today}
+                        step={15 * 60}
+                        onChange={(e) => {
+                          console.log("onChange", e.data);
+                        }}
+                      />
+
+                      &nbsp;&nbsp;
+
+                      <ControlledTimeInput
+                        date={springDay}
+                        step={15 * 60}
+                        onChange={(e) => {
+                          console.log("onChange", e.data.value);
+                        }}
+                      />
+
+                      &nbsp;&nbsp;
+
+                      <ControlledTimeInput
+                        date={autumnDay}
+                        step={15 * 60}
+                        onChange={(e) => {
+                          console.log("onChange", e.data.value);
+                        }}
+                      />
+                    </div>
+                    <span>{15 * 60} (15min)</span>
+
+                    <div>
+                      <ControlledTimeInput
+                        date={today}
+                        step={60 * 60}
+                        onChange={(e) => {
+                          console.log("onChange", e.data);
+                        }}
+                      />
+
+                      &nbsp;&nbsp;
+
+                      <ControlledTimeInput
+                        date={springDay}
+                        step={60 * 60}
+                        onChange={(e) => {
+                          console.log("onChange", e.data.value);
+                        }}
+                      />
+
+                      &nbsp;&nbsp;
+
+                      <ControlledTimeInput
+                        date={autumnDay}
+                        step={60 * 60}
+                        onChange={(e) => {
+                          console.log("onChange", e.data.value);
+                        }}
+                      />
+                    </div>
+                    <span>{60 * 60} (1h)</span>
+                  </Uu5Elements.Grid>
+
+                  <h4>format</h4>
+                  <ControlledTimeInput
+                    date={today}
+                    format="HH:mm"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={springDay}
+                    format="HH:mm"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={autumnDay}
+                    format="HH:mm"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  <br />
+                  <br />
+
+                  <ControlledTimeInput
+                    date={today}
+                    format="HH:mm:ss"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={springDay}
+                    format="HH:mm:ss"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={autumnDay}
+                    format="HH:mm:ss"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  <br />
+                  <br />
+
+                  <ControlledTimeInput
+                    date={today}
+                    format="h:mm aa"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={springDay}
+                    format="h:mm aa"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={autumnDay}
+                    format="h:mm aa"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  <br />
+                  <br />
+
+                  <ControlledTimeInput
+                    date={today}
+                    format="hh:mm:ss aa"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={springDay}
+                    format="hh:mm:ss aa"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+
+                  &nbsp;&nbsp;
+
+                  <ControlledTimeInput
+                    date={autumnDay}
+                    format="hh:mm:ss aa"
+                    onChange={(e) => {
+                      console.log("onChange", e.data.value);
+                    }}
+                  />
+                </Uu5Elements.Grid.Item>
+              </Uu5Elements.Grid>
+            </main>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

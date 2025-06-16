@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent } from "uu5g05";
+      import Uu5Editing from "uu5g05-editing";
+
+      Utils.Language.setLanguage("en");
+
+      const DEFAULT_PROPS_MAP = {
+        id: "edit-modal-id",
+        noPrint: true,
+        nestingLevel: "spot",
+        fullTextSearchPriority: 3,
+        style: { display: "flex", justifyContent: "center", alignItems: "center" },
+      };
+
+      //@@viewOn:example
+      const Page = createComponent({
+        render() {
+          const tabList = ["system"];
+
+          return (
+            <div>
+              <Uu5Editing.EditModal
+                header="Tab templates demo for Edit Modal"
+                open={true}
+                onClose={() => {}}
+                width={900}
+                onSave={({ componentProps }) =>
+                  alert("Submitted with values:\n" + JSON.stringify(componentProps, null, 2))
+                }
+                uu5Tag="Uu5Editing.EditModal"
+                props={DEFAULT_PROPS_MAP}
+                tabList={tabList}
+              />
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Offline Example</title>
+
+    <script>
+      var uu5Environment = {
+        uu5g05_fontUri: "uu_gdsg01-unicorn/assets/font.min.css",
+        uu5g05_libraryLoadDisabled: true,
+        uu5g05_libraryStatsDisabled: true,
+        uu5g05_iconLibraryMap: {
+          mdi: "%40mdi/font/css/materialdesignicons.min.css",
+        },
+      };
+    </script>
+    <script src="uu5loaderg01/uu5loaderg01.min.js"></script>
+
+    <script>
+      // prettier-ignore
+      Uu5Loader.config({
+        imports: {
+          "react": "react/react.development.js",
+          "react-dom": "react-dom/react-dom.development.js",
+          "prop-types": "prop-types/prop-types.js",
+          "uu5stringg01": "uu5stringg01/uu5stringg01.js",
+          "uu_i18ng01": "uu_i18ng01/uu_i18ng01.js",
+          "uu_gdsg01-unicorn": "uu_gdsg01-unicorn/uu_gdsg01-unicorn.js",
+          "uu5g05": "uu5g05/uu5g05.js",
+          "uu5g05-elements": "uu5g05/uu5g05-elements.js",
+          "uu5g05-forms": "uu5g05/uu5g05-forms.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script>
+      Promise.all([
+        Uu5Loader.import("uu5g05"),
+        Uu5Loader.import("uu5g05-elements"),
+        Uu5Loader.import("uu5g05-forms"),
+      ]).then(([Uu5, Uu5Elements, Uu5Forms]) => {
+        const { createVisualComponent, Utils } = Uu5;
+
+        const Demo = createVisualComponent({
+          render() {
+            return Utils.Element.create(
+              "div",
+              undefined,
+              Utils.Element.create(
+                Uu5Elements.Button,
+                { icon: "uugds-check", onClick: () => alert("Hello, world!") },
+                "Click me!"
+              )
+            );
+          },
+        });
+
+        Utils.Dom.render(Utils.Element.create(Demo), document.getElementById("uu5"));
+      });
+    </script>
+  </body>
+</html>

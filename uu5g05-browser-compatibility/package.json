@@ -1,0 +1,44 @@
+{
+  "name": "uu5g05-browser-compatibility",
+  "version": "1.40.1",
+  "description": "The library should be used in index.html, because the library checks if the browser is supported and if not it recommends another.",
+  "license": "License Commercial",
+  "namespace": "Uu5BrowserCompatibility",
+  "spec": "uu5-lib; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
+  "dependencies": {
+    "browser-update": "3.1.13"
+  },
+  "uuBuildSettings": {
+    "externals": {}
+  },
+  "devDependencies": {
+    "uu_appg01_devkit": "^6.6.0",
+    "uu5devkitg01-plugin": "^1.5.1"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "clean": "uu_appg01_devkit clean",
+    "test": "uu_appg01_devkit test",
+    "build": "uu_appg01_devkit build",
+    "package": "uu_appg01_devkit package",
+    "start": "uu_appg01_devkit start",
+    "prettify": "uu_appg01_devkit prettify",
+    "vulnerabilityScan": "uu_appg01_devkit vulnerabilityScan",
+    "uuAppDevKitUpgrade": "uu_appg01_devkit uuAppDevKitUpgrade",
+    "uu5Generate": "uu5devkitg01-plugin generate",
+    "uu5LsiExport": "uu5devkitg01-plugin lsiExport",
+    "uu5LsiImport": "uu5devkitg01-plugin lsiImport",
+    "uu5DocUpdateExamples": "uu5devkitg01-plugin docUpdateExamples"
+  },
+  "main": "src/index.js",
+  "files": [
+    "dist",
+    "dist-node"
+  ],
+  "prettier": {
+    "printWidth": 120
+  },
+  "browserslist": "> 0.2%, not ie < 11, not op_mini all"
+}

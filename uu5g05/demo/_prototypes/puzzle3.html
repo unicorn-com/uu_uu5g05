@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Puzzle</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5">Loading...</main>
+
+    <script type="text/babel">
+      //@@viewOn:example
+      import { Utils, createVisualComponent, useRef, useState, useEffect, useMemo } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      /**
+       * Draw a single puzzle piece
+       *
+       * ctx - canvas context
+       * x, y - top-left corner of piece on canvas
+       * w, h - piece width and height
+       * img - full image object
+       * sx, sy - source tile position on image
+       * edge - directions for top, right, bottom, left
+       * showImage - whether to fill image into the piece
+       * canvas - canvas DOM for calculating image draw size
+       */
+      function drawPiece(canvas, x, y, w, h, img, sx, sy, edge, showImage, lineCssColor = "#212121", backgroundCssColor = "#fff") {
+        const tabSize = Math.max(w, h) * 0.2; // Use a fixed tab size based on the larger dimension
+        const neck = tabSize * 0.5;           // "neck" is the tight part of tab
+        const tabOffset = tabSize;            // Total extension of the tab
+
+        const ctx = canvas.getContext("2d");
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+
+        // TOP edge
+        if (edge.top === 0) {
+          ctx.lineTo(x + w, y);
+        } else {
+          const midX = x + w / 2;
+          const dir = edge.top;
+          ctx.lineTo(midX - neck, y);
+          ctx.bezierCurveTo(
+            midX - neck, y - tabOffset * dir,
+            midX + neck, y - tabOffset * dir,
+            midX + neck, y
+          );
+          ctx.lineTo(x + w, y);
+        }
+
+        // RIGHT edge
+        if (edge.right === 0) {
+          ctx.lineTo(x + w, y + h);
+        } else {
+          const midY = y + h / 2;
+          const dir = edge.right;
+          ctx.lineTo(x + w, midY - neck);
+          ctx.bezierCurveTo(
+            x + w + tabOffset * dir, midY - neck,
+            x + w + tabOffset * dir, midY + neck,
+            x + w, midY + neck
+          );
+          ctx.lineTo(x + w, y + h);
+        }
+
+        // BOTTOM edge
+        if (edge.bottom === 0) {
+          ctx.lineTo(x, y + h);
+        } else {
+          const midX = x + w / 2;
+          const dir = edge.bottom;
+          ctx.lineTo(midX + neck, y + h);
+          ctx.bezierCurveTo(
+            midX + neck, y + h + tabOffset * dir,
+            midX - neck, y + h + tabOffset * dir,
+            midX - neck, y + h
+          );
+          ctx.lineTo(x, y + h);
+        }
+
+        // LEFT edge
+        if (edge.left === 0) {
+          ctx.lineTo(x, y);
+        } else {
+          const midY = y + h / 2;
+          const dir = edge.left;
+          ctx.lineTo(x, midY + neck);
+          ctx.bezierCurveTo(
+            x - tabOffset * dir, midY + neck,
+            x - tabOffset * dir, midY - neck,
+            x, midY - neck
+          );
+          ctx.lineTo(x, y);
+        }
+
+        ctx.closePath();
+
+        // Fill image portion if piece is visible
+        if (showImage) {
+          ctx.save();
+          ctx.clip(); // Only draw within puzzle piece path
+
+          ctx.drawImage(
+            img,
+            0, 0,                      // source: entire image
+            img.width, img.height,
+            x - (sx / img.width) * canvas.width, // offset target draw so only this tile appears
+            y - (sy / img.height) * canvas.height,
+            canvas.width,
+            canvas.height
+          );
+
+          // Draw the outline of the piece
+          ctx.strokeStyle = lineCssColor;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+        } else {
+          // Fill with custom color when piece is hidden
+          ctx.fillStyle = backgroundCssColor;
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+
+      function createPuzzle(canvas, img, {
+        rows,
+        cols,
+        hidePieces = [],
+        lineCssColor,
+        backgroundCssColor
+      } = {}) {
+        const ar = img.width / img.height;
+        if (!rows && !cols) cols = 16;
+        cols ??= Math.round(ar * rows);
+        rows ??= Math.round(Math.pow(ar, -1) * cols);
+
+        // Pre-compute edge types for all pieces
+        const edgeMap = Array(rows)
+          .fill(null)
+          .map(() => Array(cols).fill(null));
+
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            if (!edgeMap[y][x]) edgeMap[y][x] = {};
+
+            const edge = edgeMap[y][x];
+            edge.top = y === 0 ? 0 : -edgeMap[y - 1][x].bottom;
+            edge.left = x === 0 ? 0 : -edgeMap[y][x - 1].right;
+            edge.bottom = y === rows - 1 ? 0 : (x % 2 || y % 2 ? 1 : -1);
+            edge.right = x === cols - 1 ? 0 : (x % 2 || y % 2 ? -1 : 1);
+          }
+        }
+
+        const width = img.width;
+        const height = img.height;
+
+        const ctx = canvas.getContext("2d");
+        const pieceWidth = width / cols;
+        const pieceHeight = height / rows;
+
+        // if there is no line, render whole image and only missing pieces
+        if (lineCssColor === "transparent") {
+          ctx.drawImage(img, 0, 0);
+        } else {
+          // Clear canvas before redraw
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Draw each puzzle piece
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const x = c * pieceWidth;
+            const y = r * pieceHeight;
+            const sx = (img.width / cols) * c;
+            const sy = (img.height / rows) * r;
+            const idx = r * cols + c;
+            const showImage = !hidePieces.includes(idx);
+
+            (lineCssColor !== "transparent" || !showImage) && drawPiece(canvas, x, y, pieceWidth, pieceHeight, img, sx, sy, edgeMap[r][c], showImage, lineCssColor, backgroundCssColor);
+          }
+        }
+      }
+
+      const PuzzleImage = createVisualComponent({
+        uu5Tag: Config.TAG + "PuzzleImage",
+
+        render(props) {
+          // Destructure props with defaults
+          const {
+            src,
+            rows = 4,
+            cols = 4,
+            hidePieces = [],
+            elementRef,
+            lineCssColor = Uu5Elements.UuGds.ColorPalette.getValue(["building", "dark", "main"]),
+            backgroundCssColor = Uu5Elements.UuGds.ColorPalette.getValue(["building", "light", "main"]),
+            borderRadius = "moderate",
+            ...restProps
+          } = props;
+
+          // Canvas DOM reference
+          const canvasRef = useRef(null);
+          // Store image and dimensions once loaded
+          const [img, setImg] = useState(null);
+
+          useEffect(() => {
+            const canvas = canvasRef.current;
+            const img = new Image();
+            img.crossOrigin = "anonymous"; // Allow loading from external URLs
+            img.src = src;
+
+            img.onload = () => {
+              canvas.width = img.width;
+              canvas.height = img.height;
+
+              setImg(img); // Store for use in drawing
+            };
+          }, [src]);
+
+          useEffect(() => {
+            if (!img) return;
+            createPuzzle(canvasRef.current, img, { rows, cols, hidePieces, lineCssColor, backgroundCssColor });
+          }, [img, rows, cols, hidePieces, lineCssColor, backgroundCssColor]);
+
+          const attrs = Utils.VisualComponent.getAttrs(restProps, Config.Css.css({
+            border: "1px solid " + lineCssColor,
+            maxWidth: "100%", // Responsive sizing
+            borderRadius: canvasRef.current ? Uu5Elements.UuGds.RadiusPalette.getValue(["box", borderRadius], {
+              height: canvasRef.current.height,
+              width: canvasRef.current.width
+            }) : undefined,
+          }));
+
+          return (
+            <canvas
+              {...attrs}
+              ref={Utils.Component.combineRefs(elementRef, canvasRef)} // Support external + local refs
+            />
+          );
+        }
+      });
+
+      function ProgressPuzzleImage(props) {
+        const count = props.rows * props.cols;
+
+        const [progress, setProgress] = useState(() => ({
+          value: 0,
+          hiddenPieces: [...Array(count).keys()],
+        }));
+
+        useEffect(() => {
+          const interval = setInterval(() => setProgress(({ value, hiddenPieces }) => {
+            hiddenPieces = [...hiddenPieces];
+
+            const newValue = value + 1;
+            const hiddenCount = Math.round(count * (100 - newValue) / 100);
+
+            while (hiddenPieces.length > hiddenCount) {
+              hiddenPieces.splice(Utils.Number.random(hiddenPieces.length - 1, 0), 1);
+            }
+
+            if (newValue === 100) clearInterval(interval);
+
+            return {
+              value: value + 1,
+              hiddenPieces,
+            };
+          }), 500);
+
+          return () => clearInterval(interval);
+        }, [count]);
+
+        return (
+          <PuzzleImage
+            {...props}
+            hidePieces={progress.hiddenPieces} // indexes of hidden puzzle pieces
+          />
+        )
+      }
+
+      function Page() {
+        return (
+          <Uu5Elements.Grid templateColumns="1fr 1fr">
+            <PuzzleImage
+              src="https://fastly.picsum.photos/id/900/400/400.jpg?hmac=BZhoEfem5d8zMcNgsCq-s25r2aUAs0T5gjBByC4L0Mc"
+              cols={4}
+              rows={4}
+              hidePieces={[1, 3, 6]} // indexes of hidden puzzle pieces
+            />
+
+            <PuzzleImage
+              src="https://fastly.picsum.photos/id/429/1600/900.jpg?hmac=dfkcm3X3VSQD8iKwMNx4Y6tWkpBqgs7ZGBISdk511Ww"
+              cols={4}
+              rows={4}
+              hidePieces={[1, 3, 6]} // indexes of hidden puzzle pieces
+            />
+
+            <PuzzleImage
+              src="https://fastly.picsum.photos/id/429/1600/900.jpg?hmac=dfkcm3X3VSQD8iKwMNx4Y6tWkpBqgs7ZGBISdk511Ww"
+              cols={16}
+              rows={9}
+              hidePieces={[1, 3, 6]} // indexes of hidden puzzle pieces
+            />
+
+            <ProgressPuzzleImage
+              src="https://fastly.picsum.photos/id/429/1600/900.jpg?hmac=dfkcm3X3VSQD8iKwMNx4Y6tWkpBqgs7ZGBISdk511Ww"
+              cols={16}
+              rows={9}
+            />
+          </Uu5Elements.Grid>
+        );
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

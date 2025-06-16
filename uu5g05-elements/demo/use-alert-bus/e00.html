@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, useState, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const AddAndUpdateAlert = createVisualComponent({
+        render() {
+          const { addAlert, updateAlert } = Uu5Elements.useAlertBus();
+          const [id, setId] = useState();
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button
+                onClick={() => {
+                  let id = addAlert({ header: "Alert 1", message: "message", priority: "error" });
+                  setId(id);
+                }}
+              >
+                Add alert
+              </Uu5Elements.Button>
+              <br />
+              <br />
+              <Uu5Elements.Button
+                onClick={() => {
+                  // update last alert
+                  updateAlert(id, { header: "Update header", message: "Update message", priority: "success" });
+                }}
+              >
+                Update last alert
+              </Uu5Elements.Button>
+            </Fragment>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      //@@viewOn:example
+
+      const AddAndRemoveAlert = createVisualComponent({
+        render() {
+          const { addAlert, removeAlert } = Uu5Elements.useAlertBus();
+          const [id, setId] = useState();
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button
+                onClick={() => {
+                  let id = addAlert({ header: "Alert 2", message: "message", priority: "info" });
+                  setId(id);
+                }}
+              >
+                Add alert
+              </Uu5Elements.Button>
+              <br />
+              <br />
+              <Uu5Elements.Button
+                onClick={() => {
+                  // remove last alert
+                  removeAlert(id);
+                }}
+              >
+                Remove last alert
+              </Uu5Elements.Button>
+            </Fragment>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Uu5Elements.AlertBus>
+                <h4>addAlert & updateAlert</h4>
+                <AddAndUpdateAlert />
+
+                <h4>addAlert & removeAlert</h4>
+                <AddAndRemoveAlert />
+              </Uu5Elements.AlertBus>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

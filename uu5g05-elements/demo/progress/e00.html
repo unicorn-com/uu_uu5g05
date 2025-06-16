@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <Uu5Elements.Progress />
+
+              <h4>value = 30</h4>
+              <Uu5Elements.Progress value={30} />
+
+              <h4>type</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <div>
+                  <Uu5Elements.Progress value={30} type="circular" />
+                  <Uu5Elements.Progress value={-30} type="circular" />
+                </div>
+                <div>
+                  <Uu5Elements.Progress value={30} type="horizontal" />
+                  <br />
+                  <Uu5Elements.Progress value={-30} type="horizontal" />
+                </div>
+              </Uu5Elements.Grid>
+
+              <h4>animated = false</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <Uu5Elements.Progress value={30} type="circular" animated={false} />
+                <Uu5Elements.Progress value={30} type="horizontal" animated={false} />
+              </Uu5Elements.Grid>
+
+              <h4>onCancel & cancelTooltip</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <Uu5Elements.Progress
+                  value={30}
+                  type="circular"
+                  onCancel={(e) => console.log("onCancel", e)}
+                  cancelTooltip={{ cs: "cs tooltip", en: "en tooltip" }}
+                />
+                <Uu5Elements.Progress
+                  value={30}
+                  type="horizontal"
+                  onCancel={(e) => console.log("onCancel", e)}
+                  cancelTooltip={{ cs: "cs tooltip", en: "en tooltip" }}
+                />
+              </Uu5Elements.Grid>
+
+              <h4>text & suffix</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <div>
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    text={30}
+                    suffix="%"
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    text="2:46"
+                  />
+                </div>
+                <div>
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    text={30}
+                    suffix="%"
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    text="2:46"
+                  />
+                </div>
+              </Uu5Elements.Grid>
+
+              <h4>text & onCancel</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <div>
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    text={30}
+                    suffix="%"
+                    onCancel={(e) => console.log("onCancel", e)}
+                    size={null}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    text={30}
+                    suffix="%"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    text={30}
+                    suffix="%"
+                    onCancel={(e) => console.log("onCancel", e)}
+                    size="max"
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                </div>
+                <div>
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    text={30}
+                    suffix="%"
+                    onCancel={(e) => console.log("onCancel", e)}
+                    size={null}
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    text={30}
+                    suffix="%"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    text={30}
+                    suffix="%"
+                    onCancel={(e) => console.log("onCancel", e)}
+                    size="max"
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                </div>
+              </Uu5Elements.Grid>
+
+              <h4>colorScheme</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <div>
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    colorScheme="secondary"
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    colorScheme="secondary"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                </div>
+                <div>
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    colorScheme="secondary"
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    colorScheme="secondary"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                </div>
+              </Uu5Elements.Grid>
+
+              <h4>size</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <div>
+                  inline:&nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size={null}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size={null}
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size={null}
+                    text={30}
+                    suffix="%"
+                  />
+                  <br />
+                  spot (xxs-xl):
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="xxs"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="xs"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="s"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="m"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="l"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="xl"
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="xxs"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="xs"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="s"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="m"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="l"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="xl"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="xxs"
+                    text={30}
+                    suffix="%"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="xs"
+                    text={30}
+                    suffix="%"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="s"
+                    text={30}
+                    suffix="%"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="m"
+                    text={30}
+                    suffix="%"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="l"
+                    text={30}
+                    suffix="%"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="xl"
+                    text={30}
+                    suffix="%"
+                  />
+                  <br />
+                  box:
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size={80}
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size={80}
+                    onCancel={(e) => console.log("onCancel", e)}
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size={80}
+                    text={30}
+                    suffix="%"
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                  <br />
+                  area:
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="max"
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="max"
+                    onCancel={(e) => console.log("onCancel", e)}
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="circular"
+                    size="max"
+                    text={30}
+                    suffix="%"
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                </div>
+                <div>
+                  inline:&nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size={null}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size={null}
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size={null}
+                    text={30}
+                    suffix="%"
+                  />
+                  <br />
+                  spot (xxs-xl):
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="xxs"
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="xxs"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="xxs"
+                    text={30}
+                    suffix="%"
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="xs"
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="xs"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="xs"
+                    text={30}
+                    suffix="%"
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="s"
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="s"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="s"
+                    text={30}
+                    suffix="%"
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="m"
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="m"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="m"
+                    text={30}
+                    suffix="%"
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="l"
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="l"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="l"
+                    text={30}
+                    suffix="%"
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="xl"
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="xl"
+                    onCancel={(e) => console.log("onCancel", e)}
+                  />
+                  &nbsp;
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="xl"
+                    text={30}
+                    suffix="%"
+                  />
+                  <br />
+                  area:
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="max"
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="max"
+                    onCancel={(e) => console.log("onCancel", e)}
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                  <br />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    size="max"
+                    text={30}
+                    suffix="%"
+                    style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                  />
+                </div>
+              </Uu5Elements.Grid>
+
+              <h4>imageSrc & children & cssColor</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <Uu5Elements.Progress
+                  value={30}
+                  type="circular"
+                  size="max"
+                  imageSrc="https://cdn.plus4u.net/uu-gds-svgg01/1.0.0/assets/illustrations/svg/document.svg"
+                  cssColor="#43a047"
+                  style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                >
+                  uuDocKit
+                </Uu5Elements.Progress>
+                <Uu5Elements.Progress
+                  value={30}
+                  type="horizontal"
+                  size="max"
+                  imageSrc="https://cdn.plus4u.net/uu-gds-svgg01/1.0.0/assets/illustrations/svg/document.svg"
+                  cssColor="#43a047"
+                  style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                >
+                  uuDocKit
+                </Uu5Elements.Progress>
+              </Uu5Elements.Grid>
+
+              <h4>icon</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <Uu5Elements.Progress
+                  value={30}
+                  type="circular"
+                  size="max"
+                  icon="uugdssvg-svg-document"
+                  style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                >
+                  uuDocKit
+                </Uu5Elements.Progress>
+                <Uu5Elements.Progress
+                  value={30}
+                  type="horizontal"
+                  size="max"
+                  icon="uugdssvg-svg-document"
+                  style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                >
+                  uuDocKit
+                </Uu5Elements.Progress>
+              </Uu5Elements.Grid>
+
+              <h4>imageComponent</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <Uu5Elements.Progress
+                  value={30}
+                  type="circular"
+                  size="max"
+                  imageComponent={<Uu5Elements.Svg code="uugdssvg-svg-document" />}
+                  style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                >
+                  uuDocKit
+                </Uu5Elements.Progress>
+                <Uu5Elements.Progress
+                  value={30}
+                  type="horizontal"
+                  size="max"
+                  imageComponent={<Uu5Elements.Svg code="uugdssvg-svg-document" />}
+                  style={{ position: "unset", display: "unset", pointerEvents: "unset" }} // because of demo alignment
+                >
+                  uuDocKit
+                </Uu5Elements.Progress>
+              </Uu5Elements.Grid>
+
+              <h4>width or progressWidth</h4>
+              <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(320px, 1fr))">
+                <span />
+                <div>
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    width="100%"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    width="100%"
+                    text={30}
+                    suffix="%"
+                  />
+                  <Uu5Elements.Progress
+                    value={30}
+                    type="horizontal"
+                    progressWidth={200}
+                    text={30}
+                    suffix="%"
+                  />
+                </div>
+              </Uu5Elements.Grid>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

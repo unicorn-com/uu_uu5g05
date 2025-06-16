@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script
+      src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js"
+      crossorigin
+    ></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createVisualComponent, Utils, useState, UserPreferencesProvider, useUserPreferences, useScreenSize } from "uu5g05";
+      import { UuDate } from "uu_i18ng01";
+      import { Calendar } from "uu5g05-elements";
+      import { Checkbox, Select } from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      const Example = createVisualComponent({
+        render() {
+          const [pref, setPref] = useUserPreferences();
+          const [selectionMode, setSelectionMode] = useState("week");
+          const [language, setLanguage] = useState(false);
+          const [limits, setLimits] = useState(false);
+          const [value, setValue] = useState(undefined);
+          const [displayNavigation, setDisplayNavigation] = useState(true);
+          const [displayPresets, setDisplayPresets] = useState(true);
+          const [displayWeekNumbers, setDisplayWeekNumbers] = useState(true);
+          const [screenSize] = useScreenSize();
+          const isSmallScreenSize = ["xs"].indexOf(screenSize) > -1 ? true : false;
+
+          return (
+            <div>
+              <div
+                className={Config.Css.css({
+                  marginBottom: "30px",
+                  display: "grid",
+                  gap: "4px 16px",
+                  gridTemplateColumns: "350px 350px",
+                })}
+              >
+                <Select
+                  label="selectionMode"
+                  itemList={[{ value: "single" }, { value: "range" }, { value: "week" }]}
+                  value={selectionMode}
+                  onChange={(e) => {
+                    setSelectionMode(e.data.value);
+                  }}
+                />
+                <Select
+                  label={`userPref - WeekStartDay - ${pref.weekStartDay}`}
+                  itemList={[
+                    { value: 1, children: "1" },
+                    { value: 2, children: "2" },
+                    { value: 3, children: "3" },
+                    { value: 4, children: "4" },
+                    { value: 5, children: "5" },
+                    { value: 6, children: "6" },
+                    { value: 7, children: "7" },
+                  ]}
+                  value={pref.weekStartDay}
+                  onChange={(e) => {
+                    setPref(v => ({ ...v, weekStartDay: e.data.value }));
+                  }}
+                />
+                <Checkbox
+                  label={"Set Language (EN)"}
+                  value={language}
+                  onChange={() => {
+                    Utils.Language.setLanguage(language ? "cs" : "en");
+                    setLanguage(!language);
+                  }}
+                />
+                <Checkbox label={"Set Limits"} value={limits} onChange={() => setLimits(!limits)} />
+                <Checkbox
+                  label={"displayNavigation"}
+                  value={displayNavigation}
+                  onChange={() => {
+                    setDisplayNavigation(!displayNavigation);
+                  }}
+                />
+                <Checkbox
+                  label={"displayPresets"}
+                  value={displayPresets}
+                  onChange={() => {
+                    setDisplayPresets(!displayPresets);
+                  }}
+                />
+                <Checkbox
+                  label={"displayWeekNumbers"}
+                  value={displayWeekNumbers}
+                  onChange={() => {
+                    setDisplayWeekNumbers(!displayWeekNumbers);
+                  }}
+                />
+              </div>
+              <div
+                className={Config.Css.css({
+                  border: "1px dashed lightgray",
+                  borderRadius: "5px",
+                  width: isSmallScreenSize ? "auto" : "fit-content",
+                })}
+              >
+                <Calendar
+                  value={value}
+                  min={limits ? new UuDate().shiftYear(-1).toIsoString() : undefined}
+                  max={limits ? new UuDate().shiftYear(3).toIsoString() : undefined}
+                  onSelect={({ data }) => {
+                    console.log(data);
+                    setValue(data.value);
+                  }}
+                  direction="vertical"
+                  selectionMode={selectionMode}
+                  displayNavigation={displayNavigation}
+                  displayPresets={displayPresets}
+                  displayWeekNumbers={displayWeekNumbers}
+                />
+              </div>
+            </div>
+          );
+        },
+      });
+
+      const Page = createVisualComponent({
+        render(props) {
+          return (
+            <UserPreferencesProvider>
+              <Example />
+            </UserPreferencesProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

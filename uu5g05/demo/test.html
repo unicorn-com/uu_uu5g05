@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Fragment, PropTypes } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import {Uu5String} from "uu5stringg01";
+
+      const sec1 = [
+        {
+          "uu5Tag": "Uu5RichTextBricks.Block",
+          "props": {
+            "uu5String": "<uu5string/><Uu5Bricks.Link href=\"http://localhost:9090/uu-managementkit-maing02/ac9f504bd21ddf736edf7e6b8104f0f8/document?oid=66d83d55ca77e624fc83d61a&pageOid=66d83e01ca77e624fc83d6dc\">current page link</Uu5Bricks.Link>"
+          }
+        }
+      ];
+
+      const sec2 = Uu5String.toObject(sec1);
+      console.log("sec2", sec2);
+
+      const sec3 = Uu5String.toObject(sec2);
+      console.log("sec3", sec3);
+
+      function Page() {
+        return (
+          <div>
+
+          </div>
+        )
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

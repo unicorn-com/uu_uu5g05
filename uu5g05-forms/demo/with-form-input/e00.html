@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, useState, Utils, useRef, useEffect } from "uu5g05";
+      import Uu5Forms, { withFormInput, withExtensionInput } from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: 16,
+      });
+
+      const ExtensionNumberInput = withExtensionInput(Uu5Forms.Number.Input);
+
+      /*@@viewOn:example*/
+      const PortNumberInput = createVisualComponent({
+        render(props) {
+          return <ExtensionNumberInput min={1} max={65535} step={1} {...props} />;
+        },
+      });
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const {
+            value: propsValue,
+            onChange,
+            onValidationStart,
+            onValidationEnd,
+            feedback,
+            message,
+            messageParams,
+          } = props;
+
+          const [value, setValue] = useState(propsValue);
+          const [errorList, setErrorList] = useState(null);
+          const [pending, setPending] = useState();
+
+          return (
+            <div>
+              <Input
+                {...props}
+                value={value}
+                feedback={errorList?.[0].feedback || feedback}
+                message={errorList?.[0].message || message}
+                messageParams={errorList?.[0].messageParams || messageParams}
+                pending={pending}
+                onChange={(e) => {
+                  typeof onChange === "function" && onChange(e);
+                  setValue(e.data.value);
+                }}
+                onValidationStart={(e) => {
+                  typeof onValidationStart === "function" && onValidationStart(e);
+                  setPending(true);
+                }}
+                onValidationEnd={(e) => {
+                  typeof onValidationEnd === "function" && onValidationEnd(e);
+                  setErrorList(e.data.errorList.length ? e.data.errorList : null);
+                  setPending(false);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const PortNumberUncontrolled = withFormInput(PortNumberInput);
+      const PortNumber = withControlledInput(PortNumberUncontrolled);
+
+      const Page = createComponent({
+        render() {
+          const [port1, setPort1] = useState();
+          const [validationProps1, setValidationProps1] = useState({});
+          const [port2, setPort2] = useState();
+          const [validationProps2, setValidationProps2] = useState({});
+
+          const inputRef = useRef();
+
+          useEffect(() => {
+            console.log("inputRef.current", inputRef.current);
+          }, []);
+
+          return (
+            <div className={columnsCss}>
+              <div>
+                {/*@@viewOn:example*/}
+                <PortNumber
+                  name="port"
+                  label="Server port"
+                  placeholder="Enter port number (1-65535)"
+                  value={port1}
+                  onChange={(e) => setPort1(e.data.value)}
+                  {...validationProps1}
+                  onValidationEnd={(e) => {
+                    const { feedback, message, messageParams } = e.data.errorList[0] || {};
+                    setValidationProps1({ feedback, message, messageParams });
+                  }}
+                />
+
+                <PortNumber
+                  name="port"
+                  label="Server port (message as tooltip)"
+                  placeholder="Enter port number (1-65535)"
+                  value={port2}
+                  messagePosition="tooltip"
+                  onChange={(e) => setPort2(e.data.value)}
+                  {...validationProps2}
+                  onValidationEnd={(e) => {
+                    const { feedback, message, messageParams } = e.data.errorList[0] || {};
+                    setValidationProps2({ feedback, message, messageParams });
+                  }}
+                />
+
+                <h4>label & info</h4>
+                <PortNumber label="Label" info="Some information about the input." />
+                <PortNumber
+                  label="Label lsi"
+                  info={{
+                    en: "Some information about the input.",
+                    cs: "Nějaké informace o inputu.",
+                  }}
+                />
+
+                <h4>layout</h4>
+                <PortNumber label="Label vertical" layout="vertical" />
+                <PortNumber label="Label 1:1" layout="1:1" />
+                <PortNumber label="Label 1:2" layout="1:2" />
+                <PortNumber label="Label 2:3" layout="2:3" />
+
+                <h4>inputRef (in console)</h4>
+                <PortNumber label="Label" inputRef={inputRef} />
+
+                <h4>inputAttrs: onKeyDown, onKeyUp (in console)</h4>
+                <PortNumber
+                  label="Label"
+                  placeholder="Write and see console"
+                  inputAttrs={{
+                    onKeyDown: (e) => console.log("onKeyDown", e),
+                    onKeyUp: (e) => console.log("onKeyUp", e),
+                  }}
+                />
+
+                {/*@@viewOff:example*/}
+              </div>
+
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>message & messageParams</h4>
+                <PortNumber
+                  label="Message"
+                  message="Info message is displayed always if there is no validation error."
+                />
+                <PortNumber
+                  label="Message lsi"
+                  message={{
+                    en: "Info message is displayed always if the %s is valid.",
+                    cs: "Info je zobrazeno vždy, když je %s validní.",
+                  }}
+                  messageParams={["input"]}
+                />
+
+                <h4>feedback</h4>
+                <PortNumber label="Feedback" feedback="error" message="Error message" />
+                <PortNumber label="Feedback" feedback="warning" message="Warning message" />
+                <PortNumber label="Feedback" feedback="success" message="Success message" />
+
+                <h4>messagePosition="tooltip" & infoMessage</h4>
+                <PortNumber
+                  label="Feedback"
+                  feedback="error"
+                  messagePosition="tooltip"
+                  infoMessage="info message"
+                  message="Error message"
+                />
+                <PortNumber
+                  label="Feedback"
+                  feedback="warning"
+                  messagePosition="tooltip"
+                  infoMessage="info message"
+                  message="Warning message"
+                />
+                <PortNumber
+                  label="Feedback"
+                  feedback="success"
+                  messagePosition="tooltip"
+                  infoMessage="info message"
+                  message="Success message"
+                />
+                {/*@@viewOff:example*/}
+              </div>
+            </div>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

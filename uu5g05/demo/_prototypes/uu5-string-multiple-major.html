@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      Uu5Loader.config({
+        imports: {
+          "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+          uu5g04: "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04.min.js",
+
+          uu5stringg01: "https://cdn.plus4u.net/beta/uu-uu5stringg01/1.9.0-alpha-multimajor.2/uu5stringg01.min.js",
+        },
+      });
+    </script>
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createVisualComponent, createComponent, Content, Utils, useState, useLayoutEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import "uu5g04";
+
+      /*@@viewOn:example*/
+      const STATICS = {
+        uu5Tag: Config.TAG + "Component",
+        nestingLevel: ["bigBox", "box", "inline"],
+      };
+
+      let origGetLibrary = Utils.LibraryRegistry.getLibrary;
+      Utils.LibraryRegistry.getLibrary = (namespace, opts) => {
+        // (for demo only) uuALR does not support sending of { code: "Uu5Tiles", generation: 2, version: "1.x" } yet
+        // so change such parameters into currently supported { code: "Uu5Tiles", version: "1.21.3" }
+        if (namespace === "Uu5Tiles" && opts?.version === 1) opts.version = "1.21.3";
+        return origGetLibrary(namespace, opts);
+      };
+
+      const CheckInfo = createVisualComponent({
+        uu5Tag: Config.TAG + "CheckInfo",
+        render(props) {
+          const [key, setKey] = useState(0);
+
+          return (
+            <div>
+              <Uu5Elements.Button onClick={() => setKey((k) => k + 1)}>[{props.label}] Check</Uu5Elements.Button>
+              {key ? <TilesInfo key={key} {...props} /> : null}
+            </div>
+          );
+        },
+      });
+      Utils.LibraryRegistry.registerComponent(CheckInfo);
+
+      const TilesInfo = createComponent({
+        render(props) {
+          const [SubComponent, setSubComponent] = useState();
+
+          useLayoutEffect(() => {
+            let tilesLibs = Utils.LibraryRegistry.listLibraries()
+              .filter((it) => it.name === "uu5tilesg02")
+              .map((it) => ({
+                version: it.version,
+                exports: Uu5Loader.get(it.url),
+              }));
+            let allReady = tilesLibs.every((it) => !!it.exports);
+            if (allReady) {
+              setSubComponent(() =>
+                createComponent({
+                  render() {
+                    // call useController() from all uu5tilesg02 libraries
+                    let hookData = tilesLibs.map((it) => it.exports.useController());
+                    let idx = hookData.findIndex((it) => it.data != null); // if recognizing ControllerProvider, data will be [] instead of undefined
+                    console.log(
+                      `[${props.label}] useController() results:`,
+                      hookData.reduce((r, it, i) => ((r[tilesLibs[i].version] = it), r), {})
+                    );
+                    return "This Uu5Tiles.ControllerProvider is in version: " + tilesLibs[idx]?.version;
+                  },
+                })
+              );
+            } else {
+              setSubComponent(null);
+            }
+          }, []);
+          return SubComponent ? <SubComponent /> : "Tiles are being loaded, press Check to update...";
+        },
+      });
+
+      /*@@viewOff:example*/
+
+      const uu5String = `<uu5string/>
+<Uu5Tiles.ControllerProvider>
+  <${Config.TAG}CheckInfo label="first" />
+  <Uu5TilesElements.Table />
+</Uu5Tiles.ControllerProvider>
+
+<Uu5Tiles.ControllerProvider_g02v1 selectable>
+  <${Config.TAG}CheckInfo label="second" />
+  <Uu5TilesBricks.Table />
+</Uu5Tiles.ControllerProvider_g02v1>
+`;
+
+      function Page() {
+        return (
+          <div>
+            <pre>{uu5String}</pre>
+            <Content>{uu5String}</Content>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diary difference</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5calendarg01/2.x/assets/example-config.js"
+            crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      var uu5Environment = {};
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5" style="height: 100%">Loading...</main>
+
+    <script type="text/babel">
+      import {
+        createComponent,
+        createVisualComponent,
+        Utils,
+        PropTypes,
+        useState,
+        useRef,
+        useEffect,
+        useDataObject,
+        useUserPreferences,
+      } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import Plus4U5App from "uu_plus4u5g02-app";
+      import Uu5Calendar from "uu5calendarg01";
+      import { UuDate } from "uu_i18ng01";
+
+      const personCacheMap = {};
+
+      const Calls = {
+        async findPerson(search) {
+          if (personCacheMap[search.uuIdentity]) return personCacheMap[search.uuIdentity];
+
+          const dtoOut = await Plus4U5.Utils.AppClient.cmdGet(
+            "https://uuapp.plus4u.net/uu-plus4upeople-maing01/56ac93ddb0034de8b8e4f4b829ff7d0f/people/findPerson",
+            { private: false, ...search }
+          );
+          if (search.uuIdentity) personCacheMap[search.uuIdentity] = dtoOut;
+          return dtoOut;
+        },
+        async listDwRecord({ baseUri, ...dtoInData }) {
+          let commandUri = baseUri + (baseUri.endsWith("/") ? "" : "/") + "uuDwRecord/listDiaryRecords";
+          return await Plus4U5.Utils.AppClient.cmdGet(commandUri, dtoInData);
+        },
+      };
+
+      const COLOR_SCHEME_LIST = [
+        // "blue",
+        // "light-blue",
+        // "cyan",
+        // "dark-green",
+        // "green",
+        // "light-green",
+        // "yellow",
+        // "orange",
+        // "red",
+        // "pink",
+        // "purple",
+        // "dark-purple",
+        // "dark-blue",
+        // "steel",
+        "blue",
+        "orange",
+        "light-blue",
+        "red",
+        "cyan",
+        "pink",
+        "dark-green",
+        "purple",
+        "green",
+        "dark-purple",
+        "light-green",
+        "dark-blue",
+        "yellow",
+        "steel",
+      ];
+
+      function getColor(i) {
+        i = i % COLOR_SCHEME_LIST.length;
+        return COLOR_SCHEME_LIST[i];
+      }
+
+      const PEOPLE_LIST = [
+        {
+          name: "Ondřej Čapek",
+          uuIdentity: "7-7948-1",
+          role: "uuhumaninterfacefamily-manager",
+        },
+        {
+          name: "Jakub Šírek",
+          uuIdentity: "7888-8591-1",
+          role: "uuhumaninterfacefamily-designer",
+        },
+        {
+          name: "Milan Šatka",
+          uuIdentity: "127-0000-0000-1",
+          role: "uuhumaninterfacefamily-technologyarchitect",
+        },
+        {
+          name: "Josef Vegner",
+          uuIdentity: "7611-1",
+          role: "uuhumaninterfacefamily-developer",
+        },
+
+        {
+          name: "Martin Farkaš",
+          uuIdentity: "6565-1",
+        },
+        {
+          name: "Michal Husák",
+          uuIdentity: "7709-1",
+        },
+      ];
+
+      const PersonSearch = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "PersonSearch",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const { value } = props;
+          const initialItemList = PEOPLE_LIST.map(
+            ({ uuIdentity, name }) => {
+              const i = value?.findIndex(({ value }) => value === uuIdentity);
+              return {
+                value: uuIdentity,
+                text: [name, uuIdentity].join(" "),
+                colorScheme: i > -1 ? getColor(i) : undefined,
+                children: (
+                  <>
+                    <Plus4U5Elements.PersonPhoto
+                      uuIdentity={uuIdentity}
+                      size="xs"
+                    />
+                    &nbsp;{name} ({uuIdentity})
+                  </>
+                ),
+              };
+            }
+          );
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <Uu5Forms.TextSelectAsync
+              {...props}
+              initialItemList={initialItemList}
+              onSearch={async (e) => {
+                if (e.data.value) {
+                  const data = await Calls.findPerson({ [/^(\d+-)+\d+$/.test(e.data.value) ? "uuIdentity" : "name"]: e.data.value });
+                  return data.itemList.filter(({ mtDwBaseUri }) => !!mtDwBaseUri).map(({ uuIdentity, name }) => ({
+                    value: uuIdentity,
+                    text: [name, uuIdentity].join(" "),
+                    children: (
+                      <>
+                        <Plus4U5Elements.PersonPhoto
+                          uuIdentity={uuIdentity}
+                          size="xs"
+                        />
+                        &nbsp;{name} ({uuIdentity})
+                      </>
+                    ),
+                  }));
+                } else {
+                  return initialItemList;
+                }
+              }}
+            />
+          );
+          //@@viewOff:render
+        },
+      });
+
+      function getDates(view, date) {
+        let dateFrom, dateTo;
+
+        switch (view) {
+          case "week":
+          case "workWeek":
+            dateFrom = new UuDate(date).startOfWeek().toIsoString();
+            dateTo = new UuDate(date).endOfWeek().toIsoString();
+            break;
+          case "month":
+            dateFrom = new UuDate(date).startOfMonth().toIsoString();
+            dateTo = new UuDate(date).endOfMonth().toIsoString();
+            break;
+          case "day":
+            dateFrom = dateTo = date;
+            break;
+        }
+
+        return [dateFrom, dateTo];
+      }
+
+      const GroupCalendar = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "GroupCalendar",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {
+          personList: PropTypes.arrayOf(
+            PropTypes.shape({
+              uuIdentity: PropTypes.string,
+            })
+          ),
+        },
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {
+          personList: [],
+        },
+        //@@viewOff:defaultProps
+        //@@viewOn:render
+        render(props) {
+          //@@viewOn:private
+          let { personList, ...otherProps } = props;
+
+          const { date, view } = otherProps;
+
+          async function loadEvents(personList, view, date) {
+            if (personList?.length) {
+              let events = await Promise.all(
+                personList.map(async (person) => {
+                  const personInfo = await Calls.findPerson({
+                    uuIdentity: person.uuIdentity,
+                  });
+
+                  const [dateFrom, dateTo] = getDates(view, date);
+                  const personEvents = await Calls.listDwRecord({
+                    baseUri: personInfo.itemList[0].mtDwBaseUri,
+                    dateFrom,
+                    dateTo,
+                  });
+
+                  return [...personEvents.uuDwrActiveList, ...personEvents.uuDwrFinalList].map((item) => item.showInDiary === "dayBlock" ? false : ({
+                    id: item.id,
+                    dateTimeFrom: item.startTime,
+                    dateTimeTo: item.endTime,
+                    subject: personInfo.itemList[0].name,
+                    colorScheme: person.colorScheme,
+                  })).filter(Boolean);
+                })
+              );
+
+              return events.flat();
+            } else {
+              // no persons
+              return [];
+            }
+          }
+
+          const { state, data, handlerMap } = useDataObject({
+            skipInitialLoad: true,
+            handlerMap: {
+              load: loadEvents,
+            },
+            initialDtoIn: personList,
+          });
+
+          const reloadRef = useRef(0);
+          const loadDataRef = useRef();
+          loadDataRef.current = [personList, view, date];
+
+          useEffect(() => {
+            if (typeof handlerMap.load === "function") {
+              reloadRef.current = 0;
+              handlerMap.load(personList, view, date);
+            } else {
+              reloadRef.current++;
+            }
+          }, [personList, view, date]);
+
+          useEffect(() => {
+            if (reloadRef.current && typeof handlerMap.load === "function") {
+              reloadRef.current = 0;
+              handlerMap.load(...loadDataRef.current);
+            }
+          }, [state]);
+
+          const userPreferences = useUserPreferences();
+
+          let child;
+          switch (state) {
+            case "pendingNoData":
+              child = <Uu5Elements.Pending />;
+              break;
+            case "errorNoData":
+              child = "Error was occured.";
+              break;
+            default: {
+              child = (
+                <Uu5Calendar.BigCalendar
+                  userPreferences={{
+                    ...userPreferences,
+                    showMyMeetings: true,
+                  }}
+                  isOwner
+                  timeFrom="6:00"
+                  timeTo="20:00"
+                  workTimeFrom="8:30"
+                  workTimeTo="17:00"
+                  {...otherProps}
+                  eventList={data ?? []}
+                />
+              );
+              break;
+            }
+          }
+
+          return <div>{child}</div>;
+          //@@viewOff:render
+        },
+      });
+
+      const SelectDate = createVisualComponent({
+        render(props) {
+          let { view, date, onClick } = props;
+          return (
+            <Uu5Calendar.DatePicker
+              view={view}
+              onDateChange={(e) => onClick(e.data.date)}
+              date={date}
+            />
+          );
+        },
+      });
+
+      const Today = createVisualComponent({
+        render(props) {
+          let { onClick } = props;
+          return (
+            <Uu5Elements.Button
+              onClick={() => onClick(new Date())}
+              significance="subdued"
+            >
+              Today
+            </Uu5Elements.Button>
+          );
+        },
+      });
+
+      const SelectView = createVisualComponent({
+        render(props) {
+          let { view, onClick } = props;
+          return (
+            <Uu5Calendar.ViewButton
+              significance="subdued"
+              view={view}
+              onViewChange={(e) => onClick(e.data.view)}
+            />
+          );
+        },
+      });
+
+      const Spa = createComponent({
+        render() {
+          let [personList, setPersonList] = useState([]);
+          const [view, setView] = useState("week");
+          const [selectedDate, setSelectedDate] = useState(new Date());
+
+          return (
+            <Uu5Elements.Block headerType="title" header="Diary comparison" actionList={[
+              {
+                component: SelectDate,
+                view: view,
+                date: selectedDate,
+                onClick: (v) => {
+                  // FIXME uu5calendarg01 returns moment instance:-(
+                  setSelectedDate(new Date(v))
+                },
+                collapsed: false,
+              },
+              { component: Today, onClick: setSelectedDate },
+              { component: SelectView, view: view, onClick: setView },
+            ]}>
+              <PersonSearch
+                label="Persons"
+                value={personList}
+                onChange={(e) => setPersonList(e.data.value)}
+                placeholder="Write name or uuIdentity"
+                multiple
+              />
+              <GroupCalendar
+                personList={personList?.map(({ value }, i) => ({
+                  uuIdentity: value,
+                  colorScheme: getColor(i),
+                }))}
+                view={view}
+                onViewChange={(e) => setView(e.data.view)}
+                date={selectedDate}
+                onDateChange={(e) => setSelectedDate(e.data.date)}
+                className={Config.Css.css({ marginTop: 32 })}
+              />
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Plus4U5.SpaProvider>
+              <Plus4U5App.Spa displayTop={false}>
+                <Spa />
+              </Plus4U5App.Spa>
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

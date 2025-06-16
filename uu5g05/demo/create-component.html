@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>createComponent Demo</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  //@@viewOn:imports
+  import { Utils, PropTypes, createVisualComponent, createHoc } from "uu5g05";
+  import { Config } from "uu5g05-dev";
+  //@@viewOff:imports
+
+  //@@viewOn:statics
+  const STATICS = {
+    uu5Tag: Config.TAG + "Button",
+    nestingLevel: Utils.NestingLevel.buildList("smallBox", "inline")
+  };
+  //@@viewOff:statics
+
+  const Button = createVisualComponent({
+    ...STATICS,
+
+    //@@viewOn:propTypes
+    propTypes: {
+      onClick: PropTypes.func
+    },
+    //@@viewOff:propTypes
+
+    //@@viewOn:defaultProps
+    defaultProps: {
+      onClick: undefined
+    },
+    //@@viewOff:defaultProps
+
+    render(props) {
+      //@@viewOn:private
+      //@@viewOff:private
+
+      //@@viewOn:interface
+      //@@viewOff:interface
+
+      //@@viewOn:render
+      const attrs = Utils.VisualComponent.getAttrs(props);
+      const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, STATICS);
+
+      attrs.onClick = props.onClick;
+      attrs.children = Utils.Content.build(props.children, props, STATICS);
+
+      let component = null;
+
+      switch (currentNestingLevel) {
+        case "inline":
+          component = <a {...attrs} />;
+          break;
+        case "smallBox":
+          component = <button {...attrs} />;
+          break
+      }
+
+      return component;
+      //@@viewOff:render
+    }
+  });
+
+  const ButtonHoc = createHoc({
+    uu5Tag: Config.TAG + "ButtonHoc",
+
+    propTypes: {
+      name: PropTypes.string
+    },
+
+    defaultProps: {
+      name: "button"
+    },
+
+    component: Button,
+
+    getProps(props) {
+      return {
+        ...props,
+        className: Config.Css.css`
+          font-size: 20px;
+        `
+      }
+    }
+  });
+
+  function Page() {
+    return (
+      <div>
+        <div>
+          <Button onClick={() => console.log("smallBox button")}>Smallbox</Button>
+        </div>
+        <div>
+          <Button onClick={() => console.log("inline link")} nestingLevel="inline">Inline</Button>
+        </div>
+        <div>
+          <ButtonHoc onClick={() => console.log("hoc")}>Hoc</ButtonHoc>
+        </div>
+      </div>
+    )
+  }
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

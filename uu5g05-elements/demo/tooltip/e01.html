@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Fragment, Utils, useState, useRef } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const TooltipOnCursor = createVisualComponent({
+        render({ preferredPosition, children, ...tooltipProps }) {
+          const [tooltipSettings, setTooltipSettings] = useState(null);
+          const buttonRef = useRef();
+          const openRef = useRef();
+
+          const debouncedHandleMouseMoveRef = useRef();
+          if (!debouncedHandleMouseMoveRef.current) {
+            debouncedHandleMouseMoveRef.current = Utils.Function.debounce((e) => {
+              if (openRef.current) {
+                setTooltipSettings(
+                  (tooltipSettings) =>
+                    tooltipSettings || {
+                      // 8x16 is size of the cursor
+                      pageX: e.pageX + 8,
+                      pageY: e.pageY + 16,
+                    }
+                );
+              }
+            }, 1000);
+          }
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button
+                elementRef={buttonRef}
+                elementAttrs={{
+                  onMouseEnter: () => {
+                    openRef.current = true;
+                  },
+                  onMouseMove: (e) => {
+                    e.persist();
+                    debouncedHandleMouseMoveRef.current(e);
+                  },
+                  onMouseLeave: () => {
+                    openRef.current = false;
+                    setTooltipSettings(null);
+                  },
+                }}
+              >
+                {children || preferredPosition || "Hover over me!"}
+              </Uu5Elements.Button>
+              {tooltipSettings && (
+                <Uu5Elements.Tooltip
+                  {...tooltipProps}
+                  {...tooltipSettings}
+                  preferredPosition={preferredPosition}
+                  onClose={() => setTooltipSettings(null)}
+                  delayMs={0}
+                >
+                  Lorem ipsum
+                  <br />
+                  dolor sit amet...
+                </Uu5Elements.Tooltip>
+              )}
+            </Fragment>
+          );
+        },
+      });
+
+      const TooltipOnMovingCursor = createVisualComponent({
+        render({ preferredPosition, children, ...tooltipProps }) {
+          const [tooltipSettings, setTooltipSettings] = useState(null);
+          const buttonRef = useRef();
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button
+                elementRef={buttonRef}
+                elementAttrs={{
+                  onMouseMove: (e) => {
+                    setTooltipSettings({
+                      // 8x16 is size of the cursor
+                      pageX: e.pageX + 8,
+                      pageY: e.pageY + 16,
+                    });
+                  },
+                  onMouseLeave: () => setTooltipSettings(null),
+                }}
+              >
+                {children || preferredPosition || "Hover over me!"}
+              </Uu5Elements.Button>
+              {tooltipSettings && (
+                <Uu5Elements.Tooltip
+                  {...tooltipProps}
+                  {...tooltipSettings}
+                  preferredPosition={preferredPosition}
+                  onClose={() => setTooltipSettings(null)}
+                >
+                  Lorem ipsum
+                  <br />
+                  dolor sit amet...
+                </Uu5Elements.Tooltip>
+              )}
+            </Fragment>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <h4>Tooltip on cursor</h4>
+              <TooltipOnCursor />
+
+              <h4>Tooltip on cursor during moving</h4>
+              <TooltipOnMovingCursor />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

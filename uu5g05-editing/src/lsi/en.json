@@ -1,0 +1,206 @@
+{
+  "general": {
+    "required": "The field is required.",
+    "default": "Default",
+    "unverified": "Unverified"
+  },
+  "EditModal": {
+    "header": "${name} editing",
+    "confirm": "Save",
+    "cancel": "Cancel",
+    "addItemButton": "Add item",
+    "insertBefore": "Insert before",
+    "insertAfter": "Insert after",
+    "moveToPosition": "Move to position",
+    "duplicate": "Duplicate component",
+    "delete": "Delete",
+    "preview": "Preview"
+  },
+  "ItemPositionModal": {
+    "header": "Move item to position",
+    "cancel": "Cancel",
+    "confirm": "OK"
+  },
+  "ItemRemovalDialog": {
+    "header": "Item removal",
+    "info": "You are about to do a potentially destructive action. Are you sure you want to proceed?",
+    "cancel": "Cancel",
+    "confirm": "Remove"
+  },
+  "templates": {
+    "general": "General",
+    "visual": "Visual",
+    "system": "System",
+    "authorization": "Authorization"
+  },
+  "FormDisabled": {
+    "label": "Interaction with the component",
+    "allow": "Allow",
+    "disable": "Disable"
+  },
+  "FormHidden": {
+    "label": "On the screen",
+    "show": "Show",
+    "hide": "Hide"
+  },
+  "FormNoPrint": {
+    "label": "Printing the component",
+    "show": "Show",
+    "hide": "Hide"
+  },
+  "FormIdentificationType": {
+    "label": "Visual identification outside of the app context",
+    "show": "Show",
+    "hide": "Hide",
+    "info": "Each organizational unit has its Visual Identification. Organizational units serve as origin, where every component has to came from. When the component is placed outside of its its origin, it shows the Visual Identification of the origin – a colored stripe and a square icon displayed on the left in the header. Icon allows access to the local navigation of its origin."
+  },
+  "FormBaseUri": {
+    "label": "Base URI of the app",
+    "message": "URL of the app from which to load context, data and visual identification."
+  },
+  "FormUu5Id": {
+    "label": "User preference ID",
+    "message": "Unique identification for storing and loading preferences for this component."
+  },
+  "FormDisableUserPreference": {
+    "label": "Default settings load from",
+    "userPreference": "User preference",
+    "component": "Component"
+  },
+  "FormOid": {
+    "label": "Object ID",
+    "message": "Identification of a specific object the component should display."
+  },
+  "FormBid": {
+    "label": "Branch ID",
+    "message": "Identification of a specific branch from uuBranchKit."
+  },
+  "FormRts": {
+    "label": "Show data for a specific date"
+  },
+  "FormClassName": {
+    "label": "CSS classes",
+    "message": "Separate the names with a space."
+  },
+  "FormStyle": {
+    "label": "CSS styles",
+    "message": "Write between the brackets. Each style to a single line ended with a semicolon.",
+    "error": "The only valid selector is the component."
+  },
+  "FormAspectRatio": {
+    "label": "Aspect ratio"
+  },
+  "FormBorderRadius": {
+    "label": "Border radius"
+  },
+  "FormCard": {
+    "label": "Display the component as a card",
+    "none": "Disable",
+    "content": "Only content",
+    "full": "Enable"
+  },
+  "FormColorScheme": {
+    "label": "Color scheme",
+    "default": "Default"
+  },
+  "FormFullTextSearchPriority": {
+    "label": "Full text search priority",
+    "message": "Setting the preferred component search. Auto is undefined priority of the component. 0 means that the component and its children will not be indexed by fullTextSearch. 1 means the lowest priority and 5 means the highest priority."
+  },
+  "FormHeight": {
+    "label": "Height"
+  },
+  "FormId": {
+    "label": "ID"
+  },
+  "FormNestingLevel": {
+    "label": "Nesting level"
+  },
+  "FormSignificance": {
+    "label": "Significance"
+  },
+  "FormSize": {
+    "label": "Size"
+  },
+  "FormWidth": {
+    "label": "Width"
+  },
+  "FormMargin": {
+    "label": "Margin"
+  },
+  "FormSpaces": {
+    "simple": "Simple",
+    "advanced": "Advanced",
+    "info": "Spacing is automatically responsive using values from uuGDS adaptive spacing palette.",
+    "infoForMargin": "The margin values are adjusted according to the nesting level of the component. If the nesting level is set to 'area' or 'areaCollection', the values defined for ${horizontal} will not be passed to the component. If the nesting level is set to 'inline', the values defined for ${vertical} will not be passed to the component.",
+    "infoForHorizontalMargin": "the horizontal margin",
+    "infoForVerticalMargin": "the vertical margin",
+    "infoForHorizontalOuter": "the outer horizontal spacing",
+    "infoForVerticalOuter": "the outer vertical spacing",
+    "outerVertical": "Outer vertical",
+    "outerHorizontal": "Outer horizontal",
+    "outerTop": "Outer top",
+    "outerBottom": "Outer bottom",
+    "outerLeft": "Outer left",
+    "outerRight": "Outer right",
+    "innerVertical": "Inner vertical",
+    "innerHorizontal": "Inner horizontal",
+    "innerTop": "Inner top",
+    "innerBottom": "Inner bottom",
+    "innerLeft": "Inner left",
+    "innerRight": "Inner right",
+    "outerSpacing": "Outer spacing",
+    "innerSpacing": "Inner spacing",
+    "setSidesSeparately": "Set sides separately",
+    "component": "component",
+    "margin": "Margin",
+    "padding": "Padding",
+    "inherited": "Inherited",
+    "dialogHeader": "Switch to simple spacing settings?",
+    "dialogInfo": "All set values will be reseted.",
+    "dialogCancel": "Cancel",
+    "dialogConfirm": "Simple settings"
+  },
+  "screenSizeDevice": {
+    "xs": "Mobile",
+    "s": "Tablet portrait",
+    "m": "Tablet landscape",
+    "l": "Desktop",
+    "xl": "Large desktop"
+  },
+  "FormUnit": {
+    "error": "The value is not valid. Check the units."
+  },
+  "FormLink": {
+    "href": {
+      "label": "Link"
+    },
+    "labelLink": {
+      "label": "Text"
+    },
+    "target": {
+      "label": "Open in",
+      "blank": "New tab",
+      "self": "Current tab",
+      "auto": "Auto"
+    }
+  },
+  "FormAuthorization": {
+    "type": "Authorization type",
+    "typeMsg": "Only the selected authorization type is appllied.",
+    "none": "None",
+    "noneMsg": "Everyone can see this component",
+    "profiles": "Artifact profile",
+    "roles": "Role or group",
+    "artifactUri": "Artifact URI",
+    "artifactUriMsg": "To select 'Allowed profiles' or 'Use case' it is necessary to fill in 'Artifact URI.",
+    "uuTerritoryBaseUri": "Territory URI",
+    "uuTerritoryBaseUriError": "This is not a valid URI.",
+    "roleGroupIdList": "Roles with explicit rights",
+    "roleGroupIdListMsg": "'Territory URI' must be filled in first",
+    "useCase": "Use case",
+    "useCaseMsg": "A user is authorized if user is occupied in at least one profile that the use case can execute.",
+    "profileList": "Allowed profiles",
+    "profileListError": "Failed to load profiles from given Artifact URI. You can select from the default profile set or enter a custom profile name."
+  }
+}

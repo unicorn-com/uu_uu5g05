@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 05</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-plus4u5g02/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useSession, SessionProvider, LanguageProvider } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5Elements from "uu_plus4u5g02-elements";
+      import { AuthenticationService } from "uu_appg01_oidc";
+
+      function Authentication({ children }) {
+        const { state } = useSession();
+
+        let result;
+        switch (state) {
+          case "pending":
+            result = <Uu5Elements.Pending size="max" />;
+            break;
+          case "notAuthenticated":
+            result = <Plus4U5Elements.Unauthenticated />;
+            break;
+          default:
+            result = children;
+        }
+
+        return result;
+      }
+
+      //@@viewOn:example
+      // these lsi files are stored in lsi folder in a library per language
+      const lsi = {
+        // en.json
+        en: {
+          "Errors": {
+            "uu-applibraryregistry-main/library/load/invalidDtoIn": {
+              "message": "Custom invalidDtoIn message",
+              "string.e004": "Custom error message",
+            },
+            "uu-applibraryregistry-main/*": {
+              "message": "Custom other message",
+              "string.e004": "Custom other error message",
+            },
+          }
+        },
+
+        // cs.json
+        cs: {
+          "Errors": {
+            "uu-applibraryregistry-main/library/load/invalidDtoIn": {
+              "message": "Vlastní invalidDtoIn zpráva",
+              "string.e004": "Vlastní error zpráva",
+            },
+            "uu-applibraryregistry-main/*": {
+              "message": "Vlastní jiná zpráva",
+              "string.e004": "Vlastní jiná error zpráva",
+            },
+          }
+        },
+      };
+
+      //@@viewOff:example
+      const importLsi = async (lang) => ({ default: lsi[lang] });
+      importLsi.libraryCode = "Uu5Demo";
+      Utils.Lsi.setDefaultLsi(importLsi.libraryCode, { en: lsi.en });
+
+      //@@viewOn:example
+      function FormDefault() {
+        return (
+          <Uu5Forms.Form
+            gridLayout="code, submit"
+            onSubmit={(e) => {
+              console.log("submit", e.data);
+              return Plus4U5.Utils.AppClient.get("https://uuapp-dev.plus4u.net/uu-applibraryregistry-maing01/000008ad5570455e83857a394f9a21c9/library/load", e.data.value);
+            }}
+          >
+            <Uu5Forms.FormNumber name="code" initialValue={123} />
+            <Uu5Forms.SubmitButton className={Config.Css.css({ justifySelf: "end" })} />
+          </Uu5Forms.Form>
+        )
+      }
+
+      function FormCustomMessages() {
+        return (
+          <Uu5Forms.Form
+            gridLayout="code, submit"
+            onSubmit={(e) => {
+              console.log("submit", e.data);
+              return Plus4U5.Utils.AppClient.get("https://uuapp-dev.plus4u.net/uu-applibraryregistry-maing01/000008ad5570455e83857a394f9a21c9/library/load", e.data.value);
+            }}
+            lsiError={{ import: importLsi, path: ["Errors"] }}
+          >
+            <Uu5Forms.FormNumber name="code" initialValue={123} />
+            <Uu5Forms.SubmitButton className={Config.Css.css({ justifySelf: "end" })} />
+          </Uu5Forms.Form>
+        )
+      }
+
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <SessionProvider authenticationService={AuthenticationService}>
+              <LanguageProvider language="en">
+                <Uu5Elements.LanguageSelector languageList={["en", "cs"]} />
+                <Authentication>
+                  <Uu5Elements.Grid
+                    templateColumns={{ xs: "1fr", m: "1fr 1fr" }}
+                    className={Config.Css.css({ marginTop: 32 })}
+                  >
+                    <Uu5Elements.Block header="Default" headerType="title">
+                      <FormDefault />
+                    </Uu5Elements.Block>
+
+                    <Uu5Elements.Block header="Custom messages" headerType="title">
+                      <FormCustomMessages />
+                    </Uu5Elements.Block>
+                  </Uu5Elements.Grid>
+                </Authentication>
+              </LanguageProvider>
+            </SessionProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

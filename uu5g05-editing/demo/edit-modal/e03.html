@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import { Config } from "uu5g05-dev";
+      import { Button } from "uu5g05-elements";
+      import Uu5Editing from "uu5g05-editing";
+      import Uu5Forms from "uu5g05-forms";
+
+      //@@viewOn:example
+      const DEFAULT_PROPS_MAP = {
+        itemList: [
+          {
+            label: "Overview",
+            icon: "uugds-info",
+            children: "Overview content...",
+            colorScheme: "building",
+            significance: "subdued",
+          },
+          {
+            label: "History",
+            icon: "mdi-history",
+            children: "History content...",
+            colorScheme: "building",
+            significance: "subdued",
+          },
+        ],
+      };
+
+      const Page = createComponent({
+        render() {
+          const [openModal, setOpenModal] = useState(false);
+
+          const propInputMap = {
+            label: {
+              component: Uu5Forms.FormText,
+              props: {
+                label: { en: "Label" },
+                required: true,
+              },
+            },
+            tooltip: {
+              component: Uu5Forms.FormText,
+              props: {
+                label: { en: "Tooltip" },
+              },
+            },
+            icon: {
+              component: Uu5Forms.FormText,
+              props: {
+                label: { en: "Icon" },
+              },
+            },
+          };
+
+          const getEditableItemLabel = ({ itemProps, itemIndex }) => {
+            return itemProps.label || `Item ${itemIndex + 1}`;
+          };
+
+          const itemTab = {
+            label: getEditableItemLabel,
+            layout: {
+              xs: `label, tooltip, icon, borderRadius, colorScheme, significance`,
+              m: `label label tooltip tooltip icon icon,
+                  colorScheme colorScheme significance significance . .`,
+            },
+            propInputMap: {
+              colorScheme: {
+                props: {
+                  valueList: ["building", "meaning", "basic"],
+                },
+              },
+            },
+            columns: { m: "repeat(6, 1fr)" },
+          };
+
+          return (
+            <div>
+              <h4>Items from the component Tabs</h4>
+              <Button className={Config.Css.css({ marginBottom: 16 })} onClick={() => setOpenModal(true)}>
+                Open Edit Modal
+              </Button>
+              <Uu5Editing.EditModal
+                header="Edit Modal with items from component Tabs"
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                width={900}
+                onSave={({ props }) =>
+                  alert("Submitted with values:\n" + JSON.stringify(props, null, 2))
+                }
+                uu5Tag="Uu5Editing.EditModal"
+                props={DEFAULT_PROPS_MAP}
+                propInputMap={propInputMap}
+                itemPropName="itemList"
+                itemTab={itemTab}
+              />
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

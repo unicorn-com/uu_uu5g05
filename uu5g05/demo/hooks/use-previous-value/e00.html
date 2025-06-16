@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      //@@viewOn:imports
+      import { usePreviousValue } from "uu5g05";
+      //@@viewOff:imports
+
+      const Counter = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "Counter",
+        //@@viewOff:statics
+
+        render(props) {
+          //@@viewOn:private
+          const [value, setValue] = useState(0);
+          const previousValue = usePreviousValue(value);
+
+          function increase() {
+            setValue((value) => value + 1);
+          }
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <div>
+              <Uu5Elements.Button onClick={increase}>Increase</Uu5Elements.Button>
+              <div>Previous value: {previousValue + ""}</div>
+              <div>Current value: {value + ""}</div>
+            </div>
+          );
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      function Demo() {
+        return (
+          <div>
+            <Counter />
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

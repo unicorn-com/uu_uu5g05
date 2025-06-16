@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const onClick = (...args) => console.log("onClick", ...args);
+
+      const Page = createComponent({
+        render() {
+          /*@@viewOn:example*/
+          const itemList = [
+            {
+              children: "Create",
+              icon: "uugds-plus",
+              itemList: [
+                {
+                  children: "Document",
+                  icon: "uugds-plus",
+                  onClick,
+                  itemList: [
+                    { children: "DOC", icon: "uugds-plus", onClick },
+                    { children: "PDF", icon: "uugds-plus", onClick },
+                    { children: "TXT", icon: "uugds-plus", onClick },
+                  ],
+                },
+                { children: "Form", icon: "uugds-plus", onClick },
+                { children: "Table", icon: "uugds-plus", onClick },
+                { children: "Chart", icon: "uugds-plus", onClick },
+                {
+                  children: "Picture",
+                  icon: "uugds-plus",
+                  onClick,
+                  itemList: [
+                    { children: "PNG", icon: "uugds-plus", onClick },
+                    { children: "JPG", icon: "uugds-plus", onClick },
+                  ],
+                },
+              ],
+            },
+            {
+              children: "Update",
+              icon: "uugds-reload",
+              active: true,
+              collapsible: true,
+              itemList: [
+                {
+                  children: "Document",
+                  icon: "uugds-reload",
+                  onClick,
+                  itemList: [
+                    { children: "DOC", icon: "uugds-plus", onClick },
+                    { children: "PDF", icon: "uugds-plus", onClick },
+                    { children: "TXT", icon: "uugds-plus", onClick },
+                  ],
+                },
+                { children: "Form", icon: "uugds-reload", onClick },
+                { children: "Table", icon: "uugds-reload", onClick },
+                { children: "Chart", icon: "uugds-reload", onClick },
+                { children: "Picture", icon: "uugds-reload", onClick },
+              ],
+            },
+            { divider: true },
+            { children: "Reload" },
+          ];
+          /*@@viewOff:example*/
+
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>compactSubmenu</h4>
+              <Uu5Elements.MenuList itemList={itemList} compactSubmenu />
+
+              <h4>maxHeight & compactSubmenu</h4>
+              <Uu5Elements.MenuList itemList={itemList} maxHeight={130} compactSubmenu />
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

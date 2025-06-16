@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      function Row({ columnCount, children }) {
+        return (
+          <div
+            className={Config.Css.css({
+              display: "grid",
+              gap: 16,
+              alignItems: "baseline",
+
+              ...Utils.Style.getMinMediaQueries("m", {
+                gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
+              }),
+            })}
+          >
+            {children}
+          </div>
+        );
+      }
+
+      function onClose(e) {
+        console.log("TODO onClose", e);
+      }
+
+      const ColorSchemeBlock = createComponent({
+        render({ colorScheme }) {
+          return (
+            <div>
+              <h3>colorScheme="{colorScheme}"</h3>
+              <Row columnCount={2}>
+                <div>
+                  {/*@@viewOn:example*/}
+                  <h4>significance="common"</h4>
+
+                  <Uu5Elements.HighlightedBox overlay colorScheme={colorScheme} onClose={onClose}>
+                    <LoremIpsum random={false} />
+                  </Uu5Elements.HighlightedBox>
+
+                  <br />
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    controlPosition="right"
+                    controlList={[
+                      { children: "Dismiss", significance: "distinct" },
+                      { children: "Confirm", significance: "highlighted" },
+                    ]}
+                  >
+                    <LoremIpsum random={false} avgSentences={1} />
+                  </Uu5Elements.HighlightedBox>
+
+                  <br />
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    controlPosition="bottom"
+                    controlList={[
+                      { children: "Dismiss", significance: "distinct" },
+                      { children: "Confirm", significance: "highlighted" },
+                    ]}
+                  >
+                    <LoremIpsum random={false} />
+                  </Uu5Elements.HighlightedBox>
+
+                  {/*@@viewOff:example*/}
+                </div>
+
+                <div>
+                  {/*@@viewOn:example*/}
+                  <h4>significance="highlighted"</h4>
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    onClose={onClose}
+                    significance="highlighted"
+                  >
+                    <LoremIpsum random={false} />
+                  </Uu5Elements.HighlightedBox>
+
+                  <br />
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    significance="highlighted"
+                    controlPosition="right"
+                    controlList={[
+                      { children: "Dismiss", significance: "distinct" },
+                      { children: "Confirm", significance: "highlighted" },
+                    ]}
+                  >
+                    <LoremIpsum random={false} avgSentences={1} />
+                  </Uu5Elements.HighlightedBox>
+
+                  <br />
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    significance="highlighted"
+                    controlPosition="bottom"
+                    controlList={[
+                      { children: "Dismiss", significance: "distinct" },
+                      { children: "Confirm", significance: "highlighted" },
+                    ]}
+                  >
+                    <LoremIpsum random={false} />
+                  </Uu5Elements.HighlightedBox>
+
+                  {/*@@viewOff:example*/}
+                </div>
+              </Row>
+
+              <br />
+
+              <Row columnCount={2}>
+                <div>
+                  {/*@@viewOn:example*/}
+                  <h4>significance="distinct"</h4>
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    onClose={onClose}
+                    significance="distinct"
+                  >
+                    <LoremIpsum random={false} />
+                  </Uu5Elements.HighlightedBox>
+
+                  <br />
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    significance="distinct"
+                    controlPosition="right"
+                    controlList={[
+                      { children: "Dismiss", significance: "distinct" },
+                      { children: "Confirm", significance: "highlighted" },
+                    ]}
+                  >
+                    <LoremIpsum random={false} avgSentences={1} />
+                  </Uu5Elements.HighlightedBox>
+
+                  <br />
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    significance="distinct"
+                    controlPosition="bottom"
+                    controlList={[
+                      { children: "Dismiss", significance: "distinct" },
+                      { children: "Confirm", significance: "highlighted" },
+                    ]}
+                  >
+                    <LoremIpsum random={false} />
+                  </Uu5Elements.HighlightedBox>
+
+                  {/*@@viewOff:example*/}
+                </div>
+
+                <div>
+                  {/*@@viewOn:example*/}
+                  <h4>significance="subdued"</h4>
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    onClose={onClose}
+                    significance="subdued"
+                  >
+                    <LoremIpsum random={false} />
+                  </Uu5Elements.HighlightedBox>
+
+                  <br />
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    significance="subdued"
+                    controlPosition="right"
+                    controlList={[
+                      { children: "Dismiss", significance: "distinct" },
+                      { children: "Confirm", significance: "highlighted" },
+                    ]}
+                  >
+                    <LoremIpsum random={false} avgSentences={1} />
+                  </Uu5Elements.HighlightedBox>
+
+                  <br />
+
+                  <Uu5Elements.HighlightedBox
+                    overlay
+                    colorScheme={colorScheme}
+                    significance="subdued"
+                    controlPosition="bottom"
+                    controlList={[
+                      { children: "Dismiss", significance: "distinct" },
+                      { children: "Confirm", significance: "highlighted" },
+                    ]}
+                  >
+                    <LoremIpsum random={false} />
+                  </Uu5Elements.HighlightedBox>
+                  {/*@@viewOff:example*/}
+                </div>
+              </Row>
+            </div>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <h2>Overlay</h2>
+              {["important", "warning", "positive", "negative"].map(v => <ColorSchemeBlock key={v} colorScheme={v} />)}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

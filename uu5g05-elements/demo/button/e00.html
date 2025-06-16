@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <Uu5Elements.Button>Button</Uu5Elements.Button>
+
+              <h4>icon & iconRight & iconNotification</h4>
+              <Uu5Elements.Button icon="uugds-favorites" />
+              <Uu5Elements.Button icon="uugds-favorites">Button</Uu5Elements.Button>
+              <Uu5Elements.Button iconNotification icon="uugds-filter">
+                iconNotification
+              </Uu5Elements.Button>
+              <Uu5Elements.Button iconNotification={{ colorScheme: "green" }} icon="uugds-filter">
+                iconNotification
+              </Uu5Elements.Button>
+              <Uu5Elements.Button iconRight="uugds-menu-down">Button</Uu5Elements.Button>
+              <Uu5Elements.Button icon="uugds-favorites" iconRight="uugds-menu-down">
+                Button
+              </Uu5Elements.Button>
+
+              <h4>size & icon & iconRight</h4>
+              <Uu5Elements.Button size="xxs">xxs</Uu5Elements.Button>
+              <Uu5Elements.Button size="xxs" icon="uugds-favorites" />
+              <Uu5Elements.Button size="xxs" icon="uugds-favorites">
+                xxs
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="xxs" iconRight="uugds-menu-down">
+                xxs
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="xxs" icon="uugds-favorites" iconRight="uugds-menu-down">
+                xxs
+              </Uu5Elements.Button>
+              <br />
+              <Uu5Elements.Button size="xs">xs</Uu5Elements.Button>
+              <Uu5Elements.Button size="xs" icon="uugds-favorites" />
+              <Uu5Elements.Button size="xs" icon="uugds-favorites">
+                xs
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="xs" iconRight="uugds-menu-down">
+                xs
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="xs" icon="uugds-favorites" iconRight="uugds-menu-down">
+                xs
+              </Uu5Elements.Button>
+              <br />
+              <Uu5Elements.Button size="s">s</Uu5Elements.Button>
+              <Uu5Elements.Button size="s" icon="uugds-favorites" />
+              <Uu5Elements.Button size="s" icon="uugds-favorites">
+                s
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="s" iconRight="uugds-menu-down">
+                s
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="s" icon="uugds-favorites" iconRight="uugds-menu-down">
+                s
+              </Uu5Elements.Button>
+              <br />
+              <Uu5Elements.Button size="m">m</Uu5Elements.Button>
+              <Uu5Elements.Button size="m" icon="uugds-favorites" />
+              <Uu5Elements.Button size="m" icon="uugds-favorites">
+                m
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="m" iconRight="uugds-menu-down">
+                m
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="m" icon="uugds-favorites" iconRight="uugds-menu-down">
+                m
+              </Uu5Elements.Button>
+              <br />
+              <Uu5Elements.Button size="l">l</Uu5Elements.Button>
+              <Uu5Elements.Button size="l" icon="uugds-favorites" />
+              <Uu5Elements.Button size="l" icon="uugds-favorites">
+                l
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="l" iconRight="uugds-menu-down">
+                l
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="l" icon="uugds-favorites" iconRight="uugds-menu-down">
+                l
+              </Uu5Elements.Button>
+              <br />
+              <Uu5Elements.Button size="xl">xl</Uu5Elements.Button>
+              <Uu5Elements.Button size="xl" icon="uugds-favorites" />
+              <Uu5Elements.Button size="xl" icon="uugds-favorites">
+                xl
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="xl" iconRight="uugds-menu-down">
+                xl
+              </Uu5Elements.Button>
+              <Uu5Elements.Button size="xl" icon="uugds-favorites" iconRight="uugds-menu-down">
+                xl
+              </Uu5Elements.Button>
+
+              <h4>size</h4>
+              <Uu5Elements.Button size="xxs">xxs</Uu5Elements.Button>
+              <Uu5Elements.Button size="xs">xs</Uu5Elements.Button>
+              <Uu5Elements.Button size="s">s</Uu5Elements.Button>
+              <Uu5Elements.Button size="m">m</Uu5Elements.Button>
+              <Uu5Elements.Button size="l">l</Uu5Elements.Button>
+              <Uu5Elements.Button size="xl">xl</Uu5Elements.Button>
+
+              <h4>borderRadius</h4>
+              <Uu5Elements.Button borderRadius="none">none</Uu5Elements.Button>
+              <Uu5Elements.Button borderRadius="elementary">elementary</Uu5Elements.Button>
+              <Uu5Elements.Button borderRadius="moderate">moderate</Uu5Elements.Button>
+              <Uu5Elements.Button borderRadius="expressive">expressive</Uu5Elements.Button>
+              <Uu5Elements.Button borderRadius="full">full</Uu5Elements.Button>
+
+              <h4>width</h4>
+              <Uu5Elements.Button width="50%">50%</Uu5Elements.Button>
+              <Uu5Elements.Button width={300}>300</Uu5Elements.Button>
+
+              <h4>effect: ground & upper</h4>
+              <Uu5Elements.Button effect="ground" onClick={() => console.log("ground")}>Button</Uu5Elements.Button> &nbsp;
+              <Uu5Elements.Button effect="upper" onClick={() => console.log("upper")}>Button</Uu5Elements.Button>
+
+              <h4>pressed</h4>
+              <Uu5Elements.Button pressed>pressed</Uu5Elements.Button>
+
+              <h4>onClick</h4>
+              <Uu5Elements.Button
+                onClick={(e) => {
+                  console.log("onClick", e);
+                  if (e.ctrlKey || e.metaKey) {
+                    alert("ctrl/command click");
+                  } else if (e.button === 1) {
+                    alert("wheel click");
+                  } else {
+                    alert("click");
+                  }
+                }}
+              >
+                onClick
+              </Uu5Elements.Button>
+
+              <h4>iconAnimation & iconRightAnimation</h4>
+              <Uu5Elements.Button icon="uugds-reload" iconAnimation="rotate">Button</Uu5Elements.Button> &nbsp;
+              <Uu5Elements.Button iconRight="uugds-reload" iconRightAnimation="rotate">Button</Uu5Elements.Button>
+
+              <h4>href & target & download</h4>
+              <Uu5Elements.Button href="https://unicorn.com" target="_blank">Unicorn href</Uu5Elements.Button>
+              <Uu5Elements.Button
+                download="uu5g05-elements.js"
+                href={Utils.Uu5Loader.config().imports["uu5g05-elements"]}
+              >
+                uu5g05-elements source
+              </Uu5Elements.Button>
+
+              <h4>tooltip</h4>
+              <Uu5Elements.Button tooltip="Tooltip string">tooltip string</Uu5Elements.Button>
+              <Uu5Elements.Button tooltip={{ cs: "titulek", en: "tooltip" }}>tooltip lsi</Uu5Elements.Button>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

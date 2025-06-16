@@ -1,0 +1,142 @@
+{
+  "EditModal": {
+    "header": "${nome} edição",
+    "confirm": "Guardar",
+    "cancel": "Cancelar",
+    "addItemButton": "Adicionar item",
+    "insertBefore": "inserir antes",
+    "insertAfter": "inserir depois",
+    "moveToPosition": "mover para posição",
+    "duplicate": "duplicar componente",
+    "delete": "eliminar",
+    "preview": "Pré-visualização"
+  },
+  "ItemPositionModal": {
+    "header": "mover intem para a posição",
+    "cancel": "Cancelar",
+    "confirm": "ok"
+  },
+  "ItemRemovalDialog": {
+    "header": "Remoção de artigos",
+    "info": "Está prestes a realizar uma ação potencialmente destrutiva. Tem a certeza de que quer prosseguir?",
+    "cancel": "Cancelar",
+    "confirm": "remover"
+  },
+  "templates": {
+    "general": "Geral",
+    "visual": "Visual",
+    "system": "sistema"
+  },
+  "FormDisabled": {
+    "label": "Interação com o componente",
+    "allow": "Autorizar",
+    "disable": "Desativar"
+  },
+  "FormHidden": {
+    "label": "No ecrã",
+    "show": "Exibir",
+    "hide": "Ocultar"
+  },
+  "FormNoPrint": {
+    "label": "Impressão do componente",
+    "show": "Exibir",
+    "hide": "Ocultar"
+  },
+  "FormIdentificationType": {
+    "label": "Identificação visual fora do contexto da aplicação",
+    "show": "Exibir",
+    "hide": "Ocultar",
+    "info": "Cada unidade organizacional tem a sua identificação visual. As unidades organizacionais servem de origem, de onde cada componente tem de vir. Quando o componente é colocado fora da sua origem, mostra a identificação visual da origem - uma faixa colorida e um ícone quadrado apresentado à esquerda no cabeçalho. O ícone permite aceder à navegação local da sua origem."
+  },
+  "FormBaseUri": {
+    "label": "URI de base da aplicação",
+    "message": "URL da aplicação a partir do qual se carrega o contexto, os dados e a identificação visual."
+  },
+  "FormUu5Id": {
+    "label": "ID de preferência do utilizador",
+    "message": "Identificação única para armazenar e carregar preferências para este componente."
+  },
+  "FormDisableUserPreference": {
+    "label": "As predefinições são carregadas a partir de",
+    "userPreference": "Preferência do utilizador",
+    "component": "componente"
+  },
+  "FormOid": {
+    "label": "ID do objeto",
+    "message": "Identificação de um objeto específico que o componente deve apresentar."
+  },
+  "FormBid": {
+    "label": "ID do ramo",
+    "message": "Identificação de um ramo específico do uuBranchKit."
+  },
+  "FormRts": {
+    "label": "Mostrar dados para uma data específica"
+  },
+  "FormClassName": {
+    "label": "Classes CSS",
+    "message": "Separar os nomes com um espaço."
+  },
+  "FormStyle": {
+    "label": "Estilos CSS",
+    "message": "Escrever entre parênteses. Cada estilo numa única linha terminada com um ponto e vírgula.",
+    "error": "O único seletor válido é o componente."
+  },
+  "FormAspectRatio": {
+    "label": "Rácio de aspeto"
+  },
+  "FormBorderRadius": {
+    "label": "Raio da fronteira"
+  },
+  "FormCard": {
+    "label": "Apresentar o componente como um cartão",
+    "none": "Ativar",
+    "content": "Apenas conteúdo",
+    "full": "Desativar"
+  },
+  "FormColorScheme": {
+    "label": "Esquema de cores",
+    "default": "Predefinição"
+  },
+  "FormFullTextSearchPriority": {
+    "label": "Prioridade da pesquisa de texto integral",
+    "message": "Definição da pesquisa de componentes preferida. Auto é a prioridade indefinida do componente. 0 significa que o componente e os seus filhos não serão indexados pelo fullTextSearch. 1 significa a prioridade mais baixa e 5 significa a prioridade mais alta."
+  },
+  "FormHeight": {
+    "label": "Altura"
+  },
+  "FormId": {
+    "label": "ID"
+  },
+  "FormNestingLevel": {
+    "label": "Nível de agrupamento"
+  },
+  "FormSignificance": {
+    "label": "Significado"
+  },
+  "FormSize": {
+    "label": "Tamanho"
+  },
+  "FormWidth": {
+    "label": "Largura"
+  },
+  "FormMargin": {
+    "label": "Margem"
+  },
+  "FormUnit": {
+    "error": "O valor não é válido. Verificar as unidades."
+  },
+  "FormLink": {
+    "href": {
+      "label": "Link"
+    },
+    "labelLink": {
+      "label": "Nome da hiperligação"
+    },
+    "target": {
+      "label": "Abrir ligação",
+      "blank": "Novo separador",
+      "self": "Separador atual",
+      "auto": "Auto"
+    }
+  }
+}

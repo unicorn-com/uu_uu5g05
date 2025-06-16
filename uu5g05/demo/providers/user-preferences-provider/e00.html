@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:imports
+      import { useUserPreferences, UserPreferencesProvider } from "uu5g05";
+      //@@viewOff:imports
+
+      const EditHeader = createVisualComponent({
+        render(props) {
+          const { userPreferences } = props;
+          const timeZoneList = ["Europe/Prague", "America/Los_Angeles", "Pacific/Honolulu"];
+          return (
+            <div className={Config.Css.css({ display: "flex", alignItems: "baseline" })}>
+              <div>Time zone:&nbsp;</div>
+              <Uu5Forms.Select.Input
+                value={userPreferences.timeZone}
+                itemList={timeZoneList.map((timeZone) => ({ value: timeZone, children: timeZone }))}
+                onChange={(e) => props.onChange((curPreferences) => ({ ...curPreferences, timeZone: e.data.value }))}
+                width={200}
+              />
+            </div>
+          );
+        },
+      });
+
+      const PreferencesInfo = createVisualComponent({
+        render(props) {
+          const [userPreferences, setUserPreferences] = useUserPreferences();
+
+          const attrs = Utils.VisualComponent.getAttrs(props);
+          return (
+            <div {...attrs}>
+              {props.editable && <EditHeader onChange={setUserPreferences} userPreferences={userPreferences} />}
+              <pre>{JSON.stringify(userPreferences, null, 2)}</pre>
+            </div>
+          );
+        },
+      });
+
+      const Demo = createVisualComponent({
+        render(props) {
+          const [preferencesState, setPreferencesState] = useState({});
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>default</h4>
+              <UserPreferencesProvider>
+                <PreferencesInfo />
+              </UserPreferencesProvider>
+
+              <h4>timeZone, shortDateFormat, ...</h4>
+              <UserPreferencesProvider
+                timeZone="America/Los_Angeles"
+                shortDateFormat="D-M-Y"
+                mediumDateFormat="DD-MM-Y"
+                longDateFormat="MMMM, dddd, Y"
+                weekStartDay={7}
+                hourFormat={12}
+                languageList={["en-us"]}
+                numberGroupingSeparator=","
+                numberDecimalSeparator="."
+                currency="USD"
+                currencyGroupingSeparator=","
+                currencyDecimalSeparator="."
+              >
+                <PreferencesInfo />
+              </UserPreferencesProvider>
+
+              <h4>onChange</h4>
+              <UserPreferencesProvider
+                {...preferencesState}
+                onChange={(newPreferencesState) => {
+                  console.log("onChange", newPreferencesState);
+                  setPreferencesState(newPreferencesState);
+                }}
+              >
+                <PreferencesInfo editable />
+              </UserPreferencesProvider>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/beta/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { Utils, useState, useSpeechVoices, useLsi, useLanguage, useUpdateEffect, useTextToSpeech } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { withControlledFormInput } from "uu5g05-forms/assets/demo/form-helpers.jsx";
+      import { Config } from "uu5g05-dev";
+
+      const Slider = withControlledFormInput(Uu5Forms.Slider);
+
+      function HighlightedWord({ text, wordIndex }) {
+        let startText, highlightedText, endText;
+        startText = text.substring(0, wordIndex);
+        highlightedText = text.substring(wordIndex).match(/^\S+/)[0];
+        endText = text.substring(wordIndex + highlightedText.length);
+
+        return (
+          <>
+            {startText}
+            <Uu5Elements.Text colorScheme="primary">{highlightedText}</Uu5Elements.Text>
+            {endText}
+          </>
+        )
+      }
+
+      //@@viewOn:example
+      function VoiceSelect({ value, onChange }) {
+        const { voiceList, defaultVoice } = useSpeechVoices();
+
+        const voice = value ?? defaultVoice;
+
+        return (
+          <Uu5Elements.Dropdown
+            label={voice ? `${voice.name} (${voice.lang})` : "Auto"}
+            itemList={voiceList.map((v) => ({
+              icon: v === voice ? "uugds-check" : "empty",
+              children: `${v.name} (${v.lang})`,
+              onClick: (e) => onChange(new Utils.Event({ value: v }, e)),
+            }))}
+          />
+        );
+      }
+
+      function VoicePlayer({ text, voice, language, pitch, rate, volume, queueEnabled }) {
+        const [wordIndex, setWordIndex] = useState();
+
+        const { state, error, play, pause, stop } = useTextToSpeech({
+          text,
+          voice,
+          language,
+          pitch,
+          rate,
+          volume,
+          onStart: (e) => {
+            console.log("onStart", e.name, e.charIndex, e.elapsedTime, e);
+          },
+          onPause: (e) => {
+            console.log("onPause", e.name, e.charIndex, e.elapsedTime, e);
+          },
+          onResume: (e) => {
+            console.log("onResume", e.name, e.charIndex, e.elapsedTime, e);
+          },
+          onEnd: (e) => {
+            console.log("onEnd", e.name, e.charIndex, e.elapsedTime, e);
+            setWordIndex();
+          },
+          onBoundary: (e) => {
+            console.log("onBoundary", e.name, e.charIndex, e.elapsedTime, e);
+            if (e.name === "word") setWordIndex(e.charIndex);
+          }
+        });
+
+        return (
+          <div>
+            <Uu5Elements.Button
+              {...(
+                state === "play"
+                  ? { icon: "uugds-play-circle", pressed: true }
+                  : state === "playing"
+                    ? { icon: "uugds-pause-circle", onClick: pause }
+                    : { icon: "uugds-play-circle", onClick: () => play({ queueEnabled }) }
+              )}
+            />
+            &nbsp;
+            <Uu5Elements.Button
+              icon="uugds-stop-circle"
+              onClick={stop}
+              disabled={state === "play" || state === "stop"}
+            />
+            &nbsp;
+            {wordIndex == null ? text : <HighlightedWord text={text} wordIndex={wordIndex} />}
+          </div>
+        )
+      }
+
+      const LSI = {
+        cs: {
+          text1: "Šel pštros s pštrosicí a pštrosáčaty pštrosí ulicí do pštrosího parku.",
+          text2: "Potkal potkan potkana, pod kamenem, pod kamenem, kam pak pane potkane? Ať se vám nic nestane.",
+          text3: "Od poklopu ku poklopu, Kyklop kouli koulí.",
+        },
+        en: {
+          text1: "How much wood would a woodchuck chuck if a woodchuck could chuck wood?",
+          text2: "Which witch wished which wicked wish?",
+          text3: "She sells sea shells by the sea shore.",
+        },
+      }
+
+      Utils.Language.setLanguage("en");
+
+      function Page() {
+        const [language] = useLanguage();
+        const texts = useLsi(LSI);
+
+        const { voiceList } = useSpeechVoices();
+        const [voice, setVoice] = useState(() => voiceList.find(({ lang }) => lang.toLowerCase().startsWith(language)));
+
+        useUpdateEffect(() => {
+          setVoice(voiceList.find(({ lang }) => lang.toLowerCase().startsWith(language)))
+        }, [language]);
+
+        const [pitch, setPitch] = useState(1);
+        const [rate, setRate] = useState(1);
+        const [volume, setVolume] = useState(1);
+
+        return (
+          <main>
+            <Uu5Elements.LanguageSelector languageList={["en", "cs", "sk", "uk"]} />
+            &nbsp;
+            <VoiceSelect value={voice} onChange={(e) => setVoice(e.data.value)} />
+
+            <Uu5Elements.Grid
+              templateColumns={{ xs: "1fr", s: "repeat(auto-fit, minmax(100px, 1fr))", m: "repeat(3, 200px)" }}
+              className={Config.Css.css({ marginBlock: 16 })}
+            >
+              <Uu5Forms.Slider
+                label="Pitch"
+                value={pitch}
+                onChange={(e) => setPitch(e.data.value)}
+                min={0}
+                max={2}
+                step={0.5}
+                itemList={[{ value: 0, children: 0 }, { value: 1, children: 1 }, { value: 2, children: 2 }]}
+              />
+              <Uu5Forms.Slider
+                label="Rate"
+                value={rate}
+                onChange={(e) => setRate(e.data.value)}
+                min={0}
+                max={10}
+                step={0.25}
+              />
+              <Uu5Forms.Slider
+                label="Volume"
+                value={volume}
+                onChange={(e) => setVolume(e.data.value)}
+                min={0}
+                max={1}
+                step={0.1}
+                itemList={[{ value: 0, children: 0 }, { value: 0.5, children: 0.5 }, { value: 1, children: 1 }]}
+              />
+            </Uu5Elements.Grid>
+
+            <VoicePlayer
+              text={texts.text1}
+              voice={voice}
+              language={language}
+              pitch={pitch}
+              rate={rate}
+              volume={volume}
+            />
+            <VoicePlayer
+              text={texts.text2}
+              voice={voice}
+              language={language}
+              pitch={pitch}
+              rate={rate}
+              volume={volume}
+            />
+
+            <h4>queueEnabled</h4>
+            <VoicePlayer
+              text={texts.text3}
+              voice={voice}
+              language={language}
+              pitch={pitch}
+              rate={rate}
+              volume={volume}
+              queueEnabled
+            />
+          </main>
+        )
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

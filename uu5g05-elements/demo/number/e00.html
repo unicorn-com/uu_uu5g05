@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uu5Elements.Number Demo</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="renderHere">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, Fragment } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      function Table({ columns, children, coverItem = false }) {
+        children = Array.isArray(children) ? children : [children];
+        console.log(children);
+        return (
+          <div
+            className={Config.Css.css({
+              display: "grid",
+              gridTemplateColumns: typeof columns === "number" ? `repeat(${columns}, 1fr)` : columns,
+              gap: 8,
+            })}
+          >
+            {!coverItem ? children : children.map((child, i) => <div key={i}>{child}</div>)}
+          </div>
+        );
+      }
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Table columns="repeat(auto-fit, minmax(320px, 1fr))">
+              <div>
+                <Uu5Elements.LanguageSelector languageList={["en", "cs", "sk", "uk"]} significance="subdued" />
+
+                {/*@@viewOn:example*/}
+                <h4>Default props</h4>
+                <Uu5Elements.Number value={123456.789} />
+
+                <h4>notation</h4>
+                <Table columns="80px 1fr" coverItem>
+                  standard <Uu5Elements.Number value={123456.789} notation="standard" />
+                  scientific <Uu5Elements.Number value={123456.789} notation="scientific" />
+                  engineering <Uu5Elements.Number value={123456.789} notation="engineering" />
+                </Table>
+
+                <h4>format</h4>
+                <Table columns="80px 1fr" coverItem>
+                  short <Uu5Elements.Number value={123456.789} format="short" />
+                  long <Uu5Elements.Number value={123456.789} format="long" />
+                </Table>
+
+                <h4>minDecimalDigits</h4>
+                <Uu5Elements.Number value={123456.789} minDecimalDigits={8} />
+
+                <h4>maxDecimalDigits</h4>
+                <Uu5Elements.Number value={123456.789} maxDecimalDigits={2} />
+
+                <h4>minIntegerDigits</h4>
+                <Uu5Elements.Number value={123456.789} minIntegerDigits={10} />
+
+                <h4>groupingSeparator & decimalSeparator</h4>
+                <Uu5Elements.Number value={123456.789} groupingSeparator=" " decimalSeparator="," />
+                {/*@@viewOff:example*/}
+              </div>
+
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>unit</h4>
+                <Table columns="150px 1fr" coverItem>
+                  acre <Uu5Elements.Number value={123456.789} unit="acre" />
+                  bit <Uu5Elements.Number value={123456.789} unit="bit" />
+                  byte <Uu5Elements.Number value={123456.789} unit="byte" />
+                  celsius <Uu5Elements.Number value={123456.789} unit="celsius" />
+                  centimeter <Uu5Elements.Number value={123456.789} unit="centimeter" />
+                  day <Uu5Elements.Number value={123456.789} unit="day" />
+                  degree <Uu5Elements.Number value={123456.789} unit="degree" />
+                  fahrenheit <Uu5Elements.Number value={123456.789} unit="fahrenheit" />
+                  fluid-ounce <Uu5Elements.Number value={123456.789} unit="fluid-ounce" />
+                  foot <Uu5Elements.Number value={123456.789} unit="foot" />
+                  gallon <Uu5Elements.Number value={123456.789} unit="gallon" />
+                  gigabit <Uu5Elements.Number value={123456.789} unit="gigabit" />
+                  gigabyte <Uu5Elements.Number value={123456.789} unit="gigabyte" />
+                  gram <Uu5Elements.Number value={123456.789} unit="gram" />
+                  hectare <Uu5Elements.Number value={123456.789} unit="hectare" />
+                  hour <Uu5Elements.Number value={123456.789} unit="hour" />
+                  inch <Uu5Elements.Number value={123456.789} unit="inch" />
+                  kilobit <Uu5Elements.Number value={123456.789} unit="kilobit" />
+                  kilobyte <Uu5Elements.Number value={123456.789} unit="kilobyte" />
+                  kilogram <Uu5Elements.Number value={123456.789} unit="kilogram" />
+                  kilometer <Uu5Elements.Number value={123456.789} unit="kilometer" />
+                  liter <Uu5Elements.Number value={123456.789} unit="liter" />
+                  megabit <Uu5Elements.Number value={123456.789} unit="megabit" />
+                  megabyte <Uu5Elements.Number value={123456.789} unit="megabyte" />
+                  meter <Uu5Elements.Number value={123456.789} unit="meter" />
+                  mile <Uu5Elements.Number value={123456.789} unit="mile" />
+                  mile-scandinavian <Uu5Elements.Number value={123456.789} unit="mile-scandinavian" />
+                  milliliter <Uu5Elements.Number value={123456.789} unit="milliliter" />
+                  millimeter <Uu5Elements.Number value={123456.789} unit="millimeter" />
+                  millisecond <Uu5Elements.Number value={123456.789} unit="millisecond" />
+                  minute <Uu5Elements.Number value={123456.789} unit="minute" />
+                  month <Uu5Elements.Number value={123456.789} unit="month" />
+                  ounce <Uu5Elements.Number value={123456.789} unit="ounce" />
+                  percent <Uu5Elements.Number value={123456.789} unit="percent" />
+                  petabyte <Uu5Elements.Number value={123456.789} unit="petabyte" />
+                  pound <Uu5Elements.Number value={123456.789} unit="pound" />
+                  second <Uu5Elements.Number value={123456.789} unit="second" />
+                  stone <Uu5Elements.Number value={123456.789} unit="stone" />
+                  terabit <Uu5Elements.Number value={123456.789} unit="terabit" />
+                  terabyte <Uu5Elements.Number value={123456.789} unit="terabyte" />
+                  week <Uu5Elements.Number value={123456.789} unit="week" />
+                  yard <Uu5Elements.Number value={123456.789} unit="yard" />
+                  year <Uu5Elements.Number value={123456.789} unit="year" />
+                </Table>
+
+                <h4>unitFormat</h4>
+                <Table columns="150px 1fr" coverItem>
+                  long <Uu5Elements.Number value={123456.789} unit="liter" unitFormat="long" />
+                  short <Uu5Elements.Number value={123456.789} unit="liter" unitFormat="short" />
+                  narrow <Uu5Elements.Number value={123456.789} unit="liter" unitFormat="narrow" />
+                </Table>
+                {/*@@viewOff:example*/}
+              </div>
+
+              <div>
+                {/*@@viewOn:example*/}
+                <h4>currency</h4>
+                  <Uu5Elements.Number value={123456.789} currency="EUR" />
+
+                <h4>currencyFormat</h4>
+                <Table columns="120px 1fr" coverItem>
+                  symbol <Uu5Elements.Number value={123456.789} currency="EUR" currencyFormat="symbol" />
+                  narrowSymbol <Uu5Elements.Number value={123456.789} currency="EUR" currencyFormat="narrowSymbol" />
+                  code <Uu5Elements.Number value={123456.789} currency="EUR" currencyFormat="code" />
+                  name <Uu5Elements.Number value={123456.789} currency="EUR" currencyFormat="name" />
+                </Table>
+
+                <h4>roundingMode</h4>
+                <Table columns="120px 1fr" coverItem>
+                  ceil 1.4 = <Uu5Elements.Number value={1.4} roundingMode="ceil" />
+                  floor 1.4 = <Uu5Elements.Number value={1.4} roundingMode="floor" />
+                  expand 1.4 = <Uu5Elements.Number value={1.4} roundingMode="expand" />
+                  trunc 1.4 = <Uu5Elements.Number value={1.4} roundingMode="trunc" />
+                  halfCeil 1.5 = <Uu5Elements.Number value={1.5} roundingMode="halfCeil" />
+                  halfFloor 1.5 = <Uu5Elements.Number value={1.5} roundingMode="halfFloor" />
+                  halfExpand 1.5 = <Uu5Elements.Number value={1.5} roundingMode="halfExpand" />
+                  halfTrunc 1.5 = <Uu5Elements.Number value={1.5} roundingMode="halfTrunc" />
+                  halfEven 1.5 = <Uu5Elements.Number value={1.5} roundingMode="halfEven" />
+                </Table>
+
+                <h4>roundingPosition</h4>
+                <Table columns="50px 1fr" coverItem>
+                  1 <Uu5Elements.Number value={123456.789} roundingPosition={1} />
+                  2 <Uu5Elements.Number value={123456.789} roundingPosition={2} />
+                  3 <Uu5Elements.Number value={123456.789} roundingPosition={3} />
+                  -1 <Uu5Elements.Number value={123456.789} roundingPosition={-1} />
+                  -2 <Uu5Elements.Number value={123456.789} roundingPosition={-2} />
+                </Table>
+                {/*@@viewOff:example*/}
+              </div>
+            </Table>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("renderHere"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=2,minimum-scale=0.5">
+    <title>Rendering</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        PropTypes,
+        createVisualComponent,
+        useState,
+        useEffect,
+        useUpdateEffect,
+        usePreviousValue
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const PARENT_RELOAD = 2; // in seconds
+      const COMPONENT_EFFECT_DURATION = 1; // in seconds
+
+      const COLORS = {
+        mount: "yellow",
+        ready: "grey",
+        update: "green",
+        render: "blue",
+      };
+
+      function useLifeCycle(value) {
+        const [state, setState] = useState("mount");
+
+        const prevValue = usePreviousValue(value, value);
+        const prevState = usePreviousValue(state, state);
+
+        useEffect(() => {
+          setState("update");
+        }, [value]);
+
+        useEffect(() => {
+          if (state !== "ready") {
+            const timeout = setTimeout(() => setState("ready"), COMPONENT_EFFECT_DURATION * 1000);
+            return () => clearTimeout(timeout);
+          }
+        }, [state]);
+
+        useEffect(() => {
+          if (prevValue === value && prevState === state && state !== "mount") {
+            setState("render");
+          }
+        });
+
+        return [state, setState];
+      }
+
+      const ParentComponent = createVisualComponent({
+        render(props) {
+          let [value, setValue] = useState([0, 0]);
+
+          useEffect(() => {
+            const timeout = setTimeout(() => {
+              const i = Math.random() < 0.5 ? 0 : 1;
+              const v = [...value];
+              v[i] += 1
+              setValue(v);
+            }, PARENT_RELOAD * 1000);
+
+            return () => clearTimeout(timeout);
+          }, [value[0], value[1]]);
+
+          return (
+            <Uu5Elements.Box style={{ padding: 16 }}>
+              Parent Component increases value of random choosen component every {PARENT_RELOAD}s.
+              Both components are rendered, but only one of them is updated.
+              <Component value={value[0]} />
+              <Component value={value[1]} />
+            </Uu5Elements.Box>
+          );
+        }
+      });
+
+      const Component = createVisualComponent({
+        render(props) {
+          const { value } = props;
+          const [state] = useLifeCycle(value);
+
+          return (
+            <Uu5Elements.Box style={{ padding: 16 }} colorScheme={COLORS[state]} significance="highlighted">
+              Component: {value} ({state})
+            </Uu5Elements.Box>
+          );
+        }
+      });
+
+      function Page() {
+        return (
+          <div>
+            <ParentComponent />
+          </div>
+        )
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

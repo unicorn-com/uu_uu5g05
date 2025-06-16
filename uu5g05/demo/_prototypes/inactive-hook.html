@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maleficent</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdn.plus4u.net/uu-uu5extrasg01/1.0.0/assets/example-config.js"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.plus4u.net/uu-uu5animationg01/2.0.0/assets/example-config.js"
+            crossorigin="anonymous"></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5">Loading...</main>
+
+    <script type="text/babel">
+      //@@viewOn:example
+      import { Utils, useState, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+
+      const useInactive = (inactiveTime) => {
+        const [isInactive, setIsInactive] = useState(false);
+
+        useEffect(() => {
+          let timeout;
+
+          const resetTimeout = () => {
+            if (timeout) {
+              clearTimeout(timeout);
+            }
+
+            timeout = setTimeout(() => {
+              setIsInactive(true);
+            }, inactiveTime);
+          };
+
+          const handleUserActivity = () => {
+            setIsInactive(false);
+            resetTimeout();
+          };
+
+          // Initial setup
+          resetTimeout();
+
+          // Event listeners
+          window.addEventListener('touchstart', handleUserActivity);
+          window.addEventListener('mousedown', handleUserActivity);
+          window.addEventListener('mousemove', handleUserActivity);
+          window.addEventListener('keydown', handleUserActivity);
+          window.addEventListener('scroll', handleUserActivity);
+
+          // Cleanup
+          return () => {
+            window.removeEventListener('touchstart', handleUserActivity);
+            window.removeEventListener('mousedown', handleUserActivity);
+            window.removeEventListener('mousemove', handleUserActivity);
+            window.removeEventListener('keydown', handleUserActivity);
+            window.removeEventListener('scroll', handleUserActivity);
+
+            if (timeout) {
+              clearTimeout(timeout);
+            }
+          };
+        }, [inactiveTime]);
+
+        return isInactive;
+      };
+
+      function Page() {
+        const inactive = useInactive(5000);
+        const text = "move cursor, touch, click, scroll or press key on keyboard (threshold is 5s)";
+
+        return (
+          <Uu5Elements.Text colorScheme={inactive ? "negative" : "positive"}>
+            {inactive
+              ? `Inactive - ${text} to be active`
+              : `Active - do not ${text} to be inactive`}
+          </Uu5Elements.Text>
+        );
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

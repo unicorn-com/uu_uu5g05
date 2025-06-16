@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2,minimum-scale=0.5">
+  <title>Element moving</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  import React, { useState, useRef, useLayoutEffect } from "react";
+  import ReactDOM from "react-dom";
+
+  const STYLE = {
+    width: 200,
+    height: 200,
+    backgroundColor: "blue"
+  };
+
+  function usePosition(ref) {
+    const [position, setPosition] = useState({});
+
+    const offsetRef = useRef([0, 0]);
+    const isDownRef = useRef(false);
+
+    function mouseMoveHandler(e) {
+      e.preventDefault();
+      if (isDownRef.current) {
+        setPosition({
+          top: e.clientY + offsetRef.current[1],
+          left: e.clientX + offsetRef.current[0]
+        });
+      }
+    }
+
+    function mouseUpHandler() {
+      isDownRef.current = false;
+      document.removeEventListener("mousemove", mouseMoveHandler);
+      document.removeEventListener("mouseup", mouseUpHandler);
+    }
+
+    function onMouseDown(e) {
+      isDownRef.current = true;
+      offsetRef.current = [
+        ref.current.offsetLeft - e.clientX,
+        ref.current.offsetTop - e.clientY
+      ];
+
+      document.addEventListener("mousemove", mouseMoveHandler);
+      document.addEventListener("mouseup", mouseUpHandler);
+    }
+
+    return [position, onMouseDown];
+  }
+
+  const Box = props => {
+    const ref = useRef();
+    const [position, onMouseDown] = usePosition(ref);
+
+    const style = {
+      ...STYLE,
+      position: "absolute",
+      zIndex: 1,
+      ...position
+    };
+
+    return (
+      <div
+        ref={ref}
+        style={style}
+      >
+        <div onMouseDown={onMouseDown}>
+          Header
+        </div>
+      </div>
+    )
+  };
+
+  const Demo = props => {
+
+    return (
+      <div>
+        <Box />
+      </div>
+    )
+  };
+
+  ReactDOM.render(<Demo />, document.getElementById('uu5'));
+</script>
+</body>
+</html>

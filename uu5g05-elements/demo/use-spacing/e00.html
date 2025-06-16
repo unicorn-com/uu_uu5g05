@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+
+      /*@@viewOn:example*/
+      const SpacingBox = createVisualComponent({
+        render({ header }) {
+          const { a, b, c, d } = Uu5Elements.useSpacing();
+
+          const data = [
+            ["a", <b style={{ color: "lightgrey" }}>{a + "px"}</b>],
+            ["b", <b style={{ color: "lightgreen" }}>{b + "px"}</b>],
+            ["c", <b style={{ color: "lightblue" }}>{c + "px"}</b>],
+            ["d", <b style={{ color: "lightpink" }}>{d + "px"}</b>],
+          ]
+
+          return (
+            <div style={{
+              paddingLeft: d,
+              paddingBottom: d,
+              backgroundColor: "lightpink",
+            }}>
+              <div style={{
+                paddingTop: c,
+                paddingRight: c,
+                paddingBottom: c,
+                backgroundColor: "lightblue",
+              }}>
+                <div style={{ backgroundColor: "#fff" }}>
+                  <Uu5Elements.Text category="story" segment="heading" type="h2">
+                    {header}
+                  </Uu5Elements.Text>
+                </div>
+              </div>
+              <div style={{
+                paddingRight: c,
+                backgroundColor: "lightblue",
+              }}>
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: "200px auto",
+                  rowGap: b,
+                  paddingTop: b,
+                  backgroundColor: "lightgreen",
+                }}>
+                  {data.map((row, i) => row.map((cell, j) => (
+                    <div key={i + "-" + j} style={{ paddingLeft: j ? a : undefined, background: "lightgrey" }}>
+                      <div style={{ background: "#fff" }}>{cell}</div>
+                    </div>
+                  )))}
+                </div>
+              </div>
+            </div>
+          )
+        }
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              <Uu5Elements.SpacingProvider type="tight">
+                <SpacingBox header="tight" />
+              </Uu5Elements.SpacingProvider>
+              <br />
+              <SpacingBox header="normal" />
+              <br />
+              <Uu5Elements.SpacingProvider type="loose">
+                <SpacingBox header="loose" />
+              </Uu5Elements.SpacingProvider>
+            </div>
+          );
+        }
+      });
+      /*@@viewOff:example*/
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

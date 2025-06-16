@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Fragment, createComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const Footer = ({ style }) => (       
+        <Uu5Elements.Box
+          colorScheme="red"
+          significance="distinct"
+          className={Config.Css.css({ ...style, borderBottomLeftRadius: "inherit", borderBottomRightRadius: "inherit" })}
+        >
+          Footer
+        </Uu5Elements.Box>
+      );
+      const Child = ({ style }) => (
+        <Uu5Elements.Box
+          colorScheme="green"
+          significance="distinct"
+          className={Config.Css.css({ ...style, borderRadius: "inherit" })}
+        >
+          Children
+        </Uu5Elements.Box>
+      );
+      //@@viewOff:example   
+      const ModalOnButton = createComponent({
+        render({ header, ...props }) {
+          /*@@viewOn:example*/
+          const [open, setOpen] = useState();
+
+          return (
+            <Fragment>
+              <Uu5Elements.Button onClick={() => setOpen(true)}>{header}</Uu5Elements.Button>
+              <Uu5Elements.Modal {...props} header={header} open={open} onClose={() => setOpen(false)}>
+                {props.children || <LoremIpsum paragraphCount={10} />}
+              </Uu5Elements.Modal>
+            </Fragment>
+          );
+
+          /*@@viewOn:example*/
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <div>
+              {/*@@viewOn:example*/}
+              <h4>footer & borderBottomLeftRadius="inherit" & borderBottomRightRadius="inherit"</h4>
+              <ModalOnButton header="footer" footer={Footer} borderRadius="full" />
+              
+              <h4>children & borderRadius="inherit"</h4>
+              <ModalOnButton header="children" borderRadius="full">{Child}</ModalOnButton>
+
+              <h4>children & borderRadius="inherit" & footer & borderBottomLeftRadius="inherit" & borderBottomRightRadius="inherit"</h4>
+              <ModalOnButton header="children & footer" footer={Footer} borderRadius="full">{Child}</ModalOnButton>
+              {/*@@viewOff:example*/}
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

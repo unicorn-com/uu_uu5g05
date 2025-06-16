@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voice recording 3</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5richtextg01/2.x/assets/example-config.js"
+            crossorigin></script>
+    <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { Utils, useState, useEffect, useRef, createVisualComponent, useDevice } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import Uu5RichTextElements from "uu5richtextg01-elements";
+
+      const SUBSCRIPTION_KEY = "2a27c16030044c3ebf770cf4bb99d2cd";
+      const REGION = "westeurope";
+
+      //@@viewOn:example
+      const AudioRecButton = ({ onStream, onRecord, children, ...props }) => {
+        const [rec, setRec] = useState(false);
+        const mediaRecorderRef = useRef();
+        const streamRef = useRef();
+
+        async function startRecording() {
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            streamRef.current = stream;
+            onStream?.(stream);
+
+            mediaRecorderRef.current = new MediaRecorder(stream);
+
+            const chunks = [];
+            mediaRecorderRef.current.ondataavailable = (e) => {
+              chunks.push(e.data);
+            };
+
+            mediaRecorderRef.current.onstop = (e) => {
+              const audioBlob = new Blob(chunks, { type: "audio/wav" });
+              onRecord(new Utils.Event({ value: audioBlob }, e));
+            };
+
+            mediaRecorderRef.current.start();
+          } catch (err) {
+            console.error("Error accessing microphone:", err);
+          }
+        }
+
+        function stopRecording() {
+          onStream?.(null);
+          if (mediaRecorderRef.current) {
+            mediaRecorderRef.current.stop();
+            mediaRecorderRef.current = null;
+            streamRef.current.getTracks().find(({ kind }) => kind === "audio")?.stop();
+            streamRef.current = null;
+          }
+        }
+
+        useEffect(() => {
+          return () => stopRecording();
+        }, []);
+
+        return (
+          <Uu5Elements.Button
+            {...props}
+            {...(rec ? {
+              icon: "uugdsstencil-shape-square-solid",
+              onClick: () => {
+                setRec(false);
+                stopRecording();
+              }
+            } : {
+              icon: "uugdsstencil-shape-circle-solid",
+              onClick: () => {
+                setRec(true);
+                startRecording();
+              },
+              className: Utils.Css.joinClassName(props.className, Config.Css.css({ color: "#e53935" })),
+            })}
+          >
+            {typeof children === "function" ? children({ rec }) : children}
+          </Uu5Elements.Button>
+        );
+      };
+
+      const UuML = {
+        async speechToText(audioBlob, languageList = ["en-US", "cs-CZ", "sk-SK", "uk-UA"]) {
+          const speechConfig = SpeechSDK.SpeechConfig.fromSubscription(SUBSCRIPTION_KEY, REGION);
+          speechConfig.setProperty(
+            SpeechSDK.PropertyId.SpeechServiceConnection_AutoDetectSourceLanguages,
+            languageList.join(",")  // Set languages for automatic detection
+          );
+
+          const autoDetectConfig = SpeechSDK.AutoDetectSourceLanguageConfig.fromLanguages(languageList);
+
+          const pushStream = SpeechSDK.AudioInputStream.createPushStream();
+          pushStream.write(new Uint8Array(await audioBlob.arrayBuffer()));
+          pushStream.close();
+
+          const audioConfig = SpeechSDK.AudioConfig.fromStreamInput(pushStream);
+
+          const recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig, autoDetectConfig);
+
+          const result = await new Promise((resolve, reject) => {
+            recognizer.recognizeOnceAsync(result => {
+              if (result?.reason === SpeechSDK.ResultReason.RecognizedSpeech) {
+                resolve({ language: result.language, text: result.text });
+              } else {
+                reject(result);
+              }
+            }, err => {
+              console.error("Error recognizing speech:", err);
+            });
+          });
+
+          return result;
+        }
+      }
+
+      class Audio {
+
+        static convert(file, opts) {
+          return new Audio(file).convert(opts);
+        }
+
+        constructor(file) {
+          this.file = file;
+        }
+
+        async convert({ codec = "PCM", bitRate = 256, sampleRate = 16000, mono = true } = {}) {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)({
+            sampleRate: sampleRate
+          });
+
+          const arrayBuffer = await this.file.arrayBuffer();
+          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+          const numChannels = mono ? 1 : audioBuffer.numberOfChannels;
+          const offlineContext = new OfflineAudioContext(numChannels, audioBuffer.duration * sampleRate, sampleRate);
+          const source = offlineContext.createBufferSource();
+          source.buffer = audioBuffer;
+
+          const newBuffer = offlineContext.createBuffer(numChannels, audioBuffer.length, sampleRate);
+          if (mono && audioBuffer.numberOfChannels > 1) {
+            const left = audioBuffer.getChannelData(0);
+            const right = audioBuffer.getChannelData(1);
+            const monoChannel = newBuffer.getChannelData(0);
+            for (let i = 0; i < left.length; i++) {
+              monoChannel[i] = (left[i] + right[i]) / 2;
+            }
+          } else {
+            for (let channel = 0; channel < numChannels; channel++) {
+              newBuffer.copyToChannel(audioBuffer.getChannelData(channel), channel);
+            }
+          }
+          source.connect(offlineContext.destination);
+          source.start(0);
+
+          const renderedBuffer = await offlineContext.startRendering();
+          return Audio.#bufferToWavBlob(renderedBuffer, codec, bitRate, sampleRate, mono);
+        }
+
+        static #bufferToWavBlob(buffer, codec, bitRate, sampleRate, mono) {
+          const numChannels = mono ? 1 : buffer.numberOfChannels;
+          const format = codec === "PCM" ? 1 : 3; // 1 for PCM, 3 for IEEE float
+          const bitDepth = bitRate === 256 ? 16 : 8;
+
+          let result = new DataView(new ArrayBuffer(44 + buffer.length * 2 * numChannels));
+          let offset = 0;
+
+          function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+              view.setUint8(offset + i, string.charCodeAt(i));
+            }
+          }
+
+          function writeUint16(view, offset, value) {
+            view.setUint16(offset, value, true);
+          }
+
+          function writeUint32(view, offset, value) {
+            view.setUint32(offset, value, true);
+          }
+
+          writeString(result, offset, "RIFF");
+          offset += 4;
+          writeUint32(result, offset, 36 + buffer.length * 2 * numChannels);
+          offset += 4;
+          writeString(result, offset, "WAVE");
+          offset += 4;
+          writeString(result, offset, "fmt ");
+          offset += 4;
+          writeUint32(result, offset, 16);
+          offset += 4;
+          writeUint16(result, offset, format);
+          offset += 2;
+          writeUint16(result, offset, numChannels);
+          offset += 2;
+          writeUint32(result, offset, sampleRate);
+          offset += 4;
+          writeUint32(result, offset, sampleRate * numChannels * bitDepth / 8);
+          offset += 4;
+          writeUint16(result, offset, numChannels * bitDepth / 8);
+          offset += 2;
+          writeUint16(result, offset, bitDepth);
+          offset += 2;
+          writeString(result, offset, "data");
+          offset += 4;
+          writeUint32(result, offset, buffer.length * numChannels * 2);
+          offset += 4;
+
+          for (let i = 0; i < buffer.length; i++) {
+            for (let channel = 0; channel < numChannels; channel++) {
+              let sample = buffer.getChannelData(channel)[i] * 32767;
+              if (sample < -32768) sample = -32768;
+              if (sample > 32767) sample = 32767;
+              result.setInt16(offset, sample, true);
+              offset += 2;
+            }
+          }
+
+          return new Blob([result], { type: "audio/wav" });
+        }
+      }
+
+      function useTypingText(text) {
+        const [value, setValue] = useState(text);
+
+        useEffect(() => {
+          const a = text.replace(value, "");
+
+          if (a) {
+            const chars = a.split("");
+
+            const interval = setInterval(() => {
+              const char = chars.shift();
+              setValue((t) => t + char);
+              if (chars.length === 0) clearInterval(interval);
+            }, 40);
+          }
+        }, [text]);
+
+        return value;
+      }
+
+      function Text({ text }) {
+        return useTypingText(text);
+      }
+
+      function RichText({ text }) {
+        const value = useTypingText(text);
+        return <Uu5RichTextElements.Editor value={value} disabled={true} />
+      }
+
+      function SpeechRecButton({ onStart, onEnd, onStream, children, ...props }) {
+        const [rec, setRec] = useState(false);
+        const [streamText, setStreamText] = useState("");
+        const { isMobileOrTablet } = useDevice()
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = useRef();
+
+        const speechResultRef = useRef({});
+
+        useEffect(() => {
+          if (SpeechRecognition) {
+            const rec = new SpeechRecognition();
+            rec.continuous = true;
+            rec.interimResults = true;
+
+            onStart && rec.addEventListener("start", onStart);
+
+            rec.addEventListener("result", (e) => {
+              const resultItem = e.results.item(e.resultIndex);
+              const { transcript, confidence } = resultItem.item(0);
+
+              let value = transcript, isFinal = resultItem.isFinal;
+              if (isMobileOrTablet) {
+                value = speechResultRef.current.text ? transcript.replace(new RegExp(`^${speechResultRef.current.text}`), "") : transcript;
+
+                if (confidence === 0 && speechResultRef.current.prevConfidence === 1) {
+                  speechResultRef.current.text = transcript;
+                  isFinal = true;
+                }
+              }
+
+              onStream?.(new Utils.Event({ value }, e));
+              setStreamText(value);
+              if (isFinal) {
+                onEnd?.(new Utils.Event({ value }, e));
+                setStreamText(null);
+              }
+
+              speechResultRef.current.prevConfidence = confidence;
+            });
+
+            recognition.current = rec;
+
+            return () => {
+              recognition.current?.stop();
+            };
+          }
+        }, []);
+
+        return (
+          <>
+            {SpeechRecognition ? (
+              <Uu5Elements.Button
+                {...props}
+                {...(rec ? {
+                  icon: "uugdsstencil-shape-square-solid",
+                  onClick: () => {
+                    setRec(false);
+                    recognition.current.stop();
+                    speechResultRef.current = {};
+                  }
+                } : {
+                  icon: "uugdsstencil-shape-circle-solid",
+                  onClick: () => {
+                    setRec(true);
+                    recognition.current.start();
+                  },
+                  className: Config.Css.css({ color: "#e53935" })
+                })}
+              >
+                {typeof children === "function" ? children({ rec }) : children}
+              </Uu5Elements.Button>
+            ) : null}
+            {streamText && (
+              <Uu5Elements.Popover
+                open
+                className={Config.Css.css({
+                  backgroundColor: "rgba(255, 255, 255, 0.4)",
+                  padding: 16,
+                  pointerEvents: "none",
+                  fontSize: 40,
+                })}
+                preferredPosition="top-center"
+                pageX={window.innerWidth / 2}
+                pageY={window.innerHeight / 2}
+                bottomSheet={false}
+              >
+                {streamText}
+              </Uu5Elements.Popover>
+            )}
+          </>
+        );
+      }
+
+      function Page() {
+        const [text, setText] = useState("");
+
+        return (
+          <main>
+            <SpeechRecButton onEnd={(e) => setText(e.data.value)}>
+              Native
+            </SpeechRecButton>
+            &nbsp;&nbsp;
+            <AudioRecButton
+              onRecord={async (e) => {
+                const data = await UuML.speechToText(await Audio.convert(e.data.value));
+                console.log("UuML.speechToText", data);
+                setText(data.text);
+              }}
+            >
+              AI
+            </AudioRecButton>
+
+            <br />
+
+            <div>
+              <Text text={text} />
+            </div>
+
+            <br />
+
+            <RichText text={text} />
+          </main>
+        )
+      }
+
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

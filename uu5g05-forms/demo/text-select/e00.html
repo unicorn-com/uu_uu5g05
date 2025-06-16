@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+      if (ip) {
+        Uu5Loader.config({
+          imports: {
+            uu5g05: "http://" + ip + ":54321/uu5g05.js",
+            "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+            "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+            "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+            uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+          },
+        });
+      }
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      const columnsCss = Config.Css.css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: 32,
+      });
+
+      function withControlledInput(Input) {
+        return (props) => {
+          const {
+            value: propsValue,
+            onChange,
+            onValidationStart,
+            onValidationEnd,
+            feedback,
+            message,
+            messageParams,
+          } = props;
+
+          const [value, setValue] = useState(propsValue);
+          const [errorList, setErrorList] = useState(null);
+          const [pending, setPending] = useState();
+
+          return (
+            <div>
+              <Input
+                {...props}
+                value={value}
+                feedback={errorList?.[0].feedback || feedback}
+                message={errorList?.[0].message || message}
+                messageParams={errorList?.[0].messageParams || messageParams}
+                pending={pending}
+                onChange={(e) => {
+                  typeof onChange === "function" && onChange(e);
+                  setValue(e.data.value);
+                }}
+                onValidationStart={(e) => {
+                  typeof onValidationStart === "function" && onValidationStart(e);
+                  setPending(true);
+                }}
+                onValidationEnd={(e) => {
+                  typeof onValidationEnd === "function" && onValidationEnd(e);
+                  setErrorList(e.data.errorList.length ? e.data.errorList : null);
+                  setPending(false);
+                }}
+              />
+            </div>
+          );
+        };
+      }
+
+      const stateList = [
+        { value: undefined },
+        { value: "created" },
+        { value: "initial" },
+        { value: "active" },
+        { value: "final" },
+        { value: "alternative" },
+        { value: "problem" },
+        { value: "passive" },
+        { value: "failed" },
+        { value: "cancelled" },
+      ];
+
+      const streetList = [
+        {
+          value: "blue_ridge_blvd-brighton",
+          street: "Blue Ridge Blvd.",
+          city: "Brighton",
+          zipCode: "70116",
+          children: "Blue Ridge Blvd., Brighton",
+        },
+        {
+          value: "main_st_brighton_new_orleans",
+          street: "Main St.",
+          city: "New Orleans",
+          zipCode: "48116",
+          children: "Main St., New Orleans",
+        },
+        {
+          value: "greenleaf-ave-san-jose",
+          street: "Greenleaf Ave.",
+          city: "San Jose",
+          zipCode: "95111",
+          children: "Greenleaf Ave., San Jose",
+        },
+        {
+          value: "lewis-rd-prineville",
+          street: "Lewis Rd.",
+          city: "Prineville",
+          zipCode: "97754",
+          children: "Lewis Rd., Prineville",
+        },
+        {
+          value: "thorburn-ave-new-york",
+          street: "Thorburn Ave.",
+          city: "New York",
+          zipCode: "10011",
+          children: "Thorburn Ave., New York",
+        },
+        {
+          value: "tomahawk-dr-los-angeles",
+          street: "Tomahawk Dr.",
+          city: "Los Angeles",
+          zipCode: "90006",
+          children: "Tomahawk Dr., Los Angeles",
+        },
+        {
+          value: "park-blvd-boston",
+          street: "Park Blvd.",
+          city: "Boston",
+          zipCode: "2128",
+          children: "Park Blvd., Boston",
+        },
+        {
+          value: "charity-st-san-jose",
+          street: "Charity St.",
+          city: "San Jose",
+          zipCode: "95110",
+          children: "Charity St., San Jose",
+        },
+        {
+          value: "industry-ln-new-york",
+          street: "Industry Ln.",
+          city: "New York",
+          zipCode: "10002",
+          children: "Industry Ln., New York",
+        },
+        {
+          value: "harrison-rd-new-york",
+          street: "Harrison Rd.",
+          city: "New York",
+          zipCode: "10038",
+          children: "Harrison Rd., New York",
+        },
+        {
+          value: "w-belmont-ave-los-angeles",
+          street: "W Belmont Age.",
+          city: "Los Angeles",
+          zipCode: "91776",
+          children: "W Belmont Ave., Los Angeles",
+        },
+      ];
+
+      const TextSelect = withControlledInput(Uu5Forms.TextSelect);
+
+      function Page() {
+        return (
+          <div className={columnsCss}>
+            {/*@@viewOn:example*/}
+            <div>
+              <h4>value & onChange (in console)</h4>
+              <TextSelect
+                label="Single value"
+                itemList={stateList}
+                value="created"
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <TextSelect
+                label="Multiple value"
+                itemList={stateList}
+                value={["created", "active"]}
+                multiple
+                onChange={(e) => {
+                  console.log("onChange", e);
+                  // TODO save value to state
+                }}
+              />
+
+              <h4>itemList</h4>
+              <TextSelect
+                label="Just value"
+                itemList={[
+                  { value: "created" },
+                  { value: "initial" },
+                  { value: "active" },
+                  { value: "final" },
+                  { value: "alternative" },
+                  { value: "problem" },
+                  { value: "passive" },
+                  { value: "failed" },
+                  { value: "cancelled" },
+                ]}
+              />
+              <TextSelect
+                label="Value & children"
+                itemList={[
+                  { value: "created", children: "Created" },
+                  { value: "initial", children: "Initial" },
+                  { value: "active", children: "Active" },
+                  { value: "final", children: "Final" },
+                  { value: "alternative", children: "Alternative" },
+                  { value: "problem", children: "Problem" },
+                  { value: "passive", children: "Passive" },
+                  { value: "failed", children: "Failed" },
+                  { value: "cancelled", children: "Cancelled" },
+                ]}
+              />
+              <TextSelect
+                label="Component in children"
+                itemList={[
+                  {
+                    value: "created",
+                    text: "Created",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="created" size="l" />
+                        &nbsp;Created
+                      </>
+                    ),
+                  },
+                  {
+                    value: "initial",
+                    text: "Initial",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="initial" size="l" />
+                        &nbsp;Initial
+                      </>
+                    ),
+                  },
+                  {
+                    value: "active",
+                    text: "Active",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="active" size="l" />
+                        &nbsp;Active
+                      </>
+                    ),
+                  },
+                  {
+                    value: "final",
+                    text: "Final",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="final" size="l" />
+                        &nbsp;Final
+                      </>
+                    ),
+                  },
+                  {
+                    value: "alternative",
+                    text: "Alternative",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="alternative" size="l" />
+                        &nbsp;Alternative
+                      </>
+                    ),
+                  },
+                  {
+                    value: "problem",
+                    text: "Problem",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="problem" size="l" />
+                        &nbsp;Problem
+                      </>
+                    ),
+                  },
+                  {
+                    value: "passive",
+                    text: "Passive",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="passive" size="l" />
+                        &nbsp;Passive
+                      </>
+                    ),
+                  },
+                  {
+                    value: "failed",
+                    text: "Failed",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="failed" size="l" />
+                        &nbsp;Failed
+                      </>
+                    ),
+                  },
+                  {
+                    value: "cancelled",
+                    text: "Cancelled",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="cancelled" size="l" />
+                        &nbsp;Cancelled
+                      </>
+                    ),
+                  },
+                ]}
+              />
+              <TextSelect
+                label="Value & children & selectedChildren"
+                itemList={[
+                  {
+                    value: "created",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="created" size="l" />
+                        &nbsp;Created
+                      </>
+                    ),
+                    selectedChildren: "Created",
+                  },
+                  {
+                    value: "initial",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="initial" size="l" />
+                        &nbsp;Initial
+                      </>
+                    ),
+                    selectedChildren: "Initial",
+                  },
+                  {
+                    value: "active",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="active" size="l" />
+                        &nbsp;Active
+                      </>
+                    ),
+                    selectedChildren: "Active",
+                  },
+                  {
+                    value: "final",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="final" size="l" />
+                        &nbsp;Final
+                      </>
+                    ),
+                    selectedChildren: "Final",
+                  },
+                  {
+                    value: "alternative",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="alternative" size="l" />
+                        &nbsp;Alternative
+                      </>
+                    ),
+                    selectedChildren: "Alternative",
+                  },
+                  {
+                    value: "problem",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="problem" size="l" />
+                        &nbsp;Problem
+                      </>
+                    ),
+                    selectedChildren: "Problem",
+                  },
+                  {
+                    value: "passive",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="passive" size="l" />
+                        &nbsp;Passive
+                      </>
+                    ),
+                    selectedChildren: "Passive",
+                  },
+                  {
+                    value: "failed",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="failed" size="l" />
+                        &nbsp;Failed
+                      </>
+                    ),
+                    selectedChildren: "Failed",
+                  },
+                  {
+                    value: "cancelled",
+                    children: (
+                      <>
+                        <Uu5Elements.Badge colorScheme="cancelled" size="l" />
+                        &nbsp;Cancelled
+                      </>
+                    ),
+                    selectedChildren: "Cancelled",
+                  },
+                ]}
+              />
+              <TextSelect
+                label="Another data in itemList"
+                itemList={[
+                  {
+                    value: "blue_ridge_blvd-brighton",
+                    street: "Blue Ridge Blvd.",
+                    city: "Brighton",
+                    zipCode: "70116",
+                    children: "Blue Ridge Blvd., Brighton",
+                  },
+                  {
+                    value: "main_st_brighton_new_orleans",
+                    street: "Main St.",
+                    city: "New Orleans",
+                    zipCode: "48116",
+                    children: "Main St., New Orleans",
+                  },
+                  {
+                    value: "greenleaf-ave-san-jose",
+                    street: "Greenleaf Ave.",
+                    city: "San Jose",
+                    zipCode: "95111",
+                    children: "Greenleaf Ave., San Jose",
+                  },
+                  {
+                    value: "lewis-rd-prineville",
+                    street: "Lewis Rd.",
+                    city: "Prineville",
+                    zipCode: "97754",
+                    children: "Lewis Rd., Prineville",
+                  },
+                  {
+                    value: "thorburn-ave-new-york",
+                    street: "Thorburn Ave.",
+                    city: "New York",
+                    zipCode: "10011",
+                    children: "Thorburn Ave., New York",
+                  },
+                  {
+                    value: "tomahawk-dr-los-angeles",
+                    street: "Tomahawk Dr.",
+                    city: "Los Angeles",
+                    zipCode: "90006",
+                    children: "Tomahawk Dr., Los Angeles",
+                  },
+                  {
+                    value: "park-blvd-boston",
+                    street: "Park Blvd.",
+                    city: "Boston",
+                    zipCode: "2128",
+                    children: "Park Blvd., Boston",
+                  },
+                  {
+                    value: "charity-st-san-jose",
+                    street: "Charity St.",
+                    city: "San Jose",
+                    zipCode: "95110",
+                    children: "Charity St., San Jose",
+                  },
+                  {
+                    value: "industry-ln-new-york",
+                    street: "Industry Ln.",
+                    city: "New York",
+                    zipCode: "10002",
+                    children: "Industry Ln., New York",
+                  },
+                  {
+                    value: "harrison-rd-new-york",
+                    street: "Harrison Rd.",
+                    city: "New York",
+                    zipCode: "10038",
+                    children: "Harrison Rd., New York",
+                  },
+                  {
+                    value: "w-belmont-ave-los-angeles",
+                    street: "W Belmont Age.",
+                    city: "Los Angeles",
+                    zipCode: "91776",
+                    children: "W Belmont Ave., Los Angeles",
+                  },
+                ]}
+              />
+
+              <h4>itemList children as lsiObject</h4>
+              <TextSelect
+                placeholder="children as lsiObject"
+                itemList={[
+                  { value: "created", children: { en: "Created", cs: "Vytvořeno" } },
+                  { value: "initial", children: { en: "Initial", cs: "Úvodní" } },
+                  { value: "active", children: { en: "Active", cs: "Aktivní" } },
+                  { value: "final", children: { en: "Final", cs: "Finální" } },
+                  { value: "alternative", children: { en: "Alternative", cs: "Alternativní" } },
+                  { value: "problem", children: { en: "Problem", cs: "Problém" } },
+                  { value: "passive", children: { en: "Passive", cs: "Pasivní" } },
+                  { value: "failed", children: { en: "Failed", cs: "Neúspěšný" } },
+                  { value: "cancelled", children: { en: "Cancelled", cs: "Zrušený" } },
+                ]}
+              />
+            </div>
+            <div>
+              <h4>onFilter</h4>
+              <TextSelect
+                label="Search"
+                itemList={streetList}
+                onFilter={(e) => {
+                  console.log("onFilter", e);
+                  return ["street", "city", "zipCode"].map((k) => e.data.item[k].toLowerCase()).join(" ")
+                    .includes(e.data.value.toLowerCase());
+                }}
+              />
+
+              <h4>insertable=true</h4>
+              <TextSelect label="Create a custom item" itemList={stateList} insertable />
+
+              <h4>insertable="add"</h4>
+              <TextSelect label="Create a custom item" itemList={stateList} insertable="add" />
+
+              <h4>iconOpen & iconClosed</h4>
+              <TextSelect
+                label="Different icons"
+                itemList={stateList}
+                iconOpen="uugds-chevron-up"
+                iconClosed="uugds-chevron-down"
+              />
+
+              <h4>lsi</h4>
+              <TextSelect
+                placeholder="No items placeholder"
+                itemList={[]}
+                lsi={{ noItems: { en: "Empty List", cs: "Prázdný seznam" } }}
+              />
+
+              <h4>disableOptionReorder</h4>
+              <TextSelect
+                placeholder="Value & children"
+                itemList={[
+                  { value: "created", children: "Created" },
+                  { value: "initial", children: "Initial" },
+                  { value: "active", children: "Active" },
+                  { value: "final", children: "Final" },
+                  { value: "alternative", children: "Alternative" },
+                  { value: "problem", children: "Problem" },
+                  { value: "passive", children: "Passive" },
+                  { value: "failed", children: "Failed" },
+                  { value: "cancelled", children: "Cancelled" },
+                ]}
+                disableOptionReorder
+                multiple
+              />
+
+              <h4>displayCheckboxes</h4>
+              <TextSelect
+                placeholder="Multiple value"
+                itemList={stateList}
+                multiple
+                displayCheckboxes
+              />
+            </div>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

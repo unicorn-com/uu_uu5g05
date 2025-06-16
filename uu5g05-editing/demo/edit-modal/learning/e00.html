@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <script>
+      Uu5Loader.config({
+        imports: {
+          // uu_plus4u5g01 dependency
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+
+          "create-react-class": "https://cdn.plus4u.net/libs/create-react-class/15.7.0/create-react-class.min.js",
+
+          // uu_contentkitg01 dependency
+          uu5g04: "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04.min.js",
+          "uu5g04-bricks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-bricks.min.js",
+          "uu5g04-forms": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-forms.min.js",
+          "uu5g04-hooks": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-hooks.min.js",
+          uu5richtextg01: "https://cdn.plus4u.net/uu-uu5richtextg01/1.0.0/uu5richtextg01.min.js",
+
+          "uu5g04-block-layout": "https://cdn.plus4u.net/uu-uu5g04/1.0.0/uu5g04-block-layout.min.js",
+          uu5tilesg02: "https://cdn.plus4u.net/uu-uu5tilesg02/1.0.0/uu5tilesg02.min.js",
+          uu5codekitg01: "https://cdn.plus4u.net/uu-uu5codekitg01/1.0.0/uu5codekitg01.min.js",
+          immutable: "https://cdn.plus4u.net/libs/immutable/3.8.2/immutable.min.js",
+          "uu_applibraryregistryg01-bricks":
+            "https://cdn.plus4u.net/uu-applibraryregistryg01/1.0.0/uu_applibraryregistryg01-bricks.min.js",
+
+          uu_editablecomponentcontentg03:
+            "https://cdn.plus4u.net/uu-editablecomponentcontentg03/3.0.0/uu_editablecomponentcontentg03.min.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, withLazy, useState, useWillMount } from "uu5g05";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+      import Uu5Elements from "uu5g05-elements";
+      import UuEcc from "uu_editablecomponentcontentg03";
+
+      //@@viewOn:example
+      const BlockEditable = createComponent({
+        render(props) {
+          // the Uu5Loader.get() method is used in the render method only for the purpose of this demo file (due to the fact all components are created in one file)
+          // normally these two lines would be located in the import section
+          const Uu5Editing = Utils.Uu5Loader.get("uu5g05-editing");
+          const Uu5Forms = Utils.Uu5Loader.get("uu5g05-forms");
+
+          const { editMode, componentProps, component } = props;
+
+          // TODO develop a separated hook to take care of this and other functionalities at one place
+          useWillMount(() => {
+            if (typeof props.editMode?.onReady === "function") {
+              props.editMode.onReady(new Utils.Event());
+            }
+          });
+
+          const tabList = [
+            {
+              template: "visual",
+              propInputMap: {
+                colorScheme: {
+                  props: {
+                    info: {
+                      en: "Block does not support all of the colorScheme values listed below! This prop has to be adjusted - as per the next step of this guide!",
+                    },
+                  },
+                },
+              },
+            },
+          ];
+
+          return (
+            <Uu5Editing.EditModal
+              open={editMode.edit}
+              onClose={() => editMode.onEditEnd()}
+              onSave={({ props }) => editMode.onEditEnd({ props })}
+              uu5Tag={component.uu5Tag}
+              props={componentProps}
+              defaultProps={component.defaultProps}
+              tabList={tabList}
+            />
+          );
+        },
+      });
+
+      const EditableComponent = withLazy(async () => {
+        let results = await Promise.all([
+          Utils.Uu5Loader.import("uu5g05-editing"), // eslint-disable-line no-undef
+          Utils.Uu5Loader.import("uu5g05-forms"), // eslint-disable-line no-undef
+        ]);
+
+        // standard return of withLazy function would be a file import - e.g.:
+        // return import "./block-editable.js"
+
+        // however, in this case, when all components are stored within one demo file we need to return the component directly
+        return { default: BlockEditable };
+      });
+
+      const Block = createComponent({
+        //@@viewOn:statics
+        uu5Tag: "Uu5Demo.Block",
+        editMode: {
+          customEdit: true,
+          startMode: "button",
+        },
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {
+          colorScheme: "building",
+          significance: "common",
+        },
+        //@@viewOff:defaultProps
+
+        render(props) {
+          const { editMode, children, ...restProps } = props;
+
+          return (
+            <>
+              <Uu5Elements.Block {...restProps}>{children}</Uu5Elements.Block>
+              {editMode?.edit && <EditableComponent editMode={editMode} componentProps={restProps} component={Block} />}
+            </>
+          );
+        },
+      });
+
+      // register the component is needed for Ecc to be able to find the component through uu5string
+      Utils.LibraryRegistry.registerComponent(Block);
+
+      // use Ecc to render the component and it's editation
+      const editedComponent = `<uu5string />
+        <Uu5Demo.Block
+          colorScheme="primary"
+          significance="distinct"
+          borderRadius="elementary"
+          nestingLevel="area"
+          card="full"
+          headerType="title"
+          level=1
+          header="Block"
+          info="Some info..."
+          headerAspectRatio="1:1"
+        >
+          <Uu5Dev.LoremIpsum />
+        </Uu5Demo.Block>`;
+
+      const sectionData = {
+        data: {
+          content: editedComponent,
+          sys: {
+            rev: 0,
+          },
+        },
+        onEditReady: () => null,
+        onUpdate: () => null,
+        onLock: () => null,
+      };
+
+      const Page = createComponent({
+        render() {
+          const componentProps = {};
+
+          return (
+            <>
+              <UuEcc.PageEditProvider initialEditable>
+                <UuEcc.Section {...sectionData} />
+              </UuEcc.PageEditProvider>
+            </>
+          );
+        },
+      });
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+      //@@viewOff:example
+    </script>
+  </body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 01</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, wait } from "uu5g05-dev";
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h4>icon & iconRight</h4>
+            <Uu5Forms.SubmitButton icon="uugds-favorites" />
+            <Uu5Forms.SubmitButton icon="uugds-favorites">Button</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton iconRight="uugds-menu-down">Button</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton icon="uugds-favorites" iconRight="uugds-menu-down">Button</Uu5Forms.SubmitButton>
+
+            <h4>size & icon & iconRight</h4>
+            <Uu5Forms.SubmitButton size="xxs">xxs</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xxs" icon="uugds-favorites" />
+            <Uu5Forms.SubmitButton size="xxs" icon="uugds-favorites">xxs</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xxs" iconRight="uugds-menu-down">xxs</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xxs" icon="uugds-favorites" iconRight="uugds-menu-down">xxs</Uu5Forms.SubmitButton>
+            <br />
+            <Uu5Forms.SubmitButton size="xs">xs</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xs" icon="uugds-favorites" />
+            <Uu5Forms.SubmitButton size="xs" icon="uugds-favorites">xs</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xs" iconRight="uugds-menu-down">xs</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xs" icon="uugds-favorites" iconRight="uugds-menu-down">xs</Uu5Forms.SubmitButton>
+            <br />
+            <Uu5Forms.SubmitButton size="s">s</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="s" icon="uugds-favorites" />
+            <Uu5Forms.SubmitButton size="s" icon="uugds-favorites">s</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="s" iconRight="uugds-menu-down">s</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="s" icon="uugds-favorites" iconRight="uugds-menu-down">s</Uu5Forms.SubmitButton>
+            <br />
+            <Uu5Forms.SubmitButton size="m">m</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="m" icon="uugds-favorites" />
+            <Uu5Forms.SubmitButton size="m" icon="uugds-favorites">m</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="m" iconRight="uugds-menu-down">m</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="m" icon="uugds-favorites" iconRight="uugds-menu-down">m</Uu5Forms.SubmitButton>
+            <br />
+            <Uu5Forms.SubmitButton size="l">l</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="l" icon="uugds-favorites" />
+            <Uu5Forms.SubmitButton size="l" icon="uugds-favorites">l</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="l" iconRight="uugds-menu-down">l</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="l" icon="uugds-favorites" iconRight="uugds-menu-down">l</Uu5Forms.SubmitButton>
+            <br />
+            <Uu5Forms.SubmitButton size="xl">xl</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xl" icon="uugds-favorites" />
+            <Uu5Forms.SubmitButton size="xl" icon="uugds-favorites">xl</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xl" iconRight="uugds-menu-down">xl</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xl" icon="uugds-favorites" iconRight="uugds-menu-down">xl</Uu5Forms.SubmitButton>
+
+            <h4>size</h4>
+            <Uu5Forms.SubmitButton size="xxs">xxs</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xs">xs</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="s">s</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="m">m</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="l">l</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton size="xl">xl</Uu5Forms.SubmitButton>
+
+            <h4>borderRadius</h4>
+            <Uu5Forms.SubmitButton borderRadius="none">none</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton borderRadius="elementary">elementary</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton borderRadius="moderate">moderate</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton borderRadius="expressive">expressive</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton borderRadius="full">full</Uu5Forms.SubmitButton>
+
+            <h4>width</h4>
+            <Uu5Forms.SubmitButton width="50%">50%</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton width={300}>300</Uu5Forms.SubmitButton>
+
+            <h4>pressed</h4>
+            <Uu5Forms.SubmitButton pressed>pressed</Uu5Forms.SubmitButton>
+
+            <h4>onClick</h4>
+            <Uu5Forms.SubmitButton onClick={e => {
+              console.log("onClick", e);
+              if (e.ctrlKey || e.metaKey) {
+                alert("ctrl click");
+              } else if (e.button === 1) {
+                alert(`wheel click`);
+              } else {
+                alert(`click`);
+              }
+            }}>
+              onClick
+            </Uu5Forms.SubmitButton>
+
+            <h4>tooltip</h4>
+            <Uu5Forms.SubmitButton tooltip="Tooltip string">tooltip string</Uu5Forms.SubmitButton>
+            <Uu5Forms.SubmitButton tooltip={{ cs: "titulek", en: "tooltip" }}>tooltip lsi</Uu5Forms.SubmitButton>
+            
+            <h4>lsi</h4>
+            <Uu5Forms.SubmitButton lsi={{ submit: { en: "Submit (EN)", cs: "Odeslat (CS)" }}} />
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

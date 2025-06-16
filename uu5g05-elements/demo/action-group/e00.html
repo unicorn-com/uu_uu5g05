@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, Fragment, createComponent, createVisualComponent, Lsi, useState, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      /*@@viewOn:example*/
+      const CustomMenuListItem = createVisualComponent({
+        defaultProps: {
+          colorScheme: "red",
+        },
+        render(props) {
+          let Component = props.displayType === "menu-item" ? Uu5Elements.MenuItem : Uu5Elements.Button;
+          return <Component {...props} />;
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          const itemList = [
+            {
+              icon: "uugds-favorites",
+              children: <Lsi lsi={{ cs: "Ohodnoť", en: "Rate" }} />,
+              onClick: () => alert("rate"),
+              primary: true,
+              collapsed: false,
+            },
+            {
+              icon: "uugds-reload",
+              collapsedChildren: "Update",
+              itemList: [
+                { children: "Update Name", onClick: () => alert("update name") },
+                { children: "Update Surname", onClick: () => alert("update surname") },
+              ],
+            },
+            {
+              icon: "uugds-plus",
+              children: "Create",
+              onClick: () => alert("create"),
+              collapsed: "duplicated",
+            },
+            {
+              icon: "uugds-delete",
+              children: "Move to trash",
+              onLabelClick: () => alert("move to trash"),
+              itemList: [
+                { children: "Delete permanently", colorScheme: "negative", onClick: () => alert("delete permanently") },
+              ],
+            },
+            { divider: true },
+            { icon: "uugds-settings", children: "Settings", onClick: () => alert("settings"), iconNotification: true },
+            {
+              icon: "uugds-refresh",
+              component: CustomMenuListItem,
+              children: "Refresh",
+              onClick: () => alert("refresh"),
+            },
+            {
+              icon: "uugds-plus",
+              component: <CustomMenuListItem colorScheme="primary" />,
+              children: "Add to favorite",
+              onClick: () => alert("add to favorite"),
+            },
+          ];
+
+          return (
+            <div className={Config.Css.css`display: flex;`}>
+              <textarea
+                placeholder="Limit ActionGroup's width by resizing this textarea (lower right corner)"
+                className={Config.Css.css({ minWidth: 300 })}
+              />
+              <Uu5Elements.ActionGroup itemList={itemList} />
+            </div>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

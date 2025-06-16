@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:imports
+      import { useEvent } from "uu5g05";
+      //@@viewOff:imports
+
+      const WindowScrollBox = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "WindowScrollBox",
+        //@@viewOff:statics
+
+        render(props) {
+          //@@viewOn:private
+          const [scrollTop, setScrollTop] = useState(0);
+
+          //@@viewOn:example
+          useEvent(
+            "scroll",
+            (e) => {
+              setScrollTop(window.pageYOffset);
+            },
+            window
+          );
+          //@@viewOff:example
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <Uu5Elements.Box
+              colorScheme="primary"
+              significance="highlighted"
+              className={Config.Css.css`
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 80px;
+              `}
+            >
+              <h1>Scroll: {scrollTop}</h1>
+            </Uu5Elements.Box>
+          );
+          //@@viewOff:render
+        },
+      });
+
+      const WindowScrollBoxDebounce = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "WindowScrollBoxDebounce",
+        //@@viewOff:statics
+
+        render(props) {
+          //@@viewOn:private
+          const [scrollTop, setScrollTop] = useState(0);
+
+          //@@viewOn:example
+          // debounce us just for optimization, you can also use just a function like (e) => ...
+          useEvent(
+            "scroll",
+            debounce((e) => {
+              setScrollTop(window.pageYOffset);
+            }, 100),
+            window
+          );
+          //@@viewOff:example
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <Uu5Elements.Box
+              colorScheme="positive"
+              significance="highlighted"
+              className={Config.Css.css`
+                position: fixed;
+                z-index: 1;
+                top: 80px;
+                left: 0;
+                width: 100%;
+              `}
+            >
+              <h1>Scroll with debounce: {scrollTop}</h1>
+            </Uu5Elements.Box>
+          );
+          //@@viewOff:render
+        },
+      });
+
+      function debounce(fn, delay) {
+        let timeout;
+        return function (...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => fn(...args), delay);
+        };
+      }
+
+      function Demo() {
+        return (
+          <div>
+            <WindowScrollBox />
+            <WindowScrollBoxDebounce />
+
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+            <h2>Just scroll down</h2>
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

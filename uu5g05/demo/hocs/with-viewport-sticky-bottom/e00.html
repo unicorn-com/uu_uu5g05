@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdn.plus4u.net/uu-uu5loaderg01/1.0.0/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdn.plus4u.net/uu-uu5g05/1.0.0/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils, withViewportStickyBottom, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const BottomBar = withViewportStickyBottom(
+        createVisualComponent({
+          render(props) {
+            return (
+              <Uu5Elements.Box
+                {...props}
+                shape="background"
+                colorScheme="grey"
+                className={Utils.Css.joinClassName(props.className, Config.Css.css({ padding: 8 }))}
+              >
+                {props.children}
+              </Uu5Elements.Box>
+            );
+          },
+        }),
+      );
+
+      const Page = createComponent({
+        render() {
+          return (
+            <main>
+              <BottomBar>Viewport bottom bar</BottomBar>
+              <LoremIpsum paragraphCount={15} />
+              <Uu5Elements.ViewportStickyBottomPlaceholder />
+            </main>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

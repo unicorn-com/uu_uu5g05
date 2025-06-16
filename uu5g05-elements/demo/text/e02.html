@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, createVisualComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      /*@@viewOn:example*/
+      const BusinessCard = createVisualComponent({
+        render(props) {
+          const { name, uuIdentity } = props;
+          return (
+            <Uu5Elements.Box
+              aspectRatio="1x1"
+              className={Config.Css.css({ textAlign: "center", padding: "16px 32px" })}
+              borderRadius="expressive"
+            >
+              <Uu5Elements.RichIcon
+                imageSrc="https://cdn.plus4u.net/uu-plus4u5g02/1.0.0/assets/anonymous.png"
+                height={120}
+                className={Config.Css.css({ margin: "16px auto" })}
+              />
+              <Uu5Elements.Text
+                autoFit
+                category="interface"
+                segment="title"
+                type="major"
+                className={Config.Css.css({ whiteSpace: "nowrap", display: "block" })}
+              >
+                {name}
+              </Uu5Elements.Text>
+              <Uu5Elements.Text
+                autoFit
+                category="interface"
+                segment="content"
+                type="medium"
+                colorScheme="building"
+                significance="subdued"
+                className={Config.Css.css({ whiteSpace: "nowrap", display: "block", marginTop: 12 })}
+              >
+                {uuIdentity}
+              </Uu5Elements.Text>
+            </Uu5Elements.Box>
+          );
+        },
+      });
+
+      const ImageLink = createVisualComponent({
+        render(props) {
+          const { name } = props;
+          return (
+            <Uu5Elements.Box
+              aspectRatio="1x1"
+              borderRadius="expressive"
+              className={Config.Css.css({ display: "grid", gridTemplateRows: "66% 34%" })}
+            >
+              <Uu5Elements.Box
+                shape="background"
+                colorScheme="grey"
+                className={Config.Css.css({ borderTopLeftRadius: "inherit", borderTopRightRadius: "inherit" })}
+              />
+              <div
+                className={Config.Css.css({
+                  textAlign: "center",
+                  padding: "16px 32px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                })}
+              >
+                <Uu5Elements.Text autoFit category="interface" segment="title" type="major">
+                  {name}
+                </Uu5Elements.Text>
+              </div>
+            </Uu5Elements.Box>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Elements.Grid templateColumns="repeat(auto-fill, minmax(260px, 1fr))">
+              <BusinessCard name="Oscar" uuIdentity="1120-1" />
+              <BusinessCard name="Oscar Ian Reginald" uuIdentity="1120-1" />
+              <BusinessCard name="Babirye Martirio Mulryan" uuIdentity="11-1" />
+
+              <ImageLink name="Ornithogalum" />
+              <ImageLink name="Ornithogalumadseptentri" />
+              <ImageLink name="Ornithogalumadseptentrionesvergentulum" />
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

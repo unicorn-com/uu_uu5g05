@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent, useState, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      //@@viewOn:imports
+      import { usePrintBlocker } from "uu5g05";
+      //@@viewOff:imports
+
+      const Demo = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "Demo",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const { isPrintRequested, printReady } = usePrintBlocker();
+
+          const [state, setState] = useState("waiting"); // waiting / loading / ready
+
+          useEffect(() => {
+            if (isPrintRequested && state === "waiting") startLoad();
+          }, [isPrintRequested, state]);
+
+          const startLoad = () => {
+            setState("loading");
+            setTimeout(() => {
+              setState("ready");
+              printReady();
+            }, 3000);
+          };
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return (
+            <div>
+              {state === "waiting" && (
+                <>
+                  <p>
+                    <b>Start print or press button to trigger load (3s).</b>
+                  </p>
+                  <Uu5Elements.Button onClick={startLoad}>Trigger load manually</Uu5Elements.Button>
+                </>
+              )}
+              {state === "loading" && <Uu5Elements.Pending />}
+              {state === "ready" && <Uu5Elements.InfoItem icon="uugds-check" title="Ready" />}
+              <p>
+                {state === "ready"
+                  ? "No alert will be shown if you try to print now"
+                  : "Alert will be shown if you try to print now"}
+              </p>
+            </div>
+          );
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

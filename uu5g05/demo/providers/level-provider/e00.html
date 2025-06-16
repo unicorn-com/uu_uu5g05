@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createVisualComponent } from "uu5g05";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      //@@viewOn:imports
+      import { useLevel, LevelProvider } from "uu5g05";
+      //@@viewOff:imports
+
+      const Level = createVisualComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "Level",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {},
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {},
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const [level] = useLevel(); // level used by parent
+          const myLevel = level != null ? level + 1 : 0; // make my level bigger than parent's
+          console.log("level", myLevel);
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          const attrs = Utils.VisualComponent.getAttrs(props, Config.Css.css({ opacity: 1 - 0.05 * myLevel }));
+          return (
+            <div {...attrs}>
+              This is level {myLevel}.<LevelProvider level={myLevel}>{props.children}</LevelProvider>
+            </div>
+          );
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      const Demo = createVisualComponent({
+        render(props) {
+          return (
+            <div>
+              <Level>
+                <Level>
+                  <Level>
+                    <Level>
+                      <Level>
+                        <Level>
+                          <Level />
+                        </Level>
+                      </Level>
+                    </Level>
+                  </Level>
+                </Level>
+              </Level>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script>
+      Uu5Loader.config({
+        imports: {
+          uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.min.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        createVisualComponent,
+        createComponent,
+        useLanguage,
+        useTimeZone,
+        TimeZoneProvider,
+        Fragment,
+        useUserPreferences,
+        PropTypes, UserPreferencesProvider
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import { UuDateTime } from "uu_i18ng01";
+
+      Utils.Language.setLanguage("en-us");
+
+      const TIME_FORMAT_MAP = {
+        short: { 12: "hh:mm a", 24: "HH:mm" },
+        long: { 12: "hh:mm:ss a", 24: "HH:mm:ss a" },
+      };
+
+      const DateTime = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "DateTime",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {
+          value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+          dateFormat: PropTypes.oneOf(["none", "short", "medium", "long"]),
+          timeFormat: PropTypes.oneOf(["none", "short", "long"]),
+          hourFormat: PropTypes.oneOf([12, 24]),
+          format: PropTypes.string,
+          timeZone: PropTypes.string,
+        },
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {
+          value: undefined,
+          dateFormat: "medium",
+          timeFormat: "short",
+          hourFormat: 24,
+          format: undefined,
+          timeZone: undefined,
+        },
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const { value, dateFormat, timeFormat, hourFormat, format: propsFormat, timeZone: propsTimeZone } = props;
+
+          const [timeZone] = useTimeZone();
+          const [pref] = useUserPreferences();
+          const [language] = useLanguage();
+
+          let format = propsFormat;
+          if (!format) {
+            const formatList = [];
+            if (dateFormat !== "none" && pref[dateFormat + "DateFormat"]) {
+              formatList.push(pref[dateFormat + "DateFormat"]);
+            }
+            if (timeFormat !== "none") formatList.push(TIME_FORMAT_MAP[timeFormat][pref.hourFormat || hourFormat]);
+            format = formatList.join(" ");
+          }
+          //@@viewOff:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return new UuDateTime(value, propsTimeZone || timeZone).format(language, { format });
+          //@@viewOff:render
+        },
+      });
+
+      function Page() {
+        return (
+          <div>
+            {/*@@viewOn:example*/}
+            <h3>Default</h3>
+            <DateTime />
+
+            <h3>Custom Context</h3>
+            <TimeZoneProvider>
+              <UserPreferencesProvider
+                shortDateFormat="D. M. YY"
+                mediumDateFormat="DD. MM. Y"
+                longDateFormat="dddd, MMMM D, Y"
+                hourFormat={12}
+              >
+                <h4>Default</h4>
+                <DateTime />
+
+                <h4>dateFormat="long" & timeFormat="none"</h4>
+                <DateTime dateFormat="long" timeFormat="none" />
+
+                <h4>format="Y/D/M h:m a" & timeZone="Australia/Sydney"</h4>
+                <DateTime format="Y/D/M h:m a" timeZone="Australia/Sydney" />
+              </UserPreferencesProvider>
+            </TimeZoneProvider>
+            {/*@@viewOff:example*/}
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

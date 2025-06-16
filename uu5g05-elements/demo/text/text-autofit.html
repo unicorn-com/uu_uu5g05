@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config, LoremIpsum } from "uu5g05-dev";
+
+      const UuGds = Uu5Elements.UuGds;
+
+      const Page = createComponent({
+        render() {
+          const style = { height: "200px" };
+          const text = (
+            <>
+              Lorem ipsum dolor sit amet consectetur adipiscing elit. Ex sapien vitae pellentesque sem placerat in id.
+              Pretium tellus duis convallis tempus leo eu aenean. Urna tempor pulvinar vivamus fringilla lacus nec
+              metus.
+            </>
+          );
+          return (
+            <div>
+              <h4>default</h4>
+              <div
+                className={Config.Css.css({
+                  display: "grid",
+                  gridTemplateColumns: "160px 160px 160px 160px 160px",
+                  gap: 16,
+                  "&>*": { background: "#f0f0f0" },
+                })}
+              >
+                <Uu5Elements.Text category="interface" segment="content" type="large">
+                  <b>unfitted 16px</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  autoFit
+                  category="interface"
+                  segment="content"
+                  type="large"
+                  style={{ height: "270px" }}
+                >
+                  <b>+ letter-spacing</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  autoFit
+                  category="interface"
+                  segment="content"
+                  type="large"
+                  style={{ height: "240px" }}
+                >
+                  <b>+ reduced font</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  autoFit
+                  category="interface"
+                  segment="content"
+                  type="large"
+                  style={{ height: "155px" }}
+                >
+                  <b>+ text-ellipsis</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  autoFit
+                  category="interface"
+                  segment="content"
+                  type="large"
+                  style={{ height: "155px", resize: "both", overflow: "hidden" }}
+                >
+                  <b>resizable</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+
+                <Uu5Elements.Text category="interface" segment="content" type="medium">
+                  <b>unfitted 14px</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  autoFit
+                  category="interface"
+                  segment="content"
+                  type="medium"
+                  style={{ height: "200px" }}
+                >
+                  <b>+ letter-spacing</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+                <div style={{ height: "170px" }} />
+                <Uu5Elements.Text
+                  autoFit
+                  category="interface"
+                  segment="content"
+                  type="medium"
+                  style={{ height: "150px" }}
+                >
+                  <b>+ ellipsis</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  autoFit
+                  category="interface"
+                  segment="content"
+                  type="medium"
+                  style={{ height: "150px", resize: "both", overflow: "hidden" }}
+                >
+                  <b>resizable</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+
+                <Uu5Elements.Text category="interface" segment="content" type="small">
+                  <b>unfitted 12px</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  autoFit
+                  category="interface"
+                  segment="content"
+                  type="small"
+                  style={{ height: "130px" }}
+                >
+                  <b>+ letter-spacing</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+                <div style={{ height: "115px" }} />
+                <Uu5Elements.Text
+                  autoFit
+                  category="interface"
+                  segment="content"
+                  type="small"
+                  style={{ height: "100px" }}
+                >
+                  <b>+ ellipsis</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+                <Uu5Elements.Text
+                  autoFit
+                  category="interface"
+                  segment="content"
+                  type="small"
+                  style={{ height: "100px", resize: "both", overflow: "hidden" }}
+                >
+                  <b>resizable</b> <br />
+                  {text}
+                </Uu5Elements.Text>
+              </div>
+            </div>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 03</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config, wait } from "uu5g05-dev";
+      import { UuDate } from "uu_i18ng01";
+
+      const Calls = {
+        async createOrder(dtoIn) {
+          await wait();
+          let error = new Error("The product is no longer available.")
+          error.code = "uu-demo-app/create-order/product-unavailable-error";
+          throw error;
+        }
+      };
+
+      const Page = createComponent({
+        render() {
+          let deliveryDateMin = new UuDate();
+          deliveryDateMin.setDay(deliveryDateMin.getDay() + 3, 0, 0, 0, 0);
+
+          return (
+            <Uu5Elements.AlertBus>
+              {/*@@viewOn:example*/}
+              <Uu5Forms.Form
+                onSubmit={async (e) => {
+                  try {
+                    await Calls.createOrder(e.data.value);
+                  } catch (e) {
+                    if (e.code === "uu-demo-app/create-order/product-unavailable-error") {
+                      throw new Utils.Error.Message({
+                        en: "Unfortunately, the product is no longer available.",
+                      }, e);
+                    }
+                    throw e;
+                  }
+                  alert("Created order:\n" + JSON.stringify(e.data.value, null, 2));
+                }}
+              >
+                {/*@@viewOff:example*/}
+
+                <Uu5Elements.Block
+                  header="Buy a T-shirt"
+                  headerType="heading"
+                  info="Buy a Red Monster T-shirt in a limited edition and win one of interesting presents."
+                  footer={
+                    <Uu5Elements.Grid
+                      templateColumns={{ xs: "1fr", s: "auto" }}
+                      columnGap={Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "c"])}
+                      justifyContent={{ s: "end" }}
+                    >
+                      <Uu5Forms.SubmitButton>Buy</Uu5Forms.SubmitButton>
+                    </Uu5Elements.Grid>
+                  }
+                >
+                  <div className={Config.Css.css({
+                    display: "grid",
+                    rowGap: 8,
+                    columnGap: 32,
+                    gridAutoFlow: "column",
+                    gridTemplateRows: "repeat(4, auto)",
+                    //gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                    marginBottom: 8,
+                  })}>
+                    <div>
+                      <Uu5Forms.FormRadios
+                        name="sex"
+                        label="Gender"
+                        initialValue="man"
+                        itemList={[{ value: "man", label: "For Man" }, { value: "woman", label: "For Woman" }]}
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <Uu5Forms.FormSwitchSelect
+                        name="size"
+                        label="Size"
+                        initialValue="M"
+                        itemList={[{ value: "S" }, { value: "M" }, { value: "L" }, { value: "XL" }, { value: "XXL" }]}
+                      />
+                    </div>
+
+                    <div>
+                      <Uu5Forms.FormNumber
+                        name="count"
+                        label="Item count"
+                        required
+                        min={1}
+                        initialValue={1}
+                        message="Item count is limited by current stock reserve."
+                      />
+                    </div>
+
+                    <div className={Config.Css.css({ display: "grid", rowGap: 8 })}>
+                      <Uu5Forms.FormSelect
+                        name="destination"
+                        label="Destination"
+                        initialValue="prague"
+                        itemList={[
+                          { value: "prague", children: "Prague" },
+                          { value: "plzen", children: "Plzeň" },
+                          { value: "hk", children: "Hradec Králové" },
+                          { value: "brno", children: "Brno" },
+                          { value: "bratislava", children: "Bratislava" },
+                          { value: "kosice", children: "Košice" },
+                          { value: "kyiv", children: "Kyiv" },
+                          { value: "ternopil", children: "Ternopil" },
+                        ]}
+                      />
+
+                      <Uu5Forms.FormDate
+                        name="deliveryDate"
+                        label="Preferred delivery date"
+                        min={deliveryDateMin.toIsoString()}
+                      />
+                    </div>
+
+                    <div>
+                      <Uu5Forms.FormText
+                        name="name"
+                        label="Name"
+                        placeholder="Name and surname"
+                        initialValue="John Doe"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Uu5Forms.FormText
+                        name="phone"
+                        label="Phone"
+                        iconLeft="uugds-phone"
+                        prefix="+420"
+                        type="tel"
+                        initialValue="777123456"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Uu5Forms.FormEmail
+                        name="email"
+                        label="E-mail"
+                        initialValue="john.doe@example.com"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Uu5Forms.FormTextArea name="desc" label="Notes" />
+                    </div>
+                  </div>
+                </Uu5Elements.Block>
+              </Uu5Forms.Form>
+            </Uu5Elements.AlertBus>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

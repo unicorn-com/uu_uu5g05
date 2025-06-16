@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to create wrapped input</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useEffect, useRef } from "uu5g05";
+      import Uu5Forms, { withFormItem } from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const Gps = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "Gps",
+        //@@viewOff:statics
+
+        //@@viewOn:render
+        render(props) {
+          const { value, pending, ...propsToPass } = props;
+
+          const initialPendingRef = useRef(!value);
+
+          useEffect(() => {
+            if (!value && propsToPass.onChange) {
+              navigator.geolocation.getCurrentPosition((position) => {
+                const { latitude, longitude } = position.coords;
+                const newValue = [latitude, longitude].join(", ");
+
+                initialPendingRef.current = false;
+                propsToPass.onChange(new Utils.Event({ value: newValue }));
+              });
+            }
+          }, []);
+
+          return (
+            <Uu5Forms.Text
+              {...propsToPass}
+              value={value}
+              pending={initialPendingRef.current || pending}
+            />
+          );
+        },
+        //@@viewOff:render
+      });
+
+      const FormGps = withFormItem(Gps);
+      //@@viewOff:example
+
+      const Page = createComponent({
+        render() {
+          return (
+            <Uu5Forms.Form
+              gridLayout="gps"
+              onSubmit={async (e) => {
+                const values = e.data.value;
+                // TODO some call to server for storing data
+                alert("Submitted with values:\n" + JSON.stringify(values, null, 2));
+              }}
+            >
+              <FormGps name="gps" label="Latitude, longitude" />
+
+              <Uu5Forms.SubmitButton className={Config.Css.css({ justifySelf: "end" })} />
+            </Uu5Forms.Form>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

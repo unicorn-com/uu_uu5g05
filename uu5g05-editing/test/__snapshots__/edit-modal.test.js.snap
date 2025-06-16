@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Uu5Editing.EditModal default props 1`] = `
+<Uu5Forms.withValidationMap(Uu5Forms.FormProvider)
+  initialValue={
+    Object {
+      "borderRadius": "moderate",
+      "card": "full",
+      "colorScheme": "primary",
+      "nestingLevel": "area",
+      "significance": "highlighted",
+    }
+  }
+  key="1"
+  onSubmit={[Function]}
+  preserveValueOnUnmount={true}
+>
+  <Component />
+</Uu5Forms.withValidationMap(Uu5Forms.FormProvider)>
+`;
+
+exports[`Uu5Editing.EditModal defaultProps=undefined 1`] = `
+<Uu5Forms.withValidationMap(Uu5Forms.FormProvider)
+  initialValue={
+    Object {
+      "borderRadius": "moderate",
+      "card": "full",
+      "colorScheme": "primary",
+      "nestingLevel": "area",
+      "significance": "highlighted",
+    }
+  }
+  key="1"
+  onSubmit={[Function]}
+  preserveValueOnUnmount={true}
+>
+  <Component />
+</Uu5Forms.withValidationMap(Uu5Forms.FormProvider)>
+`;
+
+exports[`Uu5Editing.EditModal onClose - should call onClose function 1`] = `
+<Uu5Forms.withValidationMap(Uu5Forms.FormProvider)
+  initialValue={
+    Object {
+      "borderRadius": "moderate",
+      "card": "full",
+      "colorScheme": "primary",
+      "nestingLevel": "area",
+      "significance": "highlighted",
+    }
+  }
+  key="1"
+  onSubmit={[Function]}
+  preserveValueOnUnmount={true}
+>
+  <Component />
+</Uu5Forms.withValidationMap(Uu5Forms.FormProvider)>
+`;
+
+exports[`Uu5Editing.EditModal props=undefined 1`] = `
+<Uu5Forms.withValidationMap(Uu5Forms.FormProvider)
+  initialValue={Object {}}
+  key="1"
+  onSubmit={[Function]}
+  preserveValueOnUnmount={true}
+>
+  <Component />
+</Uu5Forms.withValidationMap(Uu5Forms.FormProvider)>
+`;

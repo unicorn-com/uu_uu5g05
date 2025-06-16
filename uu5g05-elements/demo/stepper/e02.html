@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 02</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="uu5"></div>
+
+  <script type="text/babel">
+    import { Utils, useState, useEffect } from "uu5g05";
+    import Uu5Elements from "uu5g05-elements";
+    import Uu5Forms from "uu5g05-forms";
+    import { Config, wait } from "uu5g05-dev";
+
+    const Step = ({ stepIndex, onPrevious, onNext, onReset }) => (
+      <Uu5Elements.Block>
+        Step Index: {stepIndex}
+        <Uu5Elements.Button size="xxs" children="Previous" onClick={onPrevious} disabled={!onPrevious} />
+        <Uu5Elements.Button size="xxs" children="Next" onClick={onNext} disabled={!onNext} />
+        <Uu5Elements.Button size="xxs" children="Reset" onClick={onReset} disabled={!onReset} />
+      </Uu5Elements.Block>
+    );
+
+    const Page = () => {
+      const [stepIndex, _setStepIndex] = useState(0);
+      const [progressIndex, setProgressIndex] = useState(stepIndex);
+
+      function setStepIndex(i) {
+        _setStepIndex(i);
+        if (i > progressIndex) setProgressIndex(i);
+      }
+
+      const requiredProps = {
+        stepIndex,
+        progressIndex,
+        validityList: [true, !progressIndex, true, true],
+        onChange: (event) => setStepIndex(event.data.stepIndex),
+      };
+
+      return (
+        <div>
+          <Step
+            stepIndex={stepIndex}
+            onPrevious={stepIndex > 0 ? () => setStepIndex(stepIndex - 1) : undefined}
+            onNext={stepIndex < 3 ? () => setStepIndex(stepIndex + 1) : undefined}
+            onReset={() => { setStepIndex(0); setProgressIndex(0); }}
+          />
+
+          {/*@@viewOn:example*/}
+          <h4>Title & Subtitle</h4>
+          <Uu5Elements.Stepper
+            {...requiredProps}
+            itemList={[
+              { title: "First Step", subtitle: "Checkout" },
+              { title: "Second Step", subtitle: "Shipping" },
+              { title: "Third Step", subtitle: "Billing" },
+              { title: "Fourth Step", subtitle: "Summary" },
+            ]}
+          />
+
+          <h4>Icon Text</h4>
+          <Uu5Elements.Stepper
+            {...requiredProps}
+            itemList={[
+              { title: "First Step", iconText: 1 },
+              { title: "Second Step", iconText: 2 },
+              { title: "Third Step", iconText: 3 },
+              { title: "Fourth Step", iconText: 4 },
+            ]}
+          />
+
+          <h4>State Icons</h4>
+          <Uu5Elements.Stepper
+            {...requiredProps}
+            itemList={[
+              { title: "First Step" },
+              { title: "Second Step" },
+              { title: "Third Step" },
+              { title: "Fourth Step" },
+            ]}
+            iconActive="mdi-emoticon-confused"
+            iconAlert="mdi-emoticon-sick-outline"
+            iconFinished="mdi-emoticon-cool-outline"
+            iconUnfinished="mdi-emoticon-neutral-outline"
+          />
+
+          <h4>Step Icons</h4>
+          <Uu5Elements.Stepper
+            {...requiredProps}
+            itemList={[
+              { title: "First Step", icon: "uugds-basket" },
+              { title: "Second Step", icon: "mdi-truck" },
+              { title: "Third Step", icon: "mdi-credit-card-outline" },
+              { title: "Fourth Step", icon: "mdi-playlist-check" },
+            ]}
+          />
+
+          <h4>Step & State Icons Priority</h4>
+          <Uu5Elements.Stepper
+            {...requiredProps}
+            itemList={[
+              {
+                title: "First Step",
+                icon: "mdi-numeric-1-box" // overridden by common props (Alert and Finished state here)
+              },
+              {
+                title: "Second Step",
+                icon: "mdi-numeric-2-box", // overridden by common props (Alert and Finished state here)
+                iconUnfinished: "mdi-checkbox-blank"
+              },
+              {
+                title: "Third Step",
+                iconActive: "mdi-checkbox-blank-badge",
+                iconFinished: "mdi-checkbox-marked" // overrides common iconFinished prop
+              },
+              {
+                title: "Fourth Step",
+                iconText: "TXT", // overrides all icons
+                icon: "mdi-numeric-4-box", // useless due to iconText
+                iconActive: "mdi-checkbox-blank-badge" // useless due to iconText
+              },
+            ]}
+            // common state props overrides only itemList[].icon props:
+            iconAlert="uugds-alert-circle"
+            iconFinished="uugds-check-circle"
+          />
+          {/*@@viewOff:example*/}
+        </div>
+      );
+    };
+
+    Utils.Dom.render(<Page />, document.getElementById("uu5"));
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="uu5"></main>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState, useSpeechToText } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Console, Config } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const Page = createComponent({
+        render() {
+          const [text, setText] = useState("");
+          const [speech, setSpeech] = useState("");
+
+          const { recording, speaking, startRecording, stopRecording, error } = useSpeechToText({
+            onStart: (e) => console.log("onStart", e),
+            onSpeechStart: (e) => console.log("onSpeechStart", e),
+            onSpeech: (e) => {
+              console.log("onSpeech", e, e.data.value);
+              setSpeech(e.data.value);
+            },
+            onSpeechEnd: (e) => {
+              console.log("onSpeechEnd", e, e.data.value);
+              setSpeech("");
+              setText((text) => text + " " + e.data.value);
+            },
+            onEnd: (e) => console.log("onEnd", e),
+          });
+
+          return (
+            <Uu5Elements.Grid templateColumns={{ xs: "1fr", m: "1fr 1fr" }}>
+              <Uu5Elements.Block
+                header="useSpeechToText"
+                headerType="title"
+                card="full"
+                actionList={[
+                  recording ? {
+                    icon: "uugdsstencil-media-mic-off",
+                    children: "Stop",
+                    onClick: () => stopRecording(),
+                    colorScheme: "negative",
+                    significance: "common",
+                  } : {
+                    icon: "uugdsstencil-media-mic",
+                    children: "Start",
+                    onClick: () => startRecording(),
+                    colorScheme: "primary",
+                    significance: "highlighted",
+                  }
+                ]}
+                className={Config.Css.css({ alignSelf: "start" })}
+              >
+                <div>
+                  recording: {recording + ""}<br />
+                  speaking: {speaking + ""}<br />
+                  error.code: {error ? error.code : ""}
+                </div>
+                <br />
+                {text} {speech}
+              </Uu5Elements.Block>
+              <Console />
+            </Uu5Elements.Grid>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

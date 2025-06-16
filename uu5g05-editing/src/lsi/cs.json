@@ -1,0 +1,206 @@
+{
+  "general": {
+    "required": "Pole je povinné.",
+    "default": "Výchozí",
+    "unverified": "Neověřené"
+  },
+  "EditModal": {
+    "header": "Úprava ${name}",
+    "confirm": "Uložit",
+    "cancel": "Zrušit",
+    "addItemButton": "Přidat položku",
+    "insertBefore": "Vložit před",
+    "insertAfter": "Vložit za",
+    "moveToPosition": "Přesunout na pozici",
+    "duplicate": "Duplikovat komponentu",
+    "delete": "Smazat",
+    "preview": "Náhled"
+  },
+  "ItemPositionModal": {
+    "header": "Přesunout položku na pozici",
+    "cancel": "Zrušit",
+    "confirm": "OK"
+  },
+  "ItemRemovalDialog": {
+    "header": "Odstranění položky",
+    "info": "Opravdu chcete nezvratně odebrat položku?",
+    "cancel": "Zrušit",
+    "confirm": "Odebrat"
+  },
+  "templates": {
+    "general": "Obecné",
+    "visual": "Visuální",
+    "system": "Systémové",
+    "authorization": "Autorizace"
+  },
+  "FormDisabled": {
+    "label": "Interakci s komponentou",
+    "allow": "Povolit",
+    "disable": "Zákázat"
+  },
+  "FormHidden": {
+    "label": "Na obrazovce komponentu",
+    "show": "Zobrazit",
+    "hide": "Skrýt"
+  },
+  "FormNoPrint": {
+    "label": "Při tisku komponentu",
+    "show": "Zobrazit",
+    "hide": "Skrýt"
+  },
+  "FormIdentificationType": {
+    "label": "Vizuální identifikaci mimo kontext aplikace",
+    "show": "Zobrazit",
+    "hide": "Skrýt",
+    "info": "Každá organizační jednotka má Vizuální identifikaci. Organizační jednotky slouží jako zdroj, odkud komponenta pochází. Pokud je komponenta umístěna mimo svou jednotku, zobrazí Vizuální identifikaci své zdrojové organizační jednotky – barevný pruh a čtvercová ikona umístěná nalevo v hlavičce komponenty. Ikona umožňuje přístup k lokální navigaci jednotky."
+  },
+  "FormBaseUri": {
+    "label": "URL adresa aplikace",
+    "message": "URL aplikace pro načtení kontextů, dat a vizuální identifikace."
+  },
+  "FormUu5Id": {
+    "label": "ID uživatelské preference",
+    "message": "Unikátní identifikátor pro uložení a načítání preferencí pro tuto komponentu."
+  },
+  "FormDisableUserPreference": {
+    "label": "Výchozí nastavení načíst z",
+    "userPreference": "Uživatelská preference",
+    "component": "Komponenty"
+  },
+  "FormOid": {
+    "label": "ID zobrazeného objektu",
+    "message": "Identifikátor specifického objektu, který má komponenta zobrazit."
+  },
+  "FormBid": {
+    "label": "ID zobrazené větve",
+    "message": "Identifikátor specifické větve z uuBranchKit."
+  },
+  "FormRts": {
+    "label": "Zobrazit data k určitému datu"
+  },
+  "FormClassName": {
+    "label": "CSS třídy",
+    "message": "Jména tříd oddělujte mezerou."
+  },
+  "FormStyle": {
+    "label": "CSS styly",
+    "message": "Pište mezi závorky. Každý styl na samostatný řádek zakončený středníkem.",
+    "error": "Jediný platný selektor je component."
+  },
+  "FormAspectRatio": {
+    "label": "Poměr stran"
+  },
+  "FormBorderRadius": {
+    "label": "Zaoblení rohů"
+  },
+  "FormCard": {
+    "label": "Zobrazení komponenty jako karta",
+    "none": "Vypnuto",
+    "content": "Pouze obsah",
+    "full": "Zapnuto"
+  },
+  "FormColorScheme": {
+    "label": "Barevné schéma",
+    "default": "Výchozí"
+  },
+  "FormFullTextSearchPriority": {
+    "label": "Full text search priority",
+    "message": "Nastavení upřednostněného vyhledávání komponenty. Auto je nedefinovaná priorita komponenty. 0 znamená, že komponenta a její potomci nebudou indexováni pomocí fullTextSearch. 1 znamená nejnižší prioritu a 5 znamená nejvyšší prioritu."
+  },
+  "FormHeight": {
+    "label": "Výška"
+  },
+  "FormId": {
+    "label": "ID"
+  },
+  "FormNestingLevel": {
+    "label": "Nesting level"
+  },
+  "FormSignificance": {
+    "label": "Significance"
+  },
+  "FormSize": {
+    "label": "Velikost"
+  },
+  "FormWidth": {
+    "label": "Šířka"
+  },
+  "FormMargin": {
+    "label": "Margin"
+  },
+  "FormSpaces": {
+    "simple": "Jednoduché",
+    "advanced": "Pokročilé",
+    "info": "Odsazení jsou automaticky responzivní. Využívají hodnoty z palety adaptivních mezer uuGDS.",
+    "infoForMargin": "Hodnoty margin se upravují podle nesting levelu dané komponenty. Pokud je nesting level nastavený na 'area' nebo 'areaCollection', hodnoty zadané pro ${horizontal} nebudou přeposlány do komponenty. Pokud je nesting level nastavený na 'inline', hodnoty zadané pro ${vertical} nebudou přeposlány do komponenty.",
+    "infoForHorizontalMargin": "horizontální margin",
+    "infoForVerticalMargin": "vertikální margin",
+    "infoForHorizontalOuter": "vnější horizontální odsazení",
+    "infoForVerticalOuter": "vnější vertikální odsazení",
+    "outerVertical": "Vnější vertikální",
+    "outerHorizontal": "Vnější horizontální",
+    "outerTop": "Vnější horní",
+    "outerBottom": "Vnější spodní",
+    "outerLeft": "Vnější levý",
+    "outerRight": "Vnější pravý",
+    "innerVertical": "Vnitřní vertikální",
+    "innerHorizontal": "Vnitřní horizontální",
+    "innerTop": "Vnitřní horní",
+    "innerBottom": "Vnitřní spodní",
+    "innerLeft": "Vnitřní levý",
+    "innerRight": "Vnitřní pravý",
+    "outerSpacing": "Vnější odsazení",
+    "innerSpacing": "Vnitřní odsazení",
+    "setSidesSeparately": "Nastavit jednotlivé strany",
+    "component": "komponenta",
+    "margin": "Margin",
+    "padding": "Padding",
+    "inherited": "Inherited",
+    "dialogHeader": "Přepnout na jednoduché nastavení rozestupů?",
+    "dialogInfo": "Všechny nastavené hodnoty budou vynulovány.",
+    "dialogCancel": "Zrušit",
+    "dialogConfirm": "Jednoduché nastavení"
+  },
+  "screenSizeDevice": {
+    "xs": "Telefon",
+    "s": "Malý tablet",
+    "m": "Velký tablet",
+    "l": "Počítač",
+    "xl": "Velký počítač"
+  },
+  "FormUnit": {
+    "error": "Hodnota není validní. Zkontrolujte jednotky."
+  },
+  "FormLink": {
+    "href": {
+      "label": "Odkaz"
+    },
+    "labelLink": {
+      "label": "Text"
+    },
+    "target": {
+      "label": "Otevřít v",
+      "blank": "Nové kartě",
+      "self": "Aktuální kartě",
+      "auto": "Automaticky"
+    }
+  },
+  "FormAuthorization": {
+    "type": "Typ autorizace",
+    "typeMsg": "Aplikován je pouze zvolený typ autorizace.",
+    "none": "Žádné",
+    "noneMsg": "Kdokoliv může vidět tuto komponentu",
+    "profiles": "Profily artefaktu",
+    "roles": "Role nebo skupina",
+    "artifactUri": "URI artefaktu",
+    "artifactUriMsg": "Pro výběr 'Povolených profilů' nebo 'Případu použití' je nejdříve nutné vyplnit 'URI artefaktu'.",
+    "uuTerritoryBaseUri": "URI teritoria",
+    "uuTerritoryBaseUriError": "Zadaná URI není validní.",
+    "roleGroupIdList": "Role s explicitními právy",
+    "roleGroupIdListMsg": "Nejdříve je nutné vyplnit 'URI teritoria'.",
+    "useCase": "Případ použití",
+    "useCaseMsg": "Uživatel je authorizován, pokud je obsazen alespoň v jednom profilu, který případ použítí může vykonat.",
+    "profileList": "Povolené profily",
+    "profileListError": "Nepodařilo se načíst profily z daného URI artefaktu. Můžete vybrat z výchozí sady profilů nebo zadat vlastní název profilu."
+  }
+}

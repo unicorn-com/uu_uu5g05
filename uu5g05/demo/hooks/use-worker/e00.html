@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5"></div>
+
+    <script type="text/babel">
+      import { createComponent, Utils, useState, useWorker } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      function random(range) {
+        return Math.floor(Math.random() * range);
+      }
+
+      /*@@viewOn:example*/
+      async function expensiveCalculation(a) {
+        console.log("Calculating in worker... `typeof window` is: " + typeof window);
+        const { UuDateTime } = UuI18n;
+        for (let i = 1; i <= 5; i++) {
+          await new Promise((resolve) => setTimeout(resolve, 400));
+          this.progress({ progress: i * 100 / 5 });
+        }
+        return [a * a, new UuDateTime().toIsoString()];
+      }
+
+      const Page = createComponent({
+        render() {
+          const uuI18nUri = Utils.Uu5Loader.resolve("uu_i18ng01", import.meta.url);
+          const { call, state, data, errorData, pendingData } = useWorker(expensiveCalculation, {
+            importList: [uuI18nUri]
+          });
+
+          const [number, setNumber] = useState(() => random(20));
+
+          async function handleClick() {
+            let result = await call(number);
+            console.log(result);
+          }
+          return (
+            <div>
+              <Uu5Elements.Button onClick={handleClick} disabled={state.startsWith("pending")}>
+                Calculate in worker
+              </Uu5Elements.Button>
+              <div className={Config.Css.css({ whiteSpace: "pre", display: "block", margin: "16px 0" })}>
+              <Uu5Elements.Text category="story" segment="body" type="major">
+                {number} * {number} ={" "}
+                {state.startsWith("pending") ? (
+                  <Uu5Elements.Progress size="xxs" type="horizontal" value={pendingData.data?.progress ?? 0} />
+                ) : (
+                  data ? (data.join("   @ ")) : "?"
+                )}
+              </Uu5Elements.Text>
+              </div>
+            </div>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

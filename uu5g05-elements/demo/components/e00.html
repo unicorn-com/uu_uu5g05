@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState, useRef, useEffect } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { LoremIpsum, Config } from "uu5g05-dev";
+      import { IframeContent, ComponentOverview } from "uu5g05-elements/assets/demo/helpers.jsx";
+
+      const DOC_BASE_URL = "https://uuapp.plus4u.net/uu-bookkit-maing01/05ecbf4e8bca405290b1a6d4cee8813a/book/page?code=Uu5Elements";
+      const NONVISUAL_COMPONENTS = ["AlertBus", "CollapsibleBox", "ContextCenterButton", "Drawer", "Toolbar"];
+      const BLACK_LIST = ["default", "UuGds", ...NONVISUAL_COMPONENTS];
+
+      const COMPONENTS = {
+        Accordion: {
+          type: "area",
+          props: {
+            itemList: [
+              { header: "Panel 1", children: <LoremIpsum /> },
+              { header: "Panel 2", children: <LoremIpsum /> },
+              { header: "Panel 3", children: <LoremIpsum /> },
+            ],
+          },
+        },
+        ActionGroup: {
+          type: "spot",
+          props: {
+            itemList: [
+              {
+                primary: true,
+                collapsed: false,
+                icon: "uugds-info-circle-solid",
+                children: "Info",
+                onClick: () => alert("info"),
+              },
+              { icon: "uugds-search", children: "Search", onClick: () => alert("search") },
+              { icon: "uugds-plus", collapsedChildren: "Create", onClick: () => alert("create") },
+              {
+                order: 1,
+                collapsed: false,
+                icon: "uugds-close",
+                children: "Close",
+                onClick: () => alert("close"),
+              },
+            ],
+          },
+        },
+        Alert: {
+          type: "area",
+          parentStyle: { "&>div": { height: "100%" } },
+          component: () => {
+            return <IframeContent>{`<Uu5Elements.Alert header="Alert" message="Info alert..." onClose={() => console.log("Alert close")} />`}</IframeContent>
+          },
+        },
+        Badge: { type: "inline", props: { children: "Badge" } },
+        Block: {
+          type: "area",
+          props: {
+            header: (
+              <Uu5Elements.Text category="story" segment="heading" type="h2">
+                Block
+              </Uu5Elements.Text>
+            ),
+            children: <LoremIpsum />,
+          },
+        },
+        Box: { type: "area", props: { children: "Box" } },
+        Breadcrumbs: {
+          type: "inline",
+          props: {
+            itemList: [
+              {
+                children: "UX Evangelist Family portal",
+              },
+              {
+                children: "Ux guide",
+              },
+              {
+                children: "Newcomers",
+              },
+            ],
+          },
+        },
+        Button: { type: "spot", props: { onClick: () => alert("click"), children: "Button" } },
+        ButtonGroup: {
+          type: "spot",
+          props: {
+            itemList: [
+              {
+                icon: "uugds-insert-above",
+                tooltip: "Add before",
+                onClick: () => alert("click"),
+              },
+              {
+                children: "Add after",
+                onClick: () => alert("click"),
+              },
+            ],
+          },
+        },
+        Calendar: {
+          type: "area",
+          props: { onSelect: ({ data }) => alert(data.value) },
+        },
+        Carousel: {
+          type: "area",
+          props: {
+            children: <Uu5Elements.Box colorScheme="red" significance="distinct" height={100} />,
+          },
+        },
+        ColorPalette: { type: "area", props: { onSelect: ({ data }) => alert(data.value) } },
+        // ContextCenterButton: {
+        //   type: "spot",
+        //   props: {
+        //     info: [
+        //       {
+        //         label: <Lsi lsi={{ cs: "Nápověda", en: "Help" }} />,
+        //         children: <LoremIpsum />,
+        //         icon: "uugdsstencil-alert-help",
+        //       },
+        //       {
+        //         label: <Lsi lsi={{ cs: "Kontext", en: "Context" }} />,
+        //         children: <LoremIpsum />,
+        //       },
+        //     ],
+        //   },
+        // },
+        DateTime: { type: "inline", props: {} },
+        Dialog: {
+          type: "area",
+          parentStyle: { "&>div": { height: "100%" } },
+          component: () => {
+            return (
+              <IframeContent minHeight={336}>
+                {`
+<Uu5Elements.Dialog
+  open
+  onClose={() => console.log("Modal close")}
+  header="Delete this dialog?"
+  icon={<Uu5Elements.Svg code="uugdssvg-svg-delete" />}
+  info="The dialog cannot be recovered."
+  actionList={[
+    {
+      children: "Cancel",
+      onClick: () => console.log("Cancel")
+    },
+    {
+      children: "Delete",
+      onClick: () => console.log("Delete"),
+      colorScheme: "negative",
+      significance: "highlighted"
+    }
+  ]}
+  width={304}
+  style={{ marginTop: 16 }}
+/>
+`}
+              </IframeContent>
+            );
+          },
+        },
+        Dropdown: {
+          type: "spot",
+          props: {
+            label: "Dropdown",
+            itemList: [
+              {
+                children: "Create",
+                icon: "uugds-plus",
+                onClick: () => alert("click"),
+              },
+              {
+                children: "Update",
+                icon: "uugds-reload",
+                onClick: () => alert("click"),
+              },
+              { divider: true },
+              { children: "Reload", onClick: () => alert("click") },
+            ],
+          },
+        },
+        Flag: { type: "spot", props: { code: "cz" } },
+        Grid: {
+          type: "area",
+          props: {
+            children: (
+              <>
+                <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Content A</Uu5Elements.Box>
+                <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Content B</Uu5Elements.Box>
+              </>
+            ),
+          },
+        },
+        GridTemplate: {
+          type: "area",
+          props: {
+            contentMap: {
+              header: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Header</Uu5Elements.Box>,
+              sidebar: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Sidebar</Uu5Elements.Box>,
+              content: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Content</Uu5Elements.Box>,
+              footer: <Uu5Elements.Box className={Config.Css.css({ padding: 16 })}>Footer</Uu5Elements.Box>,
+            },
+            templateAreas: `
+                  header header header header,
+                  sidebar content content content,
+                  footer footer footer footer
+                `,
+          },
+        },
+        Header: { type: "spot", props: { title: "Header title", subtitle: "Header subtitle" } },
+        HighlightedBox: { type: "area", props: { children: <LoremIpsum avgSentences={2} /> } },
+        Icon: { type: "inline", props: {} },
+        // _IconPalette: { type: "area", props: {} },
+        InfoGroup: {
+          type: "spot",
+          props: {
+            itemList: [
+              { subtitle: "Owner", title: "Jane Doe" },
+              { subtitle: "Date of purchase", title: "22.06.2022" },
+              { subtitle: "Date of expiration", title: "22.06.2023" },
+              { subtitle: "Number of activations", title: "5 / 10" },
+            ],
+          },
+        },
+        InfoItem: { type: "spot", props: { title: "InfoItem title", subtitle: "InfoItem subtitle" } },
+        Input: { type: "spot", props: {} },
+        Label: { type: "inline", props: { children: "Label text" } },
+        LanguageSelector: { type: "spot", props: {} },
+        Line: { type: "inline", props: { style: { width: 80 } } },
+        Link: { type: "inline", props: { children: "Link", href: "#" } },
+        LinkPanel: { type: "area", props: { children: <LoremIpsum />, header: "LinkPanel", open: true } },
+        ListItem: { type: "spot", props: { children: "List item" } },
+        ListLayout: {
+          type: "area",
+          props: {
+            itemList: [
+              { label: "Name", children: "John" },
+              { label: { en: "Surname", cs: "Příjmení" }, children: "Doe", info: "Some info" },
+            ],
+          },
+        },
+        MenuItem: {
+          type: "spot",
+          props: { children: "Menu item", significance: "distinct" },
+        },
+        MenuList: {
+          type: "area",
+          props: {
+            itemList: [
+              { children: "Create", icon: "uugds-plus" },
+              { children: "Update", icon: "uugds-reload" },
+              { divider: true },
+              { children: "Reload" },
+            ],
+          },
+        },
+        Modal: {
+          type: "area",
+          parentStyle: { "&>div": { height: "100%" } },
+          component: () => {
+            return (
+              <IframeContent>
+                {`
+<Uu5Elements.Modal header="Modal" open onClose={() => console.log("Modal close")} width={304} style={{ marginTop: 16 }}>
+  <LoremIpsum avgSentences={2} />
+</Uu5Elements.Modal>
+`}
+              </IframeContent>
+            );
+          },
+        },
+        ModalBus: {
+          type: "area",
+          parentStyle: { "&>div": { height: "100%" } },
+          component: () => {
+            return (
+              <IframeContent>
+                {`
+<Uu5Elements.ModalBus>
+  <Uu5Elements.Modal header="Modal first" open onClose={() => console.log("Modal close")} width={304} style={{ marginTop: 16 }}>
+    <LoremIpsum avgSentences={2} />
+  </Uu5Elements.Modal>
+  <Uu5Elements.Modal header="Modal second" open onClose={() => console.log("Modal close")} width={304}>
+    <LoremIpsum avgSentences={2} />
+  </Uu5Elements.Modal>
+</Uu5Elements.ModalBus>
+`}
+              </IframeContent>
+            );
+          },
+        },
+        Number: { type: "inline", props: { value: 123456.789 } },
+        Pagination: {
+          type: "spot",
+          props: {
+            count: 3,
+            onChange: ({ data }) => {
+              alert(data.index);
+            },
+          },
+        },
+        Panel: { type: "area", props: { children: <LoremIpsum />, header: "Panel", open: true } },
+        Pending: { type: "spot", props: {} },
+        PlaceholderBox: { type: "area", props: { code: "items" } },
+        Popover: {
+          type: "area",
+          props: {
+            relative: true,
+            children: <LoremIpsum />,
+            style: { width: 320 },
+          },
+          parentStyle: { "&>div>div": { position: "relative", width: "100%" } }
+        },
+        Progress: { type: "spot", props: { value: 30 } },
+        RichIcon: { type: "spot", props: {} },
+        RichLink: {
+          type: "area",
+          props: { href: "https://unicorn.com", style: { display: "flex", margin: "0 auto" } }
+        },
+        ScrollableBox: { type: "area", props: { children: <LoremIpsum />, maxHeight: 100 } },
+        Skeleton: { type: "spot", props: { style: { width: 80 } } },
+        Stepper: {
+          type: "spot",
+          props: {
+            itemList: [
+              { code: "step1", title: "Step 1" },
+              { code: "step2", title: "Step 2" },
+              { code: "step3", title: "Step 3" },
+            ],
+          },
+        },
+        Svg: { type: "spot", props: { code: "uugdssvg-svg-account" } },
+        SwitchSelectVertical: {
+          type: "area",
+          props: {
+            itemList: [
+              { children: "Initial", onClick: () => alert("Initial") },
+              { children: "Active", onClick: () => alert("Active") },
+              { children: "Final", onClick: () => alert("Final") },
+            ],
+          },
+        },
+        Tabs: {
+          type: "spot",
+          props: {
+            itemList: [
+              { label: "Overview" },
+              { label: "History & Comments" },
+              { label: "Solvers" },
+            ],
+          },
+        },
+        Tag: { type: "inline", props: { children: "TAG" } },
+        Text: { type: "inline", props: { children: "Text" } },
+        Tile: { type: "area", props: { header: "Header", footer: "Footer", children: <LoremIpsum /> } },
+        Toggle: { type: "spot", props: {} },
+        Tooltip: {
+          type: "spot",
+          component: (props) => {
+            const ref = useRef();
+            const [element, setElement] = useState();
+
+            useEffect(() => setElement(ref.current), []);
+
+            return (
+              <>
+                <span ref={ref}>Text</span>
+                <Uu5Elements.Tooltip element={element}>
+                  Some tooltip
+                </Uu5Elements.Tooltip>
+              </>
+            );
+          }
+        },
+        TouchButton: { type: "spot", props: {} },
+        TouchLink: { type: "spot", props: { children: "TouchLink" } },
+        SpeechButton: { type: "spot", props: {} },
+        Menu: { type: "area", props: { itemList: [
+          { children: "Products", icon: "uugds-web", href: "https://www.plus4u.net/products", target: "_blank" },
+          { children: "+4U People", icon: "uugds-web", href: "https://www.plus4u.net/people", target: "_blank" },
+          { children: "+4U Organizations", icon: "uugds-web", href: "https://www.plus4u.net/organizations", target: "_blank" }
+        ] } },
+      };
+
+      const Page = createComponent({
+        render() {
+          return (
+            <ComponentOverview
+              library={Uu5Elements}
+              componentMap={COMPONENTS}
+              blackList={BLACK_LIST}
+              docBaseUrl={DOC_BASE_URL}
+            />
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

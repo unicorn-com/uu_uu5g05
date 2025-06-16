@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        createVisualComponent,
+        Utils,
+        useState,
+        ContentSizeProvider
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import Uu5Forms, { useWizard } from "uu5g05-forms";
+      import { LoremIpsum } from "uu5g05-dev";
+
+      //@@viewOn:example
+      const Header = createVisualComponent({
+        render(props) {
+          return (
+            <ContentSizeProvider>
+              <Uu5Forms.Form.View>
+                <Uu5Forms.FormText
+                  name="header"
+                  label={{ en: "Header Content" }}
+                  required
+                />
+                <Uu5Forms.FormSwitchSelect
+                  name="headerType"
+                  label={{ en: "Header Type" }}
+                  itemList={[
+                    { value: "title", children: "Title" },
+                    { value: "heading", children: "Heading" },
+                  ]}
+                />
+                <Uu5Forms.FormSwitchSelect
+                  name="level"
+                  label={{ en: "Header Level" }}
+                  itemList={[{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }]}
+                />
+                <Uu5Forms.FormCheckbox
+                  name="headerSeparator"
+                  label={{ en: "Show header separator" }}
+                  info={{ en: "Separator between header and content." }}
+                />
+              </Uu5Forms.Form.View>
+            </ContentSizeProvider>
+          );
+        },
+      });
+
+      const Content = createVisualComponent({
+        render(props) {
+          return (
+            <Uu5Forms.Form.View>
+              <Uu5Forms.FormTextArea
+                name="info"
+                label={{ en: "Info" }}
+                info={{ en: "Description of the component, that can be displayed via the info icon in the top right corner." }}
+                autoResize
+              />
+              <Uu5Forms.FormCheckbox
+                name="collapsible"
+                label={{ en: "Collapsible" }}
+              />
+            </Uu5Forms.Form.View>
+          );
+        },
+      });
+
+      const Footer = createVisualComponent({
+        render(props) {
+          const { data } = props;
+          return (
+            <Uu5Forms.Form.View>
+              <Uu5Forms.FormText
+                name="footer"
+                label={{ en: "Footer Content" }}
+              />
+              <Uu5Forms.FormCheckbox
+                name="footerSeparator"
+                label={{ en: "Show footer separator" }}
+                info={{ en: "Separator between content and footer." }}
+                disabled={!data.footer}
+              />
+            </Uu5Forms.Form.View>
+          );
+        },
+      });
+
+      const TAB_LIST = [
+        { component: Header, children: "Header" },
+        { component: Content, children: "Content" },
+        { component: Footer, children: "Footer" },
+      ];
+
+      const LeftMenu = createVisualComponent({
+        render() {
+          const { itemList, stepIndex, validityList, setStepIndex } = useWizard();
+
+          return (
+            <Uu5Elements.MenuList
+              itemBorderRadius="moderate"
+              itemList={itemList.map((item, index) => ({
+                children: item.children,
+                iconRight: validityList?.[index] === false ? "uugds-alert-circle" : undefined,
+                colorScheme: validityList?.[index] === false ? "negative" : undefined,
+                focused: index === stepIndex,
+                onClick: () => setStepIndex(index),
+              }))}
+            />
+          );
+        }
+      });
+
+      const Page = createVisualComponent({
+        render() {
+          const [open, setOpen] = useState(false);
+          const [componentProps, setComponentProps] = useState({
+            headerType: "heading",
+            level: 1,
+            header: "Default",
+            info: "Some info...",
+          });
+
+          const handleSubmit = async (e) => {
+            if (e.data.value)
+              setComponentProps((prev) => {
+                for (const key in e.data.value) {
+                  if (key in Uu5Elements.Block.defaultProps && e.data.value[key] === undefined) {
+                    e.data.value[key] = Uu5Elements.Block.defaultProps[key];
+                  }
+                }
+                return { ...prev, ...e.data.value };
+              });
+            setOpen(false);
+          }
+
+          return (
+            <div>
+              <Uu5Elements.Button
+                children="Edit Block"
+                onClick={() => setOpen(true)}
+              />
+              <br /><br />
+
+              <Uu5Elements.Block {...componentProps}>
+                <LoremIpsum />
+              </Uu5Elements.Block>
+
+              <Uu5Forms.Form.Provider
+                key={open}
+                initialValue={componentProps}
+                onSubmit={handleSubmit}
+                preserveValueOnUnmount
+              >
+                <Uu5Forms.Wizard.Provider itemList={TAB_LIST} validationMode="loose">
+                  <Uu5Elements.Modal
+                    header="Edit Modal as Wizard"
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    left={<LeftMenu />}
+                    children={<Uu5Forms.Wizard.Content />}
+                    footer={
+                      <Uu5Elements.Grid
+                        templateColumns={{ xs: "1fr", s: "auto" }}
+                        columnGap={Uu5Elements.UuGds.SpacingPalette.getValue(["fixed", "c"])}
+                        justifyContent={{ s: "end" }}
+                      >
+                        <Uu5Forms.SubmitButton />
+                      </Uu5Elements.Grid>
+                    }
+                  />
+                </Uu5Forms.Wizard.Provider>
+              </Uu5Forms.Form.Provider>
+            </div>
+          );
+        },
+      });
+      //@@viewOff:example
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

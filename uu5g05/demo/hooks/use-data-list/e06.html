@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 06 - create without reload</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+    <script>
+      Uu5Loader.config({
+        imports: {
+          uu_appg01_core: "https://cdn.plus4u.net/uu-appg01-core/5.0.0/uu_appg01_core.min.js",
+          uu_appg01: "https://cdn.plus4u.net/uu-appg01/5.0.0/uu_appg01.min.js",
+          uu_appg01_oidc: "https://cdn.plus4u.net/uu-appg01-oidc/3.0.0/uu_appg01_oidc.min.js",
+        },
+      });
+    </script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import {
+        Utils,
+        useDataList,
+        createComponent,
+        createVisualComponent,
+        SessionProvider,
+        useSession,
+        useState,
+        useRef,
+        useMemo,
+        useCallback,
+        useEffect,
+        useUnmountedRef,
+        useScreenSize,
+        AutoLoad,
+        Content,
+      } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+      import { AuthenticationService } from "uu_appg01_oidc";
+      import { Client } from "uu_appg01";
+
+      let callDelay = 0;
+      let error = false;
+      let labelClassName = Config.Css.css`
+        width: 40%;
+        color: rgba(0,0,0,0.54);
+        display: inline-block;
+        text-align: right;
+        padding: 6px 16px;
+      `;
+      let inputClassName = Config.Css.css`
+        width: 60%;
+        border: 1px solid #bdbdbd;
+        outline: none;
+        min-height: 32px;
+        padding: 6px 8px 6px;
+        margin-bottom: 8px;
+        &:focus {
+          border-color: #2196f3;
+        }
+      `;
+      let controlsClassName = Config.Css.css`
+        margin: 8px 16px;
+        text-align: center;
+        &>* {
+          min-width: 96px;
+        }
+      `;
+
+      /*@@viewOn:example*/
+      const Calls = {
+        // ...
+        load(dtoIn) {
+          const commandUri = Calls.getCommandUri("joke/list");
+          return Calls.call("get", commandUri, dtoIn);
+        },
+
+        loadItem(dtoIn) {
+          const commandUri = Calls.getCommandUri("joke/get");
+          return Calls.call("get", commandUri, dtoIn);
+        },
+
+        updateItem(newData) {
+          const commandUri = Calls.getCommandUri("joke/update");
+          return Calls.call("post", commandUri, newData);
+        },
+
+        createItem(newData) {
+          const commandUri = Calls.getCommandUri("joke/create");
+          return Calls.call("post", commandUri, newData);
+        },
+
+        deleteItem(dtoIn) {
+          const commandUri = Calls.getCommandUri("joke/delete");
+          return Calls.call("post", commandUri, dtoIn);
+        },
+      };
+      /*@@viewOff:example*/
+
+      Calls.call = async (method, uri, dtoIn) => {
+        const startTime = Date.now();
+        try {
+          const clientOptions = error ? { headers: { authorization: null } } : undefined;
+          const response = await Client[method](uri, dtoIn, clientOptions);
+          return response.data;
+        } finally {
+          await new Promise((resolve) => setTimeout(resolve, Math.max(0, callDelay - (Date.now() - startTime))));
+        }
+      };
+      Calls.getCommandUri = (useCase) =>
+        "https://uuappg01-eu-w-1.plus4u.net/uu-jokes-maing01/4ef6a7b01b5942ecbfb925b249af987f/" + useCase;
+
+      const ControlPanel = createVisualComponent({
+        render(props) {
+          const { dataListResult } = props;
+          const { state, data, newData, errorData, pendingData, handlerMap } = dataListResult;
+          const [errorFlag, setErrorFlag] = useState(error);
+          const [callDelayValue, setCallDelayValue] = useState(callDelay);
+
+          error = errorFlag;
+          callDelay = callDelayValue;
+
+          return (
+            <Uu5Elements.Block
+              className={Config.Css.css`margin: 16px 0;`}
+              header={
+                <Uu5Elements.Text category="story" segment="heading" type="h2">
+                  Settings
+                </Uu5Elements.Text>
+              }
+            >
+              <label>
+                Server Error{" "}
+                <input type="checkbox" value={errorFlag} onChange={(e) => setErrorFlag(e.target.checked)} />
+              </label>
+              <br />
+
+              <label>
+                Server Call Delay{" "}
+                <input
+                  type="range"
+                  value={callDelayValue}
+                  min={0}
+                  max={5000}
+                  step={500}
+                  onChange={(e) => setCallDelayValue(e.target.value)}
+                />{" "}
+                [{callDelayValue} ms]
+              </label>
+
+              <details>
+                <summary className={Config.Css.css`display: inline-block; cursor: pointer;`}>
+                  useDataList result
+                </summary>
+                <pre className={Config.Css.css`background: #f5f5f5; padding: 16px; height: 400px; overflow: auto;`}>
+                  {JSON.stringify(
+                    {
+                      state,
+                      data: data ? JSON.stringify(data).replace(/"/g, "'") : null,
+                      newData: newData ? JSON.stringify(newData).replace(/"/g, "'") : null,
+                      pendingData: pendingData ? JSON.stringify(pendingData).replace(/"/g, "'") : null,
+                      errorData,
+                      handlerMap: Object.keys(handlerMap).reduce(
+                        (r, k) => ((r[k] = handlerMap[k] ? "fn(...)" : null), r),
+                        {}
+                      ),
+                      "data[0].handlerMap":
+                        data && data[0]
+                          ? Object.keys(data[0].handlerMap).reduce(
+                              (r, k) => ((r[k] = data[0].handlerMap[k] ? "fn(...)" : null), r),
+                              {}
+                            )
+                          : null,
+                    },
+                    null,
+                    2
+                  )}
+                </pre>
+              </details>
+            </Uu5Elements.Block>
+          );
+        },
+      });
+
+      const SIZES_REVERSED = ["xl", "l", "m", "s", "xs"];
+      const Column = createVisualComponent({
+        render(props) {
+          let { colWidth } = props;
+          let [screenSize] = useScreenSize();
+          let parsed = Utils.ScreenSize.parseValue(colWidth);
+          let widthValue =
+            parsed[screenSize] ||
+            parsed[SIZES_REVERSED.slice(SIZES_REVERSED.indexOf(screenSize)).find((it) => parsed[it])];
+          let currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, Column);
+          let attrs = Utils.VisualComponent.getAttrs(
+            props,
+            Config.Css.css`
+              width: ${Math.floor(1e5 * ((widthValue / 12) * 100)) / 1e5}%;
+              padding: 8px;
+            `
+          );
+          return (
+            <div {...attrs}>
+              <Content nestingLevel={currentNestingLevel}>{props.children}</Content>
+            </div>
+          );
+        },
+      });
+
+      const Joke = Utils.Component.memo(
+        createVisualComponent({
+          render(props) {
+            const { onUpdate, onDelete, data, processingItem = {} } = props;
+            const attrs = Utils.VisualComponent.getAttrs(props);
+            return (
+              <Uu5Elements.Block
+                {...attrs}
+                card="full"
+                colorScheme={processingItem.errorData ? "negative" : undefined}
+                significance="distinct"
+                actionList={[
+                  {
+                    children: "Update",
+                    icon: "uugds-reload",
+                    disabled: !onUpdate,
+                    meaning: "primary",
+                    primary: true,
+                    collapsed: false,
+                    onClick: () => onUpdate(processingItem),
+                  },
+                  {
+                    children: "Delete",
+                    icon: "uugds-delete",
+                    disabled: !onDelete,
+                    meaning: "negative",
+                    primary: true,
+                    collapsed: false,
+                    onClick: () => onDelete(processingItem),
+                  },
+                ]}
+                header={
+                  <Uu5Elements.Text category="interface" segment="title" type="common">
+                    {data.name}
+                  </Uu5Elements.Text>
+                }
+              >
+                {data.text}
+              </Uu5Elements.Block>
+            );
+          },
+        })
+      );
+
+      /*@@viewOn:example*/
+      const Example = createVisualComponent({
+        render() {
+          const pageSize = 8;
+          const dataListResult = useDataList({
+            pageSize,
+            handlerMap: {
+              load: Calls.load,
+              createItem: Calls.createItem,
+            },
+            itemHandlerMap: {
+              load: Calls.loadItem,
+              update: Calls.updateItem,
+              delete: Calls.deleteItem,
+            },
+          });
+          const { state, data, newData, errorData, pendingData, handlerMap } = dataListResult;
+          console.log(dataListResult);
+
+          const unmountedRef = useUnmountedRef();
+
+          const [modalProps, setModalProps] = useState();
+          const showModal = useCallback((joke, onSave) => {
+            setModalProps({
+              header: joke ? "Edit Joke" : "Create Joke",
+              children: (
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    try {
+                      let values = {};
+                      for (let el of e.target.elements) if (el.name) values[el.name] = el.value;
+                      await onSave({ values });
+                      if (unmountedRef.current) return;
+                      setModalProps(null);
+                    } catch (e) {
+                      if (unmountedRef.current) return;
+                      // TODO AlertBus.
+                      alert(`${joke ? "Updating" : "Creating"} on server failed.`);
+                    }
+                  }}
+                >
+                  <label>
+                    <span className={labelClassName}>Name</span>
+                    <input
+                      label="Name"
+                      name="name"
+                      defaultValue={joke ? joke.name : undefined}
+                      className={inputClassName}
+                    />
+                  </label>
+                  <br />
+                  <label>
+                    <span className={labelClassName}>Text</span>
+                    <textarea
+                      name="text"
+                      defaultValue={joke ? joke.text : undefined}
+                      className={inputClassName + " " + Config.Css.css`vertical-align: top;`}
+                    />
+                  </label>
+                  <br />
+                  <div className={controlsClassName}>
+                    <Uu5Elements.Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setModalProps(null);
+                      }}
+                      children="Cancel"
+                    />{" "}
+                    <Uu5Elements.Button type="submit" children="OK" colorScheme="primary" />{" "}
+                  </div>
+                </form>
+              ),
+            });
+          }, []);
+
+          const handleJokeUpdate = useCallback(
+            (item) => {
+              showModal(item.data, async ({ values }) => {
+                return await item.handlerMap.update(values);
+              });
+            },
+            [showModal, unmountedRef]
+          );
+
+          const handleJokeDelete = useCallback((item) => {
+            item.handlerMap.delete();
+          }, []);
+
+          return (
+            <div>
+              <Uu5Elements.Button
+                disabled={!handlerMap.createItem}
+                colorSchema="success"
+                onClick={() => {
+                  showModal(null, async ({ values }) => {
+                    let data = await handlerMap.createItem(values);
+                    // TODO AlertBus.
+                    alert(`Creating joke '${data.name}' on server succeeded.`);
+                  });
+                }}
+              >
+                Create item
+              </Uu5Elements.Button>{" "}
+              <Uu5Elements.Button disabled={!handlerMap.load} onClick={() => handlerMap.load()}>
+                Load 1st page & reset others
+              </Uu5Elements.Button>{" "}
+              <ControlPanel dataListResult={dataListResult} />
+              <Uu5Elements.Block
+                header={
+                  <Uu5Elements.Text category="story" segment="heading" type="h3">
+                    New Data
+                  </Uu5Elements.Text>
+                }
+              >
+                {newData.length === 0 ? (
+                  "No new data."
+                ) : (
+                  <div className={Config.Css.css`display: flex; flex-wrap: wrap; align-items: flex-start;`}>
+                    {newData.map((item) => (
+                      <Column key={item.data.id} colWidth="m-6 l-4 xl-3">
+                        <Joke
+                          id={item.data.id}
+                          data={item.data}
+                          onUpdate={!item.handlerMap.update ? null : handleJokeUpdate}
+                          onDelete={!item.handlerMap.delete ? null : handleJokeDelete}
+                          processingItem={item}
+                        />
+                      </Column>
+                    ))}
+                  </div>
+                )}
+              </Uu5Elements.Block>
+              <Uu5Elements.Block
+                header={
+                  <Uu5Elements.Text category="story" segment="heading" type="h3">
+                    Data
+                  </Uu5Elements.Text>
+                }
+              >
+                <div className={Config.Css.css`display: flex; flex-wrap: wrap; align-items: flex-start;`}>
+                  {data
+                    ? data
+                        .filter((item) => item != null)
+                        .map((item) => (
+                          <Column key={item.data.id} colWidth="m-6 l-4 xl-3">
+                            <Joke
+                              id={item.data.id}
+                              data={item.data}
+                              onUpdate={!item.handlerMap.update ? null : handleJokeUpdate}
+                              onDelete={!item.handlerMap.delete ? null : handleJokeDelete}
+                              processingItem={item}
+                            />
+                          </Column>
+                        ))
+                    : null}
+                </div>
+
+                <AutoLoad data={data} handleLoadNext={handlerMap.loadNext} distance={window.innerHeight} />
+
+                {pendingData && pendingData.operation === "loadNext" ? (
+                  <div className={Config.Css.css`text-align: center;`}>(loading {pageSize} more...)</div>
+                ) : errorData && errorData.operation === "loadNext" ? (
+                  <Uu5Elements.Button onClick={() => handlerMap.loadNext()} children="Load more (auto-load failed)" />
+                ) : null}
+              </Uu5Elements.Block>
+              <Uu5Elements.Modal {...modalProps} open={!!modalProps} onClose={() => setModalProps(null)} />
+            </div>
+          );
+        },
+      });
+      /*@@viewOff:example*/
+
+      const AuthenticatedDemo = createComponent({
+        render() {
+          let { identity } = useSession();
+          return identity ? (
+            <Example />
+          ) : identity === null ? (
+            <Uu5Elements.Button onClick={() => login()} children="Log in" />
+          ) : null;
+        },
+      });
+
+      const Page = createVisualComponent({
+        render() {
+          return (
+            <SessionProvider authenticationService={AuthenticationService}>
+              <AuthenticatedDemo />
+            </SessionProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>

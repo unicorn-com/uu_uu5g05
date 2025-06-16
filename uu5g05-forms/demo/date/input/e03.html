@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 03</title>
+
+  <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+  <script
+    src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js"
+    crossorigin
+  ></script>
+
+  <script>
+    const ip = /^\d{1,3}(\.\d{1,3}){3}$/.test(location.hostname) && location.port ? location.hostname : "";
+    if (ip) {
+      Uu5Loader.config({
+        imports: {
+          uu5g05: "http://" + ip + ":54321/uu5g05.js",
+          "uu5g05-dev": "http://" + ip + ":54324/uu5g05-dev.js",
+          "uu5g05-elements": "http://" + ip + ":54322/uu5g05-elements.js",
+          "uu5g05-forms": "http://" + ip + ":54323/uu5g05-forms.js",
+          uu_i18ng01: "https://cdn.plus4u.net/uu-i18ng01/1.0.0/uu_i18ng01.js",
+        },
+      });
+    }
+  </script>
+
+  <style>
+    body {
+      padding: 16px 32px;
+    }
+  </style>
+</head>
+<body>
+<div id="uu5">Loading...</div>
+
+<script type="text/babel">
+  import { Utils, useState, Lsi, useValueChange } from "uu5g05";
+  import Uu5Forms from "uu5g05-forms";
+  import Uu5Elements from "uu5g05-elements";
+  import { UuDate } from "uu_i18ng01";
+
+  function withControlledInput(Input) {
+    return (props) => {
+      const { value: propsValue, onChange: onChangeProp, onValidationStart, onValidationEnd } = props;
+
+      const onChange =
+        typeof onChangeProp === "function"
+          ? (value) => onChangeProp(new Utils.Event({ value }))
+          : null;
+
+      const [value, setValue] = useValueChange(propsValue, onChange);
+      const [errorList, setErrorList] = useState(null);
+      const [pending, setPending] = useState();
+
+      return (
+        <div>
+          <Input
+            {...props}
+            value={value}
+            onChange={(e) => {
+              setValue(e.data.value);
+            }}
+            onValidationStart={(e) => {
+              typeof onValidationStart === "function" && onValidationStart(e);
+              setPending(true);
+            }}
+            onValidationEnd={(e) => {
+              typeof onValidationEnd === "function" && onValidationEnd(e);
+              setErrorList(e.data.errorList.length ? e.data.errorList : null);
+              setPending(false);
+            }}
+          />
+          {errorList && (
+            <div>
+              <Uu5Elements.Text colorScheme="negative">
+                {errorList.map(({ code }) => code).join(" ")}
+              </Uu5Elements.Text>
+            </div>
+          )}
+          {pending && <div>Pending...</div>}
+        </div>
+      );
+    };
+  }
+
+  const DateInput = withControlledInput(Uu5Forms.Date.Input);
+
+  const lastDayOfTheWeek = new UuDate().endOfWeek().format(undefined, { format: "YYYY-MM-DD" });
+
+  {/*@@viewOn:example*/}
+  function CustomPresetInput({ presetList = [], ...props }) {
+    const [value, setValue] = useState();
+
+    const mergedPresetList = [
+      ...presetList,
+      { children: <Lsi lsi={{ en: "Last day of the week", cs: "Poslední den v týdnu"}} />, onClick: () => setValue(lastDayOfTheWeek) }
+    ];
+
+    return <DateInput {...props} value={value} onChange={e => setValue(e.data.value)} presetList={mergedPresetList} />
+  }
+  {/*@@viewOff:example*/}
+
+  {/*@@viewOn:example*/}
+  function Page() {
+    return (
+      <div>
+        <h4>default presets</h4>
+        <DateInput presetList={["today", "yesterday", "dayBeforeYesterday", "tomorrow", "nextWeek", "nextMonth", "lastWeek", "lastMonth"]} />
+        <h4>custom presets</h4>
+        <CustomPresetInput />
+        <h4>default + custom presets</h4>
+        <CustomPresetInput presetList={["today", "yesterday", "dayBeforeYesterday", "tomorrow"]} />
+      </div>
+    );
+  }
+  {/*@@viewOff:example*/}
+
+  Utils.Dom.render(<Page />, document.getElementById("uu5"));
+</script>
+</body>
+</html>

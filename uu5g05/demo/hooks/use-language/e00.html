@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example 00</title>
+
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5loaderg01/1.x/uu5loaderg01.min.js" crossorigin></script>
+    <script src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uu-uu5g05/1.x/assets/example-config.js" crossorigin></script>
+
+    <style>
+      body {
+        padding: 16px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uu5">Loading...</div>
+
+    <script type="text/babel">
+      import { Utils, PropTypes, createComponent, useLsi, useLanguage } from "uu5g05";
+      import Uu5Elements from "uu5g05-elements";
+      import { Config } from "uu5g05-dev";
+
+      Utils.Language.setLanguage("en");
+
+      //@@viewOn:example
+      const Lsi = createComponent({
+        //@@viewOn:statics
+        uu5Tag: Config.TAG + "Lsi",
+        //@@viewOff:statics
+
+        //@@viewOn:propTypes
+        propTypes: {
+          lsi: PropTypes.object,
+        },
+        //@@viewOff:propTypes
+
+        //@@viewOn:defaultProps
+        defaultProps: {
+          lsi: {},
+        },
+        //@@viewOff:defaultProps
+
+        render(props) {
+          //@@viewOn:private
+          const [language, setLanguage] = useLanguage();
+          console.log("language", language);
+          //@@viewOn:private
+
+          //@@viewOn:interface
+          //@@viewOff:interface
+
+          //@@viewOn:render
+          return Utils.Language.getItem(props.lsi, language);
+          //@@viewOff:render
+        },
+      });
+      //@@viewOff:example
+
+      function Demo() {
+        return (
+          <div>
+            <Uu5Elements.LanguageSelector languageList={["en", "cs"]} />&nbsp;
+            <Lsi lsi={{ cs: "Ahoj", en: "Hello" }} />
+          </div>
+        );
+      }
+
+      Utils.Dom.render(<Demo />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>
