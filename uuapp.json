@@ -1,7 +1,7 @@
 {
   "product": "uu_uu5g05",
   "version": "1.40.1",
-  "license": "License Commercial",
+  "license": "GPL-3.0",
   "description": {
     "en": "A set of libraries with tools and basic visual and non-visual components.",
     "cs": "Sada knihoven s nástroji a základními vizuálními a nevizuálními komponentami."

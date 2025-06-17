@@ -13,7 +13,7 @@
     "uu5g05-test"
   ],
   "description": "A set of libraries with tools and basic visual and non-visual components.",
-  "license": "License Commercial",
+  "license": "GPL-3.0",
   "spec": "nodejs-multi; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
   "uuBuildSettings": {},
   "devDependencies": {

@@ -2,7 +2,7 @@
   "name": "uu5g05-editing",
   "version": "1.40.1",
   "description": "The library contains components that are used to create editing modes for components.",
-  "license": "License Commercial",
+  "license": "GPL-3.0",
   "namespace": "Uu5Editing",
   "spec": "uu5-lib; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
   "dependencies": {

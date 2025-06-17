@@ -2,7 +2,7 @@
   "name": "uu5g05-browser-compatibility",
   "version": "1.40.1",
   "description": "The library should be used in index.html, because the library checks if the browser is supported and if not it recommends another.",
-  "license": "License Commercial",
+  "license": "GPL-3.0",
   "namespace": "Uu5BrowserCompatibility",
   "spec": "uu5-lib; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
   "dependencies": {

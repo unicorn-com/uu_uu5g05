@@ -2,7 +2,7 @@
   "name": "uu5g05-bricks-support",
   "version": "1.40.1",
   "description": "A set of libraries with tools and basic visual and non-visual components.",
-  "license": "License Commercial",
+  "license": "GPL-3.0",
   "namespace": "Uu5BricksSupport",
   "spec": "uu5-lib; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
   "dependencies": {

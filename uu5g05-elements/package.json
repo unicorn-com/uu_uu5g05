@@ -2,7 +2,7 @@
   "name": "uu5g05-elements",
   "version": "1.40.1",
   "description": "The library contains basic components which are connected to uuGds.",
-  "license": "License Commercial",
+  "license": "GPL-3.0",
   "namespace": "Uu5Elements",
   "spec": "uu5-lib; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
   "dependencies": {

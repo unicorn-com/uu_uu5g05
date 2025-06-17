@@ -2,7 +2,7 @@
   "name": "uu5g05-test",
   "version": "1.40.1",
   "description": "The library contains tools for testing of a components.",
-  "license": "License Commercial",
+  "license": "GPL-3.0",
   "namespace": "Uu5Test",
   "spec": "nodejs-lib; uu_appg01_devkit@6.6.0; uu5devkitg01-plugin@1.5.1",
   "dependencies": {
